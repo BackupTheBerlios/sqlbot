@@ -154,25 +154,25 @@ sub buildHelp(){
 	$helpmsg = "";
 	$helpmsg = "Hi, Im $botname. I maintain Law and order in here!\r
 Public Commands (Main Chat):-\r
-- +help = Shows these commands in a PM\r
-- +rules = rules for your client,\r
-- +myinfo = Show your information \r
-- +time = Shows the current Data & Time of the server\r
-- +showops = List of Ops Online\r
-- +fakers = List share fakers detected\r
-- +version = Shows which version the bot is running\r
-- +stats = Channel statistics\r
-- +myinfo = Show your information \r
-- +away \'Reason\' = Mark yourself away for the reason\r
-- +back = Mark yourself back. (Auto back on hub chat)\r
-- +topchat = Top 10 talkers....\r
-- +uptime = The Up Time of the hub\r
-- +seen \'username\' = show when the specified user was last online\r
+. +help = Shows these commands in a PM\r
+. +rules = rules for your client,\r
+. +myinfo = Show your information \r
+. +time = Shows the current Data & Time of the server\r
+. +showops = List of Ops Online\r
+. +fakers = List share fakers detected\r
+. +version = Shows which version the bot is running\r
+. +stats = Channel statistics\r
+. +myinfo = Show your information \r
+. +away \'Reason\' = Mark yourself away for the reason\r
+. +back = Mark yourself back. (Auto back on hub chat)\r
+. +topchat = Top 10 talkers....\r
+. +uptime = The Up Time of the hub\r
+. +seen \'username\' = show when the specified user was last online\r
 Public commands(PM):-\r
-- !help = Shows these commands in a PM\r
-- !seen \'username\' = show when the specified user was last online\r 
-- !stats = Shows the hub statistics\r
-- !rules = Shows the rules\n\r";
+. +help = Shows these commands in a PM\r
+. +seen \'username\' = show when the specified user was last online\r 
+. +stats = Shows the hub statistics\r
+. +rules = Shows the rules\n\r";
 	if(($type eq 32) or ($type eq 16) or ($type eq 8))
 	{
 	$helpmsg .="- !pass \'oldpassword\' \'newpassword\' = Change your User password\r";
@@ -182,20 +182,20 @@ Public commands(PM):-\r
 	{
 		my($defaultLogEntries) = &getHubVar("nr_log_entries");
 		$helpmsg .="\n\r\n\rOp commands(PM):-\r
-- !recheck = force bot to re check all clients,and update online table\r
-- !info \'username\' = get the info of another user\r
-- !log = show the last $defaultLogEntries Entries from the hublog\r
-- !kicklog = show the last $defaultLogEntries kicks log\r
-- !banlog = show the last $defaultLogEntries bans log\r
-- !history \'username\' = show the last $defaultLogEntries log entries of the user\r
-- !addfaker \'username\' = Add the user to the fakers log, then Nuke\r
+. +recheck = force bot to re check all clients,and update online table\r
+. +info \'username\' = get the info of another user\r
+. +log = show the last $defaultLogEntries Entries from the hublog\r
+. +kicklog = show the last $defaultLogEntries kicks log\r
+. +banlog = show the last $defaultLogEntries bans log\r
+. +history \'username\' = show the last $defaultLogEntries log entries of the user\r
+. +addfaker \'username\' = Add the user to the fakers log, then Nuke\r
 Any command NOT recognised is sent to ALL OPs as OP CHAT \r";
 	}
 	if($type eq 32)
 	{
 		$helpmsg .="\n\r\n\rOp-Admin commands(PM):-\r
-- !auser \'username\' \'password\' \'level\'= Add/Edit the user with given password at level (0=reg,1=Op,2=OpAdmin) Also use to change User level\r
-- !duser \'username\' = Delete user\r";
+. +auser \'username\' \'password\' \'level\'= Add/Edit the user with given password at level (0=reg,1=Op,2=OpAdmin) Also use to change User level\r
+. +duser \'username\' = Delete user\r";
 	}
 }
 

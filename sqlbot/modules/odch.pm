@@ -141,83 +141,83 @@ sub data_arrival(){
 		# Only specific types may msg the bot
 		my($type) = odch::get_type($user);
 		#Public PM commands
-		if($param1 =~ /!seen/i)
-			{if($param1 =~ /!seen\|/i)
-				{&msgUser("$user","usage: !seen username");}
+		if($param1 =~ /^[\!+-]seen/i)
+			{if($param1 =~ /^[\!+-]seen\|/i)
+				{&msgUser("$user","usage: +seen username");}
 			else 
 				{&seen($param2);
 				&msgUser("$user","$seenresult");}}
-		elsif($param1 =~ /!stats/i)
+		elsif($param1 =~ /^[\!+-]stats/i)
 			{&buildStats();
 			&msgUser("$user","$statsmsg");}
-		elsif($param1 =~ /!rules/i)
+		elsif($param1 =~ /^[\!+-]rules/i)
 			{&buildRules($user);
 			&msgUser("$user","$rules");}
-		elsif($param1 =~ /!help/i)
+		elsif($param1 =~ /^[\!+-]help/i)
 			{&buildHelp($user);
 			&msgUser("$user","$helpmsg");}
-		elsif($param1 =~ /!myinfo/i)
+		elsif($param1 =~ /^[\!+-]myinfo/i)
 			{&myInfo($user);}
 		#Op commands
 		elsif($type eq 8)
 		{
-			if ($param1 =~ /!pass/){
-				if($param1 =~ /!pass\|/i)
-					{&msgUser("$user","!pass oldpassword newpass");}
+			if ($param1 =~ /^[\!+-]pass/){
+				if($param1 =~ /^[\!+-]pass\|/i)
+					{&msgUser("$user","+pass oldpassword newpass");}
 				else{&chPassUser($user,$param2,$param3,$param4);}}
 		}
 		elsif($type eq 32 or $type eq 16)
 		{
-			if ($param1 =~ /!info/){
-				if($param1 =~ /!info\|/i)
-					{&msgUser("$user","!info username");}
+			if ($param1 =~ /^[\!+-]info/){
+				if($param1 =~ /^[\!+-]info\|/i)
+					{&msgUser("$user","+info username");}
 				else
 					{&info($user,$param2);}}
-			elsif($param1 =~ /!pass/i){
-				if($param1 =~ /!pass\|/i)
-					{&msgUser("$user","!pass oldpass newpass");}
+			elsif($param1 =~ /^[\!+-]pass/i){
+				if($param1 =~ /^[\!+-]pass\|/i)
+					{&msgUser("$user","+pass oldpass newpass");}
 				else
 					{&chPassUser($user,$param2,$param3);}}
-			elsif ($param1 =~ /!recheck/i){
+			elsif ($param1 =~ /^[\!+-]recheck/i){
 				&msgAll("$user has forced all clients to be rechecked");	
 				&clientRecheck();}
-			elsif ($param1 =~ /!log/i)
+			elsif ($param1 =~ /^[\!+-]log/i)
 				{&log($user);}
-			elsif ($param1 =~ /!kicklog/i)
+			elsif ($param1 =~ /^[\!+-]kicklog/i)
 				{&kickLog($user);}
-			elsif ($param1 =~ /!banlog/i)
+			elsif ($param1 =~ /^[\!+-]banlog/i)
 				{&banLog($user);}
-			elsif ($param1 =~ /!kick/i)
-				{if($param1 =~ /!kick\|/i)
-					{&msgUser("$user","usage: !kick username reason");}
+			elsif ($param1 =~ /^[\!+-]kick/i)
+				{if($param1 =~ /^[\!+-]kick\|/i)
+					{&msgUser("$user","usage: +kick username reason");}
 				else 
 					{&kickUser($user,$param);}}
-			elsif ($param1 =~ /!fakerslog/i)
+			elsif ($param1 =~ /^[\!+-]fakerslog/i)
 				{&fakersLog($user);}
-			elsif ($param1 =~ /!history/i)
-				{if($param1 =~ /!history\|/i)
-					{&msgUser("$user","usage: !history username");}
+			elsif ($param1 =~ /^[\!+-]history/i)
+				{if($param1 =~ /^[\!+-]history\|/i)
+					{&msgUser("$user","usage: +history username");}
 				else 
 					{&history("$user","$param2");}}
-			elsif ($param1 =~ /!addfaker/i)
-				{if($param1 =~ /!addfaker\|/)
-					{&msgUser("$user","usage: !addfaker username");}
+			elsif ($param1 =~ /^[\!+-]addfaker/i)
+				{if($param1 =~ /^[\!+-]addfaker\|/)
+					{&msgUser("$user","usage: +addfaker username");}
 				else 
 					{my($ip) = odch::get_ip($param2);
 					&banUser($param2,"Faker",$ip,"pban");}}
 			# Add new op commands here
-			elsif($param1 =~ /!auser/i)
+			elsif($param1 =~ /^[\!+-]auser/i)
 			{
-				if($param1 =~ /!auser\|/)
+				if($param1 =~ /^[\!+-]auser\|/)
 					{&msgAll("usage: !auser nick pass level");}
 				else
 					{&setRegUser($user,$param2,$param3,$param4);}
 
 			}
-			elsif($param1 =~ /!duser/i)
+			elsif($param1 =~ /^[\!+-]duser/i)
 			{
-				if($param1 =~ /!duser\|/)
-					{&msgAll("usage: !auser nick");}
+				if($param1 =~ /^[\!+-]duser\|/)
+					{&msgAll("usage: +auser nick");}
 				else
 					{&delRegUser($user,$param2);}
 
@@ -232,50 +232,50 @@ sub data_arrival(){
 	# Public main chat commands
 	else
 	{
-		if($data =~ /^<.*> \+fakers\|/i)
+		if($data =~ /^<.*> [\+-]fakers\|/i)
 			{&fakersLog($user);}
-		elsif($data =~ /^<.*> \+time\|/i)
+		elsif($data =~ /^<.*> [\+-]time\|/i)
 			{&setTime();
 			&msgAll("Server Time = $date $time");}
-		elsif($data =~ /^<.*> \+version\|/i)
+		elsif($data =~ /^<.*> [\+-]version\|/i)
 			{&version($user);}
-		elsif($data =~ /^<.*> \+myinfo\|/i)
+		elsif($data =~ /^<.*> [\+-]myinfo\|/i)
 			{&myInfo($user);}
-		elsif($data =~ /^<.*> \+uptime\|/i)
+		elsif($data =~ /^<.*> [\+-]uptime\|/i)
 			{&totalUptime();
 			&msgAll("Uptime: $days d $hours h $mins m");}
-		elsif($data =~ /^<.*> \+help\|/i)
+		elsif($data =~ /^<.*> [\+-]help\|/i)
 			{&buildHelp($user);
 			&msgUser("$user","$helpmsg");}
-		elsif($data =~ /^<.*> \+stats\|/i)
+		elsif($data =~ /^<.*> [\+-]stats\|/i)
 			{&buildStats();
 			&msgUser("$user","$statsmsg");}
-		elsif($data =~ /^<.*> \+rules\|/i)
+		elsif($data =~ /^<.*> [\+-]rules\|/i)
 			{&buildRules($user);
 			&msgUser("$user","$rules|");}
-		elsif($data =~ /^<.*> \+showOps\|/i)
+		elsif($data =~ /^<.*> [\+-]showOps\|/i)
 			{&showOps();
 			&msgAll("Ops online: $result|");}
-		elsif($data =~ /^<.*> \+records/i)
+		elsif($data =~ /^<.*> [\+-]records/i)
 			{if(&checkRecords())
 				{&msgAll("No New record has been set. Use +stats to view current records.");}	}
-		elsif($data =~ /^<.*> \+seen/i)
-			{if($data =~ /^<.*> \+seen\|/)
+		elsif($data =~ /^<.*> [\+-]seen/i)
+			{if($data =~ /^<.*> [\+-]seen\|/)
 				{&msgAll("usage: +seen username");}
 			elsif($data =~ /^<.*> \s?(\S*) (.*)\|/)
 				{&seen($2);
 				&msgUser("$user","$seenresult");}}
-		elsif($data =~ /^<.*> \+dcgui\|/i)
+		elsif($data =~ /^<.*> [\+-]dcgui\|/i)
 			{&msgAll("DCGUI - Homepage = http://dc.ketelhot.de/|");}
-		elsif($data =~ /^<.*> \+sqlbot\|/i)
+		elsif($data =~ /^<.*> [\+-]sqlbot\|/i)
 			{&msgAll("sqlBot - Project Homepage = http://sqlbot.berlios.de/|");}
-		elsif($data =~ /^<.*> \+topchat\|/i)
+		elsif($data =~ /^<.*> [\+-]topchat\|/i)
 			{&topChat();&msgAll("$msg");}		
-		elsif($data =~ /^<.*> \+away/i)
+		elsif($data =~ /^<.*> [\+-]away/i)
 			{&userAway("$user","$data");}
-		elsif($data =~ /^<.*> \+back/i)
+		elsif($data =~ /^<.*> [\+-]back/i)
 			{&userBack("$user");}
-		elsif($data =~ /^<.*> \+/i)
+		elsif($data =~ /^<.*> [\+-]/i)
 			{&msgAll("RTFM!  Try +help");}
 		elsif($data =~ /^<.*>(.*)/)
 			{&incLineCount($user);
