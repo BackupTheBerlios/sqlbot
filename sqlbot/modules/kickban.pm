@@ -171,6 +171,19 @@ sub banUser (){
     		{&addToLog($user,$lastAction,$reason);}
 	&msgUser($user,"You have been BANNED share:$reason");
 	odch::kick_user($user);
+}
+
+sub checkNick(){
+	
+	my($checknick) = @_;
+	my($orignick) = $checknick;
+	
+	$checknick =~ s/'//g;
+	
+	if (lc($checknick) ne lc($orignick)){
+		return(1);}
+		
+	
 
 }
 ## Required in every module ##
