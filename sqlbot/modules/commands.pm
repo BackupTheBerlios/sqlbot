@@ -174,14 +174,14 @@ Public Commands (Main Chat):-\r
 . +version = Shows which version the bot is running\r
 . +stats = Channel statistics\r
 . +myinfo = Show your information \r
-. +away <reason> = Mark yourself away for the reason\r
+. +away reason = Mark yourself away for the reason\r
 . +back = Mark yourself back. (Auto back on hub chat)\r
 . +topchat = Top 10 talkers....\r
 . +uptime = The Up Time of the hub\r
-. +seen <username> = show when the specified user was last online\r
+. +seen username = show when the specified user was last online\r
 Public commands(Private Msg with Bot) Available to ALL:-\r
 . +help = Shows these commands in a PM\r
-. +seen <username> = show when the specified user was last online\r 
+. +seen username = show when the specified user was last online\r 
 . +stats = Shows the hub statistics\r
 . +rules = Shows the rules\n\r";
 	if(($type eq 32) or ($type eq 16) or ($type eq 8))
@@ -194,23 +194,23 @@ Public commands(Private Msg with Bot) Available to ALL:-\r
 		my($defaultLogEntries) = &getHubVar("nr_log_entries");
 		$helpmsg .="\n\r\n\rOp commands(PM):-\r
 . +recheck = force bot to re check all clients,and update online table\r
-. +info <username> = get the info of another user\r
+. +info username = get the info of another user\r
 . +log = show the last $defaultLogEntries Entries from the hublog\r
 . +kicklog = show the last $defaultLogEntries kicks log\r
 . +banlog = show the last $defaultLogEntries bans log\r
-. +history <username> = show the last $defaultLogEntries log entries of the user\r
-. +addfaker <username\' = Add the user to the fakers log, then Nuke\r
-. +kick <username> \"reason\" = Kick the user for the reason\r
-. +tban <username> \"reason\" = Temp Ban user for the reason\r
-. +pban <username> \"reason\" = Perm Ban user for the reason\r
-. +uban <username> = Un Ban user for the reason\r
+. +history username = show the last $defaultLogEntries log entries of the user\r
+. +addfaker username = Add the user to the fakers log, then Nuke\r
+. +kick username \"reason\" = Kick the user for the reason\r
+. +tban username \"reason\" = Temp Ban user for the reason\r
+. +pban username \"reason\" = Perm Ban user for the reason\r
+. +uban username = Un Ban user for the reason\r
 Any command NOT recognised is sent to ALL OPs as OP CHAT \r";
 	}
 	if($type eq 32)
 	{
 		$helpmsg .="\n\r\n\rOp-Admin commands(PM):-\r
-. +auser \'username\' \'password\' \'level\'= Add/Edit the user with given password at level (0=reg,1=Op,2=OpAdmin) Also use to change User level\r
-. +duser \'username\' = Delete user\r";
+. +auser username password level = Add/Edit the user with given password at level (0=reg,1=Op,2=OpAdmin) Also use to change User level\r
+. +duser username = Delete user\r";
 	}
 }
 
