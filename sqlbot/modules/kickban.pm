@@ -120,13 +120,15 @@ sub banUser (){
 		&msgUser("$user","Dont FAKE your Client OR share ... Your IP has been [Banned]");
 		&addToFakers($user);
 		odch::add_ban_entry($ip);
-		&msgAll("P-BANNED $user($ip) for:$reason");
+		if (&getVerboseOption("verbose_banned")){
+			&msgAll("P-BANNED $user($ip) for:$reason");}
 		return(1);}
 	elsif ($mode =~ /uban/i){	# Remove ban
 		my($allowStatus) = "allow";
 		my($lastReason) = "Removed"; 
 		$mode = "Un-Ban";
-		&msgAll("UnBan/Reset Kick Count $user($ip)");
+		if (&getVerboseOption("verbose_banned")){
+			&msgAll("P-BANNED $user($ip) for:$reason");}
 		odch::remove_ban_entry($ip);
 		$dbh->do("UPDATE userDB SET tBanCount='0',
 					kickCount='0',
@@ -134,6 +136,8 @@ sub banUser (){
 					lastReason='$reason',
 				    	lastAction='$mode'
 				    	WHERE nick='$user'");
+		if(&getLogOption("log_bans"))
+			{&addToLog($user,$mode,$reason);}			
 		return(1);}
 	else{return(1);}
 	$dbh->do("UPDATE userDB SET tBanCountTot='$tBanCountTot',

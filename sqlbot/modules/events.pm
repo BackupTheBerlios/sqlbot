@@ -60,11 +60,7 @@ sub processEvent(){
 			&kickUser($user,$REASON);}}
 
 	elsif (lc($ACTION) eq lc($nuked)){
-		if(&getLogOption("log_nukes"))
-      			{&addToLog($user,$ACTION,$REASON);}
-		&banUser($user,$REASON,$ip,"pban");
-		if (&getVerboseOption("verbose_nukes"))
-			{&msgAll("$ACTION $user for : $REASON");}}
+		&banUser($user,$REASON,$ip,"pban");}
 }
 
 sub botWorker(){

@@ -58,12 +58,12 @@ sub seen()
 		{my($sth) = $dbh->prepare("SELECT * FROM userDB WHERE nick like '$userseen' LIMIT $defaultLogEntries");
 		$sth->execute();
 		while($ref = $sth->fetchrow_hashref()){
-			my($lastTime) = $ref->{'lastTime'};
+			my($outTime) = $ref->{'outTime'};
 			my($nick) = $ref->{'nick'};
 			my($status)="Online";
 			my($userOnline) = $dbh->selectrow_array("SELECT COUNT(*) FROM userDB WHERE nick='$userseen' AND status='$status' ");
 			if (($userOnline) ne 1)
-				{$seenresult .= "$nick was last online on $lastTime\n\r";}
+				{$seenresult .= "$nick was last online on $outTime\n\r";}
 			else
 				{$seenresult .= "$nick is on online now\n\r";}
 			$match++;
