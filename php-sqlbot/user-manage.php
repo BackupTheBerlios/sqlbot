@@ -20,12 +20,11 @@ if ($f == delete)
 	{$sql = "DELETE FROM userDB $where";$result = mysql_query($sql) or die(mysql_error());}
 if ($f == uType){
 	$sql = "INSERT INTO botWorker VALUES ('mysql_insertid',$uType,'$nick','$ip','$passwd')";
-	echo "$uType $nicksearch($ip) status changed.<br>";
 	$result = mysql_query($sql) or die(mysql_error());}
 else if ($f == aStatus){
-	$sql = "INSERT INTO botWorker VALUES ('mysql_insertid',$aStatus,'$nick','$ip','$information')";
-	echo "$aStatus $search($ip) status changed.<br>";
+	$sql = "INSERT INTO botWorker VALUES ('mysql_insertid','$value','$nick','$ip','$information')";
 	$result = mysql_query($sql) or die(mysql_error());}
+	
 if (empty($offset)) {$offset=0;}
 mysql_connect($databasehost,$username,$password);
 @mysql_select_db($database) or die( "Unable to select database");
@@ -141,7 +140,13 @@ while ($data=mysql_fetch_array($result))
 <td nowrap><a href="user-manage.php?field=shareByte&search=<? echo "$byteShare"?>" title="<? echo "$Share" ?>" style="cursor:help"><? echo "$font$byteShare$fontend"; ?></a></td>
 <td nowrap><a href="<? echo "user-manage.php?field=lastAction&search=$lastAction" ?>"><? echo "$font$lastAction$fontend"; ?></a></td>
 <td nowrap><a href="<? echo "user-manage.php?field=lastReason&search=$lastReason" ?>"><? echo "$font$lastReason$fontend"; ?></a></td>
-	
+<?if ($allowStatus == Banned)
+{?>
+<td>
+<form action="<? echo "user-manage.php?f=aStatus&field=$field&search=$search&nick=$nick&ip=$IP&value=23&information=Un-ban";?>" method="post">
+<input type="Submit" value="UnBan"></form>
+</td>
+<?}?>	
 	</tr>
 	<?
 	$i++;
