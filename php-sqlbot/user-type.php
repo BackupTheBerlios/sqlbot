@@ -89,7 +89,7 @@ if (!empty($numrows)){
 <tr><td><? echo "$font";?>User Type:<? echo "$fontend";?></td><td nowrap><? echo "$font$uType1$fontend"; ?></td></tr>
 <tr><td><? echo "$font";?>IP:<? echo "$fontend";?></td><td nowrap><? echo "$font$IP$fontend"; ?></td></tr>
 <tr><td><? echo "$font";?>Hostname:<? echo "$fontend";?></td><td nowrap><? echo "$font$hostname$fontend"; ?></td></tr>
-<tr><td><? echo "$font";?>Country:<? echo "$fontend";?></td><td nowrap><? echo "$font$country$fontend"; ?></td></tr>
+<tr><td><? echo "$font";?>Country:<? echo "$fontend";?></td><td nowrap><img src="img/flags/<? echo "$country" ?>.GIF" alt="<? echo "$country" ?>" border="0" title="<? echo "$country" ?>"> <? echo "$font$country$fontend"; ?></td></tr>
 <tr><td><? echo "$font";?>Current Kick Count:<? echo "$fontend";?></td><td nowrap><? echo "$font$kickCount$fontend"; ?></td></tr> 
 <tr><td><? echo "$font";?>Total Kicks:<? echo "$fontend";?></td><td nowrap><? echo "$font$kickCountTot$fontend"; ?></td></tr>
 <tr><td><? echo "$font";?>Total pBans:<? echo "$fontend";?></td><td nowrap><? echo "$font$pBanCountTot$fontend"; ?></td></tr>
