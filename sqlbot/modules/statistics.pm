@@ -42,7 +42,7 @@ sub buildStats(){
 	$rth->execute();
 	my($tmp_records) = "";
 	while (my $ref = $rth->fetchrow_hashref()) {
-		$tmp_records .=  "Record $ref->{'recordName'} is $ref->{'recordValue'} Set on $ref->{'date'} at $ref->{'time'}\n\r";}
+		$tmp_records .=  "Record $ref->{'recordName'} is $ref->{'recordValue'} Set on $ref->{'date'} at $ref->{'time'}\r";}
 	$rth->finish();
 	my($records) = "$tmp_records";
 	my($webAddress) = &getHubVar("hub_website_address");
@@ -52,7 +52,7 @@ Users online : $totalusers \r
 Total Share  : $totalgigs Gigs, Average share of $averagegigs Gigs per user.\r
 Online Clients:\r
 $clients \r
-Users Online from Countries: $countries\n\r
+Users Online from Countries: $countries\r\r
 Total Unique visitors: $totDiffUsers\r
 Current Records :\r
 $records\r
