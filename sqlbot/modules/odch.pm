@@ -30,10 +30,16 @@ sub kicked_user()
 sub new_user_connected(){
 	my($user) = @_;
 	&parseClient($user);
-	if(&userInDB($user) eq 1)
+	
+	my($userInDB) = &userInDB($user,$ip);
+	if($userInDB eq 1)
 		{&updateUserRecord($user);}
+	elsif($userInDB eq 2)
+		{&userOnline($user);
+		return;}
 	else
 		{&createNewUserRecord($user);}
+		
 	&userConnect($user);	
 	
 	&checkKicks($user);
@@ -48,10 +54,16 @@ sub new_user_connected(){
 sub reg_user_connected(){
 	my($user) = @_;
 	&parseClient($user);
-	if(&userInDB($user) eq 1)
+	
+	my($userInDB) = &userInDB($user,$ip);
+	if($userInDB eq 1)
 		{&updateUserRecord($user);}
-	else
+	elsif($userInDB eq 2)
+		{&userOnline($user);
+		return;}
+	else # if new
 		{&createNewUserRecord($user);}
+		
 	&userConnect($user);
 	
 	if (&getConfigOption("check_reg")) 
@@ -69,8 +81,13 @@ sub reg_user_connected(){
 sub op_connected(){
 	my($user) = @_;
 	&parseClient($user);
-	if(&userInDB($user) eq 1)
+	
+	my($userInDB) = &userInDB($user,$ip);
+	if($userInDB eq 1)
 		{&updateUserRecord($user);}
+	elsif($userInDB eq 2)
+		{&userOnline($user);
+		return;}
 	else
 		{&createNewUserRecord($user);}
 	&userConnect($user);
@@ -91,8 +108,14 @@ sub op_admin_connected()
 {
 	my($user) = @_;
 	&parseClient($user);
-	if(&userInDB($user) eq 1)
+	
+	my($userInDB) = &userInDB($user,$ip);
+	if($userInDB eq 1)
 		{&updateUserRecord($user);}
+	elsif($userInDB eq 2)
+		{&debug("$user is set to allow and has not been logged");
+		&userOnline($user);
+		return;}
 	else
 		{&createNewUserRecord($user);}
 	&userConnect($user);
@@ -160,15 +183,12 @@ sub data_arrival(){
 			{&myInfo($user);}
 		#Op commands
 		elsif($type eq 8)
-		{
-			if ($param1 =~ /^[\!+-]pass/){
+			{if ($param1 =~ /^[\!+-]pass/){
 				if($param1 =~ /^[\!+-]pass\|/i)
 					{&msgUser("$user","+pass oldpassword newpass");}
-				else{&chPassUser($user,$param2,$param3,$param4);}}
-		}
+				else{&chPassUser($user,$param2,$param3,$param4);}}}
 		elsif($type eq 32 or $type eq 16)
-		{
-			if ($param1 =~ /^[\!+-]info/){
+			{if ($param1 =~ /^[\!+-]info/){
 				if($param1 =~ /^[\!+-]info\|/i)
 					{&msgUser("$user","+info username");}
 				else
@@ -179,8 +199,9 @@ sub data_arrival(){
 				else
 					{&chPassUser($user,$param2,$param3);}}
 			elsif ($param1 =~ /^[\!+-]recheck/i){
-				&msgAll("$user has forced all clients to be rechecked");	
-				&clientRecheck();}
+				&msgUser("$user","Rechecking Online clients");	
+				&clientRecheck();
+				&msgUser("$user","Done");}
 			elsif ($param1 =~ /^[\!+-]log/i)
 				{&log($user);}
 			elsif ($param1 =~ /^[\!+-]kicklog/i)

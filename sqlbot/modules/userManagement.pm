@@ -17,18 +17,23 @@
 #Open this users record
 
 # Does this user record exist ?
-sub userInOnline(){
+sub userIsOnline(){
 	my($user) = @_;
-	my($value) = $dbh->selectrow_array("SELECT COUNT(*) FROM userDB WHERE nick='$user' AND status='Online'");
+	my($value) = $dbh->do("SELECT COUNT(*) FROM userDB WHERE (nick='$user' AND status='Online')");
 	if($value eq 1)
 	{return 1;}
 	return 0;
 }
+
 sub userInDB(){
-	my($user) = @_;
-	my($value) = $dbh->selectrow_array("SELECT COUNT(*) FROM userDB WHERE nick='$user'");
-	if($value eq 1)
-	{return 1;}
+	my($user,$ip) = @_;
+	my($value) = $dbh->do("SELECT COUNT(*) FROM userDB WHERE (nick='$user' OR IP='$ip')");	
+	if($value eq 1) 
+		{$value = $dbh->do("SELECT allowStatus FROM userDB WHERE (nick='$user' OR IP='$ip') && allowStatus='allow'");
+		if($value eq 1) 
+			{return 2;}
+		else 
+			{return 1;}}
 	return 0;
 }
 # Create a new record with some default
@@ -38,22 +43,18 @@ sub createNewUserRecord(){
 		
 	my($dtime)="$date $time";
 	$connection = &getConnection($conn);
-
-	$dbh->do("INSERT INTO userDB VALUES ('','$user','not set',
-		'','$utype','$type','Normal','off','',	
+	$dbh->do("INSERT INTO userDB VALUES ('','$user','not set','','$utype','$type','Normal','off','',	
 		'$fullDescription','$dcClient','$dcVersion','$NSlots','$NbHubs','$UploadLimit','$connection','$connectionMode','$country',
 		'$ip','$hostname','$dtime','','$dtime','','1','0','0','0',
 		'0','0','0','0','$shareBytes','$shareBytes','','')");
-
 }
 
 sub updateUserRecordRecheck(){
 	my($user) = @_;
 	$connection = &getConnection($conn);
-	$dbh->do("UPDATE userDB SET 	slots='$NSlots',hubs='$NbHubs',limiter='$UploadLimit',
-					connection='$connection',connectionMode='$connectionMode',
-					fullDescription='$fullDescription',shareByte='$shareBytes'
-					WHERE nick='$user'");
+	
+	$dbh->do("UPDATE userDB SET slots='$NSlots',hubs='$NbHubs',limiter='$UploadLimit',
+			fullDescription='$fullDescription',shareByte='$shareBytes' WHERE nick='$user'");
 }
 
 # User record exists so update the details
@@ -62,21 +63,21 @@ sub updateUserRecord(){
 	&setTime();
 	my($inTime)="$date $time";
 	
-	my($uurth) = $dbh->prepare("SELECT loginCount FROM userDB WHERE nick='$user'");
+	my($uurth) = $dbh->prepare("SELECT loginCount FROM userDB WHERE (nick='$user' OR IP='$ip')");
 	$uurth->execute();
 	my($ref) = $uurth->fetchrow_hashref();
 	my($loginCount) = "$ref->{'loginCount'}";
 	$loginCount++;
 	$uurth->finish();
 	my($connection) = &getConnection($conn);
-	$dbh->do("UPDATE userDB SET utype='$utype', dcClient='$dcClient',
+	$dbh->do("UPDATE userDB SET 	nick='$user', utype='$utype', dcClient='$dcClient',
 					dcVersion='$dcVersion',slots='$NSlots',
 					hubs='$NbHubs',limiter='$UploadLimit',
 					connection='$connection',connectionMode='$connectionMode',
 					country='$country',hostname='$hostname',
 					IP='$ip',inTime='$inTime',avShareBytes='$shareBytes',
 					loginCount='$loginCount',fullDescription='$fullDescription',
-					shareByte='$shareBytes'	WHERE nick='$user'");
+					shareByte='$shareBytes'	WHERE (nick='$user' OR IP='$ip') ");
 }
 
 # Check the allow status of this user
@@ -89,7 +90,7 @@ sub userStatus(){
 sub userOffline(){
 	my($user) = @_;
 	&setTime();
-	my($uoth) = $dbh->prepare("SELECT inTime,onlineTime FROM userDB WHERE nick = '$user'");
+	my($uoth) = $dbh->prepare("SELECT inTime,onlineTime FROM userDB WHERE (nick='$user' OR IP='$ip')");
 	$uoth->execute();
 	my($ref) = $uoth->fetchrow_hashref();
 
@@ -102,7 +103,7 @@ sub userOffline(){
 
 	$dbh->do("UPDATE userDB SET 	status='Offline',
 					outTime='$outTime'
-					WHERE nick='$user'");
+					WHERE nick='$user' ");
 
 #					onlineTime='$totOnlineTime'					
 }
@@ -110,6 +111,7 @@ sub userOffline(){
 sub userOnline(){
 	my($user) = @_;
 	my($online) ="Online";
+	&setTime();
 	$dbh->do("UPDATE userDB SET status='$online',
 					inTime='$date $time'
 					WHERE nick='$user'");
@@ -117,7 +119,7 @@ sub userOnline(){
 
 sub addToFakers(){
 	my($user) = @_;
-	my($atfth) = $dbh->prepare("SELECT pBanCount FROM userDB WHERE nick = '$user'");
+	my($atfth) = $dbh->prepare("SELECT pBanCount FROM userDB WHERE nick='$user'");
 	$atfth->execute();
 	my($ref) = $atfth->fetchrow_hashref();
 
@@ -131,7 +133,7 @@ sub addToFakers(){
 					pBanCount='$pBanCount', 
 					lastAction='$lastAction', 
 					lastReason='$lastReason' 
-					WHERE nick='$user'");
+					WHERE (nick='$user' OR IP='$ip')");
 }
 
 # User has spoken increment line count
@@ -139,7 +141,7 @@ sub addToFakers(){
 sub incLineCount(){
 	my($user)=@_;
 
-	my($ilcth) = $dbh->prepare("SELECT lineCount FROM userDB WHERE nick='$user'");
+	my($ilcth) = $dbh->prepare("SELECT lineCount FROM userDB WHERE nick='$user' ");
 	$ilcth->execute();
 	my($ref) = $ilcth->fetchrow_hashref();
 
@@ -156,6 +158,7 @@ sub setRegUser(){
 
 	my($userLevel) = odch::check_if_registered($setUser);
 	my($type)  = odch::get_type($user);
+	my($ip) = odch::get_ip($setUser);
 
 	if(($type ne 32) && ($level eq 2))
 		{&msgUser($user,"You Cannot Change the level of an OpAdmin");
@@ -169,7 +172,7 @@ sub setRegUser(){
 	&msgUser($setUser,">>>> $user has changed your level to $level your password is $passwd");
 	# Change this user type in the userDB
 	my($utype)  = odch::get_type($setUser);
-	$dbh->do("UPDATE userDB SET type='$utype',passwd='$passwd' WHERE nick='$setUser'");
+	$dbh->do("UPDATE userDB SET type='$utype',passwd='$passwd' WHERE (nick='$user'");
 	&addToLog($setUser,"Add/Edit User",$user);	
 	
 }
