@@ -74,7 +74,7 @@ while ($data=mysql_fetch_array($result))
 
 	?>
 	<form action="<? echo "log-hub.php?f=row&id=$id&offset=$offset&search=$search" ?>" method="post"> 
-	<td nowrap><a href="<? echo "log-hub.php?field=nick&search=$nick" ?>"><? echo "$font$nick$fontend"; ?></a></td>
+	<td nowrap><a href="<? echo "user-manage.php?field=nick&search=$nick" ?>"><? echo "$font$nick$fontend"; ?></a></td>
 	<td nowrap><? echo "$font$logTime$fontend"; ?></td> 
 	<td nowrap><a href="<? echo "log-hub.php?field=action&search=$action"; ?>"><? echo "$font$action$fontend"; ?></a></td>
 	<td nowrap><a href="<? echo "log-hub.php?field=reason&search=$reason"; ?>"><? echo "$font$reason$fontend"; ?></a></td>
