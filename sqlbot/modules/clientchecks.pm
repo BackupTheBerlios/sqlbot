@@ -94,63 +94,52 @@ sub splitDescription() {
 # Rescan all online clients
 sub clientRecheck()
 {
-#	my ($usersonline) = odch::get_user_list(); #Get space separated list of who is online
-#	my ($numonlineusers) = odch::count_users(); #And how many
-#
-#	@userlist=split(/\ /,$usersonline);
-#	my ($checkUserCount) = 0;
-#	while ($checkUserCount != $numonlineusers)
-#	{string to int
-#		$user=$userlist[$checkUserCount];
-#		$checkUserCount ++;
-#		&parseClient($user);
-#
-#
-#		{if(lc($botname) ne lc($user)) #if not a bot, should be in the online table
-#				{&addToOnline($user);}}	
-#		else
-#			{&debug("ReChecking - updating $user,type = $type");
-#			&updateInOnline($user);
-#			if($type eq 0)	
-#				{&delFromOnline($user);}
-#			if($type eq 32)
-#			{ #If Opadmin
-#			# Check OP admins if set
-#			if (&getConfigOption("check_opadmin")) {
-#					&checkKicks($user);  # Check kick counter
-#					&processEvent($user);    # take action if any
-#				}
-#			}
-#			elsif($type eq 16) { # if Op
-#				# Check OPs if set
-#				if (&getConfigOption("check_op")) {
-#					&checkKicks($user);  # Check kick counter
-#					&processEvent($user);    # take action if any
-#				}
-#			}
-#			elsif($type eq 8) { # if Reg User
-#				if (&getConfigOption("check_reg")) 
-#				{
-#					&checkKicks($user);  # Check kick counter
-#					&processEvent($user);    # take action if any
-#				}
-#			}
-#			else {	# Normal user
-#				&checkKicks($user);  # Check kick counter
-#				&processEvent($user);    # take action if any
-#			}
-#		}
-#	}
-#	# Make sure the online sql table does not contain ghosts
-#	my ($cth) = $dbh->prepare("SELECT * FROM userDB WHERE status='Online'");
-#	$cth->execute();
-#	while (my $ref = $cth->fetchrow_hashref()) {
-#		$user = "";
-#		$user = "$ref->{'name'}"; 
-#		$type = odch::get_type($user);
-#		if($type eq 0 )	{&delFromOnline($user);}
-#	}
-#	$cth->finish();
+	my ($usersonline) = odch::get_user_list(); #Get space separated list of who is online
+	my ($numonlineusers) = odch::count_users(); #And how many
+
+	@userlist=split(/\ /,$usersonline);
+	my ($checkUserCount) = 0;
+	while ($checkUserCount != $numonlineusers)
+	{
+		$user=$userlist[$checkUserCount];
+		$checkUserCount ++;
+		&parseClient($user);
+
+
+		if (&userOnline($user) ne 1){
+			if(lc($botname) ne lc($user)) #if not a bot, should be in the online table
+				{&updateUserRecord($user);}}	
+		else{
+			&updateUserRecordRecheck($user);
+			if($type eq 0 )	
+				{&userOffline($user);}
+			if($type eq 32 )
+			{ #If Opadmin
+			# Check OP admins if set
+			if (&getConfigOption("check_opadmin")) {
+					&checkKicks($user);  # Check kick counter
+					&processEvent($user);}}    # take action if any
+			elsif($type eq 16) { # if Op
+				# Check OPs if set
+				if (&getConfigOption("check_op")) {
+					&checkKicks($user);  # Check kick counter
+					&processEvent($user); }}   # take action if any
+			elsif($type eq 8) { # if Reg User
+				if (&getConfigOption("check_reg")) {
+					&checkKicks($user);  # Check kick counter
+					&processEvent($user); }}   # take action if any
+			else {	# Normal user
+				&checkKicks($user);  # Check kick counter
+				&processEvent($user); }}}   # take action if any
+	# Make sure the online sql table does not contain ghosts
+	my ($cth) = $dbh->prepare("SELECT * FROM userDB WHERE status='Online'");
+	$cth->execute();
+	while (my $ref = $cth->fetchrow_hashref()) {
+		$user = "";
+		$user = "$ref->{'nick'}"; 
+		$type = odch::get_type($user);
+		if($type eq 0 )	{&delFromOnline($user);}}
+	$cth->finish();
 }
 
 

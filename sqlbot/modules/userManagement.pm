@@ -17,6 +17,13 @@
 #Open this users record
 
 # Does this user record exist ?
+sub userOnline(){
+	my($user) = @_;
+	my($value) = $dbh->selectrow_array("SELECT COUNT(*) FROM userDB WHERE nick='$user' AND status='Online'");
+	if($value eq 1)
+	{return 1;}
+	return 0;
+}
 sub userInDB(){
 	my($user) = @_;
 	my($value) = $dbh->selectrow_array("SELECT COUNT(*) FROM userDB WHERE nick='$user'");
@@ -38,6 +45,15 @@ sub createNewUserRecord(){
 		'$ip','$hostname','$dtime','','$dtime','','1','0','0','0',
 		'0','0','0','0','$shareBytes','$shareBytes','','')");
 
+}
+
+sub updateUserRecordRecheck(){
+	my($user) = @_;
+	$connection = &getConnection($conn);
+	$dbh->do("UPDATE userDB SET 	slots='$NSlots',hubs='$NbHubs',limiter='$UploadLimit',
+					connection='$connection',connectionMode='$connectionMode',
+					fullDescription='$fullDescription',shareByte='$shareBytes'
+					WHERE nick='$user'");
 }
 
 # User record exists so update the details
