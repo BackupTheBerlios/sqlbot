@@ -42,7 +42,7 @@ sub new_user_connected(){
 	&processEvent($user);
 	&logLogon($user);
 #	&buildHelp($user);
-	&msgUser("$user","$helpmsg");
+#	&msgUser("$user","$helpmsg");
 }
 
 # Fires when a registered user has connected
@@ -61,7 +61,7 @@ sub reg_user_connected(){
 		{&msgAll("Reg User $user just connected");}
 
 #	&buildHelp($user);
-	&msgUser("$user","$helpmsg");
+#	&msgUser("$user","$helpmsg");
 }
 
 # Fires when an op has connected
@@ -80,7 +80,7 @@ sub op_connected(){
 		{&msgAll("Op $user just connected");}
 
 #	&buildHelp($user);
-	&msgUser("$user","$helpmsg");
+#	&msgUser("$user","$helpmsg");
 }
 
 #Fires when an Op Admin has connected
@@ -101,7 +101,7 @@ sub op_admin_connected()
 		{&msgAll("OpAdmin $user just connected");}
 
 #	&buildHelp($user);
-	&msgUser("$user","$helpmsg");
+#	&msgUser("$user","$helpmsg");
 
 }
 
