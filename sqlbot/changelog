@@ -5,6 +5,8 @@ SQLBot Changelog
 CVS
 -=-=-=-=-=-=-=-=-=-=-=-=-
 
+0.2.1
+-=-=-=-=-=-=-=-=-=-=-=-=-
 
 Fixed	: Coding typos and bugs in user-manager (AORCrazy)
 Added	: Bot description, hardcoded Title and Connection DSL

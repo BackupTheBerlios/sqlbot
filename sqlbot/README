@@ -104,13 +104,13 @@ Install mysql tables:
 	and create a database called "odch". This will be the databse that sqlbot will
 	use for all it's logging and configs. Right, installed?
 
-	I have included a sqlbot_install.pl file. You have to edit this file to include
-	the server, username and password. After you have edited it, run it as:
+	I have included a sqlbot_install.pl file. run it as:
 
 		`perl sqlbot_install.pl`
 
-	it should hopefully install your required tables, and default data. If you get
-	errors, look at the errors, as they probably will tell you what is wrong.
+	it will prompt you for your sql host, username and password it will install 
+	your required tables, and default data. Errors may be shown if table data cannot
+	be created for whatever reason.
 	
 
 
