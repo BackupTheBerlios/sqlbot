@@ -52,8 +52,8 @@ sub kickWorker()
 		$kickCountTot++;
 		$kw1th->finish();
 		$dbh->do("UPDATE userDB SET kickCountTot='$kickCountTot',kickCount='$kickCount',lastReason='$information',lastAction='Kicked' 
-			WHERE nick='$user' AND lastAction!='P-Banned'");
-		$dbh->do("DELETE FROM botWorker WHERE function LIKE '1%' AND nick='$user'");
+			WHERE nick='$nick' AND lastAction!='P-Banned'");
+		$dbh->do("DELETE FROM botWorker WHERE function LIKE '1%' AND nick='$nick'");
 	}
 	$kwth->finish();
 	
@@ -63,7 +63,6 @@ sub kickWorker()
 sub kickUser(){
 	my($user,$lastReason)=@_;
 	my($ip) = odch::get_ip($user);
-	if ($ip =~ /192.168/) {$ip = &getHubVar("external_ip"); }
 
 	my($sqluser) = &sqlConvertNick($user);
 	$dbh->do("INSERT INTO botWorker VALUES ('mysql_insertid','10','$sqluser','$ip','$lastReason')");
