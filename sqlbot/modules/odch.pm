@@ -155,7 +155,7 @@ sub data_arrival(){
 		elsif($pm =~ /!myinfo/)
 			{&myinfo(@_);}
 		#Op commands
-		if($type eq 32 or $type eq 16)
+		elsif($type eq 32 or $type eq 16)
 		{
 			&debug("$pm");
 			if ($pm =~ /!info/){
