@@ -96,11 +96,13 @@ while ($data=mysql_fetch_array($result))
 	$limiter=mysql_result($result,$i,"limiter");
 		if ($limiter == "0") {$limiter = "none";}
 	$dcClient=mysql_result($result,$i,"dcClient");
+	
+	$default_popup="$dcClient $dcVersion  Hubs=$hubs  Slots=$slots  Limiter=$limiter  Mode=$connectionMode";
+	
 	if ( $dcClient == "No Tag" ) { $icoClient = NoTag ; $popup = "No Tag";}
-	if ( $dcClient == "++" ) { 	$icoClient = DCpp ;
-						$popup= "$dcClient $dcVersion  Slots=$slots  Hubs=$hubs  Mode=$connectionMode  Limiter=$limiter";}
-	if ( $dcClient == "DCGUI" ) { $icoClient = DCGUI ;
-						$popup= "$dcClient $dcVersion  Slots=$slots  Hubs=$hubs  Mode=$connectionMode  Limiter=$limiter";}
+	if ( $dcClient == "++" ) { $icoClient = DCpp ; $popup=$default_popup;}
+	if ( $dcClient == "DC" ) { $icoClient = DC ; $popup=$default_popup;}			
+	if ( $dcClient == "DCGUI" ) { $icoClient = DCGUI ; $popup=$default_popup;}
 
 
 
