@@ -62,19 +62,22 @@ Email_Address : $ref->{'email'}");
 
 sub seen()
 {
-	my($user,$data)=@_;
-	my ($del,$subpm) = ($1,$2);
+	my($userseen)=@_;
 	$seenresult = "";
 	my($match) = 0;
-	my($user_count) = $dbh->selectrow_array("SELECT COUNT(*) FROM user_stats where name like '%$2%'");
-	if ($user_count ne 1)	
-		{my($sth) = $dbh->prepare("SELECT * FROM user_stats where name like '%$2%'");
+	$seensearch = $userseen;
+	$userseen  =~ s/\*/\%/g;
+	$seenresult= "\r";
+	
+	my($user_count) = $dbh->selectrow_array("SELECT COUNT(*) FROM user_stats where name like '$userseen'");
+	if ($user_count ne 0)	
+		{my($sth) = $dbh->prepare("SELECT * FROM user_stats where name like '$userseen'");
 		$sth->execute();
 		while(my $ref = $sth->fetchrow_hashref()){
 			my($last_date) = $ref->{'last_date'};
 			my($last_time) = $ref->{'last_time'};
 			my($name) = $ref->{'name'};
-			my($user_online) = $dbh->selectrow_array("SELECT COUNT(*) FROM online where name like '$name'");
+			my($user_online) = $dbh->selectrow_array("SELECT COUNT(*) FROM online where name = '$name'");
 			if (($user_online) ne 1)
 				{$seenresult .= "$name was last online on $last_date at $last_time\n\r";}
 			else
@@ -82,16 +85,15 @@ sub seen()
 			$match++;
 		}
 		$sth->finish();
-		$seenresult .= "Matches found for $2: $match\n\r";
+		$seenresult .= "Matches found for \'$seensearch\': $match\n\r";
 	}
 	else
-		{my($user_online) = $dbh->selectrow_array("SELECT COUNT(*) FROM online where name like '$2'");
-		if (($user_online) ne 1)
-				{$seenresult .= "No Matches found for $2\r";}
+		{my($user_online) = $dbh->selectrow_array("SELECT COUNT(*) FROM online where name = '$userseen'");
+		if (($user_online) eq 0)
+				{$seenresult .= "No Matches found for \'$seensearch\'\r";}
 			else
-				{$seenresult .= "$2 is on online now\r";}
+				{$seenresult .= "\'$seensearch\' is on online now\r";}
 	}
-	$sth->finish();
 	&debug("$user - seen built");
 }
 
