@@ -20,7 +20,7 @@ sub splitDescription() {
 	#Initialise globals
 	$type=0; $ip=""; ;$GigsShared="";
 	$tmpdata=""; $fullDescription="Not Set"; $dcClient="";
-	$dcVersion=""; $NbHubs=0; $NSlots=0; $slt_ratio=""; $country="";
+	$dcVersion=""; $HubString=0;$NbHubs=0; $NSlots=0; $slt_ratio=""; $country="";
 	$UploadLimit=0; $conn=""; $connection=""; $email="";$tmpModeAP="";
 	$connectionMode="unknown";$tmp0="";$shareBytes=0;
 	my($tmpdata)="";my($verdata)="";my($tmpModeAP)="";
@@ -129,8 +129,12 @@ sub splitDescription() {
 
 	$NbHubs = $tmp2[1];
 	## New DC ++ format support ##
-	
-	if($NbHubs =~ /\//) { ($a,$b,$c)=split(/\//,$NbHubs); $NbHubs=$a+$b+$c; }
+
+	if($NbHubs =~ /\//) { 
+		($a,$b,$c)=split(/\//,$NbHubs); $NbHubs=$a+$b+$c;
+		$HubString= "Multi";
+	}
+	else { $HubString= "Single";}
 	if($NbHubs == 0){$NbHubs++;}
 
 	$NSlots = $tmp3[1];
@@ -236,11 +240,27 @@ sub parseClient(){
 			
 			## MIN VERSION ##
 			$dcVersion =~/(\d)\1{2,}/;
-			if ( $dcVersion ){
+			if ( $dcVersion )
+			{
 				if ($ref->{'min_version'} > $dcVersion)
-					{$REASON = "Version($dcVersion)";
-					$ACTION = "Kicked";}}
-
+				{
+					$REASON = "Version($dcVersion)";
+					$ACTION = "Kicked";
+				}
+				&debug("tagcheck - $user $dcClient $dcVersion $HubString");
+				if ($dcClient eq "++") 
+				{
+					if ($dcVersion > "0.239999") 
+					{
+						if($HubString ne "Multi")
+						{
+						&debug("tagcheck - kick $user Hacked tag");
+						$REASON = "Hacked tag";
+						$ACTION = "P-Banned";
+						}
+					}
+				}
+			}
 			## MIN SLOTS ##
 			if ($ref->{'min_slots'} > 0 )
 				{
