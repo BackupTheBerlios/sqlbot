@@ -505,34 +505,40 @@ void DCClient::MyInfo( CMessageMyInfo * MessageMyInfo )
           }
      }
      
-     switch(MessageMyInfo->m_eClientVersion)
-     {
-          case eucvDCPP:
-          {
-               info->SetClient("++"); //DC++
-               break;
-          }
-          case eucvDCGUI:
-          {
-               info->SetClient("DCGUI"); //DCGUI-QT
-               break;
-          }
-          case eucvNMDC:
-          {
-               info->SetClient("DC"); //NMDC
-               break;
-          }
-          case eucvDCTC:
-          {
-               info->SetClient("DCTC"); 
-               break;
-          }
-          default:
-          {
-               info->SetClient("Unknown");
-               break;
-          }
-     }
+	switch(MessageMyInfo->m_eClientVersion)
+	{
+		case eucvDCPP:
+		{
+			info->SetClient("++"); //DC++
+			break;
+		}
+		case eucvDCGUI:
+          	{
+               		info->SetClient("DCGUI"); //DCGUI-QT
+               		break;
+          	}
+          	case eucvNMDC:
+          	{
+               		info->SetClient("NMDC"); //NMDC
+               		break;
+          	}
+          	case eucvDCTC:
+          	{
+               		info->SetClient("DCTC"); 
+               		break;
+          	}
+	  	case eucvNONE:
+	  	{
+               		info->SetClient("NOTAG");
+               		break;
+	  	}
+          	default:
+          	{
+               		info->SetClient("UNKNOWN");
+               		break;
+          	}
+     	}
+	
      if (MessageMyInfo->m_sComment != "")
           {info->SetDescription(MessageMyInfo->m_sComment);}
 
@@ -823,17 +829,20 @@ bool DCClient::ClientCheck(UserInfo *info,CString nick)
           
           return(FALSE);
      }
-     //Check if client is recognised
-     if (info->GetClient() == "Unknown")
-     {                                      
-          if (hubConfig->GetHubKickNoTag())
-          {    //Kick untagged clients
-               interface->Kick(ehikb_UnTagged,info,nick);
-               return(FALSE);
-          }
+     
+	// Check if client is recognised
+	if (info->GetClient() == "NOTAG")
+	{                                      
+		if ( hubConfig->GetHubKickNoTag() )
+		{
+			//Kick untagged clients
+			interface->Kick(ehikb_UnTagged,info,nick);
+			return(FALSE);
+		}
 
-          return(TRUE);
-     }
+		return(TRUE);
+	}
+
      //Check Min Slots
      if (info->GetSlots() < hubConfig->GetHubMinSlots())
      {
