@@ -193,7 +193,8 @@ CREATE TABLE `clientRules` (
   `hubID` int(11) NOT NULL default '0', 
   `NAME` varchar(100) NOT NULL default '', 
   `VERSION` int(10) unsigned NOT NULL default '0', 
-  `ALLOW` tinyint(1) NOT NULL default '0', 
+  `CLIENTCOMMAND` int(11) NOT NULL default '0', 
+  `RULECOMMAND` int(11) NOT NULL default '0', 
   `MINSPEED` int(10) unsigned NOT NULL default '0', 
   `MAXSPEED` int(10) unsigned NOT NULL default '0', 
   `MINSHARE` bigint(20) NOT NULL default '0', 
@@ -212,9 +213,11 @@ CREATE TABLE `clientRules` (
   `MAXVERSIONPATCH` int(11) NOT NULL default '0', 
   `SLOTHUBRATIO` double NOT NULL default '0', 
   `ENABLEMOTD` tinyint(1) NOT NULL default '0', 
-  `MOTD` longtext NOT NULL, 
-  PRIMARY KEY Â (`ID`) 
+  `MOTD` text NOT NULL, 
+  `REDIRECTHOST` varchar(100) NOT NULL default '', 
+  PRIMARY KEY  (`ID`) 
 ) TYPE=MyISAM; 
+
 
 
 #Now wer have sql finished... log out:
