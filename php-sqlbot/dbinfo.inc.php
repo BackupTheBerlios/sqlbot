@@ -3,14 +3,14 @@
 $databasehost="localhost";
 
 // MySQL DB login
-$username="logger";
+$username="odch";
 $password="linux";
 
 //Name of DB
 $database="odch";
 
 // Name of the Hub (Used only for headers)
-$hubname="Nutter.kicks-ass.net";
+$hubname="AxlJab.homelinux.org:8080";
 
 //The Default number of entries to display, commands like !log
 $defaultLogEntries = 20;
@@ -20,12 +20,12 @@ $font = "<font size=\"-1\">";  // e.g  size=\"-1\"
 $fontend = "</font>";
 
 // Specify the Log Table Colours
-$rowColour = "FFCC66";
-$rowColourAlt = "FFFF33";
+$rowColour = "#e0e0e0";
+$rowColourAlt = "#EBEBEB";
 
 // Special courling and formatting for online Table Ops, & OpAdmin
-$OprowColour = "FFCC66";	//Colour 1
-$OprowColourAlt = "FFFF33";	//Colour 2
+$OprowColour = "#FFFF33";	//Colour 1
+$OprowColourAlt = "#FFFF33";	//Colour 2
 $highlight = "<i>";		//Special html tagging ? leave blank for none
 $highlightstop = "</i>";	//End of special tagging
 
