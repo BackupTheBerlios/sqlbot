@@ -36,7 +36,7 @@ if ($action == "delete_hub")
 }
 if ($action == "add_hub")
 {
-	$add_to_hubConfig = "INSERT INTO hubConfig VALUES('','','','0','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','')";
+	$add_to_hubConfig = "INSERT INTO hubConfig VALUES('','','','0','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','')";
 	$result = mysql_query($add_to_hubConfig) or die(mysql_error());
 }
 

@@ -15,7 +15,15 @@
 if ($hubID == "" || $uiNick == "" || $uiIp == "") {
 echo "$hubID ; $uiNick ; $uiIp ; Error... information parsed!<p>Please return to the <a href=\"index.php\"><font color=\"blue\">index.php</font></a>";}
 else {
-	
+
+if ($updateuser == "1") {
+$update_into_userInfo = "UPDATE userInfo SET
+		uiPassword='$uiPassword',
+		uiUserLevel='$uiUserLevel'
+	WHERE uiNick='$uiNick' && uiIp='$uiIp' && hubID='$hubID'";
+$result = mysql_query($update_into_userInfo) or die(mysql_error());
+}
+
 // GET BOT NAME
 $botresult=mysql_query("SELECT * FROM botConfig");
 	$bcName=htmlentities(mysql_result($botresult,$i,"bcName"));
@@ -86,6 +94,7 @@ $userresult=mysql_query("SELECT *,DATE_FORMAT(uiLastSeenTime, '%d/%m/%Y %H:%i') 
 	$HubID=mysql_result($userresult,$i,"HubID");
 	$uiCountry=mysql_result($userresult,$i,"uiCountry");
 	$uiIsAdmin=mysql_result($userresult,$i,"uiIsAdmin");
+	$uiUserLevel=mysql_result($userresult,$i,"uiUserLevel");
 	$uiPassword=htmlentities(mysql_result($userresult,$i,"uiPassword"));
 	$uiShare=mysql_result($userresult,$i,"uiShare");
 	$uiTag=htmlentities(mysql_result($userresult,$i,"uiTag"));
@@ -129,6 +138,32 @@ if ($uiStatus == "1") { $online_status = "<font color=\"#23FF07\">Online</font> 
 							$uiLastSeenTime = "Currently online";}
 if ($uiStatus == "0") { $online_status = "<font color=\"#EBEBEB\">Offline</font>"; }
 
+
+
+// COUNTRY CODES
+$long_ip_number = sprintf("%u", ip2long($uiIp));
+
+$country_query  = "SELECT country_code2,country_name FROM iptoc ".
+         "WHERE ip_from<=inet_aton('$uiIp') ".
+          "AND ip_to>=inet_aton('$uiIp') ";
+
+// Executing above query
+    $country_exec = mysql_query($country_query);
+
+
+    // Fetching the record set into an array
+    $ccode_array=mysql_fetch_array($country_exec);
+
+
+    // getting the country code from the array
+    $country_code=$ccode_array['country_code2'];
+
+
+    // getting the country name from the array
+    $country_name=$ccode_array['country_name'];
+
+
+
 ?>
 	<tr>
 		<th>User Details</th>
@@ -148,7 +183,7 @@ if ($uiStatus == "0") { $online_status = "<font color=\"#EBEBEB\">Offline</font>
 				</tr>
 				<tr>
 					<td nowrap>Country</td>
-					<td nowrap> : &nbsp; <?php echo "$uiCountry"; ?></td>
+					<td nowrap> : &nbsp; <?php echo "$country_name"; ?></td>
 				</tr>
 				<tr>
 					<td nowrap>User Type</td>
@@ -182,6 +217,29 @@ if ($uiStatus == "0") { $online_status = "<font color=\"#EBEBEB\">Offline</font>
 					<td nowrap>Bans</td>
 					<td nowrap> : &nbsp; <?php echo "$uiBanTotal"; ?></td>
 				</tr>
+				<tr>
+					<td nowrap>Password</td>
+					<td nowrap><form action="<?php echo "$PHP_SELF"; ?>" method="post">
+								<?php hidden_value(hubID, $hubID); ?>
+								<?php hidden_value(uiNick, $uiNick); ?>
+								<?php hidden_value(uiIp, $uiIp); ?>
+								<?php hidden_value(updateuser, 1); ?>
+								<input type="text" name="uiPassword"	value="<?php echo "$uiPassword"; ?>" class="search_input">
+								<select name="uiUserLevel" class="form_select">
+								<?php
+								function list_level($uiUserLevel, $user_level, $user_value) {
+								//if (empty($uiUserLevel)) { $uiUserLevel = "0"; }
+										if ( "$uiUserLevel" == "$user_level" ) { echo "<option selected value=\"$user_level\">$user_value"; }
+										else { echo "<option value=\"$user_level\">$user_value"; }}
+									list_level($uiUserLevel, 0, User);
+									list_level($uiUserLevel, 1, VIP);
+									list_level($uiUserLevel, 2, Op);
+									list_level($uiUserLevel, 3, OpAdmin);
+									?>
+								</select>
+								<input type="submit" value="Update" class="userdbnicknormal"></form>
+					</td>
+				</tr>
 			</table>			
 		</td>
 		<td valign="top">
@@ -200,7 +258,7 @@ if ($uiStatus == "0") { $online_status = "<font color=\"#EBEBEB\">Offline</font>
 					<td nowrap> : &nbsp; <?php echo "$uiTag"; ?></td>
 				</tr>
 				<tr>
-					<td nowrap>Message</td>
+					<td nowrap>Comment</td>
 					<td nowrap> : &nbsp; <?php echo "$uiDescription"; ?></td>
 				</tr>
 				<tr>
@@ -208,8 +266,8 @@ if ($uiStatus == "0") { $online_status = "<font color=\"#EBEBEB\">Offline</font>
 					<td nowrap> : &nbsp; <?php echo "$uiSpeed"; ?></td>
 				</tr>
 				<tr>
-					<td nowrap>Hubs (Norm/Reg/Op)</td>
-					<td nowrap> : &nbsp; <?php echo "$uiHubs/$uiHubsReg/$uiHubsOp"; ?></td>
+					<td nowrap>Hubs Tot (Op/Reg/Usr)</td>
+					<td nowrap> : &nbsp; <?php echo "$uiHubs &nbsp; [$uiHubsOp/$uiHubsReg/$uiHubsNorm]"; ?></td>
 				</tr>
 				<tr>
 					<td nowrap>Limiter</td>

@@ -73,10 +73,11 @@ hcOwner VARCHAR(40),
 hcSoftware VARCHAR(40),
 hcVersion VARCHAR(40),
 hcMotd LONGTEXT,
-hcMinConnection SET('28.8Kbps','33.6Kbps','56Kbps','ISDN','DSL','Satellite','Cable','LAN(T1)','LAN(T3)','WIRELESS','MICROWAVE'),
+hcMinSpeed SET('28.8Kbps','33.6Kbps','56Kbps','ISDN','DSL','Satellite','Cable','LAN(T1)','LAN(T3)','WIRELESS','MICROWAVE'),
 hcMinSlots int(2),
 hcMaxSlots int(3),
 hcMaxHubs int(3),
+hcMinLimiter int(2),
 hcSlotRatio FLOAT(3,2),
 hcEnableTagCheck SET('0','1'),
 hcKickNoTag SET('0','1'),
@@ -103,6 +104,7 @@ uiStatus  SET('0','1'),
 hubID INT(3) NOT NULL,
 uiCountry VARCHAR(3),
 uiIsAdmin SET('0','1'),
+uiUserLevel SET('0','1','2','3'),
 uiPassword VARCHAR(40),
 uiShare bigint(12),
 uiTag VARCHAR(50),
@@ -131,6 +133,7 @@ uiBanFlag VARCHAR(14),
 uiBanTime VARCHAR(14),
 uiBanExpire VARCHAR(14),
 uiLoginCount int(7));
+
 
 
 

@@ -40,10 +40,11 @@ if ($action == "update")
 		hcFileListDl='$hcFileListDl',
 		hcOwner='$hcOwner',
 		hcMotd='$hcMotd',
-		hcMinConnection='$hcMinConnection',
+		hcMinSpeed='$hcMinSpeed',
 		hcMinSlots='$hcMinSlots',
 		hcMaxSlots='$hcMaxSlots',
 		hcMaxHubs='$hcMaxHubs',
+		hcMinLimiter='$hcMinLimiter',
 		hcSlotRatio='$hcSlotRatio',
 		hcEnableTagCheck='$hcEnableTagCheck',
 		hcKickNoTag='$hcKickNoTag',
@@ -110,10 +111,11 @@ $result=mysql_query("SELECT * FROM hubConfig WHERE hubID='$hubID'");
 	$hcSoftware=htmlentities(mysql_result($result,$i,"hcSoftware"));
 	$hcVersion=htmlentities(mysql_result($result,$i,"hcVersion"));
 	$hcMotd=htmlentities(mysql_result($result,$i,"hcMotd"));
-	$hcMinConnection=mysql_result($result,$i,"hcMinConnection");
+	$hcMinSpeed=mysql_result($result,$i,"hcMinSpeed");
 	$hcMinSlots=mysql_result($result,$i,"hcMinSlots");
 	$hcMaxSlots=mysql_result($result,$i,"hcMaxSlots");
 	$hcMaxHubs=mysql_result($result,$i,"hcMaxHubs");
+	$hcMinLimiter=mysql_result($result,$i,"hcMinLimiter");
 	$hcSlotRatio=mysql_result($result,$i,"hcSlotRatio");
 	$hcEnableCloneCheck=mysql_result($result,$i,"hcEnableCloneCheck");
 	$hcEnableTagCheck=mysql_result($result,$i,"hcEnableTagCheck");
@@ -199,7 +201,7 @@ $hcStatus = "<font color=\"#FF1D28\"><strong>Offline</strong></font>";
 						<table cellpadding="0" cellspacing="0" class="config">
 							<tr>
 								<td></td>
-								<td align="right"><font size="+1"><strong><u>Hub Configuration</u></strong></font>
+								<td align="right"><font size="+1"><strong><u>Bot Configuration</u></strong></font>
 								</td>
 							</tr>
 							<tr><?php dual_select_form(Yes,No, "Log System", hcLogSystem, $hcLogSystem); ?></tr>
@@ -228,10 +230,11 @@ $hcStatus = "<font color=\"#FF1D28\"><strong>Offline</strong></font>";
 							<tr><?php dual_select_form(Yes,No, "Verbose No-Tag Kicks", hcVerboseKickNoTag, $hcVerboseKickNoTag); ?></tr>
 							<tr><?php dual_select_form(Yes,No, "Verbose Kicks", hcVerboseKick, $hcVerboseKick); ?></tr>
 							<tr><?php dual_select_form(Yes,No, "Verbose Bans", hcVerboseBan, $hcVerboseBan); ?></tr>
-							<tr><?php connection_choice("Minimum Connection", hcMinConnection, $hcMinConnection); ?></tr>
+							<tr><?php connection_choice("Minimum Connection", hcMinSpeed, $hcMinSpeed); ?></tr>
 							<tr><?php line_form("Minimum Slots", 2, hcMinSlots, $hcMinSlots); ?></tr>
 							<tr><?php line_form("Maximum Slots", 3, hcMaxSlots, $hcMaxSlots); ?></tr>
 							<tr><?php line_form("Maximum Hubs", 3, hcMaxHubs, $hcMaxHubs); ?></tr>
+							<tr><?php line_form("Minimal Limiter (KB/s)", 2, hcMinLimiter, $hcMinLimiter); ?></tr>
 							<tr><?php line_form("Slot Ratio", 4, hcSlotRatio, $hcSlotRatio); ?></tr>					
 							<tr>
 								<td></td>
