@@ -11,8 +11,7 @@ mysql_connect($databasehost,$username,$password);
 @mysql_select_db($database) or die( "Unable to select database");
 $result=mysql_query("SELECT * FROM userDB WHERE allowStatus!='Normal' ORDER by rowID DESC  LIMIT $offset,$defaultLogEntries"); 
 $numrows=mysql_num_rows($result);
-//Say which entries from the log we are displaying
- 
+mysql_close(); 
 echo "Total Number of Users Banned $numrows<br>";
 ?>
 <table border="$tableborders" cellspacing="2" cellpadding="2">
@@ -102,7 +101,7 @@ if (!(($offset/$limit)==$pages-1) && $pages!=1) {
     $newoffset=$offset+$limit;
     print "<a href=\"?m=$menuname&p=$path/hubfakers&offset=$newoffset\">NEXT</a><p>\n";
 }
-mysql_close();
+
 ?>
 </div>
 <? echo "$fontend";?>

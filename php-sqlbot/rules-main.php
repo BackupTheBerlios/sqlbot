@@ -37,7 +37,7 @@ if ($function == updateclient){
 $query="SELECT * FROM client_rules";
 $result=mysql_query($query);
 $num=mysql_numrows($result);
-
+mysql_close();
 echo "$font<p><b>Current Per Client Rules</b><br>$fontend";
 ?>
 

@@ -14,7 +14,7 @@ mysql_connect($databasehost,$username,$password);
 @mysql_select_db($database) or die( "Unable to select database");
 $result=mysql_query("SELECT * FROM userDB WHERE status='Online' ORDER by nick LIMIT $offset,$defaultLogEntries ");
 $numrows=mysql_num_rows($result);
-
+mysql_close();
 echo "Total Number of users online $numrows<br>";
 ?>
 <table border="$tableborders" cellspacing="2" cellpadding="2">
@@ -95,7 +95,7 @@ if (!(($offset/$limit)==$pages) && $pages!=1) {
     $newoffset=$offset+$limit;
     print "<a href=\"?m=$menuname&p=$path/hubonline&offset=$newoffset\">NEXT</a><p>\n";
 }
-mysql_close();
+
 ?></div>
 <? echo "$fontend";?>
 </body>

@@ -28,7 +28,6 @@ mysql_connect($databasehost,$username,$password);
 $numresult=mysql_query("SELECT * FROM userDB");
 $numrows=mysql_num_rows($numresult);
 $result=mysql_query("SELECT * FROM userDB $where ORDER by uType ASC LIMIT $offset,$defaultLogEntries");
-
 mysql_close();
 ?>
 <b>Filter Users Stats</b>
