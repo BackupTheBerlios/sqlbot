@@ -13,7 +13,7 @@
 #
 #	
 #	http://nutter.kicks-ass.net:35600/
-#	http://axljab.homelinux.org:8080/		
+#	http://axljab.homelinux.org:8080/
 #
 ##############################################################################################
 
@@ -97,7 +97,7 @@ sub op_admin_connected()
 		{&createNewUserRecord($user);}
 	&userConnect($user);
 	
-	if (&getConfigOption("check_opadmin")) 
+	if (&getConfigOption("check_opadmin"))
 	{	&checkClones($user);
 		&checkKicks($user);
 		&processEvent($user);
@@ -243,7 +243,7 @@ sub data_arrival(){
 			{&myInfo($user);}
 		elsif($data =~ /^<.*> \+uptime\|/i)
 			{&totalUptime();
-			&msgAll("Uptime: $days\d $hours\h $mins\m");}
+			&msgAll("Uptime: $days d $hours h $mins m");}
 		elsif($data =~ /^<.*> \+help\|/i)
 			{&buildHelp($user);
 			&msgUser("$user","$helpmsg");}

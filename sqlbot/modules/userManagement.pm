@@ -35,7 +35,8 @@ sub createNewUserRecord(){
 	$dbh->do("INSERT INTO userDB VALUES ('mysql_insertid','$user','not set',
 		'','$utype','$type','Normal','off','',	
 		'$fullDescription','$dcClient','$dcVersion','$NSlots','$NbHubs','$UploadLimit','$connection','$connectionMode','$country',
-		'$ip','$hostname','$dtime','','$dtime','','1','0','0','0','0','0','0','0','$shareBytes','$shareBytes','','')");
+		'$ip','$hostname','$dtime','','$dtime','0000-00-00 00:00:00','1','0','0','0',
+		'0','0','0','0','$shareBytes','$shareBytes','','')");
 
 }
 
@@ -72,22 +73,22 @@ sub userStatus(){
 sub userOffline(){
 	my($user) = @_;
 	&setTime();
-	my($uoth) = $dbh->prepare("SELECT inTime FROM userDB WHERE nick = '$user'");
+	my($uoth) = $dbh->prepare("SELECT inTime,onlineTime FROM userDB WHERE nick = '$user'");
 	$uoth->execute();
 	my($ref) = $uoth->fetchrow_hashref();
 
-	my($inTime) = "$ref->{'inTime'}";		
-	# $onlinetime += $outtime - $intime;
+	my($outTime)="$date $time";
+	my($inTime) = "$ref->{'inTime'}";
+	my($onlineTime) = "$ref->{'onlineTime'}";
+#	my($totOnlineTime) =
+#	&calcOnlineTime($outTime,$inTime,$onlineTime);
 	$uoth->finish();
-	
-	$onlineTime="$date $time";
-	$outTime="$date $time";
 
-	my($online) ="Offline";
-	$dbh->do("UPDATE userDB SET 	status='$online',
+	$dbh->do("UPDATE userDB SET 	status='Offline',
 					outTime='$outTime',
-					onlineTime='$onlineTime'
 					WHERE nick='$user'");
+
+#					onlineTime='$totOnlineTime'					
 }
 
 sub userOnline(){

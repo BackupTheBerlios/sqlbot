@@ -13,6 +13,9 @@
 #
 ##############################################################################################
 # Set Date a time globals
+
+use Time::Local;
+
 sub setTime() {
         use POSIX qw(strftime);
         $time = strftime "%H:%M:%S", localtime;
@@ -114,6 +117,37 @@ sub addToLog(){
 	&setTime();
 	my($dtime)="$date $time";
 	$dbh->do("INSERT INTO hubLog VALUES ('mysql_insertid','$user','$dtime','$ACTION','$REASON')");
+}
+
+sub calcOnlineTime(){
+#	my($outTime,$inTime,$onlineTime) = @_;
+
+	#use Date::Calc qw(Delta_DHMS);
+
+#	my($idate, $itime) = split /\ /, $inTime;
+#	my($iy, $im, $id) = split /\-/, $idate;my($ihh, $imm, $iss) = split /\:/, $itime;
+#	my($odate, $otime) = split /\ /, $outTime;
+#	my($oy, $om, $od) = split /\-/, $odate;my($ohh, $omm, $oss) = split /\:/, $otime;
+#	my($ondate, $ontime) = split /\ /, $onlineTime;
+#	my($ony, $onm, $ond) = split /\-/, $ondate;my($onhh, $onmm, $onss) = split /\:/, $ontime;
+
+
+#use Date::Calc qw(Delta_DHMS);
+#	($days,$hours,$minutes,$seconds) = Delta_DHMS( $iy, $im, $id, $ihh, $imm, $iss,  # earlier
+#							$oy, $om, $od, $ohh, $omm, $oss); # later
+
+#	&debug("$days, $hours, $minutes, $seconds");
+
+#	$ies=timelocal($iss,$imm,$ihh,$id,$im,$iy);
+#	$oes=timelocal($oss,$omm,$ohh,$od,$om,$oy);
+#	my($difftime)=$oes-$ies;
+
+
+
+
+
+
+#	return($time);
 }
 ## Required in every module ##
 1;

@@ -72,17 +72,17 @@ $SIG{ALRM} = \&botWorker;
 sub botWorker(){
 	# Check for Kick Events
 	my($WKicks) = $dbh->selectrow_array("SELECT COUNT(*) FROM botWorker WHERE function LIKE '1%'");
-	if($kicks ne 0)
+	if($WKicks ne 0)
 		{&kickWorker();}
 
 	#Check for pban Events
 	my($WBans) = $dbh->selectrow_array("SELECT COUNT(*) FROM botWorker WHERE function LIKE '2%'"); # Or 22 or 23
-	if($bans ne 0)
+	if($WBans ne 0)
 		{&banWorker();}
 
 	#Check for User List events
 	my($WUsers) = $dbh->selectrow_array("SELECT COUNT(*) FROM botWorker WHERE function LIKE '3%'"); # Or 31 or 32 or 33
-	if($users ne 0)
+	if($WBans ne 0)
 		{&userWorker();}
 	alarm(60);
 }
