@@ -23,7 +23,7 @@ if ($function == delclient){
 	$result = mysql_query($sql) or die(mysql_error());}
 if ($function == addclient){
 	$sql = "INSERT INTO client_rules VALUES ('','$client','$min_version','$allowed',
-		'$min_slots','$max_slots','$slot_ratio','$max_hubs','$min_share','$min_connection','$client_name',@$min_limit')";
+		'$min_slots','$max_slots','$slot_ratio','$max_hubs','$min_share','$min_connection','$client_name','$min_limit')";
 	$result = mysql_query($sql) or die(mysql_error());}
 if ($function == updateclient){
 	$sql = "UPDATE client_rules SET client='$ud_client', min_version='$ud_min_version',
