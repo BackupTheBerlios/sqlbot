@@ -179,7 +179,7 @@ Public Commands (Main Chat):-\r
 . +topchat = Top 10 talkers....\r
 . +uptime = The Up Time of the hub\r
 . +seen \'username\' = show when the specified user was last online\r
-Public commands(PM):-\r
+Public commands(Private Msg with Bot) Available to ALL:-\r
 . +help = Shows these commands in a PM\r
 . +seen \'username\' = show when the specified user was last online\r 
 . +stats = Shows the hub statistics\r
@@ -192,7 +192,7 @@ Public commands(PM):-\r
 	if(($type eq 32) or ($type eq 16))
 	{
 		my($defaultLogEntries) = &getHubVar("nr_log_entries");
-		$helpmsg .=" \r \rOp commands(PM):-\r
+		$helpmsg .="\n\r\n\rOp commands(PM):-\r
 . +recheck = force bot to re check all clients,and update online table\r
 . +info \'username\' = get the info of another user\r
 . +log = show the last $defaultLogEntries Entries from the hublog\r
@@ -200,6 +200,10 @@ Public commands(PM):-\r
 . +banlog = show the last $defaultLogEntries bans log\r
 . +history \'username\' = show the last $defaultLogEntries log entries of the user\r
 . +addfaker \'username\' = Add the user to the fakers log, then Nuke\r
+. +kick \'username\' \'reason\' = Kick the user for the reason\r
+. +tban \'username\' \'reason\' = Temp Ban user for the reason\r
+. +pban \'username\' \'reason\' = Perm Ban user for the reason\r
+. +uban \'username\' \'reason\' = Un Ban user for the reason\r
 Any command NOT recognised is sent to ALL OPs as OP CHAT \r";
 	}
 	if($type eq 32)

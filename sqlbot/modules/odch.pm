@@ -238,6 +238,27 @@ sub data_arrival(){
 					{&msgUser("$user","usage: +kick username reason");}
 				else 
 					{&kickUser($param2,$param3);}}
+			elsif ($param1 =~ /^[\!+-]tban/i)
+				{if($param1 =~ /^[\!+-]tban\|/i)
+					{&msgUser("$user","usage: +kick username reason");}
+				else 
+					{&splitDescription($param2);
+					&banUser($param2,$param3,$ip,"tban");
+					&kickUser($param2,$param3);}}
+			elsif ($param1 =~ /^[\!+-]pban/i)
+				{if($param1 =~ /^[\!+-]pban\|/i)
+					{&msgUser("$user","usage: +pban username reason");}
+				else 
+					{&splitDescription($param2);
+					&banUser($param2,$param3,$ip,"pban");
+					&kickUser($param2,$param3);}}
+			elsif ($param1 =~ /^[\!+-]uban/i)
+				{if($param1 =~ /^[\!+-]uban\|/i)
+					{&msgUser("$user","usage: +uban username reason");}
+				else 
+					{&splitDescription($param2);
+					&banUser($param2,$param3,$ip,"uban");
+					&kickUser($param2,$param3);}}
 			elsif ($param1 =~ /^[\!+-]fakerslog/i)
 				{&fakersLog($user);}
 			elsif ($param1 =~ /^[\!+-]history/i)
