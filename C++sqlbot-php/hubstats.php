@@ -182,8 +182,8 @@ else if ($searchfield == "7") {$SearchType = "Video"; $parse_option = "&& lsType
 else if ($searchfield == "8") {$SearchType = "Folder"; $parse_option = "&& lsType='$searchfield'";}
 
 function isselected($searchfield, $number, $meaning) {
-if ($number == "$searchfield") { echo "<option value=\"$number\" selected>$meaning"; }
-else { echo "<option value=\"$number\">$meaning";}
+if ($number == "$searchfield") { echo "\n<option value=\"$number\" selected>$meaning"; }
+else { echo "\n<option value=\"$number\">$meaning";}
 }
 
 ?>

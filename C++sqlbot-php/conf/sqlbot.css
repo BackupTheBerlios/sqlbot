@@ -138,6 +138,17 @@ table.stats {
 	width: 100%;
 }
 
+table.updown {
+	font-family: arial, helvetica, sans-serif;
+	font-size: 10px;
+	border: none;
+	margin: 0px;
+	padding: 0px;
+	color: #FFFFFF;
+	height: 100%;
+}
+
+
 td.chatlog {
 	font-family: arial, helvetica, sans-serif;
 	font-size: 10px;
@@ -264,6 +275,20 @@ td.stats {
 	height: 90px;
 }
 
+.form_textarea_long {
+	font-family: arial, helvetica, sans-serif;
+	padding-left: 3px;
+	background: #9CE0FF;
+	text-decoration: none;
+	font-weight: normal;
+	color: #000000;
+	font-size: 10px;
+	width: 200px;
+	height: 140px;
+}
+
+
+
 .form_noedit {
 	width: 194px;
 	font-size: 10px;
@@ -285,19 +310,19 @@ td.stats {
 
 input.button {
 	font-weight: normal;
-	font-size: 10pt;
+	font-size: 10px;
     border-width: 1px;
     border-style: solid;
     border-color:#b0b0b0;
 }
 
 input.menubutton {
-	text-align: right;
+	font-family: arial, helvetica, sans-serif;
+	font-size: 10px;
 	width: 80px;
 	border-color: #b0b0b0;
 	border-style: solid;
 	border-width: 1px;
-	font-size: 10pt;
 	font-weight: normal;
 	padding: 0px;
 }
@@ -305,7 +330,7 @@ input.menubutton {
 input.userdbcol {
 	font-weight: bold;
 	color: #FFFFFF;
-	font-size: 10pt;
+	font-size: 10px;
 	width: 100%;
 	border-width: 0px;
 	border-style: solid;
@@ -316,7 +341,7 @@ input.userdbcol {
 input.userdbnicknormal {
 	font-weight: normal;
 	color: #FFFFFF;
-	font-size: 10pt;
+	font-size: 10px;
 	border-width: 0px;
 	border-style: solid;
 	border-color: #b0b0b0;
@@ -326,7 +351,7 @@ input.userdbnicknormal {
 
 input.userdbBot {
 	color: #010101;
-	font-size: 10pt;
+	font-size: 10px;
 	border-width: 0px;
 	border-style: solid;
 	border-color: #b0b0b0;
@@ -336,7 +361,7 @@ input.userdbBot {
 input.userdbBotMaster {
 	font-weight: bold;
 	color: #33FF00;
-	font-size: 10pt;
+	font-size: 10px;
 	border-width: 0px;
 	border-style: solid;
 	border-color: #b0b0b0;
@@ -347,7 +372,7 @@ input.userdbBotMaster {
 input.userdbOPADM {
 	font-weight: bold;
 	color: yellow;
-	font-size: 10pt;
+	font-size: 10px;
 	border-width: 0px;
 	border-style: solid;
 	border-color: #b0b0b0;
@@ -357,7 +382,7 @@ input.userdbOPADM {
 input.userdbOP {
 	font-weight: bold;
 	color: #FFFFFF;
-	font-size: 10pt;
+	font-size: 10px;
 	border-width: 0px;
 	border-style: solid;
 	border-color: #b0b0b0;
@@ -367,7 +392,7 @@ input.userdbOP {
 input.userdbVIP {
 	font-style: italic;
 	color: #FFFFFF;
-	font-size: 10pt;
+	font-size: 10px;
 	border-width: 0px;
 	border-style: solid;
 	border-color: #b0b0b0;
@@ -378,7 +403,7 @@ input.userdbVIP {
 input.userdbERROR {
 	text-decoration: blink;
 	color: #FFFFFF;
-	font-size: 10pt;
+	font-size: 10px;
 	border-width: 0px;
 	border-style: solid;
 	border-color: #b0b0b0;
@@ -388,7 +413,7 @@ input.userdbERROR {
 input.deldata {
 	font-weight: bold;
 	color: #FFFFFF;
-	font-size: 10pt;
+	font-size: 10px;
 	border-width: 0px;
 	border-style: solid;
 	border-color: #598FE3;

@@ -244,6 +244,13 @@ $totshared_bytes=mysql_result($total_bytes_q,$i);
 			<form action="<?php echo "$PHP_SELF"; ?>" method="post">
 			<?php hidden_value(hubID, $hubID); ?>
 			<?php hidden_value(parse, $parse); ?>
+			<?php hidden_value(parseorder, uiCountry); ?>
+			<input type="submit" value="Country" class="userdbcol"></form>
+		</td>
+		<td>
+			<form action="<?php echo "$PHP_SELF"; ?>" method="post">
+			<?php hidden_value(hubID, $hubID); ?>
+			<?php hidden_value(parse, $parse); ?>
 			<?php hidden_value(parseorder, uiIp); ?>
 			<input type="submit" value="IP" class="userdbcol"></form>
 		</td>
@@ -307,7 +314,6 @@ while ($data=mysql_fetch_array($userresult))
 
 
 // CONVERSIONS FOR GRAPHICS& DATE
-
 	$conv_time=mysql_result($userresult,$i,"date");
 	$BanTime=mysql_result($userresult,$i,"BanTime");
 	$BanExpire=mysql_result($userresult,$i,"BanExpire");
@@ -323,6 +329,7 @@ while ($data=mysql_fetch_array($userresult))
 	if  ($uiStatus == "0") { $Status ="<img src=\"img/Offline.gif\" alt=\"Offline\" title=\"Offline\">";}
 	if  (($uiBanFlag > "0") && ($uiStatus == "0")) { $Status ="<img src=\"img/Ban.gif\" alt=\"Offline\" title=\"Banned\">";}
 
+	if (!empty($uiCountry)) {$flag = "<img src=\"img/flags/${uiCountry}.PNG\" alt=\"$uiCountry\" ONMOUSEOVER=\"popup('$uiCountry</td>','yellow')\"; ONMOUSEOUT=\"kill()\">"; }
 
 
 //CONVERSION FOR SHARE
@@ -382,6 +389,7 @@ echo "<tr>
 		<td nowrap align=\"center\">$Level</td>
 		<td nowrap align=\"center\" $clientHover>$CLIENT</td>
 		<td nowrap align=\"center\">$uiSpeed</td>
+		<td nowrap align=\"center\">$flag</td>
 		<td nowrap align=\"center\">$uiIp</td>
 		<td nowrap align=\"center\">$conv_time</td>
 		<td nowrap align=\"center\"

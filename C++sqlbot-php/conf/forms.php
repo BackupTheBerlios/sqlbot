@@ -63,6 +63,11 @@ echo "<td valign=\"top\">$value_description &nbsp;</td>
 		<td align=\"right\"><textarea rows=\"19\" cols=\"19\" name=\"$value\" class=\"form_textarea\">$value_orig</textarea></td>";}
 
 
+function textarea_form_long($value_description, $value, $value_orig) {
+echo "<td valign=\"top\">$value_description &nbsp;</td>
+		<td align=\"right\"><textarea rows=\"19\" cols=\"30\" name=\"$value\" class=\"form_textarea_long\">$value_orig</textarea></td>";}
+
+
 // NON-EDITABLE FORM
 function noedit_form($value_description, $value_orig) {
 if ($value_orig == "") {$value_orig = "*Unknown*";}

@@ -202,7 +202,7 @@ $country_query  = "SELECT country_code2,country_name FROM iptoc ".
 				</tr>
 				<tr>
 					<td nowrap>Country</td>
-					<td nowrap> : &nbsp; <?php echo "$country_name"; ?></td>
+					<td nowrap> : &nbsp; <?php echo "[$uiCountry] $country_name"; ?></td>
 				</tr>
 				<tr>
 					<td nowrap>User Type</td>
@@ -361,6 +361,6 @@ $country_query  = "SELECT country_code2,country_name FROM iptoc ".
 	</tr>
 </table>
 <!-- END MAIN TABLE -->
-<?php mysql_close(); }?>
+<?php mysql_close();}?>
 </body>
 </html>

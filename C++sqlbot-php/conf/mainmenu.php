@@ -4,6 +4,10 @@
 		<?php hidden_value(hubID, $hubID); ?>
 		<input type="submit" value="Hub Config" class="menubutton"></form>
 		
+		<form action="<?php echo "hubextras.php"; ?>" method="post">
+		<?php hidden_value(hubID, $hubID); ?>
+		<input type="submit" value="Hub Extras" class="menubutton"></form>
+		
 		<form action="<?php echo "userdb.php"; ?>" method="post">
 		<?php hidden_value(hubID, $hubID); ?>
 		<?php hidden_value(parse, Online); ?>

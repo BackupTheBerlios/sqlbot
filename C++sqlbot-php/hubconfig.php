@@ -60,7 +60,6 @@ if ($action == "update")
 }
 
 
-
 if ($action == "delete") { ?>
 <br><br>
 <div align="center">Are you sure you want to delete <strong><?php echo "$hcName</strong> with hubID = $hubID ?<br>
@@ -86,7 +85,6 @@ This will delete all your logs and users for that hub too!"; ?>
 <?php }
 else {
 
-// $hubID = "1";
 // MySQL Connection
 $result=mysql_query("SELECT * FROM hubConfig WHERE hubID='$hubID'");
 	$hubID=htmlentities(mysql_result($result,$i,"hubID"));

@@ -98,7 +98,10 @@ $logresult=mysql_query("SELECT *,DATE_FORMAT(lcTime, '%H:%i:%S') AS time,
 
 
 <FIELDSET>
-	<LEGEND><font color="#FFFFFF"> &nbsp; Chat log for  <?php echo "[ $hcName ] &nbsp; $total_chats Messages in total"; ?>	&nbsp; </font></LEGEND>	
+	<LEGEND><font color="#FFFFFF"> &nbsp; Chat log for  <?php echo "[ $hcName ] &nbsp; $total_chats Messages in total"; ?>	&nbsp; </font></LEGEND>
+<table width="100%">
+<tr>
+<td>
 <table class="chatlog">
 	<tr>
 		<th>Time</th>
@@ -127,7 +130,7 @@ echo "<tr>
 				<form action=\"userinfo.php\" method=\"post\">";
 							hidden_value(hubID, $hubID);
 							hidden_value(uiNick, $lcNick);
-	echo "<input type=\"submit\" value=\"$lcNick\" class=\"userdbOP\" nowrap title=\"View User's Data\"></form></td>
+	echo "<input type=\"submit\" value=\"$lcNick\" class=\"userdbOP\" title=\"View User's Data\"></form></td>
 			<td nowrap valign=\"top\"> &gt;&gt;</td>
 			<td valign=\"top\" class=\"chatlog\">$Message</td>
 		</tr>";
@@ -141,76 +144,14 @@ echo "<tr>
 
 ?>
 </table>
-	<!-- END USER DATABACE SPACE -->
-	</FIELDSET>
-<!-- PREVIOUS / NEXT PAGE -->
-		<table width="100%">
+</td>
+<td width="14" valign="top">
+<!-- PAGE UP / DOWN BUTTONS -->
+		<table cellpadding="0" cellspacing="0" width="14">
 		<tr>
-			<td width="15">
+			<td height="20">
 				<?php
-				// CODE FOR FIRST-PAGE BUTTON
-				$last_divide = floor($total_selection / $defaultLogEntries);
-				$last_offset = $last_divide * $defaultLogEntries;
-				$is_there_a_last = $total_selection - $offset;
-				if ($offset > "0") { 
-				?>
-						<form action="<?php echo "$PHP_SELF"; ?>" method="post">
-							<?php hidden_value(hubID, $hubID); ?>
-							<?php hidden_value(parse, $parse); ?>
-							<?php hidden_value(parseorder, $parseorder); ?>
-							<?php hidden_value(offset, 0); ?>
-							<?php if ($useSearch == "1") {
-							hidden_value(useSearch, 1);
-							hidden_value(useSearch, 1);
-							hidden_value(searchvalue, $searchvalue);
-							hidden_value(searchfield, $searchfield);
-							;} ?>
-							<input type="submit" value="<<<" class="userdbnicknormal" title="Go to First Page"></form>
-				<?php ;} ?>
-			</td>
-			<td>
-				<?php
-				// CODE FOR PREVIOUS BUTTON
-				if ($offset >= $defaultLogEntries){
-				$offset_value = $offset - $defaultLogEntries ?>
-						<form action="<?php echo "$PHP_SELF"; ?>" method="post">
-							<?php hidden_value(hubID, $hubID); ?>
-							<?php hidden_value(parse, $parse); ?>
-							<?php hidden_value(parseorder, $parseorder); ?>
-							<?php hidden_value(offset, $offset_value); ?>
-							<?php if ($useSearch == "1") {
-							hidden_value(useSearch, 1);
-							hidden_value(useSearch, 1);
-							hidden_value(searchvalue, $searchvalue);
-							hidden_value(searchfield, $searchfield);
-							;} ?>
-							<input type="submit" value=" << " class="userdbnicknormal" title="Go to Previous Page"></form>
-				<?php ;} ?>
-			</td>
-			<td align="right">
-				<?php
-				// CODE FOR NEXT BUTTON
-				$offset_value = $offset + $defaultLogEntries;
-				$is_there_next = ($total_chats -$offset_value) /$defaultLogEntries;
-				if ($is_there_next > 0){ 
-				?>
-						<form action="<?php echo "$PHP_SELF"; ?>" method="post">
-							<?php hidden_value(hubID, $hubID); ?>
-							<?php hidden_value(parse, $parse); ?>
-							<?php hidden_value(parseorder, $parseorder); ?>
-							<?php hidden_value(offset, $offset_value); ?>
-							<?php if ($useSearch == "1") {
-							hidden_value(useSearch, 1);
-							hidden_value(useSearch, 1);
-							hidden_value(searchvalue, $searchvalue);
-							hidden_value(searchfield, $searchfield);
-							;} ?>
-							<input type="submit" value=" >> " class="userdbnicknormal" title="Go to Next Page"></form>
-				<?php ;} ?>
-			</td>
-			<td align="right" width="10">
-				<?php
-				// CODE FOR LAST-PAGE BUTTON
+				// CODE FOR FIRST PAGE BUTTON
 				$last_divide = floor($total_chats / $defaultLogEntries);
 				$last_offset = $last_divide * $defaultLogEntries;
 				$is_there_a_last = $total_chats - $offset;
@@ -227,12 +168,88 @@ echo "<tr>
 							hidden_value(searchvalue, $searchvalue);
 							hidden_value(searchfield, $searchfield);
 							;} ?>
-							<input type="submit" value=">>>" class="userdbnicknormal" title="Go to Last Page"></form>
+							<input type="image" value=">>>" src="img/allup.png" title="First Page"></form>
+				<?php ;} ?>
+			</td>
+		</tr>
+		<tr>
+			<td height="15">
+				<?php
+				// CODE FOR PREVIOUS PAGE
+				$offset_value = $offset + $defaultLogEntries;
+				$is_there_next = ($total_chats -$offset_value) /$defaultLogEntries;
+				if ($is_there_next > 0){ 
+				?>
+						<form action="<?php echo "$PHP_SELF"; ?>" method="post">
+							<?php hidden_value(hubID, $hubID); ?>
+							<?php hidden_value(parse, $parse); ?>
+							<?php hidden_value(parseorder, $parseorder); ?>
+							<?php hidden_value(offset, $offset_value); ?>
+							<?php if ($useSearch == "1") {
+							hidden_value(useSearch, 1);
+							hidden_value(useSearch, 1);
+							hidden_value(searchvalue, $searchvalue);
+							hidden_value(searchfield, $searchfield);
+							;} ?>
+							<input type="image" value=">>" src="img/pageup.png" title="Previous Page"></form>
+				<?php ;} ?>
+			</td>
+		</tr>
+		<tr>
+			<td>&nbsp;</td>
+		</tr>
+		<tr>
+			<td>
+				<?php
+				// CODE FOR NEXT PAGE
+				if ($offset >= $defaultLogEntries){
+				$offset_value = $offset - $defaultLogEntries ?>
+						<form action="<?php echo "$PHP_SELF"; ?>" method="post">
+							<?php hidden_value(hubID, $hubID); ?>
+							<?php hidden_value(parse, $parse); ?>
+							<?php hidden_value(parseorder, $parseorder); ?>
+							<?php hidden_value(offset, $offset_value); ?>
+							<?php if ($useSearch == "1") {
+							hidden_value(useSearch, 1);
+							hidden_value(useSearch, 1);
+							hidden_value(searchvalue, $searchvalue);
+							hidden_value(searchfield, $searchfield);
+							;} ?>
+							<input type="image" value="<<" src="img/pagedown.png" title="Next Page"></form>
+				<?php ;} ?>
+			</td>
+		</tr>
+			<tr>
+			<td>
+				<?php
+				// CODE FOR LAST PAGE BUTTON
+				$last_divide = floor($total_selection / $defaultLogEntries);
+				$last_offset = $last_divide * $defaultLogEntries;
+				$is_there_a_last = $total_selection - $offset;
+				if ($offset > "0") { 
+				?>
+						<form action="<?php echo "$PHP_SELF"; ?>" method="post">
+							<?php hidden_value(hubID, $hubID); ?>
+							<?php hidden_value(parse, $parse); ?>
+							<?php hidden_value(parseorder, $parseorder); ?>
+							<?php hidden_value(offset, 0); ?>
+							<?php if ($useSearch == "1") {
+							hidden_value(useSearch, 1);
+							hidden_value(useSearch, 1);
+							hidden_value(searchvalue, $searchvalue);
+							hidden_value(searchfield, $searchfield);
+							;} ?>
+							<input type="image" value="<<<" src="img/alldown.png" title="Newest Page"></form>
 				<?php ;} ?>
 			</td>
 		</tr>
 	</table>
-	
+<!-- END PAGE UP / DOWN BUTTONS -->
+</td>
+</tr>
+</table>
+	<!-- END USER DATABACE SPACE -->
+	</FIELDSET>
 </td>
 </tr>
 </table>

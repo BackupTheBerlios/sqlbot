@@ -39,6 +39,8 @@ if ($action == "delete_hub")
 	$result2 = mysql_query($delete_from_logChat) or die(mysql_error());
 	$delete_from_userInfo = "DELETE FROM userInfo WHERE hubID='$hubID'";
 	$result3 = mysql_query($delete_from_userInfo) or die(mysql_error());
+	$delete_from_hubExtras = "DELETE FROM hubExtras WHERE hubID='$hubID'";
+	$result4 = mysql_query($delete_from_hubExtras) or die(mysql_error());
 }
 if ($action == "add_hub")
 {
