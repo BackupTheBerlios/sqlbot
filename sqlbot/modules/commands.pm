@@ -88,7 +88,7 @@ sub buildRules {
 	&parseClient($user);
 	$rules = "";
 	if (&getClientExists($dcClient)) 
-		{my($brth) = $dbh->prepare("SELECT min_share,min_version,min_slots,slot_ratio,max_hubs,client_name,min_connection FROM client_rules WHERE client='$dcClient'");
+		{my($brth) = $dbh->prepare("SELECT * FROM client_rules WHERE client='$dcClient'");
 		$brth->execute();
 		my($ref) = $brth->fetchrow_hashref();
 		my($minShare) = $ref->{'min_share'};
