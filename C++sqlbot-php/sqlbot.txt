@@ -11,8 +11,8 @@ bcUDPport int(6),
 bcWWW VARCHAR(40),
 bcConnection SET('28.8Kbps','33.6Kbps','56Kbps','Satellite','ISDN','DSL','Cable','LAN(T1)','LAN(T3)'),
 bcDescription VARCHAR(40),
-bcSharePath VARCHAR(40),
-bcLogDir VARCHAR(40));
+bcSharePath VARCHAR(75),
+bcLogDir VARCHAR(75));
 
 sql> INSERT INTO botConfig VALUES("1","C++SqlBot","","","9180","9180","","","C++ Bot running with MySQL","","");
 

@@ -12,8 +12,8 @@
 	mysql_connect($databasehost,$username,$password);
 	@mysql_select_db($database) or die( "Unable to select database");
 
-if ($hubID == "") {
-echo "Error... no hubID parsed!<p>Please return to the <a href=\"index.php\"><font color=\"blue\">index.php</font></a>";}
+if ($hubID == "" || $uiNick == "" || $uiIp == "") {
+echo "$hubID ; $uiNick ; $uiIp ; Error... information parsed!<p>Please return to the <a href=\"index.php\"><font color=\"blue\">index.php</font></a>";}
 else {
 	
 // GET BOT NAME
@@ -92,77 +92,15 @@ $hcStatus = "<font color=\"#FF1D28\"><strong>Offline</strong></font>";
 <tr>
 <td>
 	<!-- START USER DATABACE SPACE -->
-<?php
-if ($parse == "All") { $parseoption = "";}
-if ($parse == "Online") { $parseoption = "&& uiStatus='1'"; }
-if ($parse == "Fakers") { $parseoption = ""; }
 
-// GET TOTAL USERS IN DB 
-$total_result=mysql_query("SELECT * FROM userInfo WHERE hubID='$hubID'");
-$total_users=mysql_num_rows($total_result);
 
-// LIMIT $defaultLogEntries ORDER BY uiNick
-//$userresult=mysql_query("SELECT *,DATE_FORMAT(uiLastSeenTime, '%d/%m/%Y %H:%i') AS date FROM userInfo WHERE hubID='$hubID' $parseoption ORDER BY uiIsAdmin  DESC,uiNick");
-
-$userresult=mysql_query("SELECT *,DATE_FORMAT(uiLastSeenTime, '%d/%m/%Y %H:%i') AS date FROM userInfo WHERE hubID='$hubID' $parseoption $parseoptionextra ORDER BY uiIsAdmin  DESC,$parseorder");
-
-$total_selection=mysql_num_rows($userresult);
-
-?>
 <FIELDSET>
-	<LEGEND><font color="#FFFFFF"> &nbsp; Selected users: [ <?php echo "$parse"; ?> ] &nbsp; Selected:
-					[ <?php echo "$total_selection / $total_users"; ?> ] &nbsp;  for hub <?php echo "$hcName [ ID: $hubID ]"; ?></font></LEGEND>	
-	
-	<table class="userdb">
-	<tr nowrap>
-		<td><!-- Online / Offline icon --></td>
-		<td>
-			<form action="<?php echo "$PHP_SELF"; ?>" method="post">
-			<?php hidden_value(hubID, $hubID); ?>
-			<?php hidden_value(parse, $parse); ?>
-			<?php hidden_value(parseorder, uiNick); ?>
-			<input type="submit" value="User Nick" class="userdbcol"></form>
-		</td>
-		<th>Rank</th>
-		<td>
-			<form action="<?php echo "$PHP_SELF"; ?>" method="post">
-			<?php hidden_value(hubID, $hubID); ?>
-			<?php hidden_value(parse, $parse); ?>
-			<?php hidden_value(parseorder, uiClient); ?>
-			<input type="submit" value="Client" class="userdbcol"></form>
-		</td>
-		<td>
-			<form action="<?php echo "$PHP_SELF"; ?>" method="post">
-			<?php hidden_value(hubID, $hubID); ?>
-			<?php hidden_value(parse, $parse); ?>
-			<?php hidden_value(parseorder, uiSpeed); ?>
-			<input type="submit" value="Connection" class="userdbcol"></form>
-		</td>
-		<td>
-			<form action="<?php echo "$PHP_SELF"; ?>" method="post">
-			<?php hidden_value(hubID, $hubID); ?>
-			<?php hidden_value(parse, $parse); ?>
-			<?php hidden_value(parseorder, uiIp); ?>
-			<input type="submit" value="IP" class="userdbcol"></form>
-		</td>
-		<td>
-			<form action="<?php echo "$PHP_SELF"; ?>" method="post">
-			<?php hidden_value(hubID, $hubID); ?>
-			<?php hidden_value(parse, $parse); ?>
-			<?php hidden_value(parseorder, date); ?>
-			<input type="submit" value="CheckIn" class="userdbcol"></form>
-		</td>
-		<td>
-			<form action="<?php echo "$PHP_SELF"; ?>" method="post">
-			<?php hidden_value(hubID, $hubID); ?>
-			<?php hidden_value(parse, $parse); ?>
-			<?php hidden_value(parseorder, uiShare); ?>
-			<input type="submit" value="Shared Bytes" class="userdbcol"></form>
-		</td>
-	</tr>
+	<LEGEND><font color="#FFFFFF"> &nbsp; Detailed information about <?php echo "[ $uiNick ]"; ?> &nbsp; </font></LEGEND>	
+<table class="userdb">
 <?php
-while ($data=mysql_fetch_array($userresult)) 
-{
+$userresult=mysql_query("SELECT *,DATE_FORMAT(uiLastSeenTime, '%d/%m/%Y %H:%i') AS lastdate,
+									DATE_FORMAT(uiFirstSeenTime, '%d/%m/%Y %H:%i') AS firstdate FROM userInfo
+									WHERE hubID='$hubID' && uiNick='$uiNick' && uiIp='$uiIp'");
 
 	$rowID=mysql_result($userresult,$i,"rowID");
 	$uiNick=htmlentities(mysql_result($userresult,$i,"uiNick"));
@@ -187,8 +125,8 @@ while ($data=mysql_fetch_array($userresult))
 	$uiSlots=mysql_result($userresult,$i,"uiSlots");
 	$uiLimiter=mysql_result($userresult,$i,"uiLimiter");
 	$uiSpeed=mysql_result($userresult,$i,"uiSpeed");
-	$uiFirstSeenTime=mysql_result($userresult,$i,"uiFirstSeenTime");
-	$uiLastSeenTime=mysql_result($userresult,$i,"uiLastSeenTime");
+//	$uiFirstSeenTime=mysql_result($userresult,$i,"uiFirstSeenTime");
+//	$uiLastSeenTime=mysql_result($userresult,$i,"uiLastSeenTime");
 	$uiTimeOnline=mysql_result($userresult,$i,"uiTimeOnline");
 	$uiTotalSearches=mysql_result($userresult,$i,"uiTotalSearches");
 	$uiKickTotal=mysql_result($userresult,$i,"uiKickTotal");
@@ -202,47 +140,105 @@ while ($data=mysql_fetch_array($userresult))
 	$uiBanExpire=mysql_result($userresult,$i,"uiBanExpire");
 	$uiLoginCount=mysql_result($userresult,$i,"uiLoginCount");
 
-
-// CONVERSIONS FOR GRAPHICS& DATE
-
-	$conv_time=mysql_result($userresult,$i,"date");
-	if ($uiClient == "Unknown") { $uiClient = "<img src=\"img/clients/NoTag.gif\" alt=\"\" title=\"$uiTag\">"; }
-	if ($uiClient == "DCGUI") { $uiClient = "<img src=\"img/clients/DCGUI.gif\" alt=\"$uiClient\" title=\"$uiTag\">"; }
-	if ($uiClient == "++") { $uiClient = "<img src=\"img/clients/DCpp.gif\" alt=\"$uiClient\" title=\"$uiTag\">"; }
-	if ($uiClient == "DC") { $uiClient = "<img src=\"img/clients/DC.gif\" alt=\"$uiClient\" title=\"$uiTag\">"; }
-	if ($uiNick == "$bcName") { $uiClient = "BOT"; }
-	if  ($uiStatus == "1") { $uiStatus ="<img src=\"img/Online.gif\" alt=\"Online\">";}
-	if  ($uiStatus == "0") { $uiStatus ="<img src=\"img/Offline.gif\" alt=\"Offline\">";}
-
-if ($uiIsAdmin == "1") { $class = "userdbnickop"; }
-else {$class = "userdbnicknormal"; }
-
-	echo "<tr>
-		<td>$uiStatus</td>
-		<td nowrap>
-			<form action=\"userinfo.php\" method=\"post\">
-			<input type=\"hidden\" name=\"hubID\" value=\"$hubID\">
-			<input type=\"hidden\" name=\"uiIp\" value=\"$uiIp\">
-			<input type=\"hidden\" name=\"uiNick\" value=\"$uiNick\">
-			<input type=\"submit\" value=\"$uiNick\" class=\"$class\"></form>
-		</td>
-		<td nowrap align=\"center\">$uiIsAdmin</td>
-		<td nowrap align=\"center\">$uiClient</td>
-		<td nowrap align=\"center\">$uiSpeed</td>
-		<td nowrap align=\"center\">$uiIp</td>
-		<td nowrap align=\"center\">$conv_time</td>
-		<td nowrap align=\"center\">$uiShare</td>
-	</tr>";
-	$i++;
-}
-
-
-
+// DATE CONVERSIONS
+$uiFirstSeenTime=mysql_result($userresult,$i,"firstdate");
+$uiLastSeenTime=mysql_result($userresult,$i,"lastdate");
+//USER STATUS CONVERSIONS
+if ($uiIsAway == "1") { $away = "(Away)"; }
+if ($uiStatus == "1") { $online_status = "<font color=\"#23FF07\">Online</font> $away";
+							$uiLastSeenTime = "Currently online";}
+if ($uiStatus == "0") { $online_status = "<font color=\"#EBEBEB\">Offline</font>"; }
 
 ?>
-	</table>
-
-
+	<tr>
+		<th>User Details</th>
+		<th>Client Details</th>
+	</tr>
+	<tr>
+		<td valign="top">
+			<!-- User Details -->
+			<table class="userinfo">
+				<tr>
+					<td nowrap>Status</td>
+					<td nowrap> : &nbsp; <?php echo "$online_status"; ?></td>
+				</tr>
+				<tr>
+					<td nowrap>IP</td>
+					<td nowrap> : &nbsp; <?php echo "$uiIp"; ?></td>
+				</tr>
+				<tr>
+					<td nowrap>Country</td>
+					<td nowrap> : &nbsp; <?php echo "$uiCountry"; ?></td>
+				</tr>
+				<tr>
+					<td nowrap>User Type</td>
+					<td nowrap> : &nbsp; <?php echo "$uiIsAdmin"; ?></td>
+				</tr>
+				<tr>
+					<td nowrap>Total Logins</td>
+					<td nowrap> : &nbsp; <?php echo "$uiLoginCount"; ?></td>
+				</tr>
+				<tr>
+					<td nowrap>First Seen</td>
+					<td nowrap> : &nbsp; <?php echo "$uiFirstSeenTime"; ?></td>
+				</tr>
+				<tr>
+					<td nowrap>Last Seen</td>
+					<td nowrap> : &nbsp; <?php echo "$uiLastSeenTime"; ?></td>
+				</tr>
+				<tr>
+					<td nowrap>Lines Spoken</td>
+					<td nowrap> : &nbsp; <?php echo "$uiSayTotal"; ?></td>
+				</tr>
+			</table>			
+		</td>
+		<td valign="top">
+			<!-- Client Details -->
+			<table class="userinfo">
+				<tr>
+					<td nowrap>Client</td>
+					<td nowrap> : &nbsp; <?php echo "$uiClient"; ?></td>
+				</tr>
+				<tr>
+					<td nowrap>Client Version</td>
+					<td nowrap> : &nbsp; <?php echo "$uiVersion"; ?></td>
+				</tr>
+				<tr>
+					<td nowrap>Tag</td>
+					<td nowrap> : &nbsp; <?php echo "$uiTag"; ?></td>
+				</tr>
+				<tr>
+					<td nowrap>Message</td>
+					<td nowrap> : &nbsp; <?php echo "$uiDescription"; ?></td>
+				</tr>
+				<tr>
+					<td nowrap>Connection</td>
+					<td nowrap> : &nbsp; <?php echo "$uiSpeed"; ?></td>
+				</tr>
+				<tr>
+					<td nowrap>Hubs (Norm/Reg/Op)</td>
+					<td nowrap> : &nbsp; <?php echo "$uiHubs/$uiHubsReg/$uiHubsOp"; ?></td>
+				</tr>
+				<tr>
+					<td nowrap>Limiter</td>
+					<td nowrap> : &nbsp; <?php echo "$uiLimiter KB/s"; ?></td>
+				</tr>
+				<tr>
+					<td nowrap>Connection Mode</td>
+					<td nowrap> : &nbsp; <?php echo "$uiMode"; ?></td>
+				</tr>
+				<tr>
+					<td nowrap>Current Share</td>
+					<td nowrap> : &nbsp; <?php echo "$uiShare bytes"; ?></td>
+				</tr>
+				<tr>
+					<td nowrap>Total Time on hub</td>
+					<td nowrap> : &nbsp; <?php echo "$uiTimeOnline seconds"; ?></td>
+				</tr>
+			</table>
+		</td>
+	</tr>
+</table>
 	<!-- END USER DATABACE SPACE -->
 	</FIELDSET>
 </td>

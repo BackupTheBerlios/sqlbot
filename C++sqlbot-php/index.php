@@ -93,8 +93,8 @@ $result=mysql_query("SELECT * FROM botConfig WHERE rowID='1'");
 					<tr><?php line_form("UDP Port", 6, bcUDPport, $bcUDPport); ?></tr>
 					<tr><?php line_form("Bot WWW", 40, bcWWW, $bcWWW); ?></tr>
 					<tr><?php line_form("Tag Description", 40, bcDescription, $bcDescription); ?></tr>
-					<tr><?php line_form("Share path", 40, bcSharePath, $bcSharePath); ?></tr>
-					<tr><?php line_form("Log Directory", 40, bcLogDir, $bcLogDir); ?></tr>
+					<tr><?php line_form("Share path", 50, bcSharePath, $bcSharePath); ?></tr>
+					<tr><?php line_form("Log Directory", 75, bcLogDir, $bcLogDir); ?></tr>
 					<tr><?php connection_choice("Bot Connection", bcConnection, $bcConnection); ?></tr>
 					<tr><td></td>
 						<td align="right"><input type="submit" value="Update Changes" class="button">

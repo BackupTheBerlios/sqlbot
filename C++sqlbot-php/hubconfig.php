@@ -35,8 +35,6 @@ if ($action == "update")
 		hcShareCheckTimeout='$hcShareCheckTimeout',
 		hcShareCheckTimeoutMultiplier='$hcShareCheckTimeoutMultiplier',
 		hcOwner='$hcOwner',
-		hcSoftware='$hcSoftware',
-		hcVersion='$hcVersion',
 		hcMotd='$hcMotd',
 		hcMinConnection='$hcMinConnection',
 		hcMinSlots='$hcMinSlots',

@@ -84,6 +84,20 @@ table.userdb {
 	width: 100%;
 }
 
+table.userinfo {
+	vertical-align: top;
+	font-family: arial, helvetica, sans-serif;
+	font-size: 12px;
+	vertical-align: top;
+	margin: 0px;
+	padding: 0px;
+	color: #FFFFFF;
+	padding-left: 5px;
+	padding-right: 5px;
+	padding-bottom: 5px;
+	width: 50%;
+}
+
 td.menu {
 	border-bottom: solid;
 	border-right: solid;
@@ -147,9 +161,6 @@ td.main {
 }
 
 
-
-
-
 .form_checkbox {
 	background: #9CE0FF;
 	color: #000000;
@@ -189,10 +200,10 @@ td.main {
 input.button {
 	font-weight: normal;
 	font-size: 10pt;
-        border-width: 1;
-        border-height: 1;
-        border-style: solid;
-        border-color:#b0b0b0;
+    border-width: 1px;
+    border-height: 1px;
+    border-style: solid;
+    border-color:#b0b0b0;
 }
 
 input.menubutton {
@@ -200,11 +211,43 @@ input.menubutton {
 	width: 80px;
 	border-color: #b0b0b0;
 	border-style: solid;
-	border-height: 1;
-	border-width: 1;
+	border-height: 1px;
+	border-width: 1px;
 	font-size: 10pt;
 	font-weight: normal;
 	padding: 0px;
 }
 
+input.userdbcol {
+	font-weight: bold;
+	color: #FFFFFF;
+	font-size: 10pt;
+	width: 100%;
+	border-width: 0px;
+	border-height: 0px;
+	border-style: solid;
+	border-color: #b0b0b0;
+	background-color: #598FE3;
+}
 
+input.userdbnicknormal {
+	font-weight: normal;
+	color: #FFFFFF;
+	font-size: 10pt;
+	border-width: 0px;
+	border-height: 0px;
+	border-style: solid;
+	border-color: #b0b0b0;
+	background-color: #598FE3;
+}
+
+input.userdbnickop {
+	font-weight: bold;
+	color: #FFFFFF;
+	font-size: 10pt;
+	border-width: 0px;
+	border-height: 0px;
+	border-style: solid;
+	border-color: #b0b0b0;
+	background-color: #598FE3;
+}

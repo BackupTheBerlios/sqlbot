@@ -7,5 +7,6 @@
 		<form action="<?php echo "userdb.php"; ?>" method="post">
 		<?php hidden_value(hubID, $hubID); ?>
 		<?php hidden_value(parse, Online); ?>
+		<?php hidden_value(parseorder, uiNick); ?>
 		<input type="submit" value="User DB" class="menubutton"></form>
 </FIELDSET>
