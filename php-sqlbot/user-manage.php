@@ -6,29 +6,20 @@ echo "$font";
 mysql_connect($databasehost,$username,$password);
 @mysql_select_db($database) or die( "Unable to select database");
 $where = "";
-if (!empty($nicksearch))  
-	{$where="WHERE nick LIKE '%$nicksearch%'";$ipsearch = "";}
-else if (!empty($ipsearch)) 
-	{$where="WHERE IP LIKE '%$ipsearch%'";$nicksearch = "";}
-else if (!empty($country)) 
-	{$where="WHERE country = '$country'";$country = "";}
-else if (!empty($status)) 
-	{$where="WHERE status = '$status'";$status = "";}
-else if (!empty($allowstatus)) 
-	{$where="WHERE allowStatus = '$allowstatus'";$allowstatus = "";}
+if (!empty($field))  
+	{$where="WHERE $field LIKE '%$search%'";}
 	
-else if(!empty($search)){$where = "WHERE $field LIKE '%$search%'"; }
-else {$where = ""; }	
+
 if ($function == delete)
 	{$sql = "DELETE FROM userDB $where";$result = mysql_query($sql) or die(mysql_error());}
 if ($f == uType){
-	$sql = "INSERT INTO botWorker VALUES ('mysql_insertid',$uType,'$nicksearch','$ip','$passwd')";
+	$sql = "INSERT INTO botWorker VALUES ('mysql_insertid',$uType,'$search','$ip','$passwd')";
 	echo "$nicksearch($ip) status changed.<br>";
 	$result = mysql_query($sql) or die(mysql_error());}
 else if ($f == aStatus){
 	
-	$sql = "INSERT INTO botWorker VALUES ('mysql_insertid',$aStatus,'$nicksearch','$ip','Admin')";
-	echo "$nicksearch($ip) status changed.<br>";
+	$sql = "INSERT INTO botWorker VALUES ('mysql_insertid',$aStatus,'$search','$ip','Admin')";
+	echo "$search($ip) status changed.<br>";
 	$result = mysql_query($sql) or die(mysql_error());}
 if (empty($offset)) {$offset=0;}
 mysql_connect($databasehost,$username,$password);
@@ -37,23 +28,7 @@ $numresult=mysql_query("SELECT * FROM userDB $where");
 $numrows=mysql_num_rows($numresult);
 $result=mysql_query("SELECT * FROM userDB $where ORDER by uType,nick LIMIT $offset,$defaultLogEntries");
 mysql_close();
-?>
-<b>Filter Users Stats</b>
-<table> 
-	<tr><td nowrap><form method="get" class='inline' action="user-manage.php">
-		Nick Search<input  TYPE="text" VALUE="<? echo "$nicksearch";?>" NAME="nicksearch" SIZE="30" MAXLENGTH="50" >
-		IP Search<input  TYPE="text" VALUE="<? echo "$ipsearch";?>" NAME="ipsearch" SIZE="20" MAXLENGTH="20" >
-		<input type="submit" value="Apply"></form>
-		</td>
-	<td nowrap>
-		
-<form action="<? echo "user-manage.php?function=delete&ipsearch=$ipsearch&nicksearch=$nicksearch&countrysearch=$countrysearch" ?>" method="post">
-	<input type="Submit" value="Delete ALL" onClick="return confirmDelete()"></form>
-</td></tr>
-</form>
-</td>
-</table>		
-<?
+
 echo "Totals :Users $numrows<br>";
 ?>
 <table border="$tableborders" cellspacing="2" cellpadding="2">
@@ -151,12 +126,12 @@ while ($data=mysql_fetch_array($result))
 	?>
 	
 	
-<td nowrap><a href="<? echo "user-manage.php?nicksearch=$nick" ?>" title="Search for: <?echo "$nick"?>"> <? echo "$font$nick$fontend"; ?></a> <a href="<? echo "user-type.php?nicksearch=$nick" ?>" title="<?echo "$nick"?>'s info"> <? echo "<font color=\"#2400FF\" size=\"-1\">(i)</font>"?></a></td>
+<td nowrap><a href="<? echo "user-manage.php?field=nick&search=$nick" ?>" title="Search for: <?echo "$nick"?>"> <? echo "$font$nick$fontend"; ?></a> <a href="<? echo "user-type.php?nicksearch=$nick" ?>" title="<?echo "$nick"?>'s info"> <? echo "<font color=\"#2400FF\" size=\"-1\">(i)</font>"?></a></td>
 <!-- <td nowrap><? echo "$font$passwd$fontend"; ?></td> -->
-<td nowrap><a href="<? echo "user-manage.php?status=$status" ?>" title="Search for users <?echo "$status"?>"> <? echo "$font$status$fontend"; ?></a></td>
-<td nowrap><? echo "$font$uType$fontend"; ?></td>
+<td nowrap><a href="<? echo "user-manage.php?field=status&search=$status" ?>" title="Search for users <?echo "$status"?>"> <? echo "$font$status$fontend"; ?></a></td>
+<td nowrap><a href="<? echo "user-manage.php?field=uType&search=$uType" ?>"><? echo "$font$uType$fontend"; ?></a></td>
 <!--<td nowrap><? echo "$font$type$fontend"; ?></td> -->
-<td nowrap><a href="<? echo "user-manage.php?allowstatus=$allowStatus" ?>"><? echo "$font$allowStatus$fontend"; ?></a></td>
+<td nowrap><a href="<? echo "user-manage.php?field=allowStatus&search=$allowStatus" ?>"><? echo "$font$allowStatus$fontend"; ?></a></td>
 <!--<td nowrap><? echo "$font$awayStatus$fontend"; ?></td>-->
 <!-- <td nowrap><? echo "$font$awayMSg$fontend"; ?></td> -->
 <!-- <td nowrap><? echo "$font$fullDescription$fontend"; ?></td>-->
@@ -165,10 +140,10 @@ while ($data=mysql_fetch_array($result))
 <td nowrap><? echo "$font$slots$fontend"; ?></td>
 <td nowrap><? echo "$font$hubs$fontend"; ?></td>
 <td nowrap><? echo "$font$limiter$fontend"; ?></td> -->
-<td nowrap><? echo "$font$connection$fontend"; ?></td>
+<td nowrap><a href="<? echo "user-manage.php?field=connection&search=$connection" ?>"><? echo "$font$connection$fontend"; ?></a></td>
 <!-- <td nowrap><? echo "$font$connectionMode$fontend"; ?></td> -->
-<td nowrap><a href="user-manage.php?country=<? echo "$country"?>" title="Search for all users from: <? echo "$country"?>"><? echo "$font$country$fontend"; ?></a></td>
-<td nowrap><a href="user-manage.php?ipsearch=<? echo "$IP"?>" title="Search for all users with: <? echo "$IP"?>"><? echo "$font$IP$fontend"; ?></td>
+<td nowrap><a href="user-manage.php?field=country&search=<? echo "$country"?>" title="Search for all users from: <? echo "$country"?>"><? echo "$font$country$fontend"; ?></a></td>
+<td nowrap><a href="user-manage.php?field=IP&search=<? echo "$IP"?>" title="Search for all users with: <? echo "$IP"?>"><? echo "$font$IP$fontend"; ?></td>
 <!-- <td nowrap><? echo "$font$hostname$fontend"; ?></td>
 <td nowrap><? echo "$font$firstTime$fontend"; ?></td>
 <td nowrap><? echo "$font$outTime$fontend"; ?></td> -->
@@ -184,8 +159,8 @@ while ($data=mysql_fetch_array($result))
 <td nowrap><? echo "$font$lineCount$fontend"; ?></td>
 <td nowrap><? echo "$font$avShareBytes$fontend"; ?></td> -->
 <td nowrap><a title="<? echo "$Share" ?>" style="cursor:help"><? echo "$font$byteShare$fontend"; ?></a></td>
-<td nowrap><? echo "$font$lastAction$fontend"; ?></td> 
-<td nowrap><? echo "$font$lastReason$fontend"; ?></td>
+<td nowrap><a href="<? echo "user-manage.php?field=lastAction&search=$lastAction" ?>"><? echo "$font$lastAction$fontend"; ?></a></td>
+<td nowrap><a href="<? echo "user-manage.php?field=lastReason&search=$lastReason" ?>"><? echo "$font$lastReason$fontend"; ?></a></td>
 	
 	</tr>
 	<?
@@ -195,7 +170,7 @@ echo "</table>";
 
 if ($offset!=0) { 
     $prevoffset=$offset-$defaultLogEntries;
-    print "<a href=\"user-manage.php?offset=$prevoffset&ipsearch=$ipsearch&nicksearch=$nicksearch\">PREV</a> &nbsp; \n";
+    print "<a href=\"user-manage.php?offset=$prevoffset&field=$field&search=$search\">PREV</a> &nbsp; \n";
 }
 $pages=intval($numrows/$limit);
 
@@ -204,12 +179,12 @@ if ($numrows%$limit) {
 
 for ($i=1;$i<=$pages;$i++) { // loop thru
     $newoffset=$limit*($i-1);
-    print "<a href=\"user-manage.php?offset=$newoffset&ipsearch=$ipsearch&nicksearch=$nicksearch\">$i</a> &nbsp; \n"; }
+    print "<a href=\"user-manage.php?offset=$newoffset&field=$field&search=$search\">$i</a> &nbsp; \n"; }
 
 if (!(($offset/$limit)==$pages-1) && $pages!=1) {
     // not last page so give NEXT link
     $newoffset=$offset+$limit;
-    print "<a href=\"user-manage.php?offset=$newoffset&ipsearch=$ipsearch&nicksearch=$nicksearch\">NEXT</a><p>\n";
+    print "<a href=\"user-manage.php?offset=$newoffset&field=$field&search=$search\">NEXT</a><p>\n";
 }
 
 ?></div>
