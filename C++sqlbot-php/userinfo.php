@@ -12,15 +12,15 @@
 	mysql_connect($databasehost,$username,$password);
 	@mysql_select_db($database) or die( "Unable to select database");
 
-if ($hubID == "" || $uiNick == "" || $uiIp == "") {
-echo "$hubID ; $uiNick ; $uiIp ; Error... information parsed!<p>Please return to the <a href=\"index.php\"><font color=\"blue\">index.php</font></a>";}
+if ($hubID == "" || $uiNick == "") {
+echo "$hubID ; $uiNick ; Error... information parsed!<p>Please return to the <a href=\"index.php\"><font color=\"blue\">index.php</font></a>";}
 else {
 
 if ($updateuser == "1") {
 $update_into_userInfo = "UPDATE userInfo SET
 		uiPassword='$uiPassword',
 		uiUserLevel='$uiUserLevel'
-	WHERE uiNick='$uiNick' && uiIp='$uiIp' && hubID='$hubID'";
+	WHERE uiNick='$uiNick' && hubID='$hubID'";
 $result = mysql_query($update_into_userInfo) or die(mysql_error());
 }
 
@@ -83,7 +83,7 @@ $hcStatus = "<font color=\"#FF1D28\"><strong>Offline</strong></font>";
 <?php
 $userresult=mysql_query("SELECT *,DATE_FORMAT(uiLastSeenTime, '%d/%m/%Y %H:%i') AS lastdate,
 									DATE_FORMAT(uiFirstSeenTime, '%d/%m/%Y %H:%i') AS firstdate FROM userInfo
-									WHERE hubID='$hubID' && uiNick='$uiNick' && uiIp='$uiIp'");
+									WHERE hubID='$hubID' && uiNick='$uiNick'");
 
 	$rowID=mysql_result($userresult,$i,"rowID");
 	$uiNick=htmlentities(mysql_result($userresult,$i,"uiNick"));

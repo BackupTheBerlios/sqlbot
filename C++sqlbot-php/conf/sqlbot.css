@@ -251,8 +251,30 @@ input.userdbnicknormal {
 	border-color: #b0b0b0;
 	background-color: #598FE3;
 }
+input.userdbMASTER {
+	font-weight: bold;
+	color: #33FF00;
+	font-size: 10pt;
+	border-width: 0px;
+	border-height: 0px;
+	border-style: solid;
+	border-color: #b0b0b0;
+	background-color: #598FE3;
+}
 
-input.userdbnickop {
+
+input.userdbOPADM {
+	font-weight: bold;
+	color: yellow;
+	font-size: 10pt;
+	border-width: 0px;
+	border-height: 0px;
+	border-style: solid;
+	border-color: #b0b0b0;
+	background-color: #598FE3;
+}
+
+input.userdbOP {
 	font-weight: bold;
 	color: #FFFFFF;
 	font-size: 10pt;
@@ -263,4 +285,40 @@ input.userdbnickop {
 	background-color: #598FE3;
 }
 
+input.userdbVIP {
+	font-style: italic;
+	color: #FFFFFF;
+	font-size: 10pt;
+	border-width: 0px;
+	border-height: 0px;
+	border-style: solid;
+	border-color: #b0b0b0;
+	background-color: #598FE3;
+}
+
+
+input.userdbERROR {
+	text-decoration: blink;
+	color: #FFFFFF;
+	font-size: 10pt;
+	border-width: 0px;
+	border-height: 0px;
+	border-style: solid;
+	border-color: #b0b0b0;
+	background-color: #598FE3;
+}
+
+
 #dek {POSITION:absolute;VISIBILITY:hidden;Z-INDEX:200;}
+
+table.popup {
+	font-family: arial, helvetica, sans-serif;
+	font-size: 10px;
+	vertical-align: top;
+	margin: 10px;
+	padding: 0px;
+	color: #010101;
+	padding-left: 0px;
+	padding-right: 0px;
+	padding-bottom: 0px;
+}

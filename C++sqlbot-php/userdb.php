@@ -13,8 +13,8 @@
 //Permission granted to Dynamicdrive.com to include script in archive
 //For this and 100's more DHTML scripts, visit http://dynamicdrive.com
 
-Xoffset= 50;    // modify these values to ...
-Yoffset= 0;    // change the popup position.
+Xoffset= 10;    // modify these values to ...
+Yoffset= -20;    // change the popup position.
 
 var old,skn,iex=(document.all),yyy=-1000;
 
@@ -36,8 +36,8 @@ skn.display="none"
 document.onmousemove=get_mouse;
 
 function popup(msg,bak){
-var content="<TABLE  BORDER=1 BORDERCOLOR=black CELLPADDING=2 CELLSPACING=0 "+
-"BGCOLOR="+bak+"><TD ALIGN><FONT COLOR=black SIZE=2>"+msg+"</FONT></TD></TABLE>";
+var content="<TABLE  BORDER=1 BORDERCOLOR=\"black\" CELLPADDING=2 CELLSPACING=0 "+
+"BGCOLOR="+bak+" CLASS=\"popup\"><TR><TD>"+msg+"</TD></TR></TABLE>";
 yyy=Yoffset;
  if(ns4){skn.document.write(content);skn.document.close();skn.visibility="visible"}
  if(ns6){document.getElementById("dek").innerHTML=content;skn.display=''}
@@ -136,16 +136,26 @@ if (empty($offset)) { $offset = 0; }
 $total_result=mysql_query("SELECT * FROM userInfo WHERE hubID='$hubID'");
 $total_users=mysql_num_rows($total_result);
 
-$userresult=mysql_query("SELECT *,DATE_FORMAT(uiLastSeenTime, '%d/%m/%Y %H:%i') AS date FROM userInfo WHERE hubID='$hubID' $parseoption $parseoptionextra ORDER BY uiIsAdmin  DESC,$parseorder LIMIT $offset,$defaultLogEntries");
+$userresult=mysql_query("SELECT *,DATE_FORMAT(uiLastSeenTime, '%d/%m/%Y %H:%i') AS date FROM userInfo WHERE hubID='$hubID' $parseoption $parseoptionextra ORDER BY uiUserLevel  DESC,$parseorder LIMIT $offset,$defaultLogEntries");
 
-$total_userresult=mysql_query("SELECT *,DATE_FORMAT(uiLastSeenTime, '%d/%m/%Y %H:%i') AS date FROM userInfo WHERE hubID='$hubID' $parseoption $parseoptionextra ORDER BY uiIsAdmin  DESC,$parseorder");
+$total_userresult=mysql_query("SELECT *,DATE_FORMAT(uiLastSeenTime, '%d/%m/%Y %H:%i') AS date FROM userInfo WHERE hubID='$hubID' $parseoption $parseoptionextra ORDER BY uiUserLevel  DESC,$parseorder");
 
 $total_selection=mysql_num_rows($total_userresult);
+
+$total_bytes_q=mysql_query("SELECT SUM(uiShare) FROM userInfo WHERE hubID='$hubID' $parseoption $parseoptionextra");
+
+$totshared_bytes=mysql_result($total_bytes_q,$i);
+
+	if (($totshared_bytes / 1024 / 1024 / 1024 / 1024) > 1) { $Shared=round(($totshared_bytes / 1024 / 1024 / 1024 / 1024), 2); $totalShare="$Shared TB";}
+	else if (($totshared_bytes / 1024 / 1024 / 1024) > 1) { $Shared=round(($totshared_bytes / 1024 / 1024 / 1024), 2); $totalShare="$Shared GB";}
+	else if (($totshared_bytes / 1024 / 1024) > 1) { $Shared=round(($totshared_bytes / 1024 / 1024), 2); $Share="$totalShared MB";}
+	else if (($totshared_bytes / 1024) > 1) { $Shared=round(($totshared_bytes / 1024), 2); $totalShare="$Shared KB";};
+
 
 ?>
 <FIELDSET>
 	<LEGEND><font color="#FFFFFF"> &nbsp; Selected users: [ <?php echo "$parse"; ?> ] &nbsp; Selected:
-					[ <?php echo "$total_selection / $total_users"; ?> ] &nbsp;  for hub <?php echo "$hcName [ ID: $hubID ]"; ?></font></LEGEND>
+					[ <?php echo "$total_selection / $total_users ($totalShare)"; ?> ] &nbsp;  for hub <?php echo "$hcName [ ID: $hubID ]"; ?></font></LEGEND>
 	<!-- SEARCH DIALOG -->
 	<table width="100%">
 		<tr>
@@ -229,6 +239,7 @@ while ($data=mysql_fetch_array($userresult))
 	$HubID=mysql_result($userresult,$i,"HubID");
 	$uiCountry=mysql_result($userresult,$i,"uiCountry");
 	$uiIsAdmin=mysql_result($userresult,$i,"uiIsAdmin");
+	$uiUserLevel=mysql_result($userresult,$i,"uiUserLevel");
 	$uiPassword=htmlentities(mysql_result($userresult,$i,"uiPassword"));
 	$uiShare=mysql_result($userresult,$i,"uiShare");
 	$uiTag=htmlentities(mysql_result($userresult,$i,"uiTag"));
@@ -262,18 +273,17 @@ while ($data=mysql_fetch_array($userresult))
 // CONVERSIONS FOR GRAPHICS& DATE
 
 	$conv_time=mysql_result($userresult,$i,"date");
-	if ($uiClient == "Unknown") { $CLIENT = "<img src=\"img/clients/NoTag.gif\" alt=\"\" title=\"$uiTag\">"; }
-	if ($uiClient == "DCGUI") { $CLIENT = "<img src=\"img/clients/DCGUI.gif\" alt=\"$uiClient\" title=\"$uiTag\">"; }
-	if ($uiClient == "++") { $CLIENT = "<img src=\"img/clients/DCpp.gif\" alt=\"$uiClient\" title=\"$uiTag\">"; }
-	if ($uiClient == "DC") { $CLIENT = "<img src=\"img/clients/DC.gif\" alt=\"$uiClient\" title=\"$uiTag\">"; }
+	if ($uiClient == "Unknown") { $CLIENT = "<img src=\"img/clients/NoTag.gif\" alt=\"\">"; }
+	if ($uiClient == "DCGUI") { $CLIENT = "<img src=\"img/clients/DCGUI.gif\" alt=\"$uiClient\">"; }
+	if ($uiClient == "++") { $CLIENT = "<img src=\"img/clients/DCpp.gif\" alt=\"$uiClient\">"; }
+	if ($uiClient == "DC") { $CLIENT = "<img src=\"img/clients/DC.gif\" alt=\"$uiClient\">"; }
 	if ($uiNick == "$bcName") { $CLIENT = "BOT"; }
 	
 	if  (($uiStatus == "1") && ($uiIsAway == "0")) { $uiStatus ="<img src=\"img/Online.gif\" alt=\"Online\" title=\"Online\">";}
 	if  (($uiStatus == "1") && ($uiIsAway == "1")) { $uiStatus ="<img src=\"img/Away.gif\" alt=\"Away\" title=\"Away\">";}
 	if  ($uiStatus == "0") { $uiStatus ="<img src=\"img/Offline.gif\" alt=\"Offline\" title=\"Offline\">";}
 
-if ($uiIsAdmin == "1") { $class = "userdbnickop"; }
-else {$class = "userdbnicknormal"; }
+
 
 //CONVERSION FOR SHARE
 	if (($uiShare / 1024 / 1024 / 1024 / 1024) > 1) { $Shared=round(($uiShare / 1024 / 1024 / 1024 / 1024), 2); $Share="$Shared TB";}
@@ -286,21 +296,41 @@ if ($uiMode == "Passive") { $uiMode = "P"; }
 if ($uiMode == "Active") { $uiMode = "A"; }
 
 
+//DECLARE POPUPS FOR USER-NICK
+if ($uiClient == "Unknown") { $clientHover = "ONMOUSEOVER=\"popup('Unknown</td>','yellow')\"; ONMOUSEOUT=\"kill()\""; }
+else  { $clientHover = "ONMOUSEOVER=\"popup('Client</td><td>$uiClient</td></tr><tr><td>Version</td><td>$uiVersion</td></tr><tr><td>Details</td><td>M:$uiMode,H:$uiHubs,S:$uiSlots,L:$uiLimiter</td>','yellow')\"; ONMOUSEOUT=\"kill()\""; }
+
+
+// DECLARE USER-STATES
+if ($uiUserLevel == "3") { $class = "userdbOPADM"; $Level = "Op Admin"; }
+if ($uiUserLevel == "2") { $class = "userdbOP"; $Level = "Operator";  }
+if ($uiUserLevel == "1") { $class = "userdbVIP"; $Level = "VIP";  }
+if ($uiNick == "$bcMaster") { $class = "userdbMASTER"; $Level = "Master"; }
+if (($uiUserLevel > "1") && ($uiIsAdmin == "0")) { $class = "userdbERROR"; $Level = "Misconfigured"; }
+if (($uiUserLevel < "2") && ($uiIsAdmin == "1")) { $class = "userdbERROR"; $Level = "Misconfigured"; }
+if (($uiUserLevel == "0") && ($uiIsAdmin == "0")) { $class = "userdbnicknormal"; $Level = "User";}
+
+
+
+
+
+// PAGE DATA
 echo "<tr>
 		<td width=\"5\">$uiStatus</td>
 		<td>
 			<form action=\"userinfo.php\" method=\"post\">
 			<input type=\"hidden\" name=\"hubID\" value=\"$hubID\">
-			<input type=\"hidden\" name=\"uiIp\" value=\"$uiIp\">
 			<input type=\"hidden\" name=\"uiNick\" value=\"$uiNick\">
-			<input type=\"submit\" value=\"$uiNick\" class=\"$class\" nowrap ONMOUSEOVER=\"popup('$uiClient V:$uiVersion<br>M:$uiMode,H:$uiHubs,S:$uiSlots,L:$uiLimiter','yellow')\"; ONMOUSEOUT=\"kill()\"></form>
+			<input type=\"submit\" value=\"$uiNick\" class=\"$class\" nowrap
+			ONMOUSEOVER=\"popup('Logins</td><td>$uiLoginCount</td></tr><tr><td>Kicks</td><td>$uiKickTotal</td></tr><tr><td>Bans</td><td>$uiBanTotal</td>','yellow')\"; ONMOUSEOUT=\"kill()\"></form>
 		</td>
-		<td nowrap align=\"center\">$uiIsAdmin</td>
-		<td nowrap align=\"center\">$CLIENT</td>
+		<td nowrap align=\"center\">$Level</td>
+		<td nowrap align=\"center\" $clientHover>$CLIENT</td>
 		<td nowrap align=\"center\">$uiSpeed</td>
 		<td nowrap align=\"center\">$uiIp</td>
 		<td nowrap align=\"center\">$conv_time</td>
-		<td nowrap align=\"center\"><a title=\"$Share\" style=\"cursor:help;\">$uiShare</a></td>
+		<td nowrap align=\"center\"
+		ONMOUSEOVER=\"popup('$Share</td>','yellow')\"; ONMOUSEOUT=\"kill()\">$uiShare</td>
 	</tr>";
 	$i++;
 }
