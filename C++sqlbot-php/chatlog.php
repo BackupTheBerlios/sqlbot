@@ -80,7 +80,7 @@ $result=mysql_query("SELECT * FROM hubConfig WHERE hubID='$hubID'");
 // GET CHAT LOGS
 if (empty($offset)) { $offset = 0; }
 
-$logtotal=mysql_query("SELECT * FROM logChat");
+$logtotal=mysql_query("SELECT * FROM logChat where hubID='$hubID'");
 $total_chats=mysql_num_rows($logtotal);
 
 $logresult=mysql_query("SELECT *,DATE_FORMAT(lcTime, '%H:%i:%S') AS time,
@@ -164,7 +164,7 @@ echo "<tr>
 							<input type="submit" value="<<<" class="userdbnicknormal" title="Go to First Page"></form>
 				<?php ;} ?>
 			</td>
-			<td width="*">
+			<td>
 				<?php
 				// CODE FOR PREVIOUS BUTTON
 				if ($offset >= $defaultLogEntries){
@@ -183,7 +183,7 @@ echo "<tr>
 							<input type="submit" value=" << " class="userdbnicknormal" title="Go to Previous Page"></form>
 				<?php ;} ?>
 			</td>
-			<td width="*" align="right">
+			<td align="right">
 				<?php
 				// CODE FOR NEXT BUTTON
 				$offset_value = $offset + $defaultLogEntries;
