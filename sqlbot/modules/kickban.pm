@@ -113,27 +113,22 @@ sub banUser (){
 		$tBanCount++;
 		$tBanCountTot++;
 		odch::add_ban_entry($ip);
+		odch::add_nickban_entry($user);
 		if (&getVerboseOption("verbose_banned")){
 			&msgAll("T-BANNED $user($ip) for:$reason");}}
 	elsif ($mode =~ /pban/i){	# Permanent Ban
 		$lastAction = "P-Banned";
 		$pBanCountTot++;
 		odch::add_ban_entry($ip);
+		odch::add_nickban_entry($user);
 		if (&getVerboseOption("verbose_banned")){
 			&msgAll("P-BANNED $user($ip) for:$reason");}}
-	elsif ($mode =~ /nban/i){	# Nick Ban
-		$lastAction = "N-Banned";
-		$pBanCountTot++;
-		odch::add_ban_entry($user);
-		if (&getVerboseOption("verbose_banned")){
-			&msgAll("N-BANNED $user($ip) for:$reason");}}
-			
 	elsif ($mode =~ /uban/i){	# Remove ban
 		$lastAction = "Un-Ban";
 		if (&getVerboseOption("verbose_banned")){
 			&msgAll("UN-BANNED $user($ip) for:$reason");}
 		odch::remove_ban_entry($ip);
-		odch::remove_ban_entry($user);
+		odch::remove_nickban_entry($user);
 		$dbh->do("UPDATE userDB SET tBanCount='0',
 					kickCount='0',
 					allowStatus='Normal',
