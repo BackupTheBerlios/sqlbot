@@ -120,7 +120,7 @@ eval { $dbh->do("CREATE TABLE userDB (	rowID 		INT(7) NOT NULL AUTO_INCREMENT PR
 					print "Created table \"userDB\"\n";
 			}; print "CREATE \"userDB\" failed: $@\n" if $@;
 
-eval { $dbh->do("CREATE TABLE botWorker (	rowID 		TINYINT(7) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+eval { $dbh->do("CREATE TABLE botWorker (	rowID 		INT(7) NOT NULL AUTO_INCREMENT PRIMARY KEY,
 					function	int(3),
 					nick		VARCHAR(30),
 					IP		VARCHAR(15),
