@@ -28,7 +28,6 @@ sub userInDB(){
 	my($user,$ip) = @_;
 
 	my($value) = $dbh->selectrow_array("SELECT COUNT(DISTINCT(nick)) FROM userDB WHERE (nick='$user' OR IP='$ip')  ");	
-	&debug("$user($ip) userInDB(Count)=$value");
 	if($value eq 1) 
 	{	
 		my($value1) = $dbh->selectrow_array("SELECT COUNT(DISTINCT(nick)) FROM userDB WHERE (nick='$user' OR IP='$ip') AND allowStatus='allow'");
