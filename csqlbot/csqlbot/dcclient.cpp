@@ -808,9 +808,13 @@ bool DCClient::CheckForCommand(eMsgSrc msgSrc,CString nick, CString cmd)
      return(FALSE);
 }                                                
 
+/** */
 bool DCClient::ClientCheck(UserInfo *info,CString nick)
 {
-	if (info == 0){return FALSE;}
+	bool res = FALSE;
+
+	if (!info)
+		return FALSE;
 
 	//Tag checks disabled
 	if (!hubConfig->GetHubEnableTagCheck())
@@ -876,47 +880,78 @@ bool DCClient::ClientCheck(UserInfo *info,CString nick)
 
 			printf("Rule found '%s'\n",rule->m_sName.Data());
 
+			// store rule
 			matchrule = rule;
 
-			break;
+			// check client
+			res = ClientCheck(info,matchrule);
+			
+			// client kicked, no more tests
+			if ( res == FALSE )
+				break;
 		}
 	}
 
-	if ( matchrule == 0 )
+	// check if we have found a rule for the client
+	if ( (matchrule == 0) && (res == FALSE) )
+	{
+		// no rule found, use default
 		matchrule = defaultrule;
+	}
+
+	// if we have a default rule
 	if ( matchrule == 0 )
 	{
 		printf("No Rule found !\n");
-		return TRUE;
+		res = TRUE;
+	}
+	else
+	{
+		// check client with default rule
+		res = ClientCheck(info,matchrule);
 	}
 
-	// first we send client motd
-	if ( matchrule->m_bMotd && (matchrule->m_sMotd != "") )
+     	if ( res )
 	{
-		SendPrivateMessage( GetNick(), info->GetNick(), matchrule->m_sMotd );
+		//Download file list
+
+     		//The client checks ok, make sure ban flag is none
+     		info->SetBanFlag(euibfNone);
+	}
+	
+     	return res;
+}
+
+/** Check the client tag */
+bool DCClient::ClientCheck( UserInfo *info, CClientRule * rule )
+{
+	// first we send client motd
+	if ( rule->m_bMotd && (rule->m_sMotd != "") )
+	{
+		SendPrivateMessage( GetNick(), info->GetNick(), rule->m_sMotd );
 	}
 	
 	// check if the client allowed
-	if ( matchrule->m_bAllow == FALSE )
+	if ( rule->m_bAllow == FALSE )
 	{
-		interface->Kick(ehikb_None,info,matchrule);
+		interface->Kick(ehikb_None,info,rule);
 
 		return FALSE;
 	}
 
      	// Check min speed
-     	if ( hubConfig->ConvertSpeed(info->GetSpeed()) < matchrule->m_eMinUserSpeed )
+     	if ( hubConfig->ConvertSpeed(info->GetSpeed()) < rule->m_eMinUserSpeed )
      	{
-          	interface->Kick(ehikb_MinConnection,info,matchrule);
+          	interface->Kick(ehikb_MinConnection,info,rule);
 
           	return(FALSE);     
      	}
 
 	// Check min share
-     	if ( info->GetShare() < matchrule->m_nMinShared )
+     	if ( info->GetShare() < rule->m_nMinShared )
      	{
           	//Kick Share is too small
-          	interface->Kick(ehikb_Share,info,matchrule);
+          	interface->Kick(ehikb_Share,info,rule);
           
           	return(FALSE);
      	}
@@ -924,27 +959,27 @@ bool DCClient::ClientCheck(UserInfo *info,CString nick)
 	// TODO: Check max share
 
      	// Check Min Slots
-     	if ( info->GetSlots() < matchrule->m_nMinSlots )
+     	if ( info->GetSlots() < rule->m_nMinSlots )
      	{
-           	interface->Kick(ehikb_MnSlots,info,matchrule);
+           	interface->Kick(ehikb_MnSlots,info,rule);
                                         
            	return(FALSE);
      	}
 	
      	// Check Max Slots
-     	if ( (matchrule->m_nMaxSlots > 0) &&
-	     (info->GetSlots() > matchrule->m_nMaxSlots) )
+     	if ( (rule->m_nMaxSlots > 0) &&
+	     (info->GetSlots() > rule->m_nMaxSlots) )
      	{
-		interface->Kick(ehikb_MxSlots,info,matchrule);
+		interface->Kick(ehikb_MxSlots,info,rule);
 
            	return(FALSE);
      	}
 
      	// Check max hubs
-     	if ( (matchrule->m_nMaxHubs > 0) && 
-	     (info->GetHubs() > matchrule->m_nMaxHubs) )
+     	if ( (rule->m_nMaxHubs > 0) && 
+	     (info->GetHubs() > rule->m_nMaxHubs) )
      	{
-          	interface->Kick(ehikb_MxHubs,info,matchrule);
+          	interface->Kick(ehikb_MxHubs,info,rule);
 		
          	return(FALSE);
      	}
@@ -956,7 +991,7 @@ bool DCClient::ClientCheck(UserInfo *info,CString nick)
               	    (info->GetUiHubsNorm() == 0) &&
               	    (info->GetClient() == "++"))
           	{
-               		cout << "Invalid tag check Manually inspect "<< nick.Data() << " tag" << endl;
+               		cout << "Invalid tag check Manually inspect "<< info->GetNick().Data() << " tag" << endl;
           	}
      	}
 
@@ -973,7 +1008,7 @@ bool DCClient::ClientCheck(UserInfo *info,CString nick)
                    	(info->GetUiHubsNorm() == 0) &&
                    	(info->GetUiHubsOp() == 0))
                		{
-                    		interface->Kick(ehikb_HackedTag,info,matchrule);
+                    		interface->Kick(ehikb_HackedTag,info,rule);
 				
                     		return(FALSE);
                		}
@@ -983,19 +1018,14 @@ bool DCClient::ClientCheck(UserInfo *info,CString nick)
      	// Check slot Ratio
      	double userSlotRatio = ((double)info->GetSlots()/(double)info->GetHubs());
 	
-     	if ( userSlotRatio < matchrule->m_nSlotHubRatio )
+     	if ( userSlotRatio < rule->m_nSlotHubRatio )
      	{
-          	interface->Kick(ehikb_SlotRatio,info,matchrule);
+          	interface->Kick(ehikb_SlotRatio,info,rule);
 		
           	return(FALSE);
-     	}        
-
-     	//Download file list
-
-     	//The client checks ok, make sure ban flag is none
-     	info->SetBanFlag(euibfNone);
+     	}
 	
-     	return(TRUE);
+	return TRUE;
 }
 
 void DCClient::SaveUserList(void)

@@ -33,6 +33,8 @@
 #include "hubinterface.h"
 #include "botcontroller.h"
 
+class CClientRule;
+
 class DCClient : public CClient  {
 public: 
      /** */
@@ -82,6 +84,8 @@ public:
      CString GetBotNick() {return botNick;}
      /** Check the client tag */
      bool ClientCheck(UserInfo *info,CString nick);
+     /** Check the client tag */
+     bool ClientCheck( UserInfo *info, CClientRule * rule );
      /** Check for Clones */
      bool CloneCheck(CString nick,CString nick1);
      /** Get the Hub ID */          
