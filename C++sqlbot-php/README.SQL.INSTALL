@@ -15,6 +15,9 @@
 
 				use database sqlbot;
 
+or
+				use sqlbot;
+
 #(it should say "Database changed"
 
 
