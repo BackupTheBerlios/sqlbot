@@ -1,11 +1,11 @@
-<?
+<?php 
 $page_title="Hub Statistics";
 include("header.ini");
 ?>
 
 
 
-<?
+<?php 
 ///////////////////////////////////////////////////////
 ////Total Share figures
 ///////////////////////////////////////////////////////
@@ -34,14 +34,14 @@ while ($limit > $highRange)
 	?>
 
 
-	<td><? echo "$font$lowRangeGb - $highRangGb GB $fontend" ?></td>
-	<td><? echo "$font$count$fontend" ?></td>
-	<td><TABLE bgColor=red height=10 width=<? echo "$tablewidth" ?> cellSpacing=0 cellPadding=0 border= 0>
+	<td><?php  echo "$font$lowRangeGb - $highRangGb GB $fontend" ?></td>
+	<td><?php  echo "$font$count$fontend" ?></td>
+	<td><TABLE bgColor=red height=10 width=<?php  echo "$tablewidth" ?> cellSpacing=0 cellPadding=0 border= 0>
  <TR><TD></TD></TR>
 </TABLE>
 	</td>
 	
-	</tr><?
+	</tr><?php 
 	++$i;
 	 $lowRange  =  $lowRange + $range;
 	 $highRange  =  $highRange + $range;

@@ -1,4 +1,4 @@
-<?
+<?php 
 // Host of MySQL DB
 $databasehost="localhost";
 

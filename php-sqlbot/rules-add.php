@@ -1,4 +1,4 @@
-<?
+<?php 
 $page_title="Add a new hub-rule";
 include("header.ini");
 ?>

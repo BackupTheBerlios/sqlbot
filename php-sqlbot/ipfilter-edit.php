@@ -1,9 +1,9 @@
-<?
+<?php 
 $page_title="Edit a filtered Nickname";
 include("header.ini");
 ?>
 
-<?
+<?php 
 mysql_connect($databasehost,$username,$password);
 @mysql_select_db($database) or die( "Unable to select database");
 $query="SELECT * FROM ipFiltering where rowID=$id";
@@ -25,36 +25,36 @@ $log=mysql_result($result,$i,"log");
 	
 	<tr>
 		<td></td>	
-		<td><input type="hidden" name="rowID" value="<? echo "$rowID"; ?>"></t>
+		<td><input type="hidden" name="rowID" value="<?php  echo "$rowID"; ?>"></t>
 	</tr><tr>
 		<td>IP Range Start</td>
-		<td><input type="Text" name="ipStart" value="<? echo"$ipStart";?>"></td>
+		<td><input type="Text" name="ipStart" value="<?php  echo"$ipStart";?>"></td>
 		<td></td>
 	</tr><tr>
 		<td>IP Mask</td>
-		<td><input type="Text" name="ipMask" value="<? echo"$ipMask";?>"></td>
+		<td><input type="Text" name="ipMask" value="<?php  echo"$ipMask";?>"></td>
 		<td></td>
 	</tr><tr>
 		<td></td>
-		<td><input type="radio" name="function" value="ban" <? if ($function == "ban") echo"checked=\"true\"";?> >Ban<br></td>
+		<td><input type="radio" name="function" value="ban" <?php  if ($function == "ban") echo"checked=\"true\"";?> >Ban<br></td>
 		<td></td>
 	</tr><tr>
 		<td></td>
-		<td><input type="radio" name="function" value="allow" <? if ($function == "allow") echo"checked=\"true\"";?> >Allow<br></td>
+		<td><input type="radio" name="function" value="allow" <?php  if ($function == "allow") echo"checked=\"true\"";?> >Allow<br></td>
 		<td></td>
 	</tr><tr>
 		<td>Log</td>
-		<td><input type="checkbox" name="log" value="<? echo"$log";?>" <? if ($log == "on") echo" checked";?> ></td>
+		<td><input type="checkbox" name="log" value="<?php  echo"$log";?>" <?php  if ($log == "on") echo" checked";?> ></td>
 		<td></td>
 	</tr><tr>
 		<td>Information</td>
-		<td><input type="Text" name="information" value="<? echo"$information";?>" ></td>
+		<td><input type="Text" name="information" value="<?php  echo"$information";?>" ></td>
 		<td></td>		
 	</tr></table>
 	<hr>
 <input type="Submit" value="Submit changes">
 </form>
-<? ++$i; }  ?>
+<?php  ++$i; }  ?>
 </center>
 </body>
 </html> 

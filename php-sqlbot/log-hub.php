@@ -1,11 +1,11 @@
-<?
+<?php 
 $page_title="Hub Log";
 include("header.ini");
 ?>
 <br>
 	<div align="center"><form action="log-hub.php" method="post">
 	<input class="button" type="Submit" value="Refresh"></form><br>
-<div align="center"><?
+<div align="center"><?php 
 $entry=0;
 mysql_connect($databasehost,$username,$password);
 @mysql_select_db($database) or die( "Unable to select database");
@@ -32,30 +32,30 @@ $result=mysql_query("SELECT * FROM hubLog $where ORDER by rowID DESC  LIMIT $off
 mysql_close();
 ?>
 
-<table border="<? echo "$tableborders";?> cellspacing="2" cellpadding="2">
+<table border="<?php  echo "$tableborders";?> cellspacing="2" cellpadding="2">
 <tr>
-	<th><? echo " Filters Applied $font$field $search$fontend";?></th>
-	<th><form action="<? echo "log-hub.php" ?>" method="post">
+	<th><?php  echo " Filters Applied $font$field $search$fontend";?></th>
+	<th><form action="<?php  echo "log-hub.php" ?>" method="post">
 	<input type="Submit" value="Reset Filters"></form></th>
-	<th><form action="<? echo "log-hub.php?f=delete&field=$field&search=$search" ?>" method="post">
+	<th><form action="<?php  echo "log-hub.php?f=delete&field=$field&search=$search" ?>" method="post">
 	<input type="Submit" value="Delete ALL" onClick="return confirmDelete()"></form></th>
 	</tr><tr>
-	<th><form action="<? echo "log-hub.php?field=nick&search=$search" ?>" method="post">
-	<input type="text" name="search" value=""><? echo "$font";?></th><th>
+	<th><form action="<?php  echo "log-hub.php?field=nick&search=$search" ?>" method="post">
+	<input type="text" name="search" value=""><?php  echo "$font";?></th><th>
 	<input type="Submit" value="Nick Search"></form></th>
 </tr>
 </table>
-<?
+<?php 
 echo "<br>Total Number of Matching Entries <b>$numrows</b><br>"; ?>
 
-<table border="<? echo "$tableborders";?> cellspacing="2" cellpadding="2"> 
+<table border="<?php  echo "$tableborders";?> cellspacing="2" cellpadding="2"> 
 <tr>  
-	<th><? echo "$font";?>Nick<? echo "$fontend";?></th> 
-	<th><? echo "$font";?>Date Time<? echo "$fontend";?></th>
-	<th><? echo "$font";?>Action<? echo "$fontend";?></th> 
-	<th><? echo "$font";?>Reason<? echo "$fontend";?></th> 
+	<th><?php  echo "$font";?>Nick<?php  echo "$fontend";?></th> 
+	<th><?php  echo "$font";?>Date Time<?php  echo "$fontend";?></th>
+	<th><?php  echo "$font";?>Action<?php  echo "$fontend";?></th> 
+	<th><?php  echo "$font";?>Reason<?php  echo "$fontend";?></th> 
 </tr> 
-<? 
+<?php  
 while ($data=mysql_fetch_array($result)) 
 { 	// include code to display results as you see fit
 	
@@ -73,14 +73,14 @@ while ($data=mysql_fetch_array($result))
 	else{echo "<TR bgcolor="; echo "$rowColourAlt"; echo ">\n";}
 
 	?>
-	<form action="<? echo "log-hub.php?f=row&id=$id&offset=$offset&search=$search" ?>" method="post"> 
-	<td nowrap><a href="<? echo "user-manage.php?field=nick&search=$nick" ?>"><? echo "$font$nick$fontend"; ?></a></td>
-	<td nowrap><? echo "$font$logTime$fontend"; ?></td> 
-	<td nowrap><a href="<? echo "log-hub.php?field=action&search=$action"; ?>"><? echo "$font$action$fontend"; ?></a></td>
-	<td nowrap><a href="<? echo "log-hub.php?field=reason&search=$reason"; ?>"><? echo "$font$reason$fontend"; ?></a></td>
+	<form action="<?php  echo "log-hub.php?f=row&id=$id&offset=$offset&search=$search" ?>" method="post"> 
+	<td nowrap><a href="<?php  echo "user-manage.php?field=nick&search=$nick" ?>"><?php  echo "$font$nick$fontend"; ?></a></td>
+	<td nowrap><?php  echo "$font$logTime$fontend"; ?></td> 
+	<td nowrap><a href="<?php  echo "log-hub.php?field=action&search=$action"; ?>"><?php  echo "$font$action$fontend"; ?></a></td>
+	<td nowrap><a href="<?php  echo "log-hub.php?field=reason&search=$reason"; ?>"><?php  echo "$font$reason$fontend"; ?></a></td>
 	</form>
 	</tr>
-	<? $i++; } 
+	<?php  $i++; } 
 echo "</table></div>";
 
 if ($offset!=0) { 
@@ -103,6 +103,6 @@ if (!(($offset/$limit)==$pages) && $pages!=1) {
 ?></div>
 
 
-<? echo "$fontend";?>
+<?php  echo "$fontend";?>
 </body>
 </html>

@@ -1,6 +1,6 @@
-<? $page_title="Users Ban/Allow/Kick Settings";include("header.ini");?>
+<?php  $page_title="Users Ban/Allow/Kick Settings";include("header.ini");?>
 
-<div align="center"><?
+<div align="center"><?php 
 $limit=$defaultLogEntries; 
 echo "$font";
 mysql_connect($databasehost,$username,$password);
@@ -72,9 +72,9 @@ if (!empty($numrows)){
 
 ?>
 
-<table border="<? echo "$tableBorders";?>" cellspacing="2" cellpadding="2">
+<table border="<?php  echo "$tableBorders";?>" cellspacing="2" cellpadding="2">
 <tr>
-<td align="center"><strong><font color="#0100FF"><? echo "$nick"; ?></font></strong> (<? echo "$font$status$fontend"; ?>)</td></tr>
+<td align="center"><strong><font color="#0100FF"><?php  echo "$nick"; ?></font></strong> (<?php  echo "$font$status$fontend"; ?>)</td></tr>
 <tr>
 <table border="1">
 <tr>
@@ -83,38 +83,38 @@ if (!empty($numrows)){
 </tr>
 <tr>
 <td valign="top">
-<table border="<? echo "$tableBorders";?>" cellspacing="2" cellpadding="2">
-<tr><td><? echo "$font";?>Allow Status:<? echo "$fontend";?></td><td nowrap><? echo "$font$allowStatus$fontend"; ?></td></tr>
-<tr><td><? echo "$font";?>Total Logins:<? echo "$fontend";?></td><td nowrap><? echo "$font$loginCount$fontend"; ?></td></tr>
-<tr><td><? echo "$font";?>User Type:<? echo "$fontend";?></td><td nowrap><? echo "$font$uType1$fontend"; ?></td></tr>
-<tr><td><? echo "$font";?>IP:<? echo "$fontend";?></td><td nowrap><? echo "$font$IP$fontend"; ?></td></tr>
-<tr><td><? echo "$font";?>Hostname:<? echo "$fontend";?></td><td nowrap><? echo "$font$hostname$fontend"; ?></td></tr>
-<tr><td><? echo "$font";?>Country:<? echo "$fontend";?></td><td nowrap><img src="img/flags/<? echo "$country" ?>.GIF" alt="<? echo "$country" ?>" border="0" title="<? echo "$country" ?>"> <? echo "$font$country$fontend"; ?></td></tr>
-<tr><td><? echo "$font";?>Current Kick Count:<? echo "$fontend";?></td><td nowrap><? echo "$font$kickCount$fontend"; ?></td></tr> 
-<tr><td><? echo "$font";?>Total Kicks:<? echo "$fontend";?></td><td nowrap><? echo "$font$kickCountTot$fontend"; ?></td></tr>
-<tr><td><? echo "$font";?>Total pBans:<? echo "$fontend";?></td><td nowrap><? echo "$font$pBanCountTot$fontend"; ?></td></tr>
-<tr><td><? echo "$font";?>Current tBan Count:<? echo "$fontend";?></td><td nowrap><? echo "$font$tBanCount$fontend"; ?></td></tr> 
-<tr><td><? echo "$font";?>Total tBans:<? echo "$fontend";?></td><td nowrap><? echo "$font$tBanCountTot$fontend"; ?></td></tr>
-<tr><td><? echo "$font";?>Last Action:<? echo "$fontend";?></td><td nowrap><? echo "$font$lastAction$fontend"; ?></td></tr>
-<tr><td><? echo "$font";?>Last Reason:<? echo "$fontend";?></td><td nowrap><? echo "$font$lastReason$fontend"; ?></td></tr>
+<table border="<?php  echo "$tableBorders";?>" cellspacing="2" cellpadding="2">
+<tr><td><?php  echo "$font";?>Allow Status:<?php  echo "$fontend";?></td><td nowrap><?php  echo "$font$allowStatus$fontend"; ?></td></tr>
+<tr><td><?php  echo "$font";?>Total Logins:<?php  echo "$fontend";?></td><td nowrap><?php  echo "$font$loginCount$fontend"; ?></td></tr>
+<tr><td><?php  echo "$font";?>User Type:<?php  echo "$fontend";?></td><td nowrap><?php  echo "$font$uType1$fontend"; ?></td></tr>
+<tr><td><?php  echo "$font";?>IP:<?php  echo "$fontend";?></td><td nowrap><?php  echo "$font$IP$fontend"; ?></td></tr>
+<tr><td><?php  echo "$font";?>Hostname:<?php  echo "$fontend";?></td><td nowrap><?php  echo "$font$hostname$fontend"; ?></td></tr>
+<tr><td><?php  echo "$font";?>Country:<?php  echo "$fontend";?></td><td nowrap><img src="img/flags/<?php  echo "$country" ?>.GIF" alt="<?php  echo "$country" ?>" border="0" title="<?php  echo "$country" ?>"> <?php  echo "$font$country$fontend"; ?></td></tr>
+<tr><td><?php  echo "$font";?>Current Kick Count:<?php  echo "$fontend";?></td><td nowrap><?php  echo "$font$kickCount$fontend"; ?></td></tr> 
+<tr><td><?php  echo "$font";?>Total Kicks:<?php  echo "$fontend";?></td><td nowrap><?php  echo "$font$kickCountTot$fontend"; ?></td></tr>
+<tr><td><?php  echo "$font";?>Total pBans:<?php  echo "$fontend";?></td><td nowrap><?php  echo "$font$pBanCountTot$fontend"; ?></td></tr>
+<tr><td><?php  echo "$font";?>Current tBan Count:<?php  echo "$fontend";?></td><td nowrap><?php  echo "$font$tBanCount$fontend"; ?></td></tr> 
+<tr><td><?php  echo "$font";?>Total tBans:<?php  echo "$fontend";?></td><td nowrap><?php  echo "$font$tBanCountTot$fontend"; ?></td></tr>
+<tr><td><?php  echo "$font";?>Last Action:<?php  echo "$fontend";?></td><td nowrap><?php  echo "$font$lastAction$fontend"; ?></td></tr>
+<tr><td><?php  echo "$font";?>Last Reason:<?php  echo "$fontend";?></td><td nowrap><?php  echo "$font$lastReason$fontend"; ?></td></tr>
 </table>
 </td>
 <td valign="top">
-<table border="<? echo "$tableBorders";?>" cellspacing="2" cellpadding="2">
-<tr><td><? echo "$font";?>Client Name:<? echo "$fontend";?></td><td nowrap><? echo "$font$dcClient$fontend"; ?></td></tr>
-<tr><td><? echo "$font";?>Client Version:<? echo "$fontend";?></td><td nowrap><? echo "$font$dcVersion$fontend"; ?></td></tr>
-<tr><td><? echo "$font";?>Full Description:<? echo "$fontend";?></td><td nowrap><? echo "$font$fullDescription$fontend"; ?></td></tr>
-<tr><td><? echo "$font";?>Slots:<? echo "$fontend";?></td><td nowrap><? echo "$font$slots$fontend"; ?></td></tr>
-<tr><td><? echo "$font";?>Hubs:<? echo "$fontend";?></td><td nowrap><? echo "$font$hubs$fontend"; ?></td></tr>
-<tr><td><? echo "$font";?>Limiter:<? echo "$fontend";?></td><td nowrap><? echo "$font$limiter KB/s$fontend"; ?></td></tr>
-<tr><td><? echo "$font";?>Connection:<? echo "$fontend";?></td><td nowrap><? echo "$font$connection$fontend"; ?></td></tr>
-<tr><td><? echo "$font";?>Connection Mode:<? echo "$fontend";?></td><td nowrap><? echo "$font$connectionMode$fontend"; ?></td></tr>
-<tr><td><? echo "$font";?>Current Share:<? echo "$fontend";?></td><td nowrap><? echo "$font$byteShare bytes ($Share)$fontend"; ?></td></tr>
-<tr><td><? echo "$font";?>Average Share:<? echo "$fontend";?></td><td nowrap><? echo "$font$averageShare bytes ($avShare)$fontend"; ?></td></tr>
-<tr><td><? echo "$font";?>Total Lines Spoken:<? echo "$fontend";?></td><td nowrap><? echo "$font$totalMessages lines$fontend"; ?></td></tr>
-<tr><td><? echo "$font";?>Last Login:<? echo "$fontend";?></td><td nowrap><? echo "$font$inTime$fontend"; ?></td></tr>
-<tr><td><? echo "$font";?>First Login:<? echo "$fontend";?></td><td nowrap><? echo "$font$firstLogin$fontend"; ?></td></tr>
-<tr><td><? echo "$font";?>Total time on hub:<? echo "$fontend";?></td><td nowrap><?
+<table border="<?php  echo "$tableBorders";?>" cellspacing="2" cellpadding="2">
+<tr><td><?php  echo "$font";?>Client Name:<?php  echo "$fontend";?></td><td nowrap><?php  echo "$font$dcClient$fontend"; ?></td></tr>
+<tr><td><?php  echo "$font";?>Client Version:<?php  echo "$fontend";?></td><td nowrap><?php  echo "$font$dcVersion$fontend"; ?></td></tr>
+<tr><td><?php  echo "$font";?>Full Description:<?php  echo "$fontend";?></td><td nowrap><?php  echo "$font$fullDescription$fontend"; ?></td></tr>
+<tr><td><?php  echo "$font";?>Slots:<?php  echo "$fontend";?></td><td nowrap><?php  echo "$font$slots$fontend"; ?></td></tr>
+<tr><td><?php  echo "$font";?>Hubs:<?php  echo "$fontend";?></td><td nowrap><?php  echo "$font$hubs$fontend"; ?></td></tr>
+<tr><td><?php  echo "$font";?>Limiter:<?php  echo "$fontend";?></td><td nowrap><?php  echo "$font$limiter KB/s$fontend"; ?></td></tr>
+<tr><td><?php  echo "$font";?>Connection:<?php  echo "$fontend";?></td><td nowrap><?php  echo "$font$connection$fontend"; ?></td></tr>
+<tr><td><?php  echo "$font";?>Connection Mode:<?php  echo "$fontend";?></td><td nowrap><?php  echo "$font$connectionMode$fontend"; ?></td></tr>
+<tr><td><?php  echo "$font";?>Current Share:<?php  echo "$fontend";?></td><td nowrap><?php  echo "$font$byteShare bytes ($Share)$fontend"; ?></td></tr>
+<tr><td><?php  echo "$font";?>Average Share:<?php  echo "$fontend";?></td><td nowrap><?php  echo "$font$averageShare bytes ($avShare)$fontend"; ?></td></tr>
+<tr><td><?php  echo "$font";?>Total Lines Spoken:<?php  echo "$fontend";?></td><td nowrap><?php  echo "$font$totalMessages lines$fontend"; ?></td></tr>
+<tr><td><?php  echo "$font";?>Last Login:<?php  echo "$fontend";?></td><td nowrap><?php  echo "$font$inTime$fontend"; ?></td></tr>
+<tr><td><?php  echo "$font";?>First Login:<?php  echo "$fontend";?></td><td nowrap><?php  echo "$font$firstLogin$fontend"; ?></td></tr>
+<tr><td><?php  echo "$font";?>Total time on hub:<?php  echo "$fontend";?></td><td nowrap><?php 
 function mod($a, $b) {
  return ((($a % $b) + $b) % $b);
 }
@@ -124,7 +124,7 @@ function mod($a, $b) {
 </table>
 </td>
 </tr>
-<? if ($uType == "Op-Admin") {echo "</table>User is OP-Admin, Op level and Ban settings Cannot be Modified.<br> Adminstration of OP-Admin should be performed with OpendcHub commands";}else{?>
+<?php  if ($uType == "Op-Admin") {echo "</table>User is OP-Admin, Op level and Ban settings Cannot be Modified.<br> Adminstration of OP-Admin should be performed with OpendcHub commands";}else{?>
 
 <tr>
 <td align="center" class="top_table"><strong>Modify Type</strong></td>
@@ -133,35 +133,35 @@ function mod($a, $b) {
 <td valign="top">
 <table>
 
-<form action="<? echo "user-manage.php?f=uType&nick=$nick&ip=$IP";?>" method="post">
-<tr><td><input type="radio" name="uType" value=31 <? if ($uType == "Operator") echo"checked=\"true\"";?> ><? echo "$font";?>Operator (Requires Password)</font><br></td></tr>
-<tr><td><input type="radio" name="uType" value=32 <? if ($uType == "Registered") echo"checked=\"true\"";?> ><? echo "$font";?>Register (Requires Password)</font></td></tr>
-<tr><td><input type="radio" name="uType" value=33 <? if ($uType == "User") echo"checked=\"true\"";?> ><? echo "$font";?>Un-Register</font></td></tr>
-<tr><td><input type="text" name="passwd" value=""><? echo "$font";?>Password</font></td></tr>
+<form action="<?php  echo "user-manage.php?f=uType&nick=$nick&ip=$IP";?>" method="post">
+<tr><td><input type="radio" name="uType" value=31 <?php  if ($uType == "Operator") echo"checked=\"true\"";?> ><?php  echo "$font";?>Operator (Requires Password)</font><br></td></tr>
+<tr><td><input type="radio" name="uType" value=32 <?php  if ($uType == "Registered") echo"checked=\"true\"";?> ><?php  echo "$font";?>Register (Requires Password)</font></td></tr>
+<tr><td><input type="radio" name="uType" value=33 <?php  if ($uType == "User") echo"checked=\"true\"";?> ><?php  echo "$font";?>Un-Register</font></td></tr>
+<tr><td><input type="text" name="passwd" value=""><?php  echo "$font";?>Password</font></td></tr>
 <tr><td><input type="Submit" value="Submit changes"></tr></td></form>
 </table>
 
 </td>
 <td valign="top">
 <table>
-<form action="<? echo "user-manage.php?f=aStatus&nick=$nick&ip=$IP";?>" method="post">
-<tr><td><input type="radio" name="aStatus" value=21 <? if ($allowStatus == "Banned" && $lastAction == "P-Banned" && $lastReason != "Fake(Share)" && $lastReason !="Fake(Tag)")  echo"checked=\"true\"";?>><? echo "$font";?>Permanent Ban - Place a permanent Ban</font></td></tr>
-<tr><td><input type="radio" name="aStatus" value=22 <? if ($allowStatus == "Banned" && $lastAction == "T-Banned" && $lastReason != "Fake(Share)" && $lastReason !="Fake(Tag)")  echo"checked=\"true\"";?>><? echo "$font";?>Temporary Ban - Place under temporary Ban</font></td></tr>
-<tr><td><input type="radio" name="aStatus" value=27 <? if ($allowStatus == "Normal") echo"checked=\"true\"";?>><? echo "$font";?>Reset Kick & Ban Counters</font></td></tr>
-<tr><td><input type="radio" name="aStatus" value=23 <? if ($allowStatus == "Normal") echo"checked=\"true\"";?>><? echo "$font";?>Normal (UnBan) & Reset Kick Counter</font></td></tr>
-<tr><td><input type="radio" name="aStatus" value=10 ><? echo "$font";?>Kick User</font></td></tr>
+<form action="<?php  echo "user-manage.php?f=aStatus&nick=$nick&ip=$IP";?>" method="post">
+<tr><td><input type="radio" name="aStatus" value=21 <?php  if ($allowStatus == "Banned" && $lastAction == "P-Banned" && $lastReason != "Fake(Share)" && $lastReason !="Fake(Tag)")  echo"checked=\"true\"";?>><?php  echo "$font";?>Permanent Ban - Place a permanent Ban</font></td></tr>
+<tr><td><input type="radio" name="aStatus" value=22 <?php  if ($allowStatus == "Banned" && $lastAction == "T-Banned" && $lastReason != "Fake(Share)" && $lastReason !="Fake(Tag)")  echo"checked=\"true\"";?>><?php  echo "$font";?>Temporary Ban - Place under temporary Ban</font></td></tr>
+<tr><td><input type="radio" name="aStatus" value=27 <?php  if ($allowStatus == "Normal") echo"checked=\"true\"";?>><?php  echo "$font";?>Reset Kick & Ban Counters</font></td></tr>
+<tr><td><input type="radio" name="aStatus" value=23 <?php  if ($allowStatus == "Normal") echo"checked=\"true\"";?>><?php  echo "$font";?>Normal (UnBan) & Reset Kick Counter</font></td></tr>
+<tr><td><input type="radio" name="aStatus" value=10 ><?php  echo "$font";?>Kick User</font></td></tr>
 <tr><td><input type="Text" size="50" name="information" value=""></tr></td>
 <tr><td></tr></td>
-<tr><td><input type="radio" name="aStatus" value=25 <? if ($allowStatus == "Banned" && $lastReason == "Fake(Share)") echo"checked=\"true\"";?>><? echo "$font";?>Fake Share</font></td></tr>
-<tr><td><input type="radio" name="aStatus" value=24 <? if ($allowStatus == "Banned" && $lastReason == "Fake(Tag)") echo"checked=\"true\"";?>><? echo "$font";?>Fake Tag</font></td></tr>
-<tr><td><input type="radio" name="aStatus" value=50 <? if ($allowStatus == "Allow") echo"checked=\"true\"";?>><a title="Useful for Hub List Bots" style="cursor:help"><? echo "$font";?>Allow - No logging or client checks</font></a></td></tr>
+<tr><td><input type="radio" name="aStatus" value=25 <?php  if ($allowStatus == "Banned" && $lastReason == "Fake(Share)") echo"checked=\"true\"";?>><?php  echo "$font";?>Fake Share</font></td></tr>
+<tr><td><input type="radio" name="aStatus" value=24 <?php  if ($allowStatus == "Banned" && $lastReason == "Fake(Tag)") echo"checked=\"true\"";?>><?php  echo "$font";?>Fake Tag</font></td></tr>
+<tr><td><input type="radio" name="aStatus" value=50 <?php  if ($allowStatus == "Allow") echo"checked=\"true\"";?>><a title="Useful for Hub List Bots" style="cursor:help"><?php  echo "$font";?>Allow - No logging or client checks</font></a></td></tr>
 
 <tr><td><input type="Submit" value="Submit changes"></tr></td></form>
 </table>
 </table>
 </td></tr>
 </table>
-<?}
+<?php  }
 }
 else{
 ?>
@@ -169,7 +169,7 @@ else{
 <table>
 <tr>
 This User record has been updated by another user  with the same IP.
-<?
+<?php 
 
 }
 ?>
@@ -178,6 +178,6 @@ This User record has been updated by another user  with the same IP.
 
 </div>
 
-<? echo "$fontend";?>
+<?php  echo "$fontend";?>
 </body>
 </html>

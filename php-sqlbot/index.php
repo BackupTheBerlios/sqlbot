@@ -1,4 +1,4 @@
-<?
+<?php 
 $page_title="SqlBot PHP Configurator";
 include("header.ini");
 ?>

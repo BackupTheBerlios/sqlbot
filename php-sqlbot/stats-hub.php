@@ -1,4 +1,4 @@
-<?
+<?php 
 $page_title="Hub Statistics";
 include("header.ini");
 $stats_page="stats-hub1.php";
@@ -32,7 +32,7 @@ $stats_page="stats-hub1.php";
 </tr>
 </table>
 <hr size="1" width="100%"><p>
-<?
+<?php 
 if (empty($select)){
 $select = countrydist;
 }
@@ -55,34 +55,34 @@ $i=0;while ($i < $num) {
         echo "<td bgcolor="; echo "$rowColour"; echo ">";
     	} else { 
         echo "<td bgcolor="; echo "$rowColourAlt"; echo ">"; }?>
-	<? echo "$font$country$fontend" ?></td>
-<? ++$i; }  ?>
+	<?php  echo "$font$country$fontend" ?></td>
+<?php  ++$i; }  ?>
 </tr><tr>
-<?
+<?php 
 $i=0;while ($i < $num) {
 	$count=mysql_result($result,$i,"COUNT(country)");
 	if($i % 2) { //this means if there is a remainder
         echo "<td bgcolor="; echo "$rowColour"; echo ">";
     	} else { 
         echo "<td bgcolor="; echo "$rowColourAlt"; echo ">"; }?>
-	<? echo "$font$count$fontend" ?></td>
-<? ++$i; }  ?>
+	<?php  echo "$font$count$fontend" ?></td>
+<?php  ++$i; }  ?>
 </tr>
 <tr>
-<?
+<?php 
 $i=0;while ($i < $num) {
 	$count=mysql_result($result,$i,"COUNT(country)");
 	if($i % 2) { 
         echo "<td bgcolor="; echo "$rowColour"; echo ">";
     	} else { 
         echo "<td bgcolor="; echo "$rowColourAlt"; echo ">"; }?>
-	<TABLE bgColor=red height=<? echo "$count" ?> width=10 
+	<TABLE bgColor=red height=<?php  echo "$count" ?> width=10 
 	cellSpacing=0 cellPadding=0 border= 0><td></td> </TABLE></td>	
 
-<? ++$i; }  ?>
+<?php  ++$i; }  ?>
 </tr>
 </table>
-<?
+<?php 
 }
 if ($select == hubcounters){
 ///////////////////////////////////////////////////////
@@ -103,10 +103,10 @@ $count=mysql_result($result,$i,"COUNT(allowStatus)");
     	} else { //if there isn't a remainder we will do the else
         echo "<TR bgcolor="; echo "$rowColourAlt"; echo ">\n"; }?>
 		<td>Total Number of Bans in place</td>
-		<td><? echo "$font$count$fontend" ?></td>
-		</tr><? ++$i; }  ?>
+		<td><?php  echo "$font$count$fontend" ?></td>
+		</tr><?php  ++$i; }  ?>
 </table>
-<?
+<?php 
 ///////////////////////////////////////////////////////
 //// Kick Counter
 ///////////////////////////////////////////////////////
@@ -125,11 +125,11 @@ $count=mysql_result($result,$i,"sum(kickCountTot)");
     	} else { //if there isn't a remainder we will do the else
         echo "<TR bgcolor="; echo "$rowColourAlt"; echo ">\n"; }?>
 		<td>Total Number of Kicks</td>
-		<td><? echo "$font$count$fontend" ?></td>
-		</tr><? ++$i; }  ?>
+		<td><?php  echo "$font$count$fontend" ?></td>
+		</tr><?php  ++$i; }  ?>
 </table>
 
-<?
+<?php 
 ///////////////////////////////////////////////////////
 ////Total Lines Spoken
 ///////////////////////////////////////////////////////
@@ -148,11 +148,11 @@ $count=mysql_result($result,$i,"sum(lineCount)");
     	} else { //if there isn't a remainder we will do the else
         echo "<TR bgcolor="; echo "$rowColourAlt"; echo ">\n"; }?>
 		<td>Lines Spoken</td>
-		<td><? echo "$font$count$fontend" ?></td>
-		</tr><? ++$i; }  ?>
+		<td><?php  echo "$font$count$fontend" ?></td>
+		</tr><?php  ++$i; }  ?>
 </table>
 
-<?
+<?php 
 
 }
 if ($select == abusers){
@@ -174,12 +174,12 @@ $nick=mysql_result($result,$i,"nick");
         echo "<TR bgcolor="; echo "$rowColour"; echo ">\n";
     	} else { //if there isn't a remainder we will do the else
         echo "<TR bgcolor="; echo "$rowColourAlt"; echo ">\n"; }?>
-		<td><? echo "$font$i$fontend" ?></td>
-		<td><? echo "$font$nick$fontend" ?></td>
-		<td><? echo "$font$kickCountTot$fontend" ?></td>
-		</tr><? ++$i; }  ?>
+		<td><?php  echo "$font$i$fontend" ?></td>
+		<td><?php  echo "$font$nick$fontend" ?></td>
+		<td><?php  echo "$font$kickCountTot$fontend" ?></td>
+		</tr><?php  ++$i; }  ?>
 </table>
-<?
+<?php 
 ///////////////////////////////////////////////////////
 //// Most Banned
 ///////////////////////////////////////////////////////
@@ -198,12 +198,12 @@ $nick=mysql_result($result,$i,"nick");
         echo "<TR bgcolor="; echo "$rowColour"; echo ">\n";
     	} else { //if there isn't a remainder we will do the else
         echo "<TR bgcolor="; echo "$rowColourAlt"; echo ">\n"; }?>
-		<td><? echo "$font$i$fontend" ?></td>
-		<td><? echo "$font$nick$fontend" ?></td>
-		<td><? echo "$font$tBanCountTot$fontend" ?></td>
-		</tr><? ++$i; }  ?>
+		<td><?php  echo "$font$i$fontend" ?></td>
+		<td><?php  echo "$font$nick$fontend" ?></td>
+		<td><?php  echo "$font$tBanCountTot$fontend" ?></td>
+		</tr><?php  ++$i; }  ?>
 </table>
-<?
+<?php 
 ///////////////////////////////////////////////////////
 //// Users on Most Hubs
 ///////////////////////////////////////////////////////
@@ -223,13 +223,13 @@ $nick=mysql_result($result,$i,"nick");
         echo "<TR bgcolor="; echo "$rowColour"; echo ">\n";
     	} else { //if there isn't a remainder we will do the else
         echo "<TR bgcolor="; echo "$rowColourAlt"; echo ">\n"; }?>
-		<td><? echo "$font$i$fontend" ?></td>
-		<td><? echo "$font$nick$fontend" ?></td>
-		<td><? echo "$font$hubs$fontend" ?></td>
-		</tr><? ++$i; }  ?>
+		<td><?php  echo "$font$i$fontend" ?></td>
+		<td><?php  echo "$font$nick$fontend" ?></td>
+		<td><?php  echo "$font$hubs$fontend" ?></td>
+		</tr><?php  ++$i; }  ?>
 </table>
 
-<?
+<?php 
 
 ///////////////////////////////////////////////////////
 //// Users with Most Slots
@@ -250,12 +250,12 @@ $nick=mysql_result($result,$i,"nick");
         echo "<TR bgcolor="; echo "$rowColour"; echo ">\n";
     	} else { //if there isn't a remainder we will do the else
         echo "<TR bgcolor="; echo "$rowColourAlt"; echo ">\n"; }?>
-		<td><? echo "$font$i$fontend" ?></td>
-		<td><? echo "$font$nick$fontend" ?></td>
-		<td><? echo "$font$slots$fontend" ?></td>
-		</tr><? ++$i; }  ?>
+		<td><?php  echo "$font$i$fontend" ?></td>
+		<td><?php  echo "$font$nick$fontend" ?></td>
+		<td><?php  echo "$font$slots$fontend" ?></td>
+		</tr><?php  ++$i; }  ?>
 </table>
-<?
+<?php 
 
 }
 
@@ -280,12 +280,12 @@ $nick=mysql_result($result,$i,"nick");
         echo "<TR bgcolor="; echo "$rowColour"; echo ">\n";
     	} else { //if there isn't a remainder we will do the else
         echo "<TR bgcolor="; echo "$rowColourAlt"; echo ">\n"; }?>
-		<td><? echo "$font$i$fontend" ?></td>
-		<td><? echo "$font$nick$fontend" ?></td>
-		<td><? echo "$font$onlineTime$fontend" ?></td>
-		</tr><? ++$i; }  ?>
+		<td><?php  echo "$font$i$fontend" ?></td>
+		<td><?php  echo "$font$nick$fontend" ?></td>
+		<td><?php  echo "$font$onlineTime$fontend" ?></td>
+		</tr><?php  ++$i; }  ?>
 </table> -->
-<?
+<?php 
 ///////////////////////////////////////////////////////
 ////Most Frequent / Average
 ///////////////////////////////////////////////////////
@@ -305,13 +305,13 @@ $nick=mysql_result($result,$i,"nick");
         echo "<TR bgcolor="; echo "$rowColour"; echo ">\n";
     	} else { //if there isn't a remainder we will do the else
         echo "<TR bgcolor="; echo "$rowColourAlt"; echo ">\n"; }?>
-		<td><? echo "$font$i$fontend" ?></td>
-		<td><? echo "$font$nick$fontend" ?></td>
-		<td><? echo "$font$type$fontend" ?></td>
-		</tr><? ++$i; }  ?>
+		<td><?php  echo "$font$i$fontend" ?></td>
+		<td><?php  echo "$font$nick$fontend" ?></td>
+		<td><?php  echo "$font$type$fontend" ?></td>
+		</tr><?php  ++$i; }  ?>
 </table>
 
-<?
+<?php 
 
 ///////////////////////////////////////////////////////
 //// Top ten Chatters
@@ -331,12 +331,12 @@ $nick=mysql_result($result,$i,"nick");
         echo "<TR bgcolor="; echo "$rowColour"; echo ">\n";
     	} else { //if there isn't a remainder we will do the else
         echo "<TR bgcolor="; echo "$rowColourAlt"; echo ">\n"; }?>
-		<td><? echo "$font$i$fontend" ?></td>
-		<td><? echo "$font$nick$fontend" ?></td>
-		<td><? echo "$font$count$fontend" ?></td>
-		</tr><? ++$i; }  ?>
+		<td><?php  echo "$font$i$fontend" ?></td>
+		<td><?php  echo "$font$nick$fontend" ?></td>
+		<td><?php  echo "$font$count$fontend" ?></td>
+		</tr><?php  ++$i; }  ?>
 </table>
-<?
+<?php 
 
 ///////////////////////////////////////////////////////
 //// Most Visitors
@@ -356,13 +356,13 @@ $nick=mysql_result($result,$i,"nick");
         echo "<TR bgcolor="; echo "$rowColour"; echo ">\n";
     	} else { //if there isn't a remainder we will do the else
         echo "<TR bgcolor="; echo "$rowColourAlt"; echo ">\n"; }?>
-	<td><? echo "$font$i$fontend" ?></td>
-	<td><? echo "$font$nick$fontend" ?></td>
-	<td><? echo "$font$loginCount$fontend" ?></td>
-	</tr><? ++$i; }  ?>
+	<td><?php  echo "$font$i$fontend" ?></td>
+	<td><?php  echo "$font$nick$fontend" ?></td>
+	<td><?php  echo "$font$loginCount$fontend" ?></td>
+	</tr><?php  ++$i; }  ?>
 </table>
 
-<?
+<?php 
 
 }
 
@@ -388,16 +388,16 @@ $dcClient=mysql_result($result,$i,"dcClient");
         echo "<TR bgcolor="; echo "$rowColour"; echo ">\n";
     	} else { //if there isn't a remainder we will do the else
         echo "<TR bgcolor="; echo "$rowColourAlt"; echo ">\n"; }?>
-		<td><? echo "$font$count$fontend" ?></td>
-		<td><? echo "$font$dcClient$fontend" ?></td>
-		<td nowrap><a href="user-manage.php?field=dcVersion&search=<? echo "$dcVersion"?>""><? echo "$font$dcVersion$fontend"; ?></a></td>
-		<td><TABLE bgColor=red height=10 width=<? echo "$count" ?> 
+		<td><?php  echo "$font$count$fontend" ?></td>
+		<td><?php  echo "$font$dcClient$fontend" ?></td>
+		<td nowrap><a href="user-manage.php?field=dcVersion&search=<?php  echo "$dcVersion"?>""><?php  echo "$font$dcVersion$fontend"; ?></a></td>
+		<td><TABLE bgColor=red height=10 width=<?php  echo "$count" ?> 
 		cellSpacing=0 cellPadding=0 border= 0> <TR><TD></TD></TR></TABLE></td>
 
-		</tr><? ++$i; }  ?>
+		</tr><?php  ++$i; }  ?>
 </table>
 
-<?
+<?php 
 
 ///////////////////////////////////////////////////////
 //// users with same client
@@ -420,15 +420,15 @@ $dcClient=mysql_result($result,$i,"dcClient");
         echo "<TR bgcolor="; echo "$rowColour"; echo ">\n";
     	} else { //if there isn't a remainder we will do the else
         echo "<TR bgcolor="; echo "$rowColourAlt"; echo ">\n"; }?>
-		<td><? echo "$font$count$fontend" ?></td>
-		<td><TABLE bgColor=red height=10 width=<? echo "$count" ?> 
+		<td><?php  echo "$font$count$fontend" ?></td>
+		<td><TABLE bgColor=red height=10 width=<?php  echo "$count" ?> 
 		cellSpacing=0 cellPadding=0 border= 0> <TR><TD></TD></TR></TABLE></td>
 
-		<td><? echo "$font$dcClient$fontend" ?></td>
-		</tr><?} ++$i; }  ?>
+		<td><?php  echo "$font$dcClient$fontend" ?></td>
+		</tr><?php  } ++$i; }  ?>
 </table>
 
-<?
+<?php 
 
 ///////////////////////////////////////////////////////
 ////Total Share figures
@@ -453,18 +453,18 @@ while ($limit > $highRange)
 	$highRangGb=round(($highRange / 1024 / 1024 / 1024), 2);
 	$tablewidth=$count *2;
 	?>
-	<td><? echo "$font$lowRangeGb - $highRangGb GB $fontend" ?></td>
-	<td><? echo "$font$count$fontend" ?></td>
-	<td><TABLE bgColor=red height=10 width=<? echo "$tablewidth" ?> 
+	<td><?php  echo "$font$lowRangeGb - $highRangGb GB $fontend" ?></td>
+	<td><?php  echo "$font$count$fontend" ?></td>
+	<td><TABLE bgColor=red height=10 width=<?php  echo "$tablewidth" ?> 
 	cellSpacing=0 cellPadding=0 border= 0> <TR><TD></TD></TR></TABLE></td>
-	</tr><?
+	</tr><?php 
 	++$i;
 	 $lowRange  =  $lowRange + $range;
 	 $highRange  =  $highRange + $range;}
 mysql_close();?>
 
 </table>
-<?
+<?php 
 
 
 }

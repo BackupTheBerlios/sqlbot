@@ -1,9 +1,9 @@
-<?
+<?php 
 $page_title="Edit a DC Client";
 include("header.ini");
 ?>
 
-<?
+<?php 
 mysql_connect($databasehost,$username,$password);
 @mysql_select_db($database) or die( "Unable to select database");
 $query="SELECT * FROM client_rules where rowID=$id";
@@ -215,55 +215,55 @@ $min_connection=mysql_result($result,$i,"min_connection");
 $client_name=mysql_result($result,$i,"client_name");
 ?>
 <center>
-<form action="<?echo "rules-main.php?function=updateclient";?>" method="post">
+<form action="<?php  echo "rules-main.php?function=updateclient";?>" method="post">
 <table>
 	<tr>
 		<td></td>	
-		<td><input type="hidden" name="ud_rowID" value="<? echo "$rowID"; ?>"></t>
+		<td><input type="hidden" name="ud_rowID" value="<?php  echo "$rowID"; ?>"></t>
 	</tr><tr>
 		<td>Client Tag:</td>
-		<td><input type="text" name="ud_client" value="<? echo "$client"?>"></td>
+		<td><input type="text" name="ud_client" value="<?php  echo "$client"?>"></td>
 		<td>Client Tag</td>
 	</tr><tr>
 	</tr><tr>
 		<td>Client name:</td>
-		<td><input type="text" name="ud_client_name" value="<? echo "$client_name"?>"></td>
+		<td><input type="text" name="ud_client_name" value="<?php  echo "$client_name"?>"></td>
 		<td>Full name of the Client</td>
 	</tr><tr>
 		<td>Version:</td>
-		<td><input type="text" name="ud_min_version" value="<? echo "$min_version"?>"></td>
+		<td><input type="text" name="ud_min_version" value="<?php  echo "$min_version"?>"></td>
 		<td>Minimum Client version to allow</td>
 	</tr><tr>
 		<td>Allowed</td>
-		<td><?show_allowed_box(ud_allowed,$select=$allowed);?></td>
+		<td><?php show_allowed_box(ud_allowed,$select=$allowed);?></td>
 		<td>Allowed ( YES or NO)</td>
 	</tr><tr>
 		<td>Min Slots</td>
-		<td><?show_slots_box(ud_min_slots,$min_slots);?></td>
+		<td><?php show_slots_box(ud_min_slots,$min_slots);?></td>
 		<td>Minimum number of Slots this client should have (int)</td>
 	</tr><tr>
 		<td>Max Slots</td>
-		<td><?show_slots_box(ud_max_slots,$max_slots);?></td>
+		<td><?php show_slots_box(ud_max_slots,$max_slots);?></td>
 		<td>Minimum number of Slots this client should have (int)</td>
 	</tr><tr>
 		<td>Slot Ratio</td>
-		<td><?show_ratio_box(ud_slot_ratio,$select=$slot_ratio);?></td>
+		<td><?php show_ratio_box(ud_slot_ratio,$select=$slot_ratio);?></td>
 		<td>Slot Ration,Minimum number of slots per hub</td>
 	</tr><tr>
 		<td>Speed Limiter</td>
-		<td><?show_limiter_box(ud_min_limit,$select=$min_limit);?></td>
+		<td><?php show_limiter_box(ud_min_limit,$select=$min_limit);?></td>
 		<td>Minimum speed Limit a user can have (KB/s)</td>
 	</tr><tr>
 		<td>Max Hubs</td>
-		<td><?show_hubs_box(ud_max_hubs,$select=$max_hubs);?></td>
+		<td><?php show_hubs_box(ud_max_hubs,$select=$max_hubs);?></td>
 		<td>Maximum Number of Hubs this client can be connected to (int)</td>
 	</tr><tr>
 		<td>Min Share</td>
-		<td><?show_share_box(ud_min_share,$select=$min_share);?></td>
+		<td><?php show_share_box(ud_min_share,$select=$min_share);?></td>
 		<td>Minimum Share in Gb</td>
 	</tr><tr>
 		<td>Min Connection</td>
-		<td><?show_connection_box(ud_min_connection,$select=$min_connection);?></td>
+		<td><?php show_connection_box(ud_min_connection,$select=$min_connection);?></td>
 		<td>Minimum connection Type</td>
 	</tr>
 </table>
@@ -271,7 +271,7 @@ $client_name=mysql_result($result,$i,"client_name");
 <input type="Submit" value="Update">
 <hr>
 </form>
-<? ++$i; }  ?>
+<?php  ++$i; }  ?>
 
 </center>
 

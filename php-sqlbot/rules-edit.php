@@ -1,9 +1,9 @@
-<?
+<?php 
 $page_title="Edit Rules";
 include("header.ini");
 ?>
 
-<?
+<?php 
 mysql_connect($databasehost,$username,$password);
 @mysql_select_db($database) or die( "Unable to select database");
 
@@ -18,15 +18,15 @@ $rule=mysql_result($result,$i,"rule");?>
 
 <center>
 	<table>
-	<tr><form action="rules-main.php?function=update&ud_id=<?echo"$id";?>" method="post">
+	<tr><form action="rules-main.php?function=update&ud_id=<?php  echo"$id";?>" method="post">
 		<td>Edit Rule</td>
-		<td><input type="Text" size="70" name="ud_rule" value="<? echo"$rule";?> "></td>
+		<td><input type="Text" size="70" name="ud_rule" value="<?php  echo"$rule";?> "></td>
 		<td></td>
 	<td><input type="Submit" value="Submit"></td>
 	</form>
 	</tr>
 	</table>
 </center>
-<? ++$i; }  ?>
+<?php  ++$i; }  ?>
 </body>
 </html> 

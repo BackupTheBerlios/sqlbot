@@ -1,9 +1,9 @@
-<?
+<?php 
 $page_title="Configure the log";
 include("header.ini");
 ?>
 
-<? 
+<?php  
 mysql_connect($databasehost,$username,$password); 
 @mysql_select_db($database) or die( "Unable to select database"); 
 $query="SELECT * FROM log_config ORDER by rowID ASC"; 
@@ -21,12 +21,12 @@ while ($i < $num) {
     	} else { //if there isn't a remainder we will do the else
         echo "<TR bgcolor="; echo "$rowColourAlt"; echo ">\n"; }
 	?> 
-		<td><?echo "$font$description$fontend :";?></td>
-		<td><?echo "$font( $value )$fontend";?></td>
-		<td><input type="checkbox" name="<?echo "ud_$rule";?>" <? if ($value == "on") echo" checked";?> </td>
+		<td><?php  echo "$font$description$fontend :";?></td>
+		<td><?php  echo "$font( $value )$fontend";?></td>
+		<td><input type="checkbox" name="<?php  echo "ud_$rule";?>" <?php  if ($value == "on") echo" checked";?> </td>
 	</tr>
 	
-<? ++$i; }  ?></table>
+<?php  ++$i; }  ?></table>
 <input type="submit" value="Submit">
 	</form>
 </center>

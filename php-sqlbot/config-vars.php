@@ -1,9 +1,9 @@
-<?
+<?php 
 $page_title="Configure your Hub variables";
 include("header.ini");
 ?>
 
-<?
+<?php 
 mysql_connect($databasehost,$username,$password);
 @mysql_select_db($database) or die( "Unable to select database");
 if($function == update) {
@@ -31,15 +31,15 @@ $description=mysql_result($result,$i,"description");
     	} else { //if there isn't a remainder we will do the else
         echo "<TR bgcolor="; echo "$rowColourAlt"; echo ">\n"; }
 ?>
-		<td><input type="hidden" name="ud_id" value="<? echo "$id"; ?>"></t>
-		<td><? echo "$font$description$fontend" ?></td>
-		<td><? echo"$font";?><? echo "$value" ?><? echo"$fontend";?></td>
-	<form action="config-vars-edit.php?id=<? echo "$id";?>" method="post">
+		<td><input type="hidden" name="ud_id" value="<?php  echo "$id"; ?>"></t>
+		<td><?php  echo "$font$description$fontend" ?></td>
+		<td><?php  echo"$font";?><?php  echo "$value" ?><?php  echo"$fontend";?></td>
+	<form action="config-vars-edit.php?id=<?php  echo "$id";?>" method="post">
 	<td nowrap><input type="Submit" value="Edit"></td></form>
 		</form>
 	</tr>
 
-<? ++$i; }  ?>
+<?php  ++$i; }  ?>
 </table>
 </center>
 

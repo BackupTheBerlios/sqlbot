@@ -1,7 +1,7 @@
-<?$page_title="Ip Filtering ";
+<?php $page_title="Ip Filtering ";
 include("header.ini");?>
 
-<?
+<?php 
 mysql_connect($databasehost,$username,$password);
 @mysql_select_db($database) or die( "Unable to select database");
 
@@ -31,15 +31,15 @@ $num=mysql_num_rows($result);
 mysql_close();
 echo "<center><table border=\"1\" cellspacing=\"2\" cellpadding=\"2\">";?>
 <tr>
-	<th><? echo "$font";?>IP Range Start<? echo "$fontend";?></th>
-	<th><? echo "$font";?>IP Mask<? echo "$fontend";?></th> 
-	<th><? echo "$font";?>Function<? echo "$fontend";?></th> 
-	<th><? echo "$font";?>Log<? echo "$fontend";?></th> 
-	<th><? echo "$font";?>Information<? echo "$fontend";?></th>
+	<th><?php  echo "$font";?>IP Range Start<?php  echo "$fontend";?></th>
+	<th><?php  echo "$font";?>IP Mask<?php  echo "$fontend";?></th> 
+	<th><?php  echo "$font";?>Function<?php  echo "$fontend";?></th> 
+	<th><?php  echo "$font";?>Log<?php  echo "$fontend";?></th> 
+	<th><?php  echo "$font";?>Information<?php  echo "$fontend";?></th>
 	<th><form action="ipfilter-add.php" method="post">
 	<input type="Submit" value="Add"></form></th>
 </tr>
-<?$i=0;
+<?php $i=0;
 while ($i < $num) {
 	$id=mysql_result($result,$i,"rowID");
 	$ipStart=mysql_result($result,$i,"ipStart");
@@ -56,16 +56,16 @@ while ($i < $num) {
 	
 	else { //if there isn't a remainder we will do the else
         echo "<TR bgcolor="; echo "$rowColourAlt"; echo ">\n"; }?>
-	<form action="ipfilter-main.php?f=del&id=<? echo "$id";?>&ipStart=<? echo "$ipStart";?>&ipMask=<? echo "$ipMask";?>&information=<? echo "$information";?>" method="post">
-	<td nowrap><? echo "$font$ipStart$fontend"; ?></td>
-	<td nowrap><? echo "$font$ipMask$fontend"; ?></td>
-	<td nowrap><? echo "$font$function$fontend"; ?></td>
-	<td nowrap><? echo "$font$log$fontend"; ?></td>
-	<td nowrap><? echo" $font$information$fontend"; ?></td>
+	<form action="ipfilter-main.php?f=del&id=<?php  echo "$id";?>&ipStart=<?php  echo "$ipStart";?>&ipMask=<?php  echo "$ipMask";?>&information=<?php  echo "$information";?>" method="post">
+	<td nowrap><?php  echo "$font$ipStart$fontend"; ?></td>
+	<td nowrap><?php  echo "$font$ipMask$fontend"; ?></td>
+	<td nowrap><?php  echo "$font$function$fontend"; ?></td>
+	<td nowrap><?php  echo "$font$log$fontend"; ?></td>
+	<td nowrap><?php  echo" $font$information$fontend"; ?></td>
 	<td nowrap><input type="Submit" value="Delete"></td></form>
 	</tr>
 	
-<? ++$i; }  ?></table>
+<?php  ++$i; }  ?></table>
 </center>
 </body>
 </html>

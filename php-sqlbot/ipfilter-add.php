@@ -1,4 +1,4 @@
-<?
+<?php 
 $page_title="Add a filtered IP";
 include("header.ini");
 ?>

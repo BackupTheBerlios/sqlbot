@@ -1,9 +1,9 @@
-<?
+<?php 
 $page_title="Configure SqlBot";
 include("header.ini");
 ?>
 
-<?
+<?php 
 mysql_connect($databasehost,$username,$password);
 @mysql_select_db($database) or die( "Unable to select database");
 
@@ -120,7 +120,7 @@ $sql = "UPDATE verbosity SET value='$ud_hub_timer' WHERE rule='hub_timer'";
 }?>
 <!-- Hub Config and Hub Verbosity tables -->
 <table width="100%" cellspacing="4"><tr><td valign="top">
-<?$query="SELECT * FROM hub_config ORDER by rowID ASC";
+<?php $query="SELECT * FROM hub_config ORDER by rowID ASC";
 $result=mysql_query($query);
 $num=mysql_num_rows($result);
 echo "$font<table border=\"1\" cellspacing=\"2\" cellpadding=\"2\">
@@ -136,13 +136,13 @@ while ($i < $num) {
     	} else { //if there isn't a remainder we will do the else
         echo "<TR bgcolor="; echo "$rowColourAlt"; echo ">\n"; }
 	?>
-		<td nowrap><?echo "$font$description$fontend ";?></td>
-		<td nowrap><?echo "$font( $value )$fontend";?></td>
-</tr><? ++$i; } $fontend ?>
+		<td nowrap><?php  echo "$font$description$fontend ";?></td>
+		<td nowrap><?php  echo "$font( $value )$fontend";?></td>
+</tr><?php  ++$i; } $fontend ?>
 </table>
 </td>
 <td valign="top"><!-- Second columb -->
-<?
+<?php 
 $query="SELECT * FROM verbosity ORDER by rowID ASC";
 $result=mysql_query($query);
 $num=mysql_num_rows($result);
@@ -160,13 +160,13 @@ while ($i < $num) {
     	} else { //if there isn't a remainder we will do the else
         echo "<TR bgcolor="; echo "$rowColourAlt"; echo ">\n"; }
 	?>
-		<td nowrap><?echo "$font$description $fontend";?></td>
-		<td nowrap><?echo "$font( $value )$fontend";?></td>
+		<td nowrap><?php  echo "$font$description $fontend";?></td>
+		<td nowrap><?php  echo "$font( $value )$fontend";?></td>
 	</tr>
 
-<? ++$i; } $fontend ?></table></td>
+<?php  ++$i; } $fontend ?></table></td>
 </td><td valign="top"><!-- Third columb -->
-<?$query="SELECT * FROM log_config ORDER by rowID ASC";
+<?php $query="SELECT * FROM log_config ORDER by rowID ASC";
 $result=mysql_query($query);
 $num=mysql_num_rows($result);
 mysql_close();
@@ -183,13 +183,13 @@ while ($i < $num) {
     	} else { //if there isn't a remainder we will do the else
         echo "<TR bgcolor="; echo "$rowColourAlt"; echo ">\n"; }
 	?>
-		<td nowrap><?echo "$font$description$fontend ";?></td>
-		<td nowrap><?echo "$font( $value )$fontend";?></td>
+		<td nowrap><?php  echo "$font$description$fontend ";?></td>
+		<td nowrap><?php  echo "$font( $value )$fontend";?></td>
 	</tr>
-<? ++$i; } $fontend ?></table></td></tr></tr></table>
+<?php  ++$i; } $fontend ?></table></td></tr></tr></table>
 
 <!-- End Hub Config and Hub Verbosity tables -->
-<? echo "$fontend";?>
+<?php  echo "$fontend";?>
 </body>
 </html>
 

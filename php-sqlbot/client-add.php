@@ -1,4 +1,4 @@
-<?
+<?php 
 $page_title="Add a DC Client";
 include("header.ini");
 ?>

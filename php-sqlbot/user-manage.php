@@ -1,6 +1,6 @@
-<? $page_title="User Management";include("header.ini");?>
+<?php  $page_title="User Management";include("header.ini");?>
 
-<div align="center"><?
+<div align="center"><?php 
 $entry=0;$limit=$defaultLogEntries; 
 echo "$font";
 mysql_connect($databasehost,$username,$password);
@@ -37,52 +37,52 @@ $numrows=mysql_num_rows($numresult);
 $result=mysql_query("SELECT * FROM userDB $where ORDER by $orderby LIMIT $offset,$defaultLogEntries");
 mysql_close();
 ?>
-<table border="<? echo $tableBorders;?>" cellspacing="2" cellpadding="2">
+<table border="<?php  echo $tableBorders;?>" cellspacing="2" cellpadding="2">
 <tr>
 	<th> Preset Filters</th>
-	<th><form action="<? echo "user-manage.php?field=status&search=Online" ?>" method="post">
+	<th><form action="<?php  echo "user-manage.php?field=status&search=Online" ?>" method="post">
 	<input type="Submit" value="Online"></form></th>
-	<th><form action="<? echo "user-manage.php?field=lastAction&search=Kicked" ?>" method="post">
+	<th><form action="<?php  echo "user-manage.php?field=lastAction&search=Kicked" ?>" method="post">
 	<input type="Submit" value="Show Kicked"></form></th>
-	<th><form action="<? echo "user-manage.php?field=lastReason&search=Fake" ?>" method="post">
+	<th><form action="<?php  echo "user-manage.php?field=lastReason&search=Fake" ?>" method="post">
 	<input type="Submit" value="Show Fakers"></form></th>
-	<th><form action="<? echo "user-manage.php?field=allowStatus&search=Banned" ?>" method="post">
+	<th><form action="<?php  echo "user-manage.php?field=allowStatus&search=Banned" ?>" method="post">
 	<input type="Submit" value="Show Banned"></form></th>
 	</tr><tr>
-	<th><? echo " Filters Applied $font$field $search$fontend";?></th>
-	<th><form action="<? echo "user-manage.php" ?>" method="post">
+	<th><?php  echo " Filters Applied $font$field $search$fontend";?></th>
+	<th><form action="<?php  echo "user-manage.php" ?>" method="post">
 	<input type="Submit" value="Reset Filters"></form></th>
-	<th><form action="<? echo "user-manage.php?f=delete&field=$field&search=$search" ?>" method="post">
+	<th><form action="<?php  echo "user-manage.php?f=delete&field=$field&search=$search" ?>" method="post">
 	<input type="Submit" value="Delete ALL" onClick="return confirmDelete()"></form></th>
 	
-	<th><form action="<? echo "user-manage.php?f=parselog" ?>" method="post">
+	<th><form action="<?php  echo "user-manage.php?f=parselog" ?>" method="post">
 	<input type="Submit" value="Delete Single Entries" onClick="return confirmLogParse()"></form>
 	</th>
 	</tr><tr>
-	<th><form action="<? echo "user-manage.php?field=nick&search=$search" ?>" method="post">
-	<input type="text" name="search" value=""><? echo $font;?></th><th>
+	<th><form action="<?php  echo "user-manage.php?field=nick&search=$search" ?>" method="post">
+	<input type="text" name="search" value=""><?php  echo $font;?></th><th>
 	<input type="Submit" value="Nick Search"></form></th>
 </tr>
-</table><?
+</table><?php 
 echo "Totals :Users $numrows<br>";
 ?>
-<table border="<? echo "$tableBorders";?>" cellspacing="2" cellpadding="2">
+<table border="<?php  echo "$tableBorders";?>" cellspacing="2" cellpadding="2">
 <tr>
-<th><a href="<? echo "user-manage.php?order=nick" ?>"> <? echo $font;?>Nick<? echo $fontend;?></a></th>
-<th><? echo $font;?>Status<? echo "$fontend";?></th>
-<th><a href="<? echo "user-manage.php?order=uType" ?>"> <? echo $font;?>Type<? echo "$fontend";?></a></th>
-<th><? echo $font;?>Client<? echo "$fontend";?></th>
-<th><? echo $font;?>Allowed?<? echo "$fontend";?></th>
- <th><a href="<? echo "user-manage.php?order=connection" ?>"> <? echo $font;?>Connection<? echo "$fontend";?></a></th>
- <th><a href="<? echo "user-manage.php?order=country" ?>"> <? echo $font;?>Country<? echo "$fontend";?></a></th>
-<th><a href="<? echo "user-manage.php?order=IP" ?>"> <? echo $font;?>IP<? echo "$fontend";?></a></th>
-<th><a href="<? echo "user-manage.php?order=inTime" ?>"> <? echo $font;?>Checkin Time<? echo "$fontend";?></a></th>
- <th><a href="<? echo "user-manage.php?order=shareByte" ?>"> <? echo $font;?>Shared_Bytes<? echo "$fontend";?></a></th>
- <th><a href="<? echo "user-manage.php?order=lastAction" ?>"> <? echo $font;?>Last Action<? echo "$fontend";?></a></th>
- <th><a href="<? echo "user-manage.php?order=lastReason" ?>"> <? echo $font;?>Last Reason<? echo "$fontend";?></a></th>
+<th><a href="<?php  echo "user-manage.php?order=nick" ?>"> <?php  echo $font;?>Nick<?php  echo $fontend;?></a></th>
+<th><?php  echo $font;?>Status<?php  echo "$fontend";?></th>
+<th><a href="<?php  echo "user-manage.php?order=uType" ?>"> <?php  echo $font;?>Type<?php  echo "$fontend";?></a></th>
+<th><?php  echo $font;?>Client<?php  echo "$fontend";?></th>
+<th><?php  echo $font;?>Allowed?<?php  echo "$fontend";?></th>
+ <th><a href="<?php  echo "user-manage.php?order=connection" ?>"> <?php  echo $font;?>Connection<?php  echo "$fontend";?></a></th>
+ <th><a href="<?php  echo "user-manage.php?order=country" ?>"> <?php  echo $font;?>Country<?php  echo "$fontend";?></a></th>
+<th><a href="<?php  echo "user-manage.php?order=IP" ?>"> <?php  echo $font;?>IP<?php  echo "$fontend";?></a></th>
+<th><a href="<?php  echo "user-manage.php?order=inTime" ?>"> <?php  echo $font;?>Checkin Time<?php  echo "$fontend";?></a></th>
+ <th><a href="<?php  echo "user-manage.php?order=shareByte" ?>"> <?php  echo $font;?>Shared_Bytes<?php  echo "$fontend";?></a></th>
+ <th><a href="<?php  echo "user-manage.php?order=lastAction" ?>"> <?php  echo $font;?>Last Action<?php  echo "$fontend";?></a></th>
+ <th><a href="<?php  echo "user-manage.php?order=lastReason" ?>"> <?php  echo $font;?>Last Reason<?php  echo "$fontend";?></a></th>
 
 </tr>
-<?
+<?php 
 
 while ($data=mysql_fetch_array($result)) 
 {
@@ -150,35 +150,35 @@ while ($data=mysql_fetch_array($result))
 	?>
 	
 	
-<td nowrap><a href="<? echo "user-type.php?nick=$nick&IP=$IP" ?>"> <? echo "$font$nick$fontend"?></a></td>
-<td nowrap><div align="center"><a href="<? echo "user-manage.php?field=status&search=$status" ?>" title="Search for users <?echo "$status"?>"><img src="img/user/<? echo "$status" ?>.gif" border="0"></div></a> 
+<td nowrap><a href="<?php  echo "user-type.php?nick=$nick&IP=$IP" ?>"> <?php  echo "$font$nick$fontend"?></a></td>
+<td nowrap><div align="center"><a href="<?php  echo "user-manage.php?field=status&search=$status" ?>" title="Search for users <?php  echo "$status"?>"><img src="img/user/<?php  echo "$status" ?>.gif" border="0"></div></a> 
 </td>
-<td nowrap><div align="center"><a href="<? echo "user-manage.php?field=uType&search=$uType" ?>" title="Search for all <? echo "$uType" ?>s"><img src="img/user/<? echo "$uType" ?>.gif" border="0"></a></div></td>
+<td nowrap><div align="center"><a href="<?php  echo "user-manage.php?field=uType&search=$uType" ?>" title="Search for all <?php  echo "$uType" ?>s"><img src="img/user/<?php  echo "$uType" ?>.gif" border="0"></a></div></td>
 
 <td nowrap>
-	<div align="center"><a title="<? echo "$popup" ?>" style="cursor:help"><img src="img/clients/<? echo "$icoClient" ?>.gif" border="0"></a>
+	<div align="center"><a title="<?php  echo "$popup" ?>" style="cursor:help"><img src="img/clients/<?php  echo "$icoClient" ?>.gif" border="0"></a>
 	</div>
 </td>
 
-<td nowrap><a href="<? echo "user-manage.php?field=allowStatus&search=$allowStatus" ?>"><? echo "$font$allowStatus$fontend"; ?></a></td>
-<td nowrap><a href="<? echo "user-manage.php?field=connection&search=$connection" ?>"><? echo "$font$connection$fontend"; ?></a></td>
-<td nowrap><center><a href="user-manage.php?field=country&search=<? echo "$country"?>"  title="Search for all users from: <? echo "$country"?>">
-<img src="img/flags/<? echo "$country" ?>.GIF" alt="<? echo "$country" ?>" border="0" title="<? echo "$country" ?>"></a></center></td>
+<td nowrap><a href="<?php  echo "user-manage.php?field=allowStatus&search=$allowStatus" ?>"><?php  echo "$font$allowStatus$fontend"; ?></a></td>
+<td nowrap><a href="<?php  echo "user-manage.php?field=connection&search=$connection" ?>"><?php  echo "$font$connection$fontend"; ?></a></td>
+<td nowrap><center><a href="user-manage.php?field=country&search=<?php  echo "$country"?>"  title="Search for all users from: <?php  echo "$country"?>">
+<img src="img/flags/<?php  echo "$country" ?>.GIF" alt="<?php  echo "$country" ?>" border="0" title="<?php  echo "$country" ?>"></a></center></td>
 
-<td nowrap><a href="user-manage.php?field=IP&search=<? echo "$IP"?>" title="Search for all users with: <? echo "$IP"?>"><? echo "$font$IP$fontend"; ?></a></td>
-<td nowrap><? echo "$font$inTime$fontend"; ?></td>
-<td nowrap><a href="user-manage.php?field=shareByte&search=<? echo "$byteShare"?>" title="<? echo "$Share" ?>" style="cursor:help"><? echo "$font$byteShare$fontend"; ?></a></td>
-<td nowrap><a href="<? echo "user-manage.php?field=lastAction&search=$lastAction" ?>"><? echo "$font$lastAction$fontend"; ?></a></td>
-<td nowrap><a href="<? echo "user-manage.php?field=lastReason&search=$lastReason" ?>"><? echo "$font$lastReason$fontend"; ?></a></td>
-<?if ($allowStatus == Banned)
+<td nowrap><a href="user-manage.php?field=IP&search=<?php  echo "$IP"?>" title="Search for all users with: <?php  echo "$IP"?>"><?php  echo "$font$IP$fontend"; ?></a></td>
+<td nowrap><?php  echo "$font$inTime$fontend"; ?></td>
+<td nowrap><a href="user-manage.php?field=shareByte&search=<?php  echo "$byteShare"?>" title="<?php  echo "$Share" ?>" style="cursor:help"><?php  echo "$font$byteShare$fontend"; ?></a></td>
+<td nowrap><a href="<?php  echo "user-manage.php?field=lastAction&search=$lastAction" ?>"><?php  echo "$font$lastAction$fontend"; ?></a></td>
+<td nowrap><a href="<?php  echo "user-manage.php?field=lastReason&search=$lastReason" ?>"><?php  echo "$font$lastReason$fontend"; ?></a></td>
+<?php  if ($allowStatus == Banned)
 {?>
 <td>
-<form action="<? echo "user-manage.php?f=aStatus&field=$field&search=$search&nick=$nick&ip=$IP&aStatus=23&information=Un-ban";?>" method="post">
+<form action="<?php  echo "user-manage.php?f=aStatus&field=$field&search=$search&nick=$nick&ip=$IP&aStatus=23&information=Un-ban";?>" method="post">
 <input type="Submit" value="UnBan"></form>
 </td>
-<?}?>	
+<?php  }?>	
 	</tr>
-	<?
+	<?php 
 	$i++;
 } 
 echo "</table>";
@@ -203,7 +203,7 @@ if (!(($offset/$limit)==$pages-1) && $pages!=1) {
 }
 
 ?></div>
-<? echo "$fontend";?>
+<?php  echo "$fontend";?>
 </body>
 </html>
 

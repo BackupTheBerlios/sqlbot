@@ -1,4 +1,4 @@
-<?
+<?php 
 $page_title="Records";
 include("header.ini");
 ?>
@@ -31,7 +31,7 @@ include("header.ini");
 </tr>
 </table>
 
-<?
+<?php 
 mysql_connect($databasehost,$username,$password);
 @mysql_select_db($database) or die( "Unable to select database");
 
@@ -49,11 +49,11 @@ echo "$font<p><b>Hub Records</b><br>$fontend";
 ?>
 
 <table border="1" cellspacing="2" cellpadding="2"><tr>
-		<th><? echo "$font"; ?>Record Name<? echo "$fontend"; ?></th>
-		<th><? echo "$font"; ?>Value<? echo "$fontend"; ?></th>
-		<th><? echo "$font"; ?>Reset<? echo "$fontend"; ?></th></tr>
+		<th><?php  echo "$font"; ?>Record Name<?php  echo "$fontend"; ?></th>
+		<th><?php  echo "$font"; ?>Value<?php  echo "$fontend"; ?></th>
+		<th><?php  echo "$font"; ?>Reset<?php  echo "$fontend"; ?></th></tr>
 
-<?
+<?php 
 $i=0;
 while ($i < $num) {
 	$id=mysql_result($result,$i,"rowID");
@@ -66,11 +66,11 @@ while ($i < $num) {
     	} else { //if there isn't a remainder we will do the else
         echo "<TR bgcolor="; echo "$rowColourAlt"; echo ">\n"; } ?>
 
-	<td nowrap><? echo "$font$name$fontend"; ?></td>
-	<td nowrap><? echo "$font$value$fontend"; ?></td>
-	<form action="stats-records.php?function=reset&id=<? echo "$id";?>" method="post">
+	<td nowrap><?php  echo "$font$name$fontend"; ?></td>
+	<td nowrap><?php  echo "$font$value$fontend"; ?></td>
+	<form action="stats-records.php?function=reset&id=<?php  echo "$id";?>" method="post">
 	<td nowrap><input type="Submit" value="Reset" title="Reset value to 0" onClick="return confirmDelete()"></td></form></tr>
-	<?++$i;} ?></table>
+	<?php ++$i;} ?></table>
 </center>
 </body>
 </html>
