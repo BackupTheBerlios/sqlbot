@@ -37,6 +37,9 @@ if ($function == configupdate)
 	$sql = "UPDATE hub_config SET value='$ud_post_client_check' WHERE rule='post_client_check'";
 	$result = mysql_query($sql) or die(mysql_error());
 
+	if (empty($ud_clone_check)) {$ud_clone_check = "off";}
+	$sql = "UPDATE hub_config SET value='$ud_clone_check' WHERE rule='clone_check'";
+	$result = mysql_query($sql) or die(mysql_error());
 
 	if (empty($ud_client_check)) {$ud_client_check = "off";}
 	$sql = "UPDATE hub_config SET value='$ud_client_check' WHERE rule='client_check'";
