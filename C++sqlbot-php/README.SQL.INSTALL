@@ -95,7 +95,7 @@ hcLogSystem  SET('0','1'));
 
 
 CREATE TABLE userInfo (
-uiNick VARCHAR(40),
+uiNick VARCHAR(40) NOT NULL,
 uiIp VARCHAR(16),
 uiHost VARCHAR(40),
 uiIsAway  SET('0','1'),
