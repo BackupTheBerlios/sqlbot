@@ -1,9 +1,7 @@
 <?
-$page_title="SqlBot PHP Config";
+$page_title="Testing";
 include("header.ini");
 ?>
-
-
 
 <div align="center"><table width="500" class="intro">
 <tr>

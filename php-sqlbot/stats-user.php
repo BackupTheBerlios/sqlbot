@@ -4,7 +4,6 @@ include("header.ini");
 ?>
 
 <div align="center"><?
-include("dbinfo.inc.php");
 $limit=$defaultLogEntries; 
 echo "$font";
 mysql_connect($databasehost,$username,$password);

@@ -2,11 +2,6 @@
 $page_title="Add a DC Client";
 include("header.ini");
 ?>
-
-<?
-include("dbinfo.inc.php");
-echo "<h3><center>ODCH Admin - Add New client for $hubname</center></h3><br><br>";
-?>
 <center><form action="client-main.php?function=addclient" method="post">
 	<table>
 	<tr>

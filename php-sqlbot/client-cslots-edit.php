@@ -3,7 +3,6 @@ $page_title="Connection Slots Settings";
 include("header.ini");
 ?>
 <?
-include("dbinfo.inc.php");
 mysql_connect($databasehost,$username,$password);
 @mysql_select_db($database) or die( "Unable to select database");
 if($function == update) {

@@ -4,7 +4,6 @@ include("header.ini");
 ?>
 
 <?
-include("dbinfo.inc.php");
 echo"$font";
 echo "<center><p>The rules here are additonal rules to those generated dynamically based a particular users client.<br> The rules you configure here should be static rules.<br> For Example, Grant slot to op on request, No Porn, No Installed files etc.</p></center>";
 echo"$fontend";

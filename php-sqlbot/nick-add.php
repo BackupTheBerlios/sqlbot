@@ -3,9 +3,6 @@ $page_title="Add a filtered Nickname";
 include("header.ini");
 ?>
 
-<?
-include("dbinfo.inc.php");
-?>
 <center><form action="nick-main.php?function=add" method="post">
 	<table>
 	

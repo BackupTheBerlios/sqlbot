@@ -6,7 +6,6 @@ include("header.ini");
 	<div align="center"><form action="log-online.php" method="post">
 	<input class="button" type="Submit" value="Refresh"></form><br>
 <?
-include("dbinfo.inc.php");
 $limit=$defaultLogEntries; 
 echo "$font";
 mysql_connect($databasehost,$username,$password);
@@ -27,10 +26,9 @@ echo "Total Number of users online $numrows<br>";
 ?>
 <table border="$tableborders" cellspacing="2" cellpadding="2">
 <tr> 
-<th><? echo "$font";?>#<? echo "$fontend";?></th>
 <th><? echo "$font";?>Date<? echo "$fontend";?></th>
 <th><? echo "$font";?>Time<? echo "$fontend";?></th>
-<th><? echo "$font";?>Nick<? echo "$fontend";?></th>
+<th><? echo "$font";?>Nick (email)<? echo "$fontend";?></th>
 <th><? echo "$font";?>User Type<? echo "$fontend";?></th>
 <th><? echo "$font";?>IP<? echo "$fontend";?></th>
 <th><? echo "$font";?>Country<? echo "$fontend";?></th>
@@ -41,9 +39,7 @@ echo "Total Number of users online $numrows<br>";
 <th><? echo "$font";?>Connection Mode<? echo "$fontend";?></th>
 <th><? echo "$font";?># Hubs<? echo "$fontend";?></th>
 <th><? echo "$font";?># Slots<? echo "$fontend";?></th>
-<th><? echo "$font";?>Shared [bytes]<? echo "$fontend";?></th>
-<th><? echo "$font";?>Shared [Gb]<? echo "$fontend";?></th>
-<th><? echo "$font";?>Email<? echo "$fontend";?></th>
+<th><? echo "$font";?>Shared [Gb] (bytes)<? echo "$fontend";?></th>
 </tr>
 <?
 while ($data=mysql_fetch_array($result)) 
@@ -80,28 +76,20 @@ while ($data=mysql_fetch_array($result))
 	        echo "<TR bgcolor="; echo "$rowColourAlt"; echo ">\n"; }
 		$bold = ""; $boldend = "";}
 	?>
-	<form action="<? echo "log-online.php?delete=onlinerow&id=$id" ?>" method="post">
-
-	<td nowrap><? echo "$font$bold$id$boldend$fontend"; ?></td>
 	<td nowrap><? echo "$font$bold$date$boldend$fontend"; ?></td>
 	<td nowrap><? echo "$font$bold$time$boldend$fontend"; ?></td>
-	<td nowrap><? echo "$font$bold$name$boldend$fontend"; ?></td>
+	<td nowrap><a title="<? echo "Email: $email" ?>"><? echo "$font$bold$name$boldend$fontend"; ?></a></td>
 	<td nowrap><? echo "$font$bold$user_type$boldend$fontend"; ?></td>
-	<td nowrap><? echo "$font$bold$ip$boldend$fontend"; ?></td>
-	<td nowrap><? echo "$font$bold$country$boldend$fontend"; ?></td>
+	<td nowrap><div align="center"><? echo "$font$bold$ip$boldend$fontend"; ?></div></td>
+	<td nowrap><div align="center"><? echo "$font$bold$country$boldend$fontend"; ?></div></td>
 	<td nowrap><? echo "$font$bold$client$boldend$fontend"; ?></td>
 	<td nowrap><? echo "$font$bold$client_version$boldend$fontend"; ?></td>
 	<td nowrap><? echo "$font$bold$fulldescription$boldend$fontend"; ?></td>
-	<td nowrap><? echo "$font$bold$connection$boldend$fontend"; ?></td>
-	<td nowrap><? echo "$font$bold$connection_mode$boldend$fontend"; ?></td>
-	<td nowrap><? echo "$font$bold$connected_hubs$boldend$fontend"; ?></td>
-	<td nowrap><? echo "$font$bold$upload_slots$boldend$fontend"; ?></td>
-	<td nowrap><? echo "$font$bold$shared_bytes$boldend$fontend"; ?></td>
-	<td nowrap><? echo "$font$bold$shared_gigs$boldend$fontend"; ?></td>
-	<td nowrap><? echo "$font$bold$email$boldend$fontend"; ?></td>
-	<td nowrap><input type="Submit" value="Delete" onClick="return confirmDelete()"></td>
-	
-	</form>
+	<td nowrap><div align="center"><? echo "$font$bold$connection$boldend$fontend"; ?></div></td>
+	<td nowrap><div align="center"><? echo "$font$bold$connection_mode$boldend$fontend"; ?></div></td>
+	<td nowrap><div align="center"><? echo "$font$bold$connected_hubs$boldend$fontend"; ?></div></td>
+	<td nowrap><div align="center"><? echo "$font$bold$upload_slots$boldend$fontend"; ?></div></td>
+	<td nowrap><div align="center"><a title="<? echo "$shared_bytes bytes" ?>"><? echo "$font$bold$shared_gigs$boldend$fontend"; ?></a></div></td>
 	</tr>
 	<?
 	$entry++;

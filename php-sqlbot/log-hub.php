@@ -7,7 +7,6 @@ include("header.ini");
 	<input class="button" type="Submit" value="Refresh"></form><br>
 <div align="center"><?
 $entry=0; 
-include("dbinfo.inc.php");
 echo "$font";
 $limit=$defaultLogEntries; 
 

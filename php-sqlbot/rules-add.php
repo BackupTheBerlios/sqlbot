@@ -2,10 +2,6 @@
 $page_title="Add a new hub-rule";
 include("header.ini");
 ?>
-
-<?
-include("dbinfo.inc.php");
-?>
 <center>
 	<table>
 	<tr><form action="rules-main.php?function=add" method="post">
