@@ -231,7 +231,8 @@ sub parseClient(){
 					$ACTION = "Kicked";}}
 			## MIN CONNECTION ##
 			if ($ref->{'min_connection'} > $conn)
-				{$REASON = "Connection($conn)";
+				{my $connection = &getConnection($conn);
+				$REASON = "Connection($connection)";
 				$ACTION = "Kicked";}
 			## MIN SHARE ##
 			if ($ref->{'min_share'} > $GigsShared)
@@ -258,7 +259,8 @@ sub parseClient(){
 				$ACTION = "Kicked";}
 			## MIN CONNECTION ##
 			elsif ($ref1->{'min_connection'} > $conn){
-				$REASON = "Connection($conn)";
+				my $connection = &getConnection($conn);
+				$REASON = "Connection($connection)";
 				$ACTION = "Kicked";}
 			$dcClient = "No Tag";
 			$dcClientname = "Not Known";
