@@ -19,10 +19,12 @@ else {$orderby="uType,nick";}
 if ($f == delete)
 	{$sql = "DELETE FROM userDB $where";$result = mysql_query($sql) or die(mysql_error());}
 if ($f == uType){
-	$sql = "INSERT INTO botWorker VALUES ('mysql_insertid',$uType,'$nick','$ip','$passwd')";
+	$cleannick =  	mysql_escape_string($nick);
+	$sql = "INSERT INTO botWorker VALUES ('mysql_insertid',$uType,'$cleannick','$ip','$passwd')";
 	$result = mysql_query($sql) or die(mysql_error());}
 else if ($f == aStatus){
-	$sql = "INSERT INTO botWorker VALUES ('mysql_insertid','$aStatus','$nick','$ip','$information')";
+	$cleannick =  	mysql_escape_string($nick);
+	$sql = "INSERT INTO botWorker VALUES ('mysql_insertid','$aStatus','$cleannick','$ip','$information')";
 	$result = mysql_query($sql) or die(mysql_error());}
 	
 if (empty($offset)) {$offset=0;}
