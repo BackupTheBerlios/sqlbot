@@ -111,7 +111,7 @@ $result=mysql_query("SELECT * FROM hubConfig WHERE hubID='$hubID'");
 									</tr>
 <?php
 // STATS SEARCH TYPE
-$searchType=mysql_query("SELECT lsType,COUNT(lsType) from logSearch GROUP BY lsType");
+$searchType=mysql_query("SELECT lsType,COUNT(lsType) from logSearch where hubID='$hubID' GROUP BY lsType");
 
 while ($data=mysql_fetch_array($searchType)) 
 {
