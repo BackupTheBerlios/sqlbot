@@ -8,7 +8,8 @@ mysql_connect($databasehost,$username,$password);
 $where = "";
 if (!empty($field))  
 	{$where="WHERE $field LIKE '%$search%'";}
-	
+if (!empty($order))  
+	{$orderby="ORDER by '$order'";}	
 
 if ($f == delete)
 	{$sql = "DELETE FROM userDB $where";$result = mysql_query($sql) or die(mysql_error());}
@@ -25,12 +26,21 @@ mysql_connect($databasehost,$username,$password);
 @mysql_select_db($database) or die( "Unable to select database");
 $numresult=mysql_query("SELECT * FROM userDB $where");
 $numrows=mysql_num_rows($numresult);
-$result=mysql_query("SELECT * FROM userDB $where ORDER by uType,nick LIMIT $offset,$defaultLogEntries");
+$result=mysql_query("SELECT * FROM userDB $where $orderby LIMIT $offset,$defaultLogEntries");
 mysql_close();
 ?>
 <table border="<? echo "$tableborders";?> cellspacing="2" cellpadding="2">
 <tr>
-
+	<th> Preset Filters</th>
+	<th><form action="<? echo "user-manage.php?field=status&search=Online" ?>" method="post">
+	<input type="Submit" value="Online"></form></th>
+	<th><form action="<? echo "user-manage.php?field=lastAction&search=Kicked" ?>" method="post">
+	<input type="Submit" value="Kicked"></form></th>
+	<th><form action="<? echo "user-manage.php?field=lastReason&search=Faker" ?>" method="post">
+	<input type="Submit" value="Faker"></form></th>
+	<th><form action="<? echo "user-manage.php?field=allowStatus&search=Banned" ?>" method="post">
+	<input type="Submit" value="Banned"></form></th>
+	</tr><tr>
 	<th><? echo " Filters Applied $font$field $search$fontend";?></th>
 	<th><form action="<? echo "user-manage.php" ?>" method="post">
 	<input type="Submit" value="Reset Filters"></form></th>
@@ -46,10 +56,10 @@ echo "Totals :Users $numrows<br>";
 ?>
 <table border="$tableborders" cellspacing="2" cellpadding="2">
 <tr>
-<th><? echo "$font";?>Nick<? echo "$fontend";?></th>
+<th><a href="<? echo "user-manage.php?order=nick" ?>" <? echo "$font";?>Nick<? echo "$fontend";?></a></th>
 <!-- <th><? echo "$font";?>passwd<? echo "$fontend";?></th> -->
 <th><? echo "$font";?>Status<? echo "$fontend";?></th>
- <th><? echo "$font";?>User Type<? echo "$fontend";?></th> 
+ <th><a href="<? echo "user-manage.php?order=uType" ?>" <? echo "$font";?>User Type<? echo "$fontend";?></a></th>
 <!--<th><? echo "$font";?>type<? echo "$fontend";?></th> -->
 <th><? echo "$font";?>Allow Status<? echo "$fontend";?></th>
 <!-- <th><? echo "$font";?>awayStatus<? echo "$fontend";?></th>  -->
@@ -60,14 +70,14 @@ echo "Totals :Users $numrows<br>";
 <th><? echo "$font";?>slots<? echo "$fontend";?></th>
 <th><? echo "$font";?>hubs<? echo "$fontend";?></th>
 <!--<th><? echo "$font";?>limiter<? echo "$fontend";?></th>-->
-<th><? echo "$font";?>Connection<? echo "$fontend";?></th>
+ <th><a href="<? echo "user-manage.php?order=connection" ?>" <? echo "$font";?>Connection<? echo "$fontend";?></a></th>
 <!--<th><? echo "$font";?>connectionMode<? echo "$fontend";?></th>-->
-<th><? echo "$font";?>Country<? echo "$fontend";?></th>
-<th><? echo "$font";?>IP<? echo "$fontend";?></th>
+ <th><a href="<? echo "user-manage.php?order=country" ?>" <? echo "$font";?>Country<? echo "$fontend";?></a></th>
+<th><a href="<? echo "user-manage.php?order=IP" ?>" <? echo "$font";?>IP<? echo "$fontend";?></a></th>
 <!-- <th><? echo "$font";?>hostname<? echo "$fontend";?></th> 
 <th><? echo "$font";?>First Login<? echo "$fontend";?></th> 
 <th><? echo "$font";?>outTime<? echo "$fontend";?></th> -->
-<th><? echo "$font";?>Checkin Time<? echo "$fontend";?></th>
+ <th><a href="<? echo "user-manage.php?order=inTime" ?>" <? echo "$font";?>Checkin Time<? echo "$fontend";?></a></th>
 <!-- <th><? echo "$font";?>onlineTime<? echo "$fontend";?></th>
 <th><? echo "$font";?>loginCount<? echo "$fontend";?></th>
 <th><? echo "$font";?>kickCount<? echo "$fontend";?></th>
@@ -78,9 +88,9 @@ echo "Totals :Users $numrows<br>";
 <th><? echo "$font";?>pBanCountTot<? echo "$fontend";?></th>
 <th><? echo "$font";?>lineCount<? echo "$fontend";?></th> 
 <th><? echo "$font";?>avShareBytes<? echo "$fontend";?></th> -->
-<th><? echo "$font";?>Shared_Bytes<br>[hover]<? echo "$fontend";?></th>
-<th><? echo "$font";?>Last Action<? echo "$fontend";?></th>
-<th><? echo "$font";?>Last Reason<? echo "$fontend";?></th>
+ <th><a href="<? echo "user-manage.php?order=shareByte" ?>" <? echo "$font";?>Shared_Bytes<? echo "$fontend";?></a></th>
+ <th><a href="<? echo "user-manage.php?order=lastAction" ?>" <? echo "$font";?>Last Action<? echo "$fontend";?></a></th>
+ <th><a href="<? echo "user-manage.php?order=lastReason" ?>" <? echo "$font";?>Last Reason<? echo "$fontend";?></a></th>
 
 </tr>
 <?
@@ -131,7 +141,7 @@ while ($data=mysql_fetch_array($result))
 	// Colour Rows
 	if(($uType == "Operator") || ($uType == "Op-Admin")) {echo "<TR bgcolor="; echo "$OpRowColour"; echo ">\n";}
 	else if($allowStatus == "allow") {echo "<TR bgcolor="; echo "$AllowRowColour"; echo ">\n";}
-	else if(($allowStatus == "T-Banned") || ($allowStatus == "P-Banned")) { echo "<TR bgcolor=";echo "$BanRowColour"; echo ">\n";}
+	else if(($allowStatus == "Banned")) { echo "<TR bgcolor=";echo "$BanRowColour"; echo ">\n";}
 	else if($kickCount != 0) {echo "<TR bgcolor="; echo "$KickRowColour"; echo ">\n";}
 	else if($i % 2)	{echo "<TR bgcolor="; echo "$rowColour"; echo ">\n";}
 	else{echo "<TR bgcolor="; echo "$rowColourAlt"; echo ">\n";}
@@ -139,7 +149,7 @@ while ($data=mysql_fetch_array($result))
 	?>
 	
 	
-<td nowrap><a href="<? echo "user-manage.php?field=nick&search=$nick" ?>" title="Search for: <?echo "$nick"?>"> <? echo "$font$nick$fontend"; ?></a> <a href="<? echo "user-type.php?nicksearch=$nick" ?>" title="<?echo "$nick"?>'s info"> <? echo "<font color=\"#2400FF\" size=\"-1\">(i)</font>"?></a></td>
+<td nowrap><a href="<? echo "user-type.php?nick=$nick" ?>" <? echo "$font$nick$fontend"?></a></td>
 <!-- <td nowrap><? echo "$font$passwd$fontend"; ?></td> -->
 <td nowrap><a href="<? echo "user-manage.php?field=status&search=$status" ?>" title="Search for users <?echo "$status"?>"> <? echo "$font$status$fontend"; ?></a></td>
 <td nowrap><a href="<? echo "user-manage.php?field=uType&search=$uType" ?>"><? echo "$font$uType$fontend"; ?></a></td>
@@ -183,7 +193,7 @@ echo "</table>";
 
 if ($offset!=0) { 
     $prevoffset=$offset-$defaultLogEntries;
-    print "<a href=\"user-manage.php?offset=$prevoffset&field=$field&search=$search\">PREV</a> &nbsp; \n";
+    print "<a href=\"user-manage.php?order=$order&offset=$prevoffset&field=$field&search=$search\">PREV</a> &nbsp; \n";
 }
 $pages=intval($numrows/$limit);
 
@@ -192,12 +202,12 @@ if ($numrows%$limit) {
 
 for ($i=1;$i<=$pages;$i++) { // loop thru
     $newoffset=$limit*($i-1);
-    print "<a href=\"user-manage.php?offset=$newoffset&field=$field&search=$search\">$i</a> &nbsp; \n"; }
+    print "<a href=\"user-manage.php?order=$order&offset=$newoffset&field=$field&search=$search\">$i</a> &nbsp; \n"; }
 
 if (!(($offset/$limit)==$pages-1) && $pages!=1) {
     // not last page so give NEXT link
     $newoffset=$offset+$limit;
-    print "<a href=\"user-manage.php?offset=$newoffset&field=$field&search=$search\">NEXT</a><p>\n";
+    print "<a href=\"user-manage.php?order=$order&offset=$newoffset&field=$field&search=$search\">NEXT</a><p>\n";
 }
 
 ?></div>
