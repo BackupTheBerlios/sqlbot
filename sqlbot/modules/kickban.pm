@@ -40,7 +40,7 @@ sub kickWorker()
 		&debug("(10)$user($ip)$information");
 		odch::kick_user($user); # GoodBye..
 
-		my($kw1th) = $dbh->prepare("SELECT kickCountTot,kickCount FROM userDB WHERE nick='$user'");
+		my($kw1th) = $dbh->prepare("SELECT kickCountTot,kickCount FROM userDB WHERE nick='$user' AND allowStatus!='Banned'");
 		$kw1th->execute();
 		$ref1 = $kw1th->fetchrow_hashref();
 
@@ -49,7 +49,8 @@ sub kickWorker()
 		$kickCount++;
 		$kickCountTot++;
 		$kw1th->finish();
-		$dbh->do("UPDATE userDB SET kickCountTot='$kickCountTot',kickCount='$kickCount',lastReason='$information',lastAction='Kicked' WHERE nick='$user'");
+		$dbh->do("UPDATE userDB SET kickCountTot='$kickCountTot',kickCount='$kickCount',lastReason='$information',lastAction='Kicked' 
+			WHERE nick='$user' AND allowStatus!='Banned'");
 		$dbh->do("DELETE FROM botWorker WHERE function LIKE '1%' AND nick='$user'");
 	}
 	$kwth->finish();
@@ -85,6 +86,8 @@ sub banWorker()
 			&banUser($user,"Fake(Tag)",$ip,"pban");}
 		elsif($function=='25'){
 			&banUser($user,"Fake(Share)",$ip,"pban");}
+		elsif($function=='26'){
+			&banUser($user,$information,$ip,"nban");}
 			
 		$dbh->do("DELETE FROM botWorker WHERE nick='$user'");
 	}
@@ -95,7 +98,7 @@ sub banWorker()
 sub banUser (){
 	my($user,$reason,$ip,$mode)=@_;
 
-	my($buth) = $dbh->prepare("SELECT tBanCount,tBanCountTot,pBanCountTot FROM userDB WHERE nick='$user'");
+	my($buth) = $dbh->prepare("SELECT tBanCount,tBanCountTot,pBanCountTot FROM userDB WHERE nick='$user' AND allowStatus!='Banned'");
 	$buth->execute();
 	my $ref = $buth->fetchrow_hashref();
 	my($tBanCount) = "$ref->{'tBanCount'}";
@@ -118,12 +121,19 @@ sub banUser (){
 		odch::add_ban_entry($ip);
 		if (&getVerboseOption("verbose_banned")){
 			&msgAll("P-BANNED $user($ip) for:$reason");}}
+	elsif ($mode =~ /nban/i){	# Nick Ban
+		$lastAction = "N-Banned";
+		$pBanCountTot++;
+		odch::add_ban_entry($user);
+		if (&getVerboseOption("verbose_banned")){
+			&msgAll("N-BANNED $user($ip) for:$reason");}}
+			
 	elsif ($mode =~ /uban/i){	# Remove ban
 		$lastAction = "Un-Ban";
 		if (&getVerboseOption("verbose_banned")){
-			&msgAll("UN-BANNED $user($ip) for:$reason");
-			}
+			&msgAll("UN-BANNED $user($ip) for:$reason");}
 		odch::remove_ban_entry($ip);
+		odch::remove_ban_entry($user);
 		$dbh->do("UPDATE userDB SET tBanCount='0',
 					kickCount='0',
 					allowStatus='Normal',
@@ -140,10 +150,10 @@ sub banUser (){
 				allowStatus='Banned',
 				lastReason='$reason',
 			    	lastAction='$lastAction'
-			    	WHERE nick='$user'");
+			    	WHERE nick='$user' AND allowStatus!='Banned'");
 	
 	if(&getLogOption("log_bans"))
-    		{&addToLog($user,$mode,$reason);}
+    		{&addToLog($user,$lastAction,$reason);}
 	odch::kick_user($user);
 	&msgUser($user,"You have been BANNED for:$reason");
 
