@@ -21,19 +21,22 @@ sub splitDescription() {
 	$tmpdata=""; $fulldescription=""; $dcClient="";
 	$dcVersion=""; $NbHubs=""; $NSlots=""; $slt_ratio=""; $country="";
 	$UploadLimit=""; $conn=""; $connection=""; $email="";
-
+	my($pos1)="";my($pos2)="";my($tmpdata)="";my($verdata)="";my($tmpModeAP)="";
+	my(@verdata2)=("","","","","","");
+	my(@tmpdata2)=("","","","","","");
+	
 	$type = odch::get_type($user);
 	$ip = odch::get_ip($user);
 	$shared = odch::get_share($user);
 	$GigsShared = int($shared / 1024 / 1024 / 10.24) / 100;
-	my($tmpdata) = odch::get_description($user);
+	$tmpdata = odch::get_description($user);
 	$tmpdata =~ s/'//g;
 	$fulldescription = "$tmpdata";
-	my($pos1) = rindex($tmpdata, "<") +1;
-	my($pos2) = rindex($tmpdata, ">");
+	$pos1 = rindex($tmpdata, "<") +1;
+	$pos2 = rindex($tmpdata, ">");
 
 	$verdata = substr($tmpdata, $pos1, $pos2 - $pos1);
-	my(@verdata2) = split(/\ /, $verdata);
+	@verdata2 = split(/\ /, $verdata);
 
 	$pos1 = rindex($tmpdata, "<$verdata2[0]") + 1 + length($verdata2[0]);
 	$tmpdata = substr($tmpdata, $pos1, $pos2 - $pos1);
