@@ -71,22 +71,48 @@ $hcStatus = "<font color=\"#FF1D28\"><strong>Offline</strong></font>";
 if ($parse == "All") { $parseoption = "";}
 if ($parse == "Online") { $parseoption = "&& uiStatus='1'"; }
 if ($parse == "Fakers") { $parseoption = ""; }
+if ($useSearch == "1") { 
+$alteredsearchfiled = ereg_replace ("\*", "%", $searchvalue);
+$parseoptionextra= "&& $searchfield LIKE '$alteredsearchfiled'";}
+
+if (empty($offset)) { $offset = 0; }
 
 // GET TOTAL USERS IN DB 
 $total_result=mysql_query("SELECT * FROM userInfo WHERE hubID='$hubID'");
 $total_users=mysql_num_rows($total_result);
 
-// LIMIT $defaultLogEntries ORDER BY uiNick
-//$userresult=mysql_query("SELECT *,DATE_FORMAT(uiLastSeenTime, '%d/%m/%Y %H:%i') AS date FROM userInfo WHERE hubID='$hubID' $parseoption ORDER BY uiIsAdmin  DESC,uiNick");
+$userresult=mysql_query("SELECT *,DATE_FORMAT(uiLastSeenTime, '%d/%m/%Y %H:%i') AS date FROM userInfo WHERE hubID='$hubID' $parseoption $parseoptionextra ORDER BY uiIsAdmin  DESC,$parseorder LIMIT $offset,$defaultLogEntries");
 
-$userresult=mysql_query("SELECT *,DATE_FORMAT(uiLastSeenTime, '%d/%m/%Y %H:%i') AS date FROM userInfo WHERE hubID='$hubID' $parseoption $parseoptionextra ORDER BY uiIsAdmin  DESC,$parseorder");
+$total_userresult=mysql_query("SELECT *,DATE_FORMAT(uiLastSeenTime, '%d/%m/%Y %H:%i') AS date FROM userInfo WHERE hubID='$hubID' $parseoption $parseoptionextra ORDER BY uiIsAdmin  DESC,$parseorder");
 
-$total_selection=mysql_num_rows($userresult);
+$total_selection=mysql_num_rows($total_userresult);
 
 ?>
 <FIELDSET>
 	<LEGEND><font color="#FFFFFF"> &nbsp; Selected users: [ <?php echo "$parse"; ?> ] &nbsp; Selected:
-					[ <?php echo "$total_selection / $total_users"; ?> ] &nbsp;  for hub <?php echo "$hcName [ ID: $hubID ]"; ?></font></LEGEND>	
+					[ <?php echo "$total_selection / $total_users"; ?> ] &nbsp;  for hub <?php echo "$hcName [ ID: $hubID ]"; ?></font></LEGEND>
+	<!-- SEARCH DIALOG -->
+	<table width="100%">
+		<tr>
+			<td><?php if ($useSearch == "1") {Echo "<font color=\"#FFFFFF\">Searching for <em>$searchvalue</em> in <em>$parse....</em> </font>";} ?>
+			</td>
+			<td align="right">
+			<form action="<?php echo "$PHP_SELF"; ?>" method="post">
+				<?php hidden_value(hubID, $hubID); ?>
+				<?php hidden_value(parse, $parse); ?>
+				<?php hidden_value(parseorder, uiNick); ?>
+				<?php hidden_value(useSearch, 1); ?>
+				<input type="text" name="searchvalue"	value="<?php echo "$searchvalue"; ?>" class="search_input" title="Use * if needed">
+				<select name="searchfield" class="form_select">
+					<option value="uiNick"> Nick
+					<option value="uiIp"> IP
+					<option value="uiShare"> Share
+				</select>
+				<input type="submit" value="Search" class="userdbnicknormal" title="Search users"></form>
+			</td>
+		</tr>
+	</table>
+	<!-- END SEARCH DIALOG -->
 	
 	<table class="userdb">
 	<tr nowrap>
@@ -192,14 +218,15 @@ while ($data=mysql_fetch_array($userresult))
 if ($uiIsAdmin == "1") { $class = "userdbnickop"; }
 else {$class = "userdbnicknormal"; }
 
+
 	echo "<tr>
-		<td>$uiStatus</td>
+		<td width=\"5\">$uiStatus</td>
 		<td nowrap>
 			<form action=\"userinfo.php\" method=\"post\">
 			<input type=\"hidden\" name=\"hubID\" value=\"$hubID\">
 			<input type=\"hidden\" name=\"uiIp\" value=\"$uiIp\">
 			<input type=\"hidden\" name=\"uiNick\" value=\"$uiNick\">
-			<input type=\"submit\" value=\"$uiNick\" class=\"$class\"></form>
+			<input type=\"submit\" value=\"$uiNick\" class=\"$class\" title=\"View info on $uiNick\"></form>
 		</td>
 		<td nowrap align=\"center\">$uiIsAdmin</td>
 		<td nowrap align=\"center\">$uiClient</td>
@@ -216,14 +243,58 @@ else {$class = "userdbnicknormal"; }
 
 ?>
 	</table>
-
-
+<!-- PREVIOUS / NEXT PAGE -->
+	<table width="100%">
+		<tr>
+			<td>
+			<?php
+			// CODE FOR PREVIOUS BUTTON
+				if ($offset >= $defaultLogEntries){
+				$offset_value = $offset - $defaultLogEntries
+			?>
+						<form action="<?php echo "$PHP_SELF"; ?>" method="post">
+							<?php hidden_value(hubID, $hubID); ?>
+							<?php hidden_value(parse, $parse); ?>
+							<?php hidden_value(parseorder, $parseorder); ?>
+							<?php hidden_value(offset, $offset_value); ?>
+							<?php if ($useSearch == "1") {
+							hidden_value(useSearch, 1);
+							hidden_value(useSearch, 1);
+							hidden_value(searchvalue, $searchvalue);
+							hidden_value(searchfield, $searchfield);
+							;} ?>
+							<input type="submit" value="<< Previous Page" class="userdbnicknormal" title="Go to Previous Page"></form>
+			<?php ;} ?>
+			</td>
+			<td align="right">
+			<?php
+			// CODE FOR NEXT BUTTON
+			$offset_value = $offset + $defaultLogEntries;
+			$is_there_next = ($total_selection -$offset_value) /$defaultLogEntries;
+			if ($is_there_next > 0){ 
+			?>
+						<form action="<?php echo "$PHP_SELF"; ?>" method="post">
+							<?php hidden_value(hubID, $hubID); ?>
+							<?php hidden_value(parse, $parse); ?>
+							<?php hidden_value(parseorder, $parseorder); ?>
+							<?php hidden_value(offset, $offset_value); ?>
+							<?php if ($useSearch == "1") {
+							hidden_value(useSearch, 1);
+							hidden_value(useSearch, 1);
+							hidden_value(searchvalue, $searchvalue);
+							hidden_value(searchfield, $searchfield);
+							;} ?>
+							<input type="submit" value="Next Page >>" class="userdbnicknormal" title="Go to Next Page"></form>
+			<?php ;} ?>
+			</td>
+		</tr>
+	</table>
+<!-- END PREVIOUS / NEXT PAGE -->
 	<!-- END USER DATABACE SPACE -->
 	</FIELDSET>
 </td>
 </tr>
 </table>
-
 
 		</td>
 	</tr>

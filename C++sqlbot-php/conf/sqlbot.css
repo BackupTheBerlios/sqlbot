@@ -128,6 +128,17 @@ td.main {
 	width: 200px;
 }
 
+.search_input {
+	font-family: arial, helvetica, sans-serif;
+	padding-left: 3px;
+	background: #9CE0FF;
+	text-decoration: none;
+	font-weight: normal;
+	color: #000000;
+	font-size: 10px;
+	width: 100px;
+}
+
 .password {
 	font-family: arial, helvetica, sans-serif;
 	padding-left: 3px;

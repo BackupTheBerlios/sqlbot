@@ -115,6 +115,7 @@ $result=mysql_query("SELECT * FROM hubConfig WHERE hubID='$hubID'");
 	$hcMaxSlots=mysql_result($result,$i,"hcMaxSlots");
 	$hcMaxHubs=mysql_result($result,$i,"hcMaxHubs");
 	$hcSlotRatio=mysql_result($result,$i,"hcSlotRatio");
+	$hcEnableCloneCheck=mysql_result($result,$i,"hcEnableCloneCheck");
 	$hcEnableTagCheck=mysql_result($result,$i,"hcEnableTagCheck");
 	$hcKickNoTag=mysql_result($result,$i,"hcKickNoTag");
 	$hcEnableCloneCheck=mysql_result($result,$i,"hcEnableCloneCheck");
@@ -171,7 +172,7 @@ $hcStatus = "<font color=\"#FF1D28\"><strong>Offline</strong></font>";
 							<tr><?php dual_select_form(Yes,No, "Auto-Connect", hcAutoConnect, $hcAutoConnect); ?></tr>
 							<tr><?php noedit_form("Hub ID", $hubID); ?></tr>
 							<tr><?php noedit_form("Hub Status", $hcStatus); ?></tr>
-							<tr><?php line_form("Hub Name (short)", 15, hcName, $hcName); ?></tr>
+							<tr><?php line_form("Hub Name (short)", 20, hcName, $hcName); ?></tr>
 							<tr><?php line_form("Hub Address", 40, hcHost, $hcHost); ?></tr>
 							<tr><?php line_form("Bot Password", 40, hcPwd, $hcPwd); ?></tr>
 							<tr><?php line_form("Hub Owner", 40, hcOwner, $hcOwner); ?></tr>
@@ -204,6 +205,8 @@ $hcStatus = "<font color=\"#FF1D28\"><strong>Offline</strong></font>";
 							<tr><?php dual_select_form(Yes,No, "Log System", hcLogSystem, $hcLogSystem); ?></tr>
 							<tr><?php dual_select_form(Yes,No, "Log Main Chat", hcLogChat, $hcLogChat); ?></tr>
 							<tr><?php dual_select_form(Yes,No, "Log Searches", hcLogSearches, $hcLogSearches); ?></tr>
+							<tr><?php dual_select_form(Yes,No, "Enable Clone Check", hcEnableCloneCheck, $hcEnableCloneCheck); ?></tr>
+							<tr><?php dual_select_form(Yes,No, "Check Filelists", hcFileListDl, $hcFileListDl); ?></tr>
 							<tr><?php line_form("Max Users", 5, hcMaxUsers, $hcMaxUsers); ?></tr>
 							<tr><?php line_form("Redirect Host", 40, hcRedirectHost, $hcRedirectHost); ?></tr>
 							<tr><?php size_form("Min Share", "Minimum share to enter hub", 3, hcMinShare, $hcMinShare, hcMinShareMultiplier, $hcMinShareMultiplier); ?></tr>
@@ -221,7 +224,6 @@ $hcStatus = "<font color=\"#FF1D28\"><strong>Offline</strong></font>";
 								</td>
 							</tr>
 							<tr><?php dual_select_form(Yes,No, "Enable Tag Check", hcEnableTagCheck, $hcEnableTagCheck); ?></tr>
-							<tr><?php dual_select_form(Yes,No, "Check Filelists", hcFileListDl, $hcFileListDl); ?></tr>
 							<tr><?php dual_select_form(Yes,No, "Kick No-Tags", hcKickNoTag, $hcKickNoTag); ?></tr>
 							<tr><?php dual_select_form(Yes,No, "Verbose No-Tag Kicks", hcVerboseKickNoTag, $hcVerboseKickNoTag); ?></tr>
 							<tr><?php dual_select_form(Yes,No, "Verbose Kicks", hcVerboseKick, $hcVerboseKick); ?></tr>
