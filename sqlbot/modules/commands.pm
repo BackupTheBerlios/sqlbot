@@ -17,13 +17,13 @@
 sub showFakers()
 {
 	my($user)=@_;
-	my $sth = $dbh->prepare("SELECT * FROM fakers");
-	$sth->execute();
+	my $sfth = $dbh->prepare("SELECT outTime,IP,country,shareByte FROM userDB WHERE lastReason='Faker'");
+	$sfth->execute();
 	$log = "";
 	while (my $ref = $sth->fetchrow_hashref()) 
-		{$log .= "$ref->{'date'}($ref->{'time'}) $ref->{'name'} - $ref->{'ip'} $ref->{'country'} $ref->{'shared_bytes'} \r"; 
+		{$log .= "$ref->{'outTime'} - $ref->{'IP'} $ref->{'country'} $ref->{'shareByte'} \r"; 
 	}
-	$sth->finish();
+	$sfth->finish();
 	&msgAll("Fakers detected are\n\r $log");
 	&debug("$user - fakers built");
 }
@@ -34,29 +34,28 @@ sub myInfo()
 {
 	my($user)=@_;
 
-	my($totalconnect) = $dbh->selectrow_array("SELECT total_logins FROM user_stats where name = '$user'");
-	my($average_gigs) = $dbh->selectrow_array("SELECT average_shared_gigs FROM user_stats where name = '$user'");
-	my($first_login_date) = $dbh->selectrow_array("SELECT first_date FROM user_stats where name = '$user'");
-	my($first_login_time) = $dbh->selectrow_array("SELECT first_time FROM user_stats where name = '$user'");
+	my($loginCount) = $dbh->selectrow_array("SELECT loginCount FROM userDB WHERE nick='$user'");
+	my($avShareBytes) = $dbh->selectrow_array("SELECT avShareBytes FROM userDB WHERE nick='$user'");
+	my($shareByte) = $dbh->selectrow_array("SELECT shareByte FROM userDB WHERE nick='$user'");
+	my($firstTime) = $dbh->selectrow_array("SELECT firstTime FROM userDB WHERE nick='$user'");
 
-	my $sth = $dbh->prepare("SELECT * FROM online where name = '$user'");
-	$sth->execute();
-	my $ref = $sth->fetchrow_hashref();
+	my $mith = $dbh->prepare("SELECT * FROM userDB WHERE nick='$user'");
+	$mith->execute();
+	my $ref = $mith->fetchrow_hashref();
 	&msgUser("$user","Your Info:\r
-Name : $ref->{'name'}\r
-User Type : $ref->{'user_type'}\r
-Total_Logins : $totalconnect\r
-First Login : $first_login_date at $first_login_time\r
-Client : $ref->{'client'}\r
-Client Vers : $ref->{'client_version'}\r
-Connection Mode : $ref->{'connection_mode'}\r
-IP : $ref->{'ip'}\r
+Name : $ref->{'nick'}\r
+User Type : $ref->{'utype'}\r
+Total_Logins : $loginCount\r
+First Login : $firstTime\r
+Client : $ref->{'dcClient'}\r
+Client Vers : $ref->{'dcVersion'}\r
+Connection Mode : $ref->{'connectionMode'}\r
+IP : $ref->{'IP'}\r
 Country : $ref->{'country'}\r
-Online Since : $ref->{'date'} at $ref->{'time'}\r
-Sharing (Gigs) : $ref->{'shared_gigs'}G\r
-Average Share : $average_gigs G\r
-Email_Address : $ref->{'email'}");
-        $sth->finish();
+Online Since : $ref->{'inTime'}\r
+Sharing  : $ref->{'shareByte'}\r
+Average Share : $avShareBytes");
+        $mith->finish();
 	&debug("$user - info sent");
 }
 
@@ -68,28 +67,29 @@ sub seen()
 	$seensearch = $userseen;
 	$userseen  =~ s/\*/\%/g;
 	$seenresult= "\r";
-	
-	my($user_count) = $dbh->selectrow_array("SELECT COUNT(*) FROM user_stats where name like '$userseen'");
-	if ($user_count ne 0)	
-		{my($sth) = $dbh->prepare("SELECT * FROM user_stats where name like '$userseen'");
+	my($defaultLogEntries) = &getHubVar("nr_log_entries");
+	my($userCount) = $dbh->selectrow_array("SELECT COUNT(*) FROM userDB WHERE nick like '$userseen'");
+	if ($userCount ne 0)	
+		{my($sth) = $dbh->prepare("SELECT * FROM userDB WHERE nick like '$userseen' LIMIT $defaultLogEntries");
 		$sth->execute();
 		while(my $ref = $sth->fetchrow_hashref()){
-			my($last_date) = $ref->{'last_date'};
-			my($last_time) = $ref->{'last_time'};
-			my($name) = $ref->{'name'};
-			my($user_online) = $dbh->selectrow_array("SELECT COUNT(*) FROM online where name = '$name'");
-			if (($user_online) ne 1)
-				{$seenresult .= "$name was last online on $last_date at $last_time\n\r";}
+			my($lastTime) = $ref->{'lastTime'};
+			my($nick) = $ref->{'nick'};
+			my($status)="Online";
+			my($userOnline) = $dbh->selectrow_array("SELECT COUNT(*) FROM userDB WHERE nick='$userseen' AND status='$status' ");
+			if (($userOnline) ne 1)
+				{$seenresult .= "$nick was last online on $lastTime\n\r";}
 			else
-				{$seenresult .= "$name is on online now\n\r";}
+				{$seenresult .= "$nick is on online now\n\r";}
 			$match++;
 		}
 		$sth->finish();
-		$seenresult .= "Matches found for \'$seensearch\': $match\n\r";
+		my($userCount) = $dbh->selectrow_array("SELECT COUNT(*) FROM userDB WHERE nick like '$userseen'");
+		$seenresult .= "Returned $match of $userCount for \'$seensearch\' \n\r";
 	}
 	else
-		{my($user_online) = $dbh->selectrow_array("SELECT COUNT(*) FROM online where name = '$userseen'");
-		if (($user_online) eq 0)
+		{my($userOnline) = $dbh->selectrow_array("SELECT COUNT(*) FROM userDB WHERE nick='$userseen' AND status='$status'");
+		if (($userOnline) eq 0)
 				{$seenresult .= "No Matches found for \'$seensearch\'\r";}
 			else
 				{$seenresult .= "\'$seensearch\' is on online now\r";}
@@ -102,11 +102,10 @@ sub buildRules {
 	my($user)=@_;
 	&parseClient($user);
 	$rules = "";
-	
 	if (&getClientExists($dcClient)) 
-		{my ($sth) = $dbh->prepare("SELECT * FROM client_rules WHERE client='$dcClient'");
-		$sth->execute();
-		my $ref = $sth->fetchrow_hashref();
+		{my ($brth) = $dbh->prepare("SELECT min_share,min_version,min_slots,slot_ratio,max_hubs,client_name,min_connection FROM client_rules WHERE client='$dcClient'");
+		$brth->execute();
+		my $ref = $brth->fetchrow_hashref();
 		my($minShare) = $ref->{'min_share'};
 		my($minVersion) = $ref->{'min_version'};
 		my($minSlots) = $ref->{'min_slots'};
@@ -115,7 +114,7 @@ sub buildRules {
 		my($maxHubs) = $ref->{'max_hubs'};
 		my($dcClientname) = $ref->{'client_name'};
 		my($minconnection) = &getConnection($ref->{'min_connection'});
-		$sth->finish();
+		$brth->finish();
 		$uconn = odch::get_connection($user);
 		$uconnection = &getConnection($uconn);
 
@@ -152,14 +151,13 @@ $rules .= "- You may connect to a maximum of $maxHubs hubs. \r
 		}
 	}
 # Add static hub rules
-	$rth = $dbh->prepare("SELECT * FROM hub_rules");
+	$rth = $dbh->prepare("SELECT rule FROM hub_rules");
 	$rth->execute();
 	my($tmp_rules) = "";
 	while (my $ref = $rth->fetchrow_hashref()) {
 		$tmp_rules .=  "- $ref->{'rule'} \n\r";}
 	$rth->finish();
 	$rules .= "$tmp_rules";
-	&debug("$user - Rules built");
 }
 #############################################################################################
 # Help commands in PM for all user types
@@ -169,27 +167,35 @@ sub buildHelp(){
 	
 	$helpmsg = "";
 	$helpmsg = "Hi, Im $botname. I maintain Law and order in here!\r
-A number of public commands are available to you. Type these in the main chat \r
+Public Commands (Main Chat):-\r
 - +help = Shows these commands in a PM\r
+- +rules = rules for your client,\r
+- +myinfo = Show your information \r
 - +time = Shows the current Data & Time of the server\r
-- +version = Shows which version the bot is running\r
 - +showops = List of Ops Online\r
 - +fakers = List share fakers detected\r
-- +rules = rules for your client,\r
-- +stats = Channel statistics\r
+- +version = Shows which version the bot is running\r
+- +stats = (Removed Temporarily)Channel statistics\r
 - +myinfo = Show your information \r
-- +seen \'username\' = show when the specified user was last online\n\r
-The follwing commands can be used in a PM to me\r
+- +away \'Reason\' = Mark yourself away for the reason\r
+- +back = Mark yourself back. (Auto back on hub chat)\r
+- +topchat = Top 10 talkers....\r
+- +uptime = The Up Time of the hub\r
+- +seen \'username\' = show when the specified user was last online\r
+Public commands(PM):-\r
 - !help = Shows these commands in a PM\r
 - !seen \'username\' = show when the specified user was last online\r 
 - !stats = Shows the hub statistics\r
-- !rules = Shows the rules\r";
-
+- !rules = Shows the rules\n\r";
+	if(($type eq 32) or ($type eq 16) or ($type eq 8))
+	{
+	$helpmsg .="- !pass \'oldpassword\' \'newpassword\' = Change your User password\r";
+	}
+		
 	if(($type eq 32) or ($type eq 16))
 	{
 		my($defaultLogEntries) = &getHubVar("nr_log_entries");
-		$helpmsg .="\n\r\n\rYou user type shows that Op commands are available to you\r
-Private Msg Me (Type in here) the following\r
+		$helpmsg .="\n\r\n\rOp commands(PM):-\r
 - !recheck = force bot to re check all clients,and update online table\r
 - !info \'username\' = get the info of another user\r
 - !log = show the last $defaultLogEntries Entries from the hublog\r
@@ -201,50 +207,41 @@ Any command NOT recognised is sent to ALL OPs as OP CHAT \r";
 	}
 	if($type eq 32)
 	{
-#		$helpmsg .="\n\r\n\rOp Admin commands available to you\r
-# - ##################################### \r";
+		$helpmsg .="\n\r\n\rOp-Admin commands(PM):-\r
+- !auser \'username\' \'password\' \'level\'= Add/Edit the user with given password at level (0=reg,1=Op,2=OpAdmin) Also use to change User level\r
+- !duser \'username\' = Delete user\r";
 	}
-	&debug("$user - Help built");
 }
 
 sub info()
 {
-	my($user,$infoon)=@_;
-	&debug("$user - info $infoon");
-
-	if (&usrOnline($user) ne 1)	#Online now ?
+	my($user,$infoUser)=@_;
+	my($userCount) = $dbh->selectrow_array("SELECT COUNT(*) FROM userDB WHERE nick='$infoUser'");
+	if ($userCount ne 0)
 	{
-		&msgUser("$user","$infoon is not online");}
-	else{
-		my($totalkicks) = $dbh->selectrow_array("SELECT COUNT(*) FROM log where name='$infoon' && action='Kicked'");
-		$type = odch::get_type($subpm);
-		if($type eq 32 or $type eq 16 or $type eq 8){$QUERY_LOGON = "LogOn";}
-		else {$QUERY_LOGON = "Connect";}
-			my($totalconnect) = $dbh->selectrow_array("SELECT total_logins FROM user_stats where name = '$infoon'");
-		my($average_gigs) = $dbh->selectrow_array("SELECT average_shared_gigs FROM user_stats where name = '$infoon'");
-		my($first_login_date) = $dbh->selectrow_array("SELECT first_date FROM user_stats where name = '$infoon'");
-		my($first_login_time) = $dbh->selectrow_array("SELECT first_time FROM user_stats where name = '$infoon'");
-  			my $sth = $dbh->prepare("SELECT * FROM online where name = '$infoon'");
-		$sth->execute();
-		my $ref = $sth->fetchrow_hashref();
-		&msgUser("$user","$ref->{'name'}'s Info (MySQL)\r
-Name : $ref->{'name'}\r
-User Type : $ref->{'user_type'}\r
-Total_Logins : $totalconnect\r
-First Login : $first_login_date at $first_login_time\r
-Total_Kicks : $totalkicks\r
-Client : $ref->{'client'}\r
-Client Vers : $ref->{'client_version'}\r
-Connection Mode : $ref->{'connection_mode'}\r
-IP : $ref->{'ip'}\r
+		my $ith = $dbh->prepare("SELECT nick,status,allowStatus,awayStatus,uType,loginCount,firstTime,kickCountTot,
+			dcClient,dcVersion,connectionMode,IP,country,inTime,shareBytes,avShareBytes FROM userDB where nick='$infoUser'");
+		$ith->execute();
+		my $ref = $ith->fetchrow_hashref();
+		&msgUser("$user","$ref->{'nick'}'s Info (MySQL)\r
+Name : $ref->{'nick'}\r
+Status : $ref->{'status'}\r
+Allowed Status : $ref->{'allowStatus'}\r
+Away Status : $ref->{'awayStatus'}\r
+User Type : $ref->{'uType'}\r
+Total Logins : $ref->{'loginCount'}\r
+First Login : $ref->{'firstTime'}\r
+Total Kicks : $ref->{'kickCountTot'}\r
+Client : $ref->{'dcClient'}\r
+Client Vers : $ref->{'dcVersion'}\r
+Connection Mode : $ref->{'connectionMode'}\r
+IP : $ref->{'IP'}\r
 Country : $ref->{'country'}\r
-Online Since : $ref->{'date'} at $ref->{'time'}\r
-Sharing (Gigs) : $ref->{'shared_gigs'}G\r
-Average Share : $average_gigs G\r
-Email_Address : $ref->{'email'}");
-	        $sth->finish();
+Online Since : $ref->{'inTime'}\r
+Share : $ref->{'shareByte'}\r
+Average Share : $ref->{'avShareBytes'}");
+	        $ith->finish();
 	}
-	&debug("$user - Info sent");
 }
 
 sub log()
@@ -252,88 +249,76 @@ sub log()
 	my($user)=@_;
 	&setTime();
 	my($defaultLogEntries) = &getHubVar("nr_log_entries");
-	my $sth = $dbh->prepare("SELECT * FROM log where date = '$date' ORDER by rowID DESC  LIMIT 0,$defaultLogEntries");
+	my $sth = $dbh->prepare("SELECT logTime,action,reason,nick FROM hubLog ORDER by rowID DESC LIMIT 0,$defaultLogEntries");
 	$sth->execute();
-	$log = "";
+	$result = "";
 	while (my $ref = $sth->fetchrow_hashref()) {
-			$log .= "\r\n$ref->{'date'}($ref->{'time'}) [$ref->{'action'} - $ref->{'reason'}] $ref->{'name'}"; }
+			$result .= "\r\n$ref->{'logTime'} [$ref->{'action'} - $ref->{'reason'}] $ref->{'nick'}"; }
 	$sth->finish();
-	&msgUser("$user","$log");
-	&debug("$user - log sent");
+	&msgUser("$user","$result");
 }
 
 sub kickLog()
 {
 	my($user)=@_;
-	&setTime();
 	my($defaultLogEntries) = &getHubVar("nr_log_entries");
-	my $sth = $dbh->prepare("SELECT * FROM log where date = '$date' AND (action = 'Kicked' or action = 'Banned') ORDER by rowID DESC LIMIT 0,$defaultLogEntries");
+	my $sth = $dbh->prepare("SELECT logTime,action,reason,nick FROM hubLog WHERE action like 'Kicked' ORDER by rowID DESC LIMIT 0,$defaultLogEntries");
 	$sth->execute();
-	$log = "";
+	$result = "";
 	while (my $ref = $sth->fetchrow_hashref()) {
-		$log .= "\r\n$ref->{'date'}($ref->{'time'}) [$ref->{'action'} - $ref->{'reason'}] $ref->{'name'}"; }
+		$result .= "\r\n$ref->{'logTime'} [$ref->{'action'} - $ref->{'reason'}] $ref->{'nick'}"; }
 	$sth->finish();
-	&msgUser("$user","$log");
-	&debug("$user - Kick log sent");
+	&msgUser("$user","$result");
 }
 
 sub banLog()
 {
-	my($user,$data)=@_;
-	&setTime();
+	my($user)=@_;
 	my($defaultLogEntries) = &getHubVar("nr_log_entries");
-	my $sth = $dbh->prepare("SELECT * FROM log where date = '$date' AND action = 'Banned' ORDER by rowID DESC LIMIT 0,$defaultLogEntries");
+	my $sth = $dbh->prepare("SELECT logTime,action,reason,nick FROM hubLog WHERE action like 'Ban' ORDER by rowID DESC LIMIT 0,$defaultLogEntries");
 	$sth->execute();
-	$log = "";
+	$result = "";
 	while (my $ref = $sth->fetchrow_hashref()) {
-		$log .= "\r\n$ref->{'date'}($ref->{'time'}) [$ref->{'action'} - $ref->{'reason'}] $ref->{'name'}"; }
+		$result .= "\r\n$ref->{'logTime'} [$ref->{'action'} - $ref->{'reason'}] $ref->{'nick'}"; }
 	$sth->finish();
-	&msgUser("$user","$log");
-	&debug("$user - Ban log sent");
+	&msgUser("$user","$result");
 }
 
 sub fakersLog()
 {
 	my($user)=@_;
 	&setTime();
-	my $sth = $dbh->prepare("SELECT * FROM fakers");
+	my $sth = $dbh->prepare("SELECT logTime,nick FROM hubLog WHERE reason='Fakers'");
 	$sth->execute();
-	$log = "";
+	$result = "";
 	while (my $ref = $sth->fetchrow_hashref()) {
-		$log .= "\r\n$ref->{'date'}($ref->{'time'}) $ref->{'name'} ($ref->{'ip'}) [$ref->{'shared_bytes'} bytes]"; }
+		$log .= "\r$ref->{'logTime'} $ref->{'nick'}"; }
 	$sth->finish();
-	&msgUser("$user","$log");
-	&debug("$user - Fakers sent");
+	&msgUser("$user","$result");
+
 }
 
 sub history()
 {
-	my($user,$history)=@_;
+	my($user,$hUser)=@_;
 	my($defaultLogEntries) = &getHubVar("nr_log_entries");
-	my($if_exist) = $dbh->selectrow_array("SELECT COUNT(*) FROM log WHERE name = '$history'");
-	my $sth = $dbh->prepare("SELECT * FROM log WHERE name= '$history' ORDER by rowID DESC  LIMIT 0,$defaultLogEntries");
+	my($if_exist) = $dbh->selectrow_array("SELECT COUNT(*) FROM hubLog WHERE nick='$hUser'");
+	my $sth = $dbh->prepare("SELECT logTime,action,reason,nick FROM hubLog WHERE nick='$hUser' ORDER by rowID DESC LIMIT 0,$defaultLogEntries");
 	$sth->execute();
-	$log = "";
+	$$result = "";
 	while (my $ref = $sth->fetchrow_hashref()) {
-		$log .= "\r\n$ref->{'date'}($ref->{'time'}) [$ref->{'action'} - $ref->{'reason'}] $ref->{'name'}"; }
+		$$result .= "\r\n$ref->{'logTime'} [$ref->{'action'} - $ref->{'reason'}] $ref->{'nick'}"; }
 	$sth->finish();
-	&msgUser("$user","$log");
+	&msgUser("$user","$result");
 }
-sub addFaker(){
-	my($faker)=@_;
-	&splitDescription($faker);
-	$REASON = "FAKER";
-	$ACTION = "Nuked";
-	&msgAll("$faker is $REASON gonna $ACTION him");
-	&processEvent($faker);
-}
+
 
 sub showOps(){
 	$result = "";
-	my $sth = $dbh->prepare("SELECT * FROM online WHERE user_type='Operator' OR user_type='Op-Admin'");
+	my $sth = $dbh->prepare("SELECT nick FROM userDB WHERE status='Online' AND (uType='Operator' OR uType='Op-Admin')");
 	$sth->execute();
 	while (my $ref = $sth->fetchrow_hashref()){
-		$result .= " $ref->{'name'},";}
+		$result .= " $ref->{'nick'} ";}
 	$sth->finish();
 }
 ## Required in every module ##

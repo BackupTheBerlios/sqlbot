@@ -14,7 +14,8 @@
 #
 ##############################################################################################
 
-$botVersion = "0.1.3.1";
+$botVersion = "0.2.0(devel)";
+
 
 use DBI;
 use IP::Country::Fast;
@@ -23,18 +24,17 @@ use Date::Simple ('date', 'today');
 $dbh = DBI->connect("DBI:mysql:odch:$sql_server","$sql_username","$sql_password",{ RaiseError => 1, AutoCommit => 0 });
 $dbh->do("SET OPTION SQL_BIG_TABLES = 1");
 
-## Register KickTable Timer function
-$SIG{ALRM} = \&kickKickTable;
-
 # Import the other modules,
+
 require "$modules_path/common.pm";
+require "$modules_path/kickban.pm";
+require "$modules_path/events.pm";
 require "$modules_path/mysql.pm";
 require "$modules_path/clientchecks.pm";
 require "$modules_path/statistics.pm";
 require "$modules_path/commands.pm";
-require "$modules_path/events.pm";
+require "$modules_path/userManagement.pm";
 require "$modules_path/odch.pm";
-
 # Register the script and announce a presence
 sub main(){
         odch::register_script_name($botname);
@@ -42,7 +42,7 @@ sub main(){
         if (&getVerboseOption("verbose_botjoin")){
 		&version();
         }
-        $alarmSet = 0; #default
+	&addToLog($botname,"Restart","Reloadscripts");
 }
 
 

@@ -13,46 +13,32 @@
 #	http://axljab.homelinux.org:8080/			
 #
 ##############################################################################################
-sub logDisconnect{
+sub userDisconnect(){
 	my($user)=@_;
-  	$REASON = "";
+	my($type) = odch::get_type($user);
 	if($type eq 32 or $type eq 16 or $type eq 8)
-		{$ACTION = "LogOff";
-	      	if(&getLogOption("log_logoffs"))
-        		{&addToLog($user,$ACTION,$REASON);}}
+		{if(&getLogOption("log_logoffs"))
+        		{&addToLog($user,"LogOff","");}}
 	else
-		{$ACTION = "Disconnect";
-	      	if(&getLogOption("log_disconnects"))
-	        	{&addToLog($user,$ACTION,$REASON);}}
-
-	&delFromOnline($user);
-	&debug("$user - logOff.done");
+		{if(&getLogOption("log_disconnects"))
+	        	{&addToLog($user,"Disconnect","");}}
 }
 
-sub logLogon{
+sub userConnect(){
 	my($user)=@_;
-	$REASON = "";
-
+	my($type) = odch::get_type($user);
 	if($type eq 32 or $type eq 16 or $type eq 8)
-		{$ACTION = "LogOn";
-	      	if(&getLogOption("log_logons"))
-	        	{&addToLog($user,$ACTION,$REASON);}}
+		{if(&getLogOption("log_logons"))
+	        	{&addToLog($user,"LogOn","");}}
 	else
-		{$ACTION = "Connect";
-	      	if(&getLogOption("log_connects"))
-	        	{&addToLog($user,$ACTION,$REASON);}}
-
-	&updateInStats($user,1);
-	if (&usrOnline($user)){&delFromOnline($user);}
-	&addToOnline($user);
-	&debug("$user - logON.done");	
+		{if(&getLogOption("log_connects"))
+	        	{&addToLog($user,"Connect","");}}
 }
 
 ######################################################################################
 # Write an ACTION & REASON entry to the hublog
 sub processEvent(){
 	my($user)=@_;
-	&debug("$user - processEvent");
 
 	# Select the appropriate action
 	$kicked = "Kicked";
@@ -61,76 +47,47 @@ sub processEvent(){
 	$notags = "NoTags";
 		
 	if (lc($REASON) eq lc("FAKER"))
-	{
-		&msgAll("$user is a FAKER, sharing $shared Bytes.IP was $ip");
-		&msgUser("$user","Dont FAKE your share ... Your IP has been [Banned]");
-		&addToFakers($user);
-	}
+		{&msgAll("$user is a FAKER. IP was $ip");
+		&msgUser("$user","Dont FAKE your Client OR share ... Your IP has been [Banned]");
+		&addToFakers($user);}
+
 	elsif (lc($REASON) eq lc("MLDonkey"))
-	{
-		&msgUser("$user","No MLDonkey... Your IP has been [Banned]");
-	}
+		{&msgUser("$user","No MLDonkey... Your IP has been [Banned]");}
 	
-	if (lc($ACTION) eq lc($banned)){
-    		if(&getLogOption("log_bans"))
-    			{&addToLog($user,$ACTION,$REASON);}
-		&delFromOnline($user);
-		odch::add_ban_entry($ip);
-		&addToKick($user,$REASON); # GoodBye..
-		if (&getVerboseOption("verbose_banned")){
-			&msgAll("$ACTION $user for : $REASON");
-		}
-	}
+	if (lc($ACTION) eq lc($banned))
+		{&banUser($user,$REASON,$ip,"tban");}
+
 	elsif (lc($ACTION) eq lc($kicked)){
 		if (&getConfigOption("client_check")){
-			if (lc($REASON) eq lc($notags))	{
-				if(&getLogOption("log_no_tags_kicks")){
-					&addToLog($user,$ACTION,$REASON);}}
-			else{
-        			if(&getLogOption("log_kicks"))
-        				{&addToLog($user,$ACTION,$REASON);}}
-			&addToKick($user,$REASON);
-			&buildRules($user);
-			$delayedKickTime = &getHubVar("delayed_kick_time");
-			&msgUser("$user","Your client does meet the required rules\r $rules");
-			&msgUser("$user","Your client does meet the required rules Reason : $REASON");
-			&msgUser("$user","Please get within these ruleYou will be autokicked in $delayedKickTime Seconds");
-		}
-	}
+			&kickUser($user,$REASON);}}
+
 	elsif (lc($ACTION) eq lc($nuked)){
 		if(&getLogOption("log_nukes"))
       			{&addToLog($user,$ACTION,$REASON);}
-		&delFromOnline($user);
-		odch::add_ban_entry($ip);
-		&addToKick($user,$REASON); # GoodBye..
+		&banUser($user,$REASON,$ip,"pban");
 		if (&getVerboseOption("verbose_nukes"))
-			{&msgAll("$ACTION $user for : $REASON");}
-	}
-	&debug("$user - $ACTION $user $REASON");
-	&debug("$user - processEvent.done");
+			{&msgAll("$ACTION $user for : $REASON");}}
 }
 
-# Read the kick table and kick all marked users
-sub kickKickTable()
-{
-	my $sth = $dbh->prepare("SELECT * FROM kick");
-	$sth->execute();
-	while (my $ref = $sth->fetchrow_hashref()) {
-		$kickuser = "$ref->{'user'}";
-		$reason = "$ref->{'reason'}";
-		if (&getVerboseOption("verbose_kicks")){
-			if (lc($REASON) eq lc($notags))	{
-				if (&getVerboseOption("verbose_notagkicks"))	{
-					&msgAll("Kicking $ref->{'user'} for breaking the $ref->{'reason'} rule");}}
-			else{&msgAll("Kicking $ref->{'user'} for breaking the $ref->{'reason'} rule");}}
-		&msgUser("$kickuser","You have been kicked for breaking the Rules\r Reason: $reason ");
-		odch::kick_user($kickuser); # GoodBye..
-		&debug("Kicked - $kickuser - $reason");
-	}
-	$sth->finish();
-	&delFromKick();
-	$alarmSet = 0; #Enable kick timer to be restarted
+## Register KickTable Timer function
+$SIG{ALRM} = \&botWorker;
+sub botWorker(){
+	# Check for Kick Events	
+	my($value) = $dbh->selectrow_array("SELECT COUNT(*) FROM botWorker WHERE function LIKE '1%'");
+	if($value ne 0)
+		{&kickWorker();}
 
+	#Check for pban Events
+	my($value) = $dbh->selectrow_array("SELECT COUNT(*) FROM botWorker WHERE function LIKE '2%'"); # Or 22 or 23
+	if($value ne 0)
+		{&banWorker();}
+
+	#Check for User List events
+	my($value) = $dbh->selectrow_array("SELECT COUNT(*) FROM botWorker WHERE function LIKE '3%'"); # Or 31 or 32 or 33
+	if($value ne 0)
+		{&userWorker();}
+	alarm(10);
 }
+
 ## Required in every module ##
 1;

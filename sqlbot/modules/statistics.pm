@@ -16,40 +16,40 @@
 ##############################################################################################
 # Display channel stats in main channel
 sub buildStats(){
-	my($totalgigs) = $dbh->selectrow_array("SELECT sum(shared_gigs) from online");
-	my($totalusers) = $dbh->selectrow_array("SELECT COUNT(*) from online");
-	my($totDiffUsers) = $dbh->selectrow_array("SELECT COUNT(*) from user_stats");
-	my($averagegigs) = int($totalgigs * 100 / $totalusers) / 100;
+	my($totShare) = $dbh->selectrow_array("SELECT sum(shareByte) from userDB WHERE status='Online'");
+	my($totUsersOnline) = $dbh->selectrow_array("SELECT COUNT(*) from userDB WHERE status='Online'");
+	my($totDiffUsers) = $dbh->selectrow_array("SELECT COUNT(*) from userDB");
 	&totalUptime();
 
-	my($sth) = $dbh->prepare("select country, COUNT(*) from online GROUP by country");
-	$sth->execute();
-	my($tmp_countries) = "";
-	while (my $ref = $sth->fetchrow_hashref()){
-		$tmp_countries .= "\[$ref->{'country'}-$ref->{'COUNT(*)'}] "; }
-	$sth->finish();
-	my($countries) =  "$tmp_countries";
+#	my($sth) = $dbh->prepare("SELECT * from userDB GROUP by country WHERE status='Online'");
+#	$sth->execute();
+#	my($tmpCountries) = "";
+#	while (my $ref = $sth->fetchrow_hashref()){
+#		$tmpCountries .= "\[$ref->{'country'} $ref->{'COUNT(*)'}] "; }
+#	$sth->finish();
+#	my($countries) =  "$tmpCountries";
 
-	my ($cth) = $dbh->prepare("select client, COUNT(*) from online GROUP by client");
-	$cth->execute();
-	my($tmp_client) = "";
-	while (my $ref = $cth->fetchrow_hashref()) {
-		$tmp_client .= "$ref->{'client'} [$ref->{'COUNT(*)'}]\n\r"; }
-	$cth->finish();
-	my($clients) = "$tmp_client";
+	my ($bsth) = $dbh->prepare("SELECT client, COUNT(*) from userDB GROUP by dcClient WHERE status='Online'");
+	$bsth->execute();
+	my($tmpClient) = "";
+	while (my $ref = $bsth->fetchrow_hashref()) {
+		$tmpClient .= "$ref->{'client'} [$ref->{'COUNT(*)'}]\n\r"; }
+	$bsth->finish();
+	my($clients) = "$tmpClient";
 
-	$rth = $dbh->prepare("SELECT * FROM records");
-	$rth->execute();
-	my($tmp_records) = "";
-	while (my $ref = $rth->fetchrow_hashref()) {
-		$tmp_records .=  "Record $ref->{'recordName'} is $ref->{'recordValue'} Set on $ref->{'date'} at $ref->{'time'}\r";}
-	$rth->finish();
-	my($records) = "$tmp_records";
+	$bsth1 = $dbh->prepare("SELECT * FROM records");
+	$bsth->execute();
+	my($tmpRecords) = "";
+	while (my $ref = $bsth->fetchrow_hashref()) {
+		$tmpRecords .=  "Record $ref->{'recordName'} is $ref->{'recordValue'} Set on $ref->{'date'} at $ref->{'time'}\r";}
+	$bsth->finish();
+
+	my($records) = "$tmpRecords";
 	my($webAddress) = &getHubVar("hub_website_address");
 	$statsmsg = "Online stats:\r
 Uptime: $days d $hours h $mins m\r
-Users online : $totalusers \r
-Total Share  : $totalgigs Gigs, Average share of $averagegigs Gigs per user.\r
+Users online : $totUsersOnline \r
+Total Share  : $totShare, Average share of $avShareGigs per user.\r
 Online Clients:\r
 $clients \r
 Users Online from Countries: $countries\r\r
@@ -63,48 +63,54 @@ More detailed stats can be found at $webAddress|";
 sub checkRecords(){
 	&setTime();
 	my($newRecord) = 1;
-	my($currtotalgigs) = $dbh->selectrow_array("SELECT sum(shared_gigs) from online");
-	my($currtotalusers) = $dbh->selectrow_array("SELECT COUNT(*) from online");
+	my($currtotalshare) = $dbh->selectrow_array("SELECT sum(shareByte) FROM userDB WHERE status='Online'");
+	my($currtotalusers) = $dbh->selectrow_array("SELECT COUNT(*) FROM userDB WHERE status='Online'");
+	my($shareGB) = &roundToGB($currtotalshare);
 
-	my $sth = $dbh->prepare("SELECT * FROM records WHERE recordName='share'");
-	$sth->execute();
-	my $ref = $sth->fetchrow_hashref();
+	my $crth = $dbh->prepare("SELECT * FROM records WHERE recordName='share'");
+	$crth->execute();
+	my $ref = $crth->fetchrow_hashref();
 	$record = $ref->{'recordValue'};
 	$recordDate = $ref->{'date'};
 	$recordTime = $ref->{'time'};
-	$sth->finish();
+	$crth->finish();
 
-	if ($record < $currtotalgigs)
-	{
-		$diff = $currtotalgigs-$record;
+	if ($record < $shareGB){
 		if (&getVerboseOption("verbose_records")){
-			&msgAll("A New share Record has been Set. The last record of $record GB was set on $recordDate : $recordTime. The new share of $currtotalgigs GB beats the previous record by $diff GB");}
+			&msgAll("New Share Record $shareGB GB.Last record $record GB on $recordDate:$recordTime\r");}
 
-		$dbh->do("UPDATE records SET recordValue='$currtotalgigs',date='$date',time='$long_time' WHERE recordName='share'");
-		
+		$dbh->do("UPDATE records SET recordValue='$shareGB',date='$date',time='$time' WHERE recordName='share'");
 		$newRecord = 0;
 	}
-
-	$sth = $dbh->prepare("SELECT * FROM records WHERE recordName='users'");
-	$sth->execute();
-	$ref = $sth->fetchrow_hashref();
+	
+	$crth1 = $dbh->prepare("SELECT * FROM records WHERE recordName='users'");
+	$crth->execute();
+	$ref = $crth->fetchrow_hashref();
 	$record = $ref->{'recordValue'};
 	$recordDate = $ref->{'date'};
 	$recordTime = $ref->{'time'};
 
-	$sth->finish();
+	$crth->finish();
 
-	if ($record < $currtotalusers)
-	{
+	if ($record < $currtotalusers){
 		if (&getVerboseOption("verbose_records"))
-			{&msgAll("A New User Record has been Set. The last record of $record was set on $recordDate : $recordTime");}
-		$dbh->do("UPDATE records SET recordValue='$currtotalusers',date='$date',time='$long_time' WHERE recordName='users'");
-		$newRecord = 0;
-	}
+			{&msgAll("New User Record $currtotalusers.Last record $record on $recordDate:$recordTime.");}
+		$dbh->do("UPDATE records SET recordValue='$currtotalusers',date='$date',time='$time' WHERE recordName='users'");
+		$newRecord = 0;}
+
 	return $newRecord;
 }
+sub topChat() {
+	my $tcth = $dbh->prepare("SELECT nick,lineCount FROM userDB ORDER BY lineCount DESC LIMIT 0,10");
+	$tcth->execute();
+	$msg = "The Top 10 Chatters are :\r";
+	$i=1;
+	while (my $ref = $tcth->fetchrow_hashref()) {
+		$msg .=  "$i-$ref->{'nick'}: $ref->{'lineCount'}  \r";
+		$i++;}
+	$tcth->finish();
 
-
+}
 #############################################################################################
 # Work out the hub uptime #
 sub totalUptime() {

@@ -15,12 +15,15 @@
 # Set Date a time globals
 sub setTime() {
         use POSIX qw(strftime);
-        $long_time = strftime "%H:%M:%S", localtime;
+        $time = strftime "%H:%M:%S", localtime;
         $date = strftime "%Y-%m-%d", localtime;
 }
-sub round(){
-    my($number) = shift;
-    return sprintf("%.2f", $number)
+
+sub roundToGB(){
+	my($number)=@_;
+	$number = $number / 1024 / 1024 / 1024;
+	$number =~s/([0-9]+)\.([0-9][0-9])[0-9]+/$1\.$2/g;	
+	return $number;
 }
 
 sub debug() {
@@ -39,16 +42,15 @@ sub msgUser($$) {
 
 sub msgOPs() {
 	my($sender,$msg) = @_;
-	my $sth = $dbh->prepare("SELECT * FROM online WHERE user_type='Operator' OR user_type='Op-Admin'");
+	my $sth = $dbh->prepare("SELECT nick FROM userDB WHERE (uType='Operator' OR uType='Op-Admin')");
 	$sth->execute();
 	while (my $ref = $sth->fetchrow_hashref()){
-		$op= "$ref->{'name'}";
-		if ($op ne $sender){ # Dont echo
+		$op= "$ref->{'nick'}";
+		if (lc($op) ne lc($sender)){ # Dont echo
 			odch::data_to_user($op, "\$To: $op From: $botname \$$msg |");}
 			}
 	$sth->finish();
 }
-
 
 sub msgAll() {
 	my($msg) = @_;
@@ -76,6 +78,43 @@ sub getConnection(){
 	return "Error";
 }
 
+sub getConfigOption(){
+	my($data) = @_;
+	my($value) = $dbh->do("SELECT value FROM hub_config WHERE rule='$data' && value='on'");
+	if($value eq 1)
+	{return 1;}
+	return 0;
+}
 
+sub getVerboseOption(){
+	my($data) = @_;
+	my($value) = $dbh->do("SELECT value FROM verbosity WHERE rule='$data' && value='on'");
+	if($value eq 1)
+	{return 1;}
+	return 0;
+}
+
+sub getLogOption() {
+	my($data) = @_;
+	my($value) = $dbh->do("SELECT value FROM log_config WHERE rule='$data' && value='on'");
+	if($value eq 1)
+	{return 1;}
+	return 0;
+}
+sub getHubVar() {
+	my($data) = @_;
+	my $sth = $dbh->prepare("SELECT value FROM hub_variables WHERE rule='$data'");
+	$sth->execute();
+	my $ref = $sth->fetchrow_hashref();
+	$value = "$ref->{'value'}";
+	$sth->finish();
+	return $value;
+}
+sub addToLog(){
+	my($user,$ACTION,$REASON) = @_;
+	&setTime();
+	my($dtime)="$date $time";
+	$dbh->do("INSERT INTO hubLog VALUES ('mysql_insertid','$user','$dtime','$ACTION','$REASON')");
+}
 ## Required in every module ##
 1;

@@ -1,0 +1,11 @@
+#!/bin/sh
+perl -c clientchecks.pm
+perl -c commands.pm
+perl -c common.pm
+perl -c events.pm
+perl -c kickban.pm
+perl -c main.pm
+perl -c mysql.pm
+perl -c odch.pm
+perl -c statistics.pm
+perl -c userManagement.pm
