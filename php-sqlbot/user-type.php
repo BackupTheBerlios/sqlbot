@@ -128,7 +128,7 @@ if (!empty($numrows)){
 <td valign="top">
 <table>
 
-<form action="<? echo "user-manage.php?f=uType&nicksearch=$nick&ip=$IP&in=$information";?>" method="post">
+<form action="<? echo "user-manage.php?f=uType&nick=$nick&ip=$IP";?>" method="post">
 <tr><td><input type="radio" name="uType" value=31 <? if ($uType == "Operator") echo"checked=\"true\"";?> ><? echo "$font";?>Operator (Requires Password)</font><br></td></tr>
 <tr><td><input type="radio" name="uType" value=32 <? if ($uType == "Registered") echo"checked=\"true\"";?> ><? echo "$font";?>Register (Requires Password)</font></td></tr>
 <tr><td><input type="radio" name="uType" value=33 <? if ($uType == "User") echo"checked=\"true\"";?> ><? echo "$font";?>Un-Register</font></td></tr>
@@ -139,7 +139,7 @@ if (!empty($numrows)){
 </td>
 <td valign="top">
 <table>
-<form action="<? echo "user-manage.php?f=aStatus&nicksearch=$nick&ip=$IP";?>" method="post">
+<form action="<? echo "user-manage.php?f=aStatus&nick=$nick&ip=$IP";?>" method="post">
 <tr><td><input type="radio" name="aStatus" value=24 <? if ($allowStatus == "Normal") echo"checked=\"true\"";?>><? echo "$font";?>Add to Fakers</font></td></tr>
 
 <tr><td><input type="radio" name="aStatus" value=20 <? if ($allowStatus == "allow") echo"checked=\"true\"";?>><a title="Useful for Hub List Bots" style="cursor:help"><? echo "$font";?>Allow - No logging or client checks</font></a></td></tr>

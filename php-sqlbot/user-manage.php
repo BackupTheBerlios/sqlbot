@@ -13,12 +13,12 @@ if (!empty($field))
 if ($f == delete)
 	{$sql = "DELETE FROM userDB $where";$result = mysql_query($sql) or die(mysql_error());}
 if ($f == uType){
-	$sql = "INSERT INTO botWorker VALUES ('mysql_insertid',$uType,'$search','$ip','$passwd')";
-	echo "$nicksearch($ip) status changed.<br>";
+	$sql = "INSERT INTO botWorker VALUES ('mysql_insertid',$uType,'$nick','$ip','$passwd')";
+	echo "$uType $nicksearch($ip) status changed.<br>";
 	$result = mysql_query($sql) or die(mysql_error());}
 else if ($f == aStatus){
-	$sql = "INSERT INTO botWorker VALUES ('mysql_insertid',$aStatus,'$search','$ip','Admin')";
-	echo "$search($ip) status changed.<br>";
+	$sql = "INSERT INTO botWorker VALUES ('mysql_insertid',$aStatus,'$nick','$ip','Admin')";
+	echo "$aStatus $search($ip) status changed.<br>";
 	$result = mysql_query($sql) or die(mysql_error());}
 if (empty($offset)) {$offset=0;}
 mysql_connect($databasehost,$username,$password);
