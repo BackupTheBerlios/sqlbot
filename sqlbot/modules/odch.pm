@@ -129,68 +129,72 @@ sub hub_timer() {
 #Data has received
 sub data_arrival(){
 	my($user,$data)=@_;
-	if($data =~ /\$To: $botname From: $user \$\<$user\> (.*)\|/)
+
+	if($data =~ /\$To: $botname From: (.*)\|/)
 	{
 		my $pm = $1;
+		@params = split(/\ /, $pm);
+		$param1 = $params[2];$param2 = $params[3];$param3 = $params[4];
+
 		# Only specific types may msg the bot
 		my($type) = odch::get_type($user);
-		
 		#Public PM commands
-		if($data =~ /\$To: $botname From: $user \$\<$user\> !seen/)
-			{if($data =~ /\$To: $botname From: $user \$\<$user\> !seen\|/)
+		if($param1 =~ /!seen/i)
+			{if($param1 =~ /!seen\|/i)
 				{&msgUser("$user","usage: !seen username");}
-			elsif($data =~ /\$To: $botname From: $user \$\<$user\> \s?(\S*) (.*)\|/) 
-				{&seen($2);
-				&msgUser("$user","$seenresult");}			
-		}
-		elsif($data =~ /\$To: $botname From: $user \$\<$user\> !stats/)
+			else 
+				{&seen($param2);
+				&msgUser("$user","$seenresult");}}
+		elsif($param1 =~ /!stats/i)
 			{&buildStats();
 			&msgUser("$user","$statsmsg");}
-		elsif($data =~ /\$To: $botname From: $user \$\<$user\> !rules/)
+		elsif($param1 =~ /!rules/i)
 			{&buildRules($user);
 			&msgUser("$user","$rules");}
-		elsif($data =~ /\$To: $botname From: $user \$\<$user\> !help/)
+		elsif($param1 =~ /!help/i)
 			{&buildHelp($user);
 			&msgUser("$user","$helpmsg");}
-		elsif($data =~ /\$To: $botname From: $user \$\<$user\> !myinfo/)
+		elsif($param1 =~ /!myinfo/i)
 			{&myInfo($user);}
 		#Op commands
 		elsif($type eq 32 or $type eq 16)
 		{
-			if ($data =~ /\$To: $botname From: $user \$\<$user\> !info/){
-				if($data =~ /\$To: $botname From: $user \$\<$user\> !info\|/)
+			if ($param1 =~ /!info/){
+				if($param1 =~ /!info\|/i)
 					{&msgUser("$user","!info username");}
-				elsif($data =~ /\$To: $botname From: $user \$\<$user\> \s?(\S*) (.*)\|/) 
-					{&info($user);}
+				else
+					{&info($user,$param2);}
 			}
-			elsif ($data =~ /\$To: $botname From: $user \$\<$user\> !recheck/){
+			elsif ($param1 =~ /!recheck/i){
 				&msgAll("$user has forced all clients to be rechecked");	
 				&clientRecheck();}
-			elsif ($data =~ /\$To: $botname From: $user \$\<$user\> !log/){
+			elsif ($param1 =~ /!log/i){
 				&log($user);}
-			elsif ($data =~ /\$To: $botname From: $user \$\<$user\> !kicklog/){
+			elsif ($param1 =~ /!kicklog/i){
 				&kickLog($user);}
-			elsif ($data =~ /\$To: $botname From: $user \$\<$user\> !banlog/){
+			elsif ($param1 =~ /!banlog/i){
 				&banLog($user);}
-			elsif ($data =~ /\$To: $botname From: $user \$\<$user\> !fakerslog/){
+			elsif ($param1 =~ /!fakerslog/i){
 				&fakerslog($user);}
-			elsif ($data =~ /\$To: $botname From: $user \$\<$user\> !history/)
+			elsif ($param1 =~ /!history/i)
 			{
-				if($data =~ /\$To: $botname From: $user \$\<$user\> !history\|/)
+				if($param1 =~ /!history\|/i)
 					{&msgUser("$user","usage: !history username");}
-				elsif($data =~ /\$To: $botname From: $user \$\<$user\> \s?(\S*) (.*)\|/) 
-					{&history(@_);}
+				else 
+					{&history("$user","$param2");}
 			}
-			elsif ($data =~ /\$To: $botname From: $user \$\<$user\> !addfaker/){
-				if($data =~ /\$To: $botname From: $user \$\<$user\> !addfaker\|/)
+			elsif ($param1 =~ /!addfaker/i){
+				if($param1 =~ /!addfaker\|/)
 					{&msgUser("$user","usage: !history username");}
-				elsif($data =~ /\$To: $botname From: $user \$\<$user\> \s?(\S*) (.*)\|/) 
-					{&addFaker($2);}
+				else 
+					{&addFaker($param2);}
 			}
 			# Add new op commands here
 			else{
 			#Send to OPChat
-				&msgOPs("$user","$pm");
+				$pos1 = rindex($pm,"\$"); #Get to end of data
+				$opmsg = substr($pm, $pos1+1);	
+				&msgOPs("$user","$opmsg");
 			}
 		}
 	}
@@ -236,7 +240,8 @@ sub data_arrival(){
 		my($type) = odch::get_type($user);
 		if($type eq 32)
 		{
-			
+			if($data =~ /^<.*> \+test/i)
+			{&msgUser("$user","[]");}
 		}
 	}
 } # end sub data arrival

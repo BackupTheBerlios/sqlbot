@@ -28,13 +28,13 @@ sub debug() {
 	my($debug)= &getHubVar("use_debug");
 	if($debug){ #Set in sqlbot.pl
 		my($msg) = @_;	
-		odch::data_to_user($debuguser, "\$To: $debuguser From: $botname \$ $msg|");
+		odch::data_to_user($debuguser, "\$To: $debuguser From: $botname \$$msg|");
 	}
 }
 
-sub msgUser() {
+sub msgUser($$) {
 	my($user,$msg) = @_;
-	odch::data_to_user($user, "\$To: $user From: $botname \$ $msg |");
+	odch::data_to_user($user, "\$To: $user From: $botname \$$msg |");
 }
 
 sub msgOPs() {
@@ -44,11 +44,9 @@ sub msgOPs() {
 	while (my $ref = $sth->fetchrow_hashref()){
 		$op= "$ref->{'name'}";
 		if ($op ne $sender){ # Dont echo
-			odch::data_to_user($op, "\$To: $op From: $botname \$$sender> $msg |");}
-			
-		}
+			odch::data_to_user($op, "\$To: $op From: $botname \$$msg |");}
+			}
 	$sth->finish();
-		
 }
 
 
