@@ -173,6 +173,7 @@ A number of public commands are available to you. Type these in the main chat \r
 - +help = Shows these commands in a PM\r
 - +time = Shows the current Data & Time of the server\r
 - +version = Shows which version the bot is running\r
+- +showops = List of Ops Online\r
 - +fakers = List share fakers detected\r
 - +rules = rules for your client,\r
 - +stats = Channel statistics\r
@@ -325,6 +326,15 @@ sub addFaker(){
 	$ACTION = "Nuked";
 	&msgAll("$faker is $REASON gonna $ACTION him");
 	&processEvent($faker);
+}
+
+sub showOps(){
+	$result = "";
+	my $sth = $dbh->prepare("SELECT * FROM online WHERE user_type='Operator' OR user_type='Op-Admin'");
+	$sth->execute();
+	while (my $ref = $sth->fetchrow_hashref()){
+		$result .= " $ref->{'name'},";}
+	$sth->finish();
 }
 ## Required in every module ##
 1;

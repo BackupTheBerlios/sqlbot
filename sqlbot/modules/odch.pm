@@ -219,6 +219,10 @@ sub data_arrival(){
 		elsif($data =~ /^<.*> \+rules/i)
 			{&buildRules($user);
 			&msgUser("$user","$rules|");}
+		elsif($data =~ /^<.*> \+showOps/i)
+			{&showOps();
+			&msgAll("Ops online: $result|");}
+			
 		elsif($data =~ /^<.*> \+records/i)
 			{if(&checkRecords())
 				{&msgAll("No New record has been set. Use +stats to view current records.");}	}
