@@ -48,8 +48,7 @@ sub new_user_connected(){
 		&processEvent($user);
 	}
 	elsif($userInDB eq 2)
-		{&updateUserRecord($user);
-		&debug("$user($ip) in DB = $userInDB");}
+		{&updateUserRecord($user);}
 	
 	&userOnline($user);
 }

@@ -20,8 +20,7 @@ sub userIsOnline(){
 	my($user,$ip) = @_;
 
 	my($sqluser) = &sqlConvertNick($user);
-	my($value) = $dbh->selectrow_array("SELECT COUNT(nick) FROM userDB 
-				WHERE nick='$sqluser' AND status='Online' ");
+	my($value) = $dbh->selectrow_array("SELECT COUNT(nick) FROM userDB WHERE nick='$sqluser' AND status='Online' ");
 	if($value eq 1)
 	{return 1;}
 	return 0;
@@ -30,13 +29,14 @@ sub userIsOnline(){
 sub userInDB(){
 	my($user,$ip) = @_;
 	my($sqluser) = &sqlConvertNick($user);
-	my($value) = $dbh->selectrow_array("SELECT COUNT(nick) FROM userDB WHERE nick='$sqluser' ");	
+
+	my($value) = $dbh->selectrow_array("SELECT COUNT(nick) FROM userDB WHERE (nick='$sqluser' OR IP='$ip') AND allowStatus='allow'");
 	if($value eq 1) 
-		{my($value1) = $dbh->selectrow_array("SELECT COUNT(nick) FROM userDB 
-				WHERE nick='$sqluser' AND allowStatus='allow'");
-		if($value1 eq 1) 
-			{return 2;}
-		else 
+		{return 2;}
+	else
+		{$value = 0;
+		$value = $dbh->selectrow_array("SELECT COUNT(nick) FROM userDB WHERE nick='$sqluser' ");
+		if($value eq 1) 
 			{return 1;}}
 	return 0;
 }
@@ -56,28 +56,40 @@ sub updateUserRecordRecheck(){
 	my($user,$ip) = @_;
 	$connection = &getConnection($conn);
 	my($sqluser) = &sqlConvertNick($user);
+	my($userInDB) = &userInDB($user,$ip);
 
-	$dbh->do("UPDATE userDB SET nick='$sqluser',slots='$NSlots',hubs='$NbHubs',limiter='$UploadLimit'
+	if($userInDB eq 2)
+	{
+		$dbh->do("UPDATE userDB SET nick='$sqluser',slots='$NSlots',hubs='$NbHubs',limiter='$UploadLimit'
+			,fullDescription='$fullDescription',shareByte='$shareBytes',
+			status='Online'	WHERE (nick='$sqluser' OR IP='$ip')");
+	}
+	else
+	{
+		$dbh->do("UPDATE userDB SET nick='$sqluser',slots='$NSlots',hubs='$NbHubs',limiter='$UploadLimit'
 			,fullDescription='$fullDescription',shareByte='$shareBytes',
 			status='Online'	WHERE nick='$sqluser'");
-
+	}
 }
 
 # User record exists so update the details
 sub updateUserRecord(){
 	my($user) = @_;
+	my($uurth) =0;
 	&setTime();
 	my($inTime)="$date $time";
 	my($sqluser) = &sqlConvertNick($user);
-	my($uurth) = $dbh->prepare("SELECT loginCount FROM userDB 
-			WHERE nick='$sqluser' ");
+	my($userInDB) = &userInDB($user,$ip);
+	if($userInDB eq 2)
+		{$uurth = $dbh->prepare("SELECT loginCount FROM userDB WHERE (nick='$sqluser' OR IP='$ip')");}
+	else
+		{$uurth = $dbh->prepare("SELECT loginCount FROM userDB WHERE nick='$sqluser'");}
 	$uurth->execute();
 	my($ref) = $uurth->fetchrow_hashref();
 	my($loginCount) = "$ref->{'loginCount'}";
 	$loginCount++;
 	$uurth->finish();
 	my($connection) = &getConnection($conn);
-	my($userInDB) = &userInDB($user,$ip);
 	if($userInDB eq 2)
 	{
 		$dbh->do("UPDATE userDB SET nick='$sqluser',utype='$utype',dcClient='$dcClient',
@@ -87,8 +99,7 @@ sub updateUserRecord(){
 					hostname='$hostname',IP='$ip',inTime='$inTime',
 					avShareBytes='$shareBytes',loginCount='$loginCount',
 					fullDescription='$fullDescription',shareByte='$shareBytes',
-					IP='$ip'
-					WHERE nick='$sqluser' OR IP='$ip'");
+					IP='$ip'WHERE (nick='$sqluser' OR IP='$ip')");
 	}
 	else
 	{
@@ -99,10 +110,8 @@ sub updateUserRecord(){
 					hostname='$hostname',IP='$ip',inTime='$inTime',
 					avShareBytes='$shareBytes',loginCount='$loginCount',
 					fullDescription='$fullDescription',shareByte='$shareBytes',
-					IP='$ip'
-					WHERE nick='$sqluser'");
+					IP='$ip' WHERE nick='$sqluser'");
 	}
-
 }
 
 # Check the allow status of this user
