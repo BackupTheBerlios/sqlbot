@@ -298,11 +298,11 @@ $country_query  = "SELECT country_code2,country_name FROM iptoc ".
 					<td nowrap> : &nbsp; <?php echo "$uiSlots"; ?></td>
 				</tr>
 				<tr>
-					<td nowrap>Hubs Tot [Op/Reg/Usr]</td>
+					<td nowrap>Hubs Tot [Usr/Reg/Op]</td>
 					<td nowrap> : &nbsp; <?php
 						if ( ($uiHubsOp == "0") && ($uiHubsReg == "0") && ($uiHubsNorm == "0") ) {
 						echo "$uiHubs";}
-						else { echo "$uiHubs &nbsp; [$uiHubsOp/$uiHubsReg/$uiHubsNorm]";}					?></td>
+						else { echo "$uiHubs &nbsp; [$uiHubsNorm/$uiHubsReg/$uiHubsOp]";}					?></td>
 				</tr>
 				<tr>
 					<td nowrap>Limiter</td>
