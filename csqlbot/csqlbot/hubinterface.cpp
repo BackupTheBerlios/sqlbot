@@ -290,7 +290,7 @@ void HubInterface::TimeBan(eKickBanTypes kickBanTypes,euiBanFlag banFlag, UserIn
           hubConfig->GetHubName() + ": You are being Banned for " + banMsgTime + " because: " + reason );
      if(hubConfig->GetHubVerboseBan() & kickBanTypes)
      {
-          dcclient->SendChat(botnick, " Banned " + nick + " for " + banMsgTime + " because: " + reason);
+          dcclient->SendChat(dcclient->GetBotNick(), " Banned " + nick + " for " + banMsgTime + " because: " + reason);
      }
 
      dcclient->SendConsole("BANNED",nick,"For " + banMsgTime + " Becasue: " + reason);
@@ -330,7 +330,7 @@ void HubInterface::UnBan( UserInfo * info, CString nick)
      }
      info->SetBanFlag(euibfNone);
      info->SetBanExpTime(0);
-     dcclient->SendChat(botnick, " UnBanned " + nick);
+     dcclient->SendChat(dcclient->GetBotNick(), " UnBanned " + nick);
      dcclient->SendConsole("UNBANNED",nick);
 }
 
@@ -339,7 +339,7 @@ void HubInterface::CallForUserIp(CString nick)
 {
      if (botInfo->GetIsAdmin())
      {
-          dcclient->SendChat(botnick,"!getip " + nick );
+          dcclient->SendChat(dcclient->GetBotNick(),"!getip " + nick );
      }
      else
      {
@@ -421,5 +421,7 @@ bool HubInterface::SetUserIp(CString msg)
                return(TRUE);
           }
      }
+     cout << "IP " << infoClone->ShowUserInfo().Data() << endl;
+
      return(TRUE);
 }

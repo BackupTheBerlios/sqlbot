@@ -48,7 +48,6 @@ private:
      DCClient * dcclient;
 
      UserInfo * botInfo;
-     CString botnick;
 
      MySqlHub *hubConfig;
      eHubInterface hubInterface;
