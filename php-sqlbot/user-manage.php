@@ -33,7 +33,7 @@ else if ($f == aStatus){
 if (empty($offset)) {$offset=0;}
 mysql_connect($databasehost,$username,$password);
 @mysql_select_db($database) or die( "Unable to select database");
-$numresult=mysql_query("SELECT * FROM userDB");
+$numresult=mysql_query("SELECT * FROM userDB $where");
 $numrows=mysql_num_rows($numresult);
 $result=mysql_query("SELECT * FROM userDB $where ORDER by uType,nick LIMIT $offset,$defaultLogEntries");
 mysql_close();
