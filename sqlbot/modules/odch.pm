@@ -13,7 +13,7 @@
 #
 #	
 #	http://nutter.kicks-ass.net:35600/
-#	http://axljab.homelinux.org:8080/
+#	http://axljab.homelinux.org/
 #
 ##############################################################################################
 
@@ -125,7 +125,8 @@ sub op_connected(){
 
 	if (&getVerboseOption("verbose_op_connect"))
 		{&msgAll("Op $user just connected");
-		&msgOPs("$botname","Op $user just connected");}
+		## &msgOPs("$botname","Op $user just connected");
+		}
 }
 
 #Fires when an Op Admin has connected
@@ -160,7 +161,8 @@ sub op_admin_connected()
 	
 	if (&getVerboseOption("verbose_op_connect"))
 		{&msgAll("OpAdmin $user just connected");
-		&msgOPs("$botname","OpAdmin $user just connected");}
+		## &msgOPs("$botname","OpAdmin $user just connected");
+		}
 
 }
 

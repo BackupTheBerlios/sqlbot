@@ -9,7 +9,7 @@
 #
 #
 #	http://nutter.kicks-ass.net:35600/
-#	http://axljab.homelinux.org:8080/			
+#	http://axljab.homelinux.org/			
 #
 ##############################################################################################
 #Break down the components of a client description
@@ -30,17 +30,28 @@ sub splitDescription() {
 	$type = odch::get_type($user);
 	$ip = odch::get_ip($user);
 	$shareBytes = odch::get_share($user);
+	if ( !$shareBytes )
+	{
+	    $shareBytes = 0;
+	}
 	$GigsShared = &roundToGB($shareBytes);
+	if ( !$GigsShared )
+	{
+	    $GigsShared = 0;
+	}
 	$conn = odch::get_connection($user);
 	$email = odch::get_email($user);
 
 	## Check for internal networks ##
-	if ($ip =~ /192.168/)  
+	if ( $ip )
+	{
+	    if ($ip =~ /192.168/)  
 		{$country = &getHubVar("hub_country");}
-	else
+	    else
 		{## Get Country code for user #
 		my($reg) = IP::Country::Fast->new();
 		$country = $reg->inet_atocc($ip);}
+	}
 	$hostname = odch::get_hostname($user);
 	## Get user Type ##
 	if($type =~ /8/){$utype = "Registered";}
@@ -51,7 +62,14 @@ sub splitDescription() {
 	$tmpdata = odch::get_description($user);
 #	if($tmpdata eq "") {return 1;}
 	
-	$tmpdata =~ s/'//g;	
+	if ( $tmpdata )
+	{
+	    $tmpdata =~ s/'//g;	
+	}
+	else
+	{
+	    $tmpdata = "";
+	}
 
 	$fullDescription = "$tmpdata";
 	my($pos1) = rindex($tmpdata, "<") +1;
@@ -72,10 +90,39 @@ sub splitDescription() {
 	@tmp1 = split(/:/, $tmpdata2[1]);
 	@tmp2 = split(/:/, $tmpdata2[2]);
 	@tmp3 = split(/:/, $tmpdata2[3]);
-	@tmp4 = split(/:/, $tmpdata2[4]);
+	
+	$si1 = @tmpdata2;
+	
+	if ( $si1 > 4 )
+	{
+	    @tmp4 = split(/:/, $tmpdata2[4]);
+	}
+	else
+	{
+	    $tmp4[0] = "L";
+	    $tmp4[1] = 0;
+	}
+	
 	$dcVersion = $tmp0[1];
 	
-	
+	if ( $dcVersion =~ /a.cvs/ ) { 
+	    $pos1 = rindex($dcVersion,"a.cvs"); 
+	    $dcVersion = substr($dcVersion,0,$pos1) 
+	}
+
+	if ( $dcVersion =~ /cvs/ ) { 
+	    $pos1 = rindex($dcVersion,"cvs"); 
+	    $dcVersion = substr($dcVersion,0,$pos1) 
+	}
+
+	@versp = split(/\./, $dcVersion);
+	$si = @versp;
+	if ( $si == 3 )
+	{
+	    # convert X.X.X
+    	    $dcVersion = $versp[0].".".($versp[1]*100+$versp[2]);
+	}
+
 	$tmpModeAP = $tmp1[1];
 	if($tmpModeAP =~ /A/){$connectionMode = "Active";}
 	elsif($tmpModeAP =~ /P/){$connectionMode = "Passive";}
@@ -110,7 +157,7 @@ sub clientRecheck()
 		&splitDescription($user);
 		&parseClient($user);
 		
-		if (($ip eq '') || ($user eq $botname)) {}
+		if ( (!$ip) || (!$user) || ($ip eq '') || ($user eq $botname)) {}
 		else {
 		$userInDB = &userInDB($user,$ip);
 		
@@ -196,23 +243,35 @@ sub parseClient(){
 
 			## MIN SLOTS ##
 			if ($ref->{'min_slots'} > 0 )
-				{if ($NSlots < $ref->{'min_slots'})
+				{
+				$sl1 = $ref->{'min_slots'};
+				print STDERR "SLOT1: $NSlots - $sl1\n";
+				if ($NSlots < $ref->{'min_slots'})
 					{$REASON = "Slots(min)($NSlots)";
 					$ACTION = "Kicked";}}
 			else
-				{my($minslots) = &getConnectionSlots($conn,1);
-				if ($NSlots < $minslots)
-					{$REASON = "Slots(min)($NSlots)";
-					$ACTION = "Kicked";}}
+				{
+				my($minslots) = &getConnectionSlots($conn,1);
+				print STDERR "SLOT2: $NSlots - $minslots\n";
+				if (($NSlots < $minslots) && ($minslots > 0))
+				{
+					$REASON = "Slots(min)($NSlots)";
+					$ACTION = "Kicked";
+					}
+				}
 
 			## MAX SLOTS ##
 			if ($ref->{'max_slots'} > 0 )
-				{if ($NSlots > $ref->{'max_slots'})
+				{
+				$sl2 = $ref->{'max_slots'};
+				print STDERR "SLOT3: $NSlots - $sl2\n";
+				if ($NSlots > $ref->{'max_slots'})
 					{$REASON = "Slots(max)($NSlots)";
 					$ACTION = "Kicked";}}
 			else
 				{my($maxslots) = &getConnectionSlots($conn,2);
-				if ($NSlots > $maxslots)
+				print STDERR "SLOT4: $NSlots - $maxslots\n";
+				if ( ($NSlots > $maxslots) && ($maxslots > 0))
 					{$REASON = "Slots(max)($NSlots)";
 					$ACTION = "Kicked";}}
 
@@ -267,15 +326,29 @@ sub parseClient(){
 			$pcth->execute();
 			my($ref1) = $pcth->fetchrow_hashref();
 
+			if ( $ref1 )
+			{
+			
 			## MIN SHARE ##
+			if ( !$GigsShared )
+			{
+			    $GigsShared = 0;
+			}
+			
+			if ( $ref1->{'min_share'} && $ref1->{'min_connection'} )
+			{
 			if ($ref1->{'min_share'} > $GigsShared)
 				{$REASON = "Share($GigsShared Gb)";
 				$ACTION = "Kicked";}
+
 			## MIN CONNECTION ##
 			elsif ($ref1->{'min_connection'} > $conn){
 				my $connection = &getConnection($conn);
 				$REASON = "Connection($connection)";
 				$ACTION = "Kicked";}
+			}
+			}
+			
 			$dcClient = "No Tag";
 			$dcClientname = "Not Known";
 			$dcVersion = "No Tag";
@@ -300,6 +373,15 @@ sub checkKicks(){
 		$ckth->finish();
 		my($kick_before_tban) = &getHubVar("kick_before_tban");
 		my($tban_before_pban) = &getHubVar("tban_before_pban");
+		if ( !$kick_before_tban )
+		{
+		 $kick_before_tban = 0;
+		}
+		if ( !$tban_before_pban )
+		{
+		 $tban_before_pban = 0;
+		}
+		
 		if ($tBanCount > $tban_before_pban)
 			{&msgUser("$user","You have now been T-Banned $tban_before_pban times. You have been permantly banned!");
 			$ACTION = "P-Banned";}

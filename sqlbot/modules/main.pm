@@ -10,11 +10,11 @@
 #
 #
 #	http://nutter.kicks-ass.net:35600/
-#	http://axljab.homelinux.org:8080/			
+#	http://axljab.homelinux.org/			
 #
 ##############################################################################################
 
-$botVersion = "0.2.1";
+$botVersion = "0.2.2";
 
 use DBI;
 use IP::Country::Fast;
@@ -23,8 +23,8 @@ use Date::Simple ('date', 'today');
 $dbh = DBI->connect("DBI:mysql:odch:$sql_server","$sql_username","$sql_password",{ RaiseError => 1, AutoCommit => 0 });
 $dbh->do("SET OPTION SQL_BIG_TABLES = 1");
 
-$botDescription = "I am $botname, PRAY you meet the Rules. Powered by sqlBOT (http://sqlbot.berlios.de)";
-$botConnection = "LAN(T3)";
+$botDescription = "sqlBOT (http://sqlbot.berlios.de)";
+$botConnection = "botConnection";
 $botShare = 0; #715112000000; #666
 # Import the other modules,
 
@@ -45,7 +45,8 @@ sub main(){
 		&version();
         }
 	
-	odch::data_to_all("\$MyINFO \$ALL $botname $botDescription\$ \$$botConnection\$\$$botShare\$|");
+	# odch::data_to_all("\$MyINFO \$ALL $botname $botDescription\$ \$$botConnection\$\$$botShare\$|");
+	odch::data_to_all("\$MyINFO \$ALL $botname $botDescription\$ \$$botConnection\x01\$\$$botShare\$|")
 	&addToLog($botname,"Restart","Reloadscripts");
 }
 
