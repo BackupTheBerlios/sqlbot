@@ -26,24 +26,10 @@ HubInterface::HubInterface(class DCClient * hidcclient,MySqlHub *hubCfg,eHubInte
      dcclient = hidcclient;
      hubInterface = interface;
      hubConfig = hubCfg;
-
-     botnick = "";
-     botInfo = 0;
 }
 HubInterface::~HubInterface(){
 }
 
-bool HubInterface::InitInterface()
-{
-     if(botnick.IsEmpty())
-     {
-          botnick = dcclient->GetNick();
-          botInfo = dcclient->GetNickInfo(botnick);
-          if (botInfo == 0){ return FALSE; }
-          return(TRUE);
-     }
-     return(TRUE);
-}
 
 bool HubInterface::HubVersion(CString msg)
 {
@@ -69,7 +55,7 @@ bool HubInterface::HubVersion(CString msg)
           }
           else
           {
-               dcclient->SendConsole("WARNING",botnick,"Unrecognised Hub, Not supported at this time");
+               dcclient->SendConsole("WARNING",dcclient->GetBotNick(),"Unrecognised Hub, Not supported at this time");
                exit(0);
           }
           hubConfig->SetHubSoftware(hubSoft);
@@ -185,7 +171,6 @@ CString HubInterface::KickBanMsgs(eKickBanTypes kickBanType,UserInfo * info)
 }
 bool HubInterface::Kick(eKickBanTypes kickBanType, UserInfo * info,CString nick)
 {
-     if (InitInterface() == FALSE) {return (FALSE);}
      if (info == 0){return(FALSE);}
 
      CString message = KickBanMsgs(kickBanType,info);
@@ -201,13 +186,13 @@ bool HubInterface::Kick(eKickBanTypes kickBanType, UserInfo * info,CString nick)
                     " warning Kicks remaining.";
 
           
-               dcclient->SendPrivateMessage( botnick, nick.Data(), hubConfig->GetHubName() + 
+               dcclient->SendPrivateMessage( dcclient->GetBotNick(), nick.Data(), hubConfig->GetHubName() + 
                     ": You are being kicked because: " + message );
 
                // Show this kick based on verbosity setting
                if(dcclient->GetHubConfig()->GetHubVerboseKick() & kickBanType)
                {
-                    dcclient->SendChat(botnick, " Kicking " + nick + " because: " + message);
+                    dcclient->SendChat(dcclient->GetBotNick(), " Kicking " + nick + " because: " + message);
                }
                
                //Send the kick
@@ -224,7 +209,7 @@ bool HubInterface::Kick(eKickBanTypes kickBanType, UserInfo * info,CString nick)
      else
      {
           dcclient->GetLogger()->WriteSysLog(hubConfig->GetHubName()+ "  WARNING: Require Operator/Admin in this hub.");
-          dcclient->SendConsole("WARNING",botnick,"Need Operator/Admin in this Hub.");
+          dcclient->SendConsole("WARNING",dcclient->GetBotNick(),"Need Operator/Admin in this Hub.");
           return(FALSE);
           
      }
@@ -235,7 +220,6 @@ bool HubInterface::Kick(eKickBanTypes kickBanType, UserInfo * info,CString nick)
 void HubInterface::Ban(eKickBanTypes kickBanTypes, UserInfo * info,CString nick)
 {
 
-     if (InitInterface() == FALSE) {return;}
      if (info == 0){return;}
 
      CString message = KickBanMsgs(kickBanTypes,info);
@@ -257,7 +241,6 @@ void HubInterface::TimeBan(eKickBanTypes kickBanTypes,euiBanFlag banFlag, UserIn
      CString banTime = "";
      CString banMsgTime = "";
      
-     if (InitInterface() == FALSE) {return;}
      if (info == 0){return;}
 
      if (banFlag == euibfSBan)
@@ -278,17 +261,17 @@ void HubInterface::TimeBan(eKickBanTypes kickBanTypes,euiBanFlag banFlag, UserIn
                if(!(info->GetIp().IsEmpty()))
                {
                     ipBanCmd = "!ban " + info->GetIp() + " " + banTime +"s";
-                    dcclient->SendChat(botnick,ipBanCmd); //Do a Timed Ban by IP on the hub
+                    dcclient->SendChat(dcclient->GetBotNick(),ipBanCmd); //Do a Timed Ban by IP on the hub
                }
                nickBanCmd = "!nickban " + nick + " " + banTime +"s";
-               dcclient->SendChat(botnick,nickBanCmd); //Do a Timed Ban by nick on the hub
+               dcclient->SendChat(dcclient->GetBotNick(),nickBanCmd); //Do a Timed Ban by nick on the hub
 
                break;
           }
           case ehiVerlihub:
           {
                nickBanCmd = "!tempban " + nick + " " + banTime +"s " + reason;
-               dcclient->SendChat(botnick,nickBanCmd); //Do a Timed Ban by nick on the hub
+               dcclient->SendChat(dcclient->GetBotNick(),nickBanCmd); //Do a Timed Ban by nick on the hub
 
                break;
           }
@@ -303,7 +286,7 @@ void HubInterface::TimeBan(eKickBanTypes kickBanTypes,euiBanFlag banFlag, UserIn
      info->SetBanTime();
      info->SetBanExpTime(CString(banTime).asINT());
 
-     dcclient->SendPrivateMessage(botnick, nick.Data(),
+     dcclient->SendPrivateMessage(dcclient->GetBotNick(), nick.Data(),
           hubConfig->GetHubName() + ": You are being Banned for " + banMsgTime + " because: " + reason );
      if(hubConfig->GetHubVerboseBan() & kickBanTypes)
      {
@@ -317,7 +300,6 @@ void HubInterface::UnBan( UserInfo * info, CString nick)
      CString nickBanCmd = "";
      CString ipBanCmd = "";
 
-     if (InitInterface() == FALSE) {return;}
      if (info == 0){return;}
 
      switch (hubInterface)
@@ -327,16 +309,16 @@ void HubInterface::UnBan( UserInfo * info, CString nick)
                if(!(info->GetIp().IsEmpty()))
                {
                     ipBanCmd = "!unban " + info->GetIp();
-                    dcclient->SendChat(botnick,ipBanCmd); //UnBan by IP on the hub
+                    dcclient->SendChat(dcclient->GetBotNick(),ipBanCmd); //UnBan by IP on the hub
                }
                nickBanCmd = "!unnickban " + nick;
-               dcclient->SendChat(botnick,nickBanCmd); //Un by nick on the hub
+               dcclient->SendChat(dcclient->GetBotNick(),nickBanCmd); //Un by nick on the hub
                break;
           }
           case ehiVerlihub:
           {
                nickBanCmd = "!unban " + nick;
-               dcclient->SendChat(botnick,nickBanCmd); //UnBan by nick on the hub
+               dcclient->SendChat(dcclient->GetBotNick(),nickBanCmd); //UnBan by nick on the hub
 
                break;
           }
@@ -355,7 +337,6 @@ void HubInterface::UnBan( UserInfo * info, CString nick)
 //This function is sent to the hub, Chat handler looks for the reply coming back
 void HubInterface::CallForUserIp(CString nick)
 {
-     if (InitInterface() == FALSE) {return;}
      if (botInfo->GetIsAdmin())
      {
           dcclient->SendChat(botnick,"!getip " + nick );
@@ -363,7 +344,7 @@ void HubInterface::CallForUserIp(CString nick)
      else
      {
           dcclient->GetLogger()->WriteSysLog(hubConfig->GetHubName()+ "  WARNING: Require Operator/Admin in this hub");
-          dcclient->SendConsole("WARNING",botnick,"Need Operator/Admin in this Hub");
+          dcclient->SendConsole("WARNING",dcclient->GetBotNick(),"Need Operator/Admin in this Hub");
      }
 }
 bool HubInterface::SetUserIp(CString msg)
@@ -394,7 +375,7 @@ bool HubInterface::SetUserIp(CString msg)
      UserInfo *info = dcclient->GetNickInfo(nick); //Get user
      if (info == 0){ return 0; }
 
-     if (nick == botnick)
+     if (nick == dcclient->GetBotNick())
      {    /* This is the bot reporting its IP*/
           info->SetIp(ip); //Set the bots IP and quit
           return(TRUE);
@@ -418,7 +399,7 @@ bool HubInterface::SetUserIp(CString msg)
      
      /* Check that the nicks are different, it may be a duplicate
                request for IP of same user*/
-     if(  (nick != botnick) &&               // Not the bot
+     if(  (nick != dcclient->GetBotNick()) &&               // Not the bot
           (nick != nickClone) &&           // The two nicks are different
           (!info->GetIsAdmin()) &&           // The user is not an Admin
           (!infoClone->GetIsAdmin()) &&      // Not a clone of an Admin

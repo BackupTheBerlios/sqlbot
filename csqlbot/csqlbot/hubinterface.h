@@ -27,8 +27,6 @@ class HubInterface {
 public: 
 	HubInterface(class DCClient * hidcclient, MySqlHub *hubCfg, eHubInterface interface);
 	~HubInterface();
-     /** Configure the interface this hub*/
-     bool InitInterface(void);
      /** Fill Kick Ban Message */
      CString KickBanMsgs(eKickBanTypes kickBanType,UserInfo * info);
      /** Kick the user from hub*/
