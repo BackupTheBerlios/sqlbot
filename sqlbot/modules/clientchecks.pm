@@ -19,7 +19,7 @@ sub splitDescription() {
 
 	#Initialise globals
 	$type=0; $ip=""; ;$GigsShared="";
-	$tmpdata=""; $fullDescription=""; $dcClient="";
+	$tmpdata=""; $fullDescription=""; $dcClient="";$limiter=0;
 	$dcVersion=""; $NbHubs=0; $NSlots=0; $slt_ratio=""; $country="";
 	$UploadLimit=0; $conn=""; $connection=""; $email="";$tmpModeAP="";
 	$connectionMode="unknown";$tmp0="";$shareBytes=0;
@@ -283,10 +283,10 @@ sub checkKicks(){
 		my($tban_before_pban) = &getHubVar("tban_before_pban");
 		if ($tBanCount > $tban_before_pban)
 			{&msgUser("$user","You have now been T-Banned $tban_before_pban times. You have been permantly banned!");
-			$ACTION = "T-Banned";}
+			$ACTION = "P-Banned";}
 		elsif ($kickCount > $kick_before_tban) 
 			{&msgUser("$user","You have now been kicked $kick_before_tban times . You have been T-Banned !");
-			$ACTION = "P-Banned";}}
+			$ACTION = "T-Banned";}}
 		
 }
 
