@@ -1,4 +1,4 @@
-MySQL Tables
+*//			MySQL Tables			//*
 
 <!-- GENERAL BOT CONFIG -->
 CREATE TABLE botConfig (
@@ -14,7 +14,7 @@ bcDescription VARCHAR(40),
 bcSharePath VARCHAR(40),
 bcLogDir VARCHAR(40));
 
-INSERT INTO botConfig VALUES("1","C++SqlBot","","","9180","9180","","","C++ Bot running with MySQL","","");
+sql> INSERT INTO botConfig VALUES("1","C++SqlBot","","","9180","9180","","","C++ Bot running with MySQL","","");
 
 
 
@@ -52,7 +52,7 @@ hcLogSearches  SET('0','1'),
 hcLogSystem  SET('0','1'));
 
 
-INSERT INTO hubConfig VALUES("","password","","","Axljab hub","Axllents hub","axljab.homelinux.org:9000","200","","","euronet-uk.kicks-ass.net:41412","30","30","Axllent","","","","","","","","","","","","","","","","");
+sql> INSERT INTO hubConfig VALUES("","password","","","Axljab hub","Axllents hub","axljab.homelinux.org:9000","200","","","euronet-uk.kicks-ass.net:41412","30","30","Axllent","","","","","","","","","","","","","","","","");
 
 
 <!-- USER INFO DETAILS -->
@@ -62,7 +62,7 @@ uiNick VARCHAR(40),
 uiIp VARCHAR(16),
 uiHost VARCHAR(40),
 uiIsAway  SET('0','1'),
-uiHubID INT(3) NOT NULL,
+HubID INT(3) NOT NULL,
 uiCountry VARCHAR(3),
 uiIsAdmin SET('0','1'),
 uiPassword VARCHAR(40),
@@ -93,7 +93,7 @@ uiShareChckdExpire VARCHAR(14),
 uiBanFlag VARCHAR(14),
 uiBanTime VARCHAR(14),
 uiBanExpire VARCHAR(14),
-uiLoginCount int(10));
+uiLoginCount int(7));
 
 
 
@@ -101,6 +101,8 @@ uiLoginCount int(10));
 
 
 <!-- IP-COUNTRY DB -->
+## List to be downloaded from http://ip-to-country.directi.com/downloads/ip-to-country.csv.zip
+
 CREATE TABLE iptoc (
 ip_from int(10) unsigned zerofill not null,
 ip_to int(10) unsigned zerofill not null,
