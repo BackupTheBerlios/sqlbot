@@ -115,7 +115,8 @@ sub op_connected(){
 	&userOnline($user);
 
 	if (&getVerboseOption("verbose_op_connect"))
-		{&msgAll("Op $user just connected");}
+		{&msgAll("Op $user just connected");
+		&msgOPs("$botname","Op $user just connected");}
 }
 
 #Fires when an Op Admin has connected
@@ -147,7 +148,8 @@ sub op_admin_connected()
 	&userOnline($user);
 	
 	if (&getVerboseOption("verbose_op_connect"))
-		{&msgAll("OpAdmin $user just connected");}
+		{&msgAll("OpAdmin $user just connected");
+		&msgOPs("$botname","OpAdmin $user just connected");}
 
 }
 
