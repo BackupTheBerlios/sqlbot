@@ -3,14 +3,14 @@
 $databasehost="localhost";
 
 // MySQL DB login
-$username="logger";
-$password="linux";
+$username="sqluser";
+$password="sqlpass";
 
 //Name of DB
 $database="odch";
 
 // Name of the Hub (Used only for headers)
-$hubname="nutter.kicks-ass.net:41412";
+$hubname="you hub name";
 
 //The Default number of entries to display, commands like !log
 $defaultLogEntries = 20;
