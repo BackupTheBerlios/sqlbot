@@ -29,110 +29,151 @@ sub kicked_user()
 # Fires when a normal User has connected
 sub new_user_connected(){
 	my($user) = @_;
-	&parseClient($user);
 	
-	my($userInDB) = &userInDB($user,$ip);
-	
-	if($userInDB eq 1)
-		{&updateUserRecord($user);}
-	elsif($userInDB eq 2)
-		{&updateUserRecord($user);
-		&userOnline($user);
-		return;}
+	if (&checkNick($user) eq 1){
+		&msgUser($user,"Remove the ' from your nick, You have been Kicked");
+		odch::kick_user($user);
+		&debug("Kick $user for ' in nick ");}
 	else
-		{&createNewUserRecord($user);}
-		
-	&userConnect($user);	
-	
-	&checkKicks($user);
-	&checkClones($user);
-	&processEvent($user);
-
-	&userOnline($user);
-
+	{
+		&parseClient($user);
+		my($userInDB) = &userInDB($user,$ip);
+		if($userInDB eq 1)
+			{&updateUserRecord($user);
+			&userConnect($user);	
+			&checkKicks($user);
+			&checkClones($user);
+			&processEvent($user);			
+		}
+		elsif($userInDB eq 0)
+			{&createNewUserRecord($user);
+			&userConnect($user);	
+			&checkKicks($user);
+			&checkClones($user);
+			&processEvent($user);
+		}
+		elsif($userInDB eq 2)
+			{&updateUserRecord($user);}
+			
+		&userOnline($user);
+	}
 }
 
 # Fires when a registered user has connected
 sub reg_user_connected(){
 	my($user) = @_;
-	&parseClient($user);
 	
-	my($userInDB) = &userInDB($user,$ip);
-	if($userInDB eq 1)
-		{&updateUserRecord($user);}
-	elsif($userInDB eq 2)
-		{&updateUserRecord($user);
-		&userOnline($user);
-		return;}
-	else # if new
-		{&createNewUserRecord($user);}
-		
-	&userConnect($user);
+	if (&checkNick($user) eq 1){
+		&msgUser($user,"Remove the ' from your nick, You have been Kicked");
+		odch::kick_user($user);
+		&debug("Kick $user for ' in nick ");}
+	else
+	{
+		&parseClient($user);
+		my($userInDB) = &userInDB($user,$ip);
+		if($userInDB eq 1)
+			{&updateUserRecord($user);
+			&userConnect($user);	
+			if (&getConfigOption("check_reg")) 
+			{	&checkKicks($user);
+				&checkClones($user);
+				&processEvent($user);}
+		}
+		elsif($userInDB eq 0)
+			{&createNewUserRecord($user);
+			&userConnect($user);	
+			if (&getConfigOption("check_reg")) 
+			{	&checkKicks($user);
+				&checkClones($user);
+				&processEvent($user);}
+		}
+		elsif($userInDB eq 2)
+			{&updateUserRecord($user);}
+	}
+	&userOnline($user);
 	
-	if (&getConfigOption("check_reg")) 
-	{	&checkKicks($user);
-		&checkClones($user);
-		&processEvent($user);}
-
 	if (&getVerboseOption("verbose_op_connect"))
 		{&msgAll("Reg User $user just connected");}
 
-	&userOnline($user);
 }
 
 # Fires when an op has connected
 sub op_connected(){
 	my($user) = @_;
-	&parseClient($user);
 	
-	my($userInDB) = &userInDB($user,$ip);
-	if($userInDB eq 1)
-		{&updateUserRecord($user);}
-	elsif($userInDB eq 2)
-		{&updateUserRecord($user);
-		&userOnline($user);
-		return;}
+	if (&checkNick($user) eq 1){
+		&msgUser($user,"Remove the ' from your nick, You have been Kicked");
+		odch::kick_user($user);
+		&debug("Kick $user for ' in nick ");}
 	else
-		{&createNewUserRecord($user);}
-	&userConnect($user);
+	{
+		&parseClient($user);
+		my($userInDB) = &userInDB($user,$ip);
+		if($userInDB eq 1)
+			{&updateUserRecord($user);
+			&userConnect($user);	
+			if (&getConfigOption("check_op")) 
+			{	&checkKicks($user);
+				&checkClones($user);
+				&processEvent($user);}
+		}
+		elsif($userInDB eq 0)
+			{&createNewUserRecord($user);
+			&userConnect($user);	
+			if (&getConfigOption("check_op")) 
+			{	&checkKicks($user);
+				&checkClones($user);
+				&processEvent($user);}
+		}
+		elsif($userInDB eq 2)
+			{&updateUserRecord($user);}
+	}
 	
-	if (&getConfigOption("check_op")) 
-	{	&checkKicks($user);
-		&checkClones($user);
-		&processEvent($user);}
+	&userOnline($user);
 
 	if (&getVerboseOption("verbose_op_connect"))
 		{&msgAll("Op $user just connected");}
-
-	&userOnline($user);
 }
 
 #Fires when an Op Admin has connected
 sub op_admin_connected() 
 {
 	my($user) = @_;
-	&parseClient($user);
 	
-	my($userInDB) = &userInDB($user,$ip);
-	if($userInDB eq 1)
-		{&updateUserRecord($user);}
-	elsif($userInDB eq 2)
-		{&updateUserRecord($user);
-		&userOnline($user);
-		return;}
-	else
-		{&createNewUserRecord($user);}
-	&userConnect($user);
-	
-	if (&getConfigOption("check_opadmin"))
-	{	&checkClones($user);
-		&checkKicks($user);
-		&processEvent($user);
-	}	
 
+	if (&checkNick($user) eq 1){
+		&msgUser($user,"Remove the ' from your nick, You have been Kicked");
+		odch::kick_user($user);
+		&debug("Kick $user for ' in nick ");}
+	else
+	{
+		&parseClient($user);
+		my($userInDB) = &userInDB($user,$ip);
+		if($userInDB eq 1)
+			{&updateUserRecord($user);
+			&userConnect($user);	
+			if (&getConfigOption("check_opadmin"))
+			{	&checkClones($user);
+				&checkKicks($user);
+				&processEvent($user);}	
+		}
+		elsif($userInDB eq 0)
+			{&createNewUserRecord($user);
+			&userConnect($user);	
+			if (&getConfigOption("check_opadmin"))
+			{	&checkClones($user);
+				&checkKicks($user);
+				&processEvent($user);}	
+		}
+		elsif($userInDB eq 2)
+			{&updateUserRecord($user);}
+	}
+	
+	&userOnline($user);
+	
 	if (&getVerboseOption("verbose_op_connect"))
 		{&msgAll("OpAdmin $user just connected");}
-	&userOnline($user);
+
 }
 
 # Fires when a User disconnects
