@@ -94,7 +94,7 @@ sub seen()
 #############################################################################################
 sub buildRules {
 	my($user)=@_;
-	&parseClient($user);
+	&splitDescription($user);
 	$rules = "";
 	if (&getClientExists($dcClient)) 
 		{my($brth) = $dbh->prepare("SELECT * FROM client_rules WHERE client='$dcClient'");
