@@ -88,11 +88,6 @@ $hcStatus = "<font color=\"#FF1D28\"><strong>Offline</strong></font>";
 <tr>
 <td>
 	<!-- START USER DATABACE SPACE -->
-
-
-<FIELDSET>
-	<LEGEND><font color="#FFFFFF"> &nbsp; Detailed information about <?php echo "[ $uiNick ]"; ?> &nbsp; </font></LEGEND>	
-<table class="userdb">
 <?php
 $userresult=mysql_query("SELECT *,DATE_FORMAT(uiLastSeenTime, '%d/%m/%Y %H:%i') AS lastdate,
 									DATE_FORMAT(uiFirstSeenTime, '%d/%m/%Y %H:%i') AS firstdate,
@@ -192,6 +187,9 @@ $country_query  = "SELECT country_code2,country_name FROM iptoc ".
 	else if ($uiShare == "0") { $Share = "0 KB";}
 
 ?>
+<FIELDSET>
+	<LEGEND><font color="#FFFFFF"> &nbsp; Detailed information about <?php echo "[ $uiNick ]"; ?> &nbsp; </font></LEGEND>	
+<table class="userdb">	
 	<tr>
 		<th>User Details</th>
 		<th>Client Details</th>
