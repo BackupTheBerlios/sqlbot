@@ -124,16 +124,14 @@ sub banUser (){
 			&msgAll("P-BANNED $user($ip) for:$reason");}
 		return(1);}
 	elsif ($mode =~ /uban/i){	# Remove ban
-		my($allowStatus) = "allow";
-		my($lastReason) = "Removed"; 
 		$mode = "Un-Ban";
 		if (&getVerboseOption("verbose_banned")){
-			&msgAll("P-BANNED $user($ip) for:$reason");}
+			&msgAll("UN-BANNED $user($ip) for:$reason");}
 		odch::remove_ban_entry($ip);
 		$dbh->do("UPDATE userDB SET tBanCount='0',
 					kickCount='0',
 					allowStatus='Normal',
-					lastReason='$reason',
+					lastReason='Removed',
 				    	lastAction='$mode'
 				    	WHERE nick='$user'");
 		if(&getLogOption("log_bans"))
@@ -147,6 +145,7 @@ sub banUser (){
 				lastReason='$reason',
 			    	lastAction='$mode'
 			    	WHERE nick='$user'");
+	
 	if(&getLogOption("log_bans"))
     		{&addToLog($user,$mode,$reason);}
 	odch::kick_user($user);
