@@ -93,13 +93,14 @@ $logresult=mysql_query("SELECT *,DATE_FORMAT(lcTime, '%H:%i:%S') AS time,
 		<th>Message</th>
 	</tr>
 <?php
-
-$i = ($defaultLogEntries - 1);
+// ENTRIES TO PARSE - 100% HACK!
+if ($total_chats < $defaultLogEntries) { $i = ($total_chats - 1); }
+else { $i = ($defaultLogEntries - 1); }
+if (($offset + $defaultLogEntries) > $total_chats) { $i = ($total_chats - $offset -1 ); }
 
 while ($data=mysql_fetch_array($logresult)) 
 {
 while ($i > -1) {
-
 	$date=mysql_result($logresult,$i,"date");
 	$time=mysql_result($logresult,$i,"time");
 	$lcNick=htmlentities(mysql_result($logresult,$i,"lcNick"));
@@ -124,6 +125,96 @@ echo "<tr>
 </table>
 	<!-- END USER DATABACE SPACE -->
 	</FIELDSET>
+<!-- PREVIOUS / NEXT PAGE -->
+		<table width="100%">
+		<tr>
+			<td width="15">
+				<?php
+				// CODE FOR FIRST-PAGE BUTTON
+				$last_divide = floor($total_selection / $defaultLogEntries);
+				$last_offset = $last_divide * $defaultLogEntries;
+				$is_there_a_last = $total_selection - $offset;
+				if ($offset > "0") { 
+				?>
+						<form action="<?php echo "$PHP_SELF"; ?>" method="post">
+							<?php hidden_value(hubID, $hubID); ?>
+							<?php hidden_value(parse, $parse); ?>
+							<?php hidden_value(parseorder, $parseorder); ?>
+							<?php hidden_value(offset, 0); ?>
+							<?php if ($useSearch == "1") {
+							hidden_value(useSearch, 1);
+							hidden_value(useSearch, 1);
+							hidden_value(searchvalue, $searchvalue);
+							hidden_value(searchfield, $searchfield);
+							;} ?>
+							<input type="submit" value="<<<" class="userdbnicknormal" title="Go to First Page"></form>
+				<?php ;} ?>
+			</td>
+			<td width="*">
+				<?php
+				// CODE FOR PREVIOUS BUTTON
+				if ($offset >= $defaultLogEntries){
+				$offset_value = $offset - $defaultLogEntries ?>
+						<form action="<?php echo "$PHP_SELF"; ?>" method="post">
+							<?php hidden_value(hubID, $hubID); ?>
+							<?php hidden_value(parse, $parse); ?>
+							<?php hidden_value(parseorder, $parseorder); ?>
+							<?php hidden_value(offset, $offset_value); ?>
+							<?php if ($useSearch == "1") {
+							hidden_value(useSearch, 1);
+							hidden_value(useSearch, 1);
+							hidden_value(searchvalue, $searchvalue);
+							hidden_value(searchfield, $searchfield);
+							;} ?>
+							<input type="submit" value=" << " class="userdbnicknormal" title="Go to Previous Page"></form>
+				<?php ;} ?>
+			</td>
+			<td width="*" align="right">
+				<?php
+				// CODE FOR NEXT BUTTON
+				$offset_value = $offset + $defaultLogEntries;
+				$is_there_next = ($total_chats -$offset_value) /$defaultLogEntries;
+				if ($is_there_next > 0){ 
+				?>
+						<form action="<?php echo "$PHP_SELF"; ?>" method="post">
+							<?php hidden_value(hubID, $hubID); ?>
+							<?php hidden_value(parse, $parse); ?>
+							<?php hidden_value(parseorder, $parseorder); ?>
+							<?php hidden_value(offset, $offset_value); ?>
+							<?php if ($useSearch == "1") {
+							hidden_value(useSearch, 1);
+							hidden_value(useSearch, 1);
+							hidden_value(searchvalue, $searchvalue);
+							hidden_value(searchfield, $searchfield);
+							;} ?>
+							<input type="submit" value=" >> " class="userdbnicknormal" title="Go to Next Page"></form>
+				<?php ;} ?>
+			</td>
+			<td align="right" width="10">
+				<?php
+				// CODE FOR LAST-PAGE BUTTON
+				$last_divide = floor($total_chats / $defaultLogEntries);
+				$last_offset = $last_divide * $defaultLogEntries;
+				$is_there_a_last = $total_chats - $offset;
+				if ($is_there_a_last > $defaultLogEntries) { 
+				?>
+						<form action="<?php echo "$PHP_SELF"; ?>" method="post">
+							<?php hidden_value(hubID, $hubID); ?>
+							<?php hidden_value(parse, $parse); ?>
+							<?php hidden_value(parseorder, $parseorder); ?>
+							<?php hidden_value(offset, $last_offset); ?>
+							<?php if ($useSearch == "1") {
+							hidden_value(useSearch, 1);
+							hidden_value(useSearch, 1);
+							hidden_value(searchvalue, $searchvalue);
+							hidden_value(searchfield, $searchfield);
+							;} ?>
+							<input type="submit" value=">>>" class="userdbnicknormal" title="Go to Last Page"></form>
+				<?php ;} ?>
+			</td>
+		</tr>
+	</table>
+	
 </td>
 </tr>
 </table>
