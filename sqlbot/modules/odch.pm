@@ -135,6 +135,25 @@ sub data_arrival(){
 		# Only specific types may msg the bot
 		my($type) = odch::get_type($user);
 
+		#Public PM commands
+		if($pm =~ /!seen/)
+			{if($data =~ /\$To: $botname From: $user \$\<$user\> !seen\|/)
+				{&msgUser("$user","usage: !seen username");}
+			elsif($data =~ /\$To: $botname From: $user \$\<$user\> \s?(\S*) (.*)\|/) 
+				{&seen(@_);
+				&msgUser("$user","$seenresult");}			
+		}
+		elsif($pm =~ /!stats/)
+			{&buildStats();
+			&msgUser("$user","$statsmsg");}
+		elsif($pm =~ /!rules/)
+			{&buildRules($user);
+			&msgUser("$user","$rules");}
+		elsif($pm =~ /!help/)
+			{&buildHelp(@_);
+			&msgUser("$user","$helpmsg");}
+		elsif($pm =~ /!myinfo/)
+			{&myinfo(@_);}
 		#Op commands
 		if($type eq 32 or $type eq 16)
 		{
@@ -163,26 +182,18 @@ sub data_arrival(){
 				elsif($data =~ /\$To: $botname From: $user \$\<$user\> \s?(\S*) (.*)\|/) 
 					{&history(@_);}
 			}
+			elsif ($pm =~ /!addfaker/){
+				if($data =~ /\$To: $botname From: $user \$\<$user\> !addfaker\|/)
+					{&msgUser("$user","usage: !history username");}
+				elsif($data =~ /\$To: $botname From: $user \$\<$user\> \s?(\S*) (.*)\|/) 
+					{&addFaker($2);}
+			}
+			# Add new op commands here
+			else{
+			#Send to OPChat
+				&msgOPs("$user","$pm");
+			}
 		}
-		#Public PM commands
-		if($pm =~ /!seen/)
-			{if($data =~ /\$To: $botname From: $user \$\<$user\> !seen\|/)
-				{&msgUser("$user","usage: !seen username");}
-			elsif($data =~ /\$To: $botname From: $user \$\<$user\> \s?(\S*) (.*)\|/) 
-				{&seen(@_);
-				&msgUser("$user","$seenresult");}			
-		}
-		elsif($pm =~ /!stats/)
-			{&buildStats();
-			&msgUser("$user","$statsmsg");}
-		elsif($pm =~ /!rules/)
-			{&buildRules($user);
-			&msgUser("$user","$rules");}
-		elsif($pm =~ /!help/)
-			{&buildHelp(@_);
-			&msgUser("$user","$helpmsg");}
-		elsif($pm =~ /!myinfo/)
-			{&myinfo(@_);}
 	}
 	# Public main chat commands
 	else
