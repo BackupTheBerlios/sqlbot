@@ -35,7 +35,7 @@ sub userInDB(){
 		{return 2;}
 	else
 		{$value = 0;
-		$value = $dbh->selectrow_array("SELECT COUNT(nick) FROM userDB WHERE nick='$sqluser' ");
+		$value = $dbh->selectrow_array("SELECT COUNT(nick) FROM userDB WHERE nick='$sqluser' AND allowStatus !='Banned'");
 		if($value eq 1) 
 			{return 1;}}
 	return 0;
