@@ -24,6 +24,7 @@
 #include <dclib/cutils.h>
 #include <dclib/core/cobject.h>
 #include <dclib/core/cstring.h>
+#include <dclib/dcobject.h>
 #include "mysqlcon.h"
 #include "timehand.h"
 #include "globalconf.h"
@@ -40,10 +41,12 @@ public:
 	/** */
 	CString GetClient(void) { return uiClient;}
 	/** */
-	void UserClientVersion( enum eUserClientVersion e ) { m_eUserClientVersion = e; }
+	void UserClientVersion( enum eUserClientVersion e ) { m_ClientVersion.m_eClientVersion = e; }
 	/** */
-	enum eUserClientVersion UserClientVersion() { return m_eUserClientVersion; }
-     
+	enum eUserClientVersion UserClientVersion() { return m_ClientVersion.m_eClientVersion; }
+	/** */
+	CMessageLock * ClientVersion() { return &m_ClientVersion; }
+
      void SetIsAdmin(int admin);
      void SetSpeed(CString speed);
      void SetShare(ulonglong share);
@@ -91,6 +94,7 @@ public:
      CString ShowTimeOnline(void);
      CString ShowUserInfo(void);
      int memUsage(void) { return sizeof(*this);}
+     
      /** Get Country from IP address. HEAVY LOAD*/
      void CalculateCountry(CString dottedIP);
      void unlockSqlUser(void) { sqlDataUptoDate = 0; }
@@ -99,7 +103,12 @@ public:
 private:
 
 	/** */
+	CMessageLock m_ClientVersion;
+	/** */
 	enum eUserClientVersion m_eUserClientVersion;
+	/** */
+	CString uiVersion;            // Client version
+	
 	
      CString   uiEscNick;              // an SQL safe version of the nick
 
@@ -118,7 +127,7 @@ private:
      CString   uiTag;                // Tag
      CString   uiClient;             // Name of client from info string
      CString   uiDescription;        // Description
-     CString   uiVersion;            // Client version
+     
      CString   uiMode;               // Active or Passive
      int       uiHubs;               // Total number of hubs
      int       uiHubsOp;             // Number of hubs as an op

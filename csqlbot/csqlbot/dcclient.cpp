@@ -842,9 +842,42 @@ bool DCClient::ClientCheck(UserInfo *info,CString nick)
 	{
 		if ( info->UserClientVersion() == rule->m_eClientVersion )
 		{
+			// compare client min version
+			if ( (rule->m_MinVersion.m_nVersionMajor != 0) ||
+			     (rule->m_MinVersion.m_nVersionMinor != 0) ||
+			     (rule->m_MinVersion.m_nVersionPatch != 0) )
+			{
+				if ( info->ClientVersion()->m_nVersionMajor < rule->m_MinVersion.m_nVersionMajor )
+					continue;
+				if ( (info->ClientVersion()->m_nVersionMajor == rule->m_MinVersion.m_nVersionMajor) &&
+				     (info->ClientVersion()->m_nVersionMinor < rule->m_MinVersion.m_nVersionMinor) )
+					continue;
+				if ( (info->ClientVersion()->m_nVersionMajor == rule->m_MinVersion.m_nVersionMajor) &&
+				     (info->ClientVersion()->m_nVersionMinor == rule->m_MinVersion.m_nVersionMinor) &&
+				     (info->ClientVersion()->m_nVersionPatch < rule->m_MinVersion.m_nVersionPatch) )
+					continue;
+			}
+
+			// compare client max version
+			if ( (rule->m_MaxVersion.m_nVersionMajor != 0) ||
+			     (rule->m_MaxVersion.m_nVersionMinor != 0) ||
+			     (rule->m_MaxVersion.m_nVersionPatch != 0) )
+			{
+				if ( info->ClientVersion()->m_nVersionMajor > rule->m_MaxVersion.m_nVersionMajor )
+					continue;
+				if ( (info->ClientVersion()->m_nVersionMajor == rule->m_MaxVersion.m_nVersionMajor) &&
+				     (info->ClientVersion()->m_nVersionMinor > rule->m_MaxVersion.m_nVersionMinor) )
+					continue;
+				if ( (info->ClientVersion()->m_nVersionMajor == rule->m_MaxVersion.m_nVersionMajor) &&
+				     (info->ClientVersion()->m_nVersionMinor == rule->m_MaxVersion.m_nVersionMinor) &&
+				     (info->ClientVersion()->m_nVersionPatch > rule->m_MaxVersion.m_nVersionPatch) )
+					continue;
+			}
+
 			printf("Rule found '%s'\n",rule->m_sName.Data());
-			
+
 			matchrule = rule;
+
 			break;
 		}
 	}
@@ -856,7 +889,29 @@ bool DCClient::ClientCheck(UserInfo *info,CString nick)
 		printf("No Rule found !\n");
 		return TRUE;
 	}
+
+	// first we send client motd
+	if ( matchrule->m_bMotd && (matchrule->m_sMotd != "") )
+	{
+		SendPrivateMessage( GetNick(), info->GetNick(), matchrule->m_sMotd );
+	}
 	
+	// check if the client allowed
+	if ( matchrule->m_bAllow == FALSE )
+	{
+		interface->Kick(ehikb_None,info,matchrule);
+
+		return FALSE;
+	}
+
+     	// Check min speed
+     	if ( hubConfig->ConvertSpeed(info->GetSpeed()) < matchrule->m_eMinUserSpeed )
+     	{
+          	interface->Kick(ehikb_MinConnection,info,matchrule);
+
+          	return(FALSE);     
+     	}
+
 	// Check min share
      	if ( info->GetShare() < matchrule->m_nMinShared )
      	{
@@ -865,17 +920,8 @@ bool DCClient::ClientCheck(UserInfo *info,CString nick)
           
           	return(FALSE);
      	}
-     
-	// Check if client is recognised
-	if ( info->UserClientVersion() == eucvNONE )
-	{                                      
-		if ( hubConfig->GetHubKickNoTag() )
-		{
-			//Kick untagged clients
-			interface->Kick(ehikb_UnTagged,info,matchrule);
-			return(FALSE);
-		}
-	}
+
+	// TODO: Check max share
 
      	// Check Min Slots
      	if ( info->GetSlots() < matchrule->m_nMinSlots )
@@ -914,14 +960,6 @@ bool DCClient::ClientCheck(UserInfo *info,CString nick)
           	}
      	}
 
-     	// Check connection
-     	if ( hubConfig->ConvertSpeed(info->GetSpeed()) < matchrule->m_eMinUserSpeed )
-     	{
-          	interface->Kick(ehikb_MinConnection,info,matchrule);
-
-          	return(FALSE);     
-     	}
-
      	/* For Hacked DC++ tags, version 0.24 and above have tags x/y/z,
            clients claiming to be newer than this without x/y/z have been hacked at some point. ASTA LA VISTA BABY*/
      	if ( info->UserClientVersion() == eucvDCPP )
@@ -956,12 +994,6 @@ bool DCClient::ClientCheck(UserInfo *info,CString nick)
 
      	//The client checks ok, make sure ban flag is none
      	info->SetBanFlag(euibfNone);
-	
-	// send client motd
-	if ( matchrule->m_bMotd && (matchrule->m_sMotd != "") )
-	{
-		SendPrivateMessage( GetNick(), info->GetNick(), matchrule->m_sMotd );
-	}
 	
      	return(TRUE);
 }

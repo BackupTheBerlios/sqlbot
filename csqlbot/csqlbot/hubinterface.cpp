@@ -228,25 +228,28 @@ CString HubInterface::KickBanMsgs( eKickBanTypes kickBanType, UserInfo * info, C
 /** */
 bool HubInterface::Kick( eKickBanTypes kickBanType, UserInfo * info, CClientRule * rule )
 {
-     if (info == 0){return(FALSE);}
+	if (!info)
+		return(FALSE);
 
-     UserInfo * botInfo = dcclient->GetNickInfo(dcclient->GetBotNick());
+     	UserInfo * botInfo = dcclient->GetNickInfo(dcclient->GetBotNick());
 
-     CString message = KickBanMsgs(kickBanType,info,rule);
+     	CString message = KickBanMsgs(kickBanType,info,rule);
 
-     if (botInfo->GetIsAdmin())
-     {
-          info->IncKickTotal();
+     	if ( botInfo->GetIsAdmin() )
+     	{
+          	info->IncKickTotal();
                     
-          if (info->GetKickTotal() < dcclient->GetHubConfig()->GetKickB4SBan())
-          {
-                message += " " + CString().setNum(dcclient->GetHubConfig()->GetKickB4SBan() - info->GetKickTotal()) + "/" +
-                    CString().setNum(dcclient->GetHubConfig()->GetKickB4SBan()) +
-                    " warning Kicks remaining.";
-
-          
-               dcclient->SendPrivateMessage( dcclient->GetBotNick(), info->GetNick(), hubConfig->GetHubName() + 
-                    ": You are being kicked because: " + message );
+          	if (info->GetKickTotal() < dcclient->GetHubConfig()->GetKickB4SBan())
+          	{
+			if ( message != "" )
+				message += " ";
+			
+                	message += CString().setNum(dcclient->GetHubConfig()->GetKickB4SBan() - info->GetKickTotal()) + "/" +
+                    		   CString().setNum(dcclient->GetHubConfig()->GetKickB4SBan()) +
+                    		   " warning Kicks remaining.";
+				   
+			dcclient->SendPrivateMessage( dcclient->GetBotNick(), info->GetNick(), hubConfig->GetHubName() + 
+                    		": You are being kicked because: " + message );
 
                // Show this kick based on verbosity setting
                if(dcclient->GetHubConfig()->GetHubVerboseKick() & kickBanType)

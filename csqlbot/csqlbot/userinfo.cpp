@@ -215,7 +215,7 @@ void UserInfo::WriteUserInfo(void){
                "',uiTag='" + uiTag +
                "',uiClient='" + uiClient +
                "',uiDescription='" + uiEscDescription +
-               "',uiVersion='" + uiVersion +
+               "',uiVersion='" + m_ClientVersion.m_sVersionString +
                "',uiMode='" + uiMode +
                "',uiHubs='" + CString().setNum(uiHubs) +
                "',uiHubsOp='" + CString().setNum(uiHubsOp) +
@@ -258,7 +258,7 @@ void UserInfo::WriteUserInfo(void){
                "',uiTag='" + uiTag +
                "',uiClient='" + uiClient +
                "',uiDescription='" + uiEscDescription +
-               "',uiVersion='" + uiVersion +
+               "',uiVersion='" + m_ClientVersion.m_sVersionString +
                "',uiMode='" + uiMode +
                "',uiHubs='" + CString().setNum(uiHubs) +
                "',uiHubsOp='" + CString().setNum(uiHubsOp) +
@@ -336,7 +336,7 @@ CString UserInfo::ShowUserInfo(void){
      if (!uiClient.IsEmpty())
      {
           s+= "Client : "; s+= uiClient.Data(); s+= "\r\n";
-          s+= "Version : "; s+= uiVersion.Data(); s+= "\r\n";
+          s+= "Version : "; s+= m_ClientVersion.m_sVersionString.Data(); s+= "\r\n";
           s+= "Mode : "; s+= uiMode.Data(); s+= "\r\n";
           if (uiHubsNorm)
           {
@@ -430,7 +430,30 @@ void UserInfo::SetTag(CString tag)
           int i6=tag.Find(",0:",0,FALSE);
           int i7=tag.Find('>',0,FALSE);
           
-          uiVersion=tag.Mid(i2+2,i3-i2-2);
+	m_ClientVersion.m_sVersionString = tag.Mid(i2+2,i3-i2-2);
+	  
+	int i,i1;
+	
+	// parse version
+	if ( m_ClientVersion.m_sVersionString != "" )
+	{
+		if ( (i=m_ClientVersion.m_sVersionString.Find('.')) != -1 )
+		{
+			m_ClientVersion.m_nVersionMajor = m_ClientVersion.m_sVersionString.Mid(0,i).asINT();
+			i++;
+			if ( (i1=m_ClientVersion.m_sVersionString.Find('.',i)) != -1 )
+			{
+				m_ClientVersion.m_nVersionMinor = m_ClientVersion.m_sVersionString.Mid(i,m_ClientVersion.m_sVersionString.Length()-i1).asINT();
+				i=i1+1;
+				m_ClientVersion.m_nVersionPatch = m_ClientVersion.m_sVersionString.Mid(i,m_ClientVersion.m_sVersionString.Length()-i).asINT();
+			}
+			else
+			{
+				m_ClientVersion.m_nVersionMinor = m_ClientVersion.m_sVersionString.Mid(i,m_ClientVersion.m_sVersionString.Length()-i).asINT();
+			}
+		}
+	}
+
           uiMode=tag.Mid(i3+3,i4-i3-3);
           if(uiMode=="A") {uiMode="Active";}
           else if (uiMode=="5"){uiMode="Socks";}
