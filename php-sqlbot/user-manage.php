@@ -10,6 +10,13 @@ if (!empty($nicksearch))
 	{$where="WHERE nick LIKE '%$nicksearch%'";$ipsearch = "";}
 else if (!empty($ipsearch)) 
 	{$where="WHERE IP LIKE '%$ipsearch%'";$nicksearch = "";}
+else if (!empty($country)) 
+	{$where="WHERE country = '$country'";$country = "";}
+else if (!empty($status)) 
+	{$where="WHERE status = '$status'";$status = "";}
+else if (!empty($allowstatus)) 
+	{$where="WHERE allowStatus = '$allowstatus'";$allowstatus = "";}
+	
 else if(!empty($search)){$where = "WHERE $field LIKE '%$search%'"; }
 else {$where = ""; }	
 if ($function == delete)
@@ -28,7 +35,7 @@ mysql_connect($databasehost,$username,$password);
 @mysql_select_db($database) or die( "Unable to select database");
 $numresult=mysql_query("SELECT * FROM userDB");
 $numrows=mysql_num_rows($numresult);
-$result=mysql_query("SELECT * FROM userDB $where ORDER by inTime DESC LIMIT $offset,$defaultLogEntries");
+$result=mysql_query("SELECT * FROM userDB $where ORDER by uType,nick LIMIT $offset,$defaultLogEntries");
 mysql_close();
 ?>
 <b>Filter Users Stats</b>
@@ -40,7 +47,7 @@ mysql_close();
 		</td>
 	<td nowrap>
 		
-<form action="<? echo "user-manage.php?function=delete&ipsearch=$ipsearch&nicksearch=$nicksearch" ?>" method="post">
+<form action="<? echo "user-manage.php?function=delete&ipsearch=$ipsearch&nicksearch=$nicksearch&countrysearch=$countrysearch" ?>" method="post">
 	<input type="Submit" value="Delete ALL" onClick="return confirmDelete()"></form>
 </td></tr>
 </form>
@@ -51,12 +58,12 @@ echo "Totals :Users $numrows<br>";
 ?>
 <table border="$tableborders" cellspacing="2" cellpadding="2">
 <tr>
-<th><? echo "$font";?>nick<? echo "$fontend";?></th>
+<th><? echo "$font";?>Nick<? echo "$fontend";?></th>
 <!-- <th><? echo "$font";?>passwd<? echo "$fontend";?></th> -->
-<th><? echo "$font";?>status<? echo "$fontend";?></th>
- <th><? echo "$font";?>utype<? echo "$fontend";?></th> 
+<th><? echo "$font";?>Status<? echo "$fontend";?></th>
+ <th><? echo "$font";?>User Type<? echo "$fontend";?></th> 
 <!--<th><? echo "$font";?>type<? echo "$fontend";?></th> -->
-<th><? echo "$font";?>allowStatus<? echo "$fontend";?></th>
+<th><? echo "$font";?>Allow Status<? echo "$fontend";?></th>
 <!-- <th><? echo "$font";?>awayStatus<? echo "$fontend";?></th>  -->
 <!-- <th><? echo "$font";?>awayMSg<? echo "$fontend";?></th> -->
 <!-- <th><? echo "$font";?>fullDescription<? echo "$fontend";?></th> -->
@@ -65,14 +72,14 @@ echo "Totals :Users $numrows<br>";
 <th><? echo "$font";?>slots<? echo "$fontend";?></th>
 <th><? echo "$font";?>hubs<? echo "$fontend";?></th>
 <!--<th><? echo "$font";?>limiter<? echo "$fontend";?></th>-->
-<th><? echo "$font";?>connection<? echo "$fontend";?></th>
+<th><? echo "$font";?>Connection<? echo "$fontend";?></th>
 <!--<th><? echo "$font";?>connectionMode<? echo "$fontend";?></th>-->
-<th><? echo "$font";?>country<? echo "$fontend";?></th>
+<th><? echo "$font";?>Country<? echo "$fontend";?></th>
 <th><? echo "$font";?>IP<? echo "$fontend";?></th>
 <!-- <th><? echo "$font";?>hostname<? echo "$fontend";?></th> 
-<th><? echo "$font";?>firstTime<? echo "$fontend";?></th> 
+<th><? echo "$font";?>First Login<? echo "$fontend";?></th> 
 <th><? echo "$font";?>outTime<? echo "$fontend";?></th> -->
-<th><? echo "$font";?>inTime<? echo "$fontend";?></th>
+<th><? echo "$font";?>Checkin Time<? echo "$fontend";?></th>
 <!-- <th><? echo "$font";?>onlineTime<? echo "$fontend";?></th>
 <th><? echo "$font";?>loginCount<? echo "$fontend";?></th>
 <th><? echo "$font";?>kickCount<? echo "$fontend";?></th>
@@ -83,9 +90,9 @@ echo "Totals :Users $numrows<br>";
 <th><? echo "$font";?>pBanCountTot<? echo "$fontend";?></th>
 <th><? echo "$font";?>lineCount<? echo "$fontend";?></th> 
 <th><? echo "$font";?>avShareBytes<? echo "$fontend";?></th> -->
-<th><? echo "$font";?>shared_bytes<br>[hover]<? echo "$fontend";?></th>
-<th><? echo "$font";?>lastAction<? echo "$fontend";?></th>
-<th><? echo "$font";?>lastReason<? echo "$fontend";?></th>
+<th><? echo "$font";?>Shared_Bytes<br>[hover]<? echo "$fontend";?></th>
+<th><? echo "$font";?>Last Action<? echo "$fontend";?></th>
+<th><? echo "$font";?>Last Reason<? echo "$fontend";?></th>
 
 </tr>
 <?
@@ -144,12 +151,12 @@ while ($data=mysql_fetch_array($result))
 	?>
 	
 	
-<td nowrap><a href="<? echo "user-type.php?nicksearch=$nick" ?>"<? echo "$font$nick$fontend"; ?></a></td>
+<td nowrap><a href="<? echo "user-manage.php?nicksearch=$nick" ?>" title="Search for: <?echo "$nick"?>"> <? echo "$font$nick$fontend"; ?></a> <a href="<? echo "user-type.php?nicksearch=$nick" ?>" title="<?echo "$nick"?>'s info"> <? echo "<font color=\"#2400FF\" size=\"-1\">(i)</font>"?></a></td>
 <!-- <td nowrap><? echo "$font$passwd$fontend"; ?></td> -->
-<td nowrap><? echo "$font$status$fontend"; ?></td>
-<td nowrap><a href="<? echo "user-type.php?nicksearch=$nick" ?>"<? echo "$font$uType$fontend"; ?></a></td>
+<td nowrap><a href="<? echo "user-manage.php?status=$status" ?>" title="Search for users <?echo "$status"?>"> <? echo "$font$status$fontend"; ?></a></td>
+<td nowrap><? echo "$font$uType$fontend"; ?></td>
 <!--<td nowrap><? echo "$font$type$fontend"; ?></td> -->
-<td nowrap><a href="<? echo "user-type.php?nicksearch=$nick" ?>"<? echo "$font$allowStatus$fontend"; ?></a></td>
+<td nowrap><a href="<? echo "user-manage.php?allowstatus=$allowStatus" ?>"><? echo "$font$allowStatus$fontend"; ?></a></td>
 <!--<td nowrap><? echo "$font$awayStatus$fontend"; ?></td>-->
 <!-- <td nowrap><? echo "$font$awayMSg$fontend"; ?></td> -->
 <!-- <td nowrap><? echo "$font$fullDescription$fontend"; ?></td>-->
@@ -160,8 +167,8 @@ while ($data=mysql_fetch_array($result))
 <td nowrap><? echo "$font$limiter$fontend"; ?></td> -->
 <td nowrap><? echo "$font$connection$fontend"; ?></td>
 <!-- <td nowrap><? echo "$font$connectionMode$fontend"; ?></td> -->
-<td nowrap><? echo "$font$country$fontend"; ?></td>
-<td nowrap><? echo "$font$IP$fontend"; ?></td>
+<td nowrap><a href="user-manage.php?country=<? echo "$country"?>" title="Search for all users from: <? echo "$country"?>"><? echo "$font$country$fontend"; ?></a></td>
+<td nowrap><a href="user-manage.php?ipsearch=<? echo "$IP"?>" title="Search for all users with: <? echo "$IP"?>"><? echo "$font$IP$fontend"; ?></td>
 <!-- <td nowrap><? echo "$font$hostname$fontend"; ?></td>
 <td nowrap><? echo "$font$firstTime$fontend"; ?></td>
 <td nowrap><? echo "$font$outTime$fontend"; ?></td> -->
@@ -177,7 +184,7 @@ while ($data=mysql_fetch_array($result))
 <td nowrap><? echo "$font$lineCount$fontend"; ?></td>
 <td nowrap><? echo "$font$avShareBytes$fontend"; ?></td> -->
 <td nowrap><a title="<? echo "$Share" ?>" style="cursor:help"><? echo "$font$byteShare$fontend"; ?></a></td>
-<td nowrap><a href="<? echo "user-type.php?nicksearch=$nick" ?>"<? echo "$font$lastAction$fontend"; ?></a></td> 
+<td nowrap><? echo "$font$lastAction$fontend"; ?></td> 
 <td nowrap><? echo "$font$lastReason$fontend"; ?></td>
 	
 	</tr>

@@ -4,7 +4,7 @@ include("header.ini");
 ?>
 <br>
 	<div align="center"><form action="log-hub.php" method="post">
-	<input class="button" type="Submit" value="Refresh"></form><br>
+	<input class="button" type="Submit" value="Reset search"></form><br>
 <div align="center"><?
 $entry=0;
 mysql_connect($databasehost,$username,$password);
@@ -42,7 +42,7 @@ $numresults=mysql_query("SELECT * FROM hubLog $where ");
 $numrows=mysql_num_rows($numresults);
 
 
-$result=mysql_query("SELECT * FROM hubLog $where ORDER by rowID DESC  LIMIT $offset,$defaultLogEntries");?>
+$result=mysql_query("SELECT * FROM hubLog $where ORDER by rowID DESC LIMIT $offset,$defaultLogEntries");?>
 <b>Apply Filers</b>
 <table> 
 	<td nowrap><form method="get" class='inline' action="log-hub.php">
@@ -97,7 +97,7 @@ $result=mysql_query("SELECT * FROM hubLog $where ORDER by rowID DESC  LIMIT $off
 echo "<br>Total Number of Matching Entries <b>$numrows</b><br>"; ?>
 
 <table border="<? echo "$tableborders";?> cellspacing="2" cellpadding="2"> 
-<tr>  
+<tr>
 	<th><? echo "$font";?>Nick<? echo "$fontend";?></th> 
 	<th><? echo "$font";?>Date Time<? echo "$fontend";?></th>
 	<th><? echo "$font";?>Action<? echo "$fontend";?></th> 
@@ -124,11 +124,11 @@ while ($data=mysql_fetch_array($result))
 	else{echo "<TR bgcolor="; echo "$rowColourAlt"; echo ">\n";}
 
 	?>
-	<form action="<? echo "log-hub.php?delete=logrow&id=$id&offset=$offset&nicksearch=$nicksearch&afilter=$afilter&rfilter=$rfilter" ?>" method="post"> 
-	<td nowrap><a href="<? echo "user-type.php?nicksearch=$nick" ?>"<? echo "$font$nick$fontend"; ?></a></td>
+	<form action="<? echo "log-hub.php?delete=logrow&id=$id&offset=$offset&nicksearch=$nicksearch&afilter=$afilter&rfilter=$rfilter" ?>" method="post">
+	<td nowrap><a href="<? echo "log-hub.php?nicksearch=$nick" ?>" title="Search log for: <?echo "$nick"?>" <? echo "$font$nick$fontend"; ?></a> <a href="<? echo "user-type.php?nicksearch=$nick" ?>" title="<?echo "$nick"?>'s info" <? echo "<font color=\"#2400FF\" size=\"-1\">(i)</font>"?></a></td>
 	<td nowrap><? echo "$font$logTime$fontend"; ?></td> 
-	<td nowrap><a href="<? echo "user-type.php?nicksearch=$nick" ?>"<? echo "$font$action$fontend"; ?></a></td>
-	<td nowrap><? echo "$font$reason$fontend"; ?></td>
+	<td nowrap><a href="<? echo "log-hub.php?nicksearch=&afilter=$action" ?>"<? echo "$font$action$fontend"; ?></a></td>
+	<td nowrap><a href="<? echo "log-hub.php?nicksearch=&rfilter=$reason" ?>"<? echo "$font$reason$fontend"; ?></a></td>
 	<td nowrap><center><input type="Submit" value="Delete"></center></td>
 	</form>
 	</tr>
