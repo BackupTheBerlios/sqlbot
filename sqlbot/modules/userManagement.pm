@@ -31,14 +31,12 @@ sub userInDB(){
 	my($value) = $dbh->selectrow_array("SELECT COUNT(DISTINCT(nick)) FROM userDB 
 					WHERE (nick='$user' OR IP='$ip') AND allowStatus!='Banned'");	
 	if($value eq 1) 
-	{	
-		my($value1) = $dbh->selectrow_array("SELECT COUNT(DISTINCT(nick)) FROM userDB 
+		{my($value1) = $dbh->selectrow_array("SELECT COUNT(DISTINCT(nick)) FROM userDB 
 				WHERE (nick='$user' OR IP='$ip') AND allowStatus='allow'");
 		if($value1 eq 1) 
 			{return 2;}
 		else 
-			{return 1;}
-	}
+			{return 1;}}
 	return 0;
 }
 # Create a new record with some defaults
@@ -51,7 +49,6 @@ sub createNewUserRecord(){
 	$dbh->do("INSERT INTO userDB VALUES ('','$user','not set','','$utype','$type','Normal','off','',	
 		'$fullDescription','$dcClient','$dcVersion','$NSlots','$NbHubs','$UploadLimit','$connection','$connectionMode','$country',
 		'$ip','$hostname','$dtime','','$dtime','','1','0','0','0','0','0','0','0','$shareBytes','$shareBytes','','')");
-	&debug("$user - Created new user");
 }
 
 sub updateUserRecordRecheck(){
