@@ -14,4 +14,4 @@ EXTRA_DIST = main.cpp botcommands.cpp botcommands.h botcontroller.cpp botcontrol
 INCLUDES= $(all_includes) -I/usr/local/include/dclib/ $(SSL_INCLUDES) $(LIBDC_CFLAGS) $(XML_CFLAGS) -D_REENTRANT -Wall
 
 # the library search path.
-csqlbot_LDFLAGS = $(all_libraries) $(LIBDC_LIBS) $(XML_LIBS) $(LIBDL) $(LIBPTHREAD) $(SSL_LDFLAGS) -lmysqlclient -L/usr/lib/mysql -L/usr/local/lib/
+csqlbot_LDFLAGS = $(all_libraries) $(LIBDC_LIBS) $(XML_LIBS) $(SSL_LDFLAGS) -lmysqlclient -L/usr/lib/mysql -L/usr/local/lib/
