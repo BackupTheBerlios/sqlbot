@@ -41,7 +41,7 @@ sub splitDescription() {
 
 	$pos1 = rindex($tmpdata, "<$verdata2[0]") + 1 + length($verdata2[0]);
 	$tmpdata = substr($tmpdata, $pos1, $pos2 - $pos1);
-	my(@tmpdata2) = split(/,/, $tmpdata);
+	@tmpdata2 = split(/,/, $tmpdata);
 
         $dcClient = $verdata2[0];
 	@tmp0 = split(/:/, $tmpdata2[0]);
