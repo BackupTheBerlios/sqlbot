@@ -114,7 +114,13 @@ if (!empty($numrows)){
 <tr><td><? echo "$font";?>Total Lines Spoken:<? echo "$fontend";?></td><td nowrap><? echo "$font$totalMessages lines$fontend"; ?></td></tr>
 <tr><td><? echo "$font";?>Last Login:<? echo "$fontend";?></td><td nowrap><? echo "$font$inTime$fontend"; ?></td></tr>
 <tr><td><? echo "$font";?>First Login:<? echo "$fontend";?></td><td nowrap><? echo "$font$firstLogin$fontend"; ?></td></tr>
-<tr><td><? echo "$font";?>Total time on hub:<? echo "$fontend";?></td><td nowrap><? echo "$font$totalOnline$fontend"; ?></td></tr>
+<tr><td><? echo "$font";?>Total time on hub:<? echo "$fontend";?></td><td nowrap><?
+function mod($a, $b) {
+ return ((($a % $b) + $b) % $b);
+}
+	$days= $totalOnline/86400;
+        $time=date("H:i:s", mktime(0,0,$totalOnline));echo "$font";echo (int)($days); echo "days  $time h:m:s ($totalOnline Seconds)$fontend"; 
+?></td></tr>
 </table>
 </td>
 </tr>
@@ -141,6 +147,8 @@ if (!empty($numrows)){
 <form action="<? echo "user-manage.php?f=aStatus&nick=$nick&ip=$IP";?>" method="post">
 <tr><td><input type="radio" name="aStatus" value=21 <? if ($allowStatus == "Banned" && $lastAction == "P-Banned" && $lastReason != "Fake(Share)" && $lastReason !="Fake(Tag)")  echo"checked=\"true\"";?>><? echo "$font";?>Permanent Ban - Place a permanent Ban</font></td></tr>
 <tr><td><input type="radio" name="aStatus" value=22 <? if ($allowStatus == "Banned" && $lastAction == "T-Banned" && $lastReason != "Fake(Share)" && $lastReason !="Fake(Tag)")  echo"checked=\"true\"";?>><? echo "$font";?>Temporary Ban - Place under temporary Ban</font></td></tr>
+<tr><td><input type="radio" name="aStatus" value=27 <? if ($allowStatus == "Normal") echo"checked=\"true\"";?>><? echo "$font";?>Reset Kick & Ban Counters</font></td></tr>
+
 <tr><td><input type="radio" name="aStatus" value=23 <? if ($allowStatus == "Normal") echo"checked=\"true\"";?>><? echo "$font";?>Normal (UnBan) & Reset Kick Counter</font></td></tr>
 <tr><td><input type="radio" name="aStatus" value=10 ><? echo "$font";?>Kick User</font></td></tr>
 <tr><td><input type="Text" size="50" name="information" value=""></tr></td>
