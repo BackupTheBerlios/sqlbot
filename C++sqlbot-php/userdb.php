@@ -212,8 +212,10 @@ while ($data=mysql_fetch_array($userresult))
 	if ($uiClient == "++") { $uiClient = "<img src=\"img/clients/DCpp.gif\" alt=\"$uiClient\" title=\"$uiTag\">"; }
 	if ($uiClient == "DC") { $uiClient = "<img src=\"img/clients/DC.gif\" alt=\"$uiClient\" title=\"$uiTag\">"; }
 	if ($uiNick == "$bcName") { $uiClient = "BOT"; }
-	if  ($uiStatus == "1") { $uiStatus ="<img src=\"img/Online.gif\" alt=\"Online\">";}
-	if  ($uiStatus == "0") { $uiStatus ="<img src=\"img/Offline.gif\" alt=\"Offline\">";}
+	
+	if  (($uiStatus == "1") && ($uiIsAway == "0")) { $uiStatus ="<img src=\"img/Online.gif\" alt=\"Online\" title=\"Online\">";}
+	if  (($uiStatus == "1") && ($uiIsAway == "1")) { $uiStatus ="<img src=\"img/Away.gif\" alt=\"Away\" title=\"Away\">";}
+	if  ($uiStatus == "0") { $uiStatus ="<img src=\"img/Offline.gif\" alt=\"Offline\" title=\"Offline\">";}
 
 if ($uiIsAdmin == "1") { $class = "userdbnickop"; }
 else {$class = "userdbnicknormal"; }
