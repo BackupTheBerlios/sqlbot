@@ -85,7 +85,7 @@ sub userOffline(){
 	$uoth->finish();
 
 	$dbh->do("UPDATE userDB SET 	status='Offline',
-					outTime='$outTime',
+					outTime='$outTime'
 					WHERE nick='$user'");
 
 #					onlineTime='$totOnlineTime'					
