@@ -19,13 +19,13 @@ sub splitDescription() {
 
 	#Initialise globals
 	$type=0; $ip=""; ;$GigsShared="";
-	$tmpdata=""; $fullDescription=""; $dcClient="";$UploadLimit=0;
+	$tmpdata=""; $fullDescription="Not Set"; $dcClient="";$UploadLimit="";
 	$dcVersion=""; $NbHubs=0; $NSlots=0; $slt_ratio=""; $country="";
 	$UploadLimit=0; $conn=""; $connection=""; $email="";$tmpModeAP="";
 	$connectionMode="unknown";$tmp0="";$shareBytes=0;
+	my($tmpdata)="";my($verdata)="";my($tmpModeAP)="";
 	@tmp0 = ("","");@tmp1 = ("","");@tmp2 = ("","");@tmp3 = ("","");@tmp4 = ("","");
-	@tmp4 = ("","","");my($tmpdata)="";my($verdata)="";my($tmpModeAP)="";
-	my(@verdata2)=("","","","","","");my(@tmpdata2)=("","","","","","");
+	my(@verdata2)=("","");my(@tmpdata2)=("","","","","");
 	
 	$type = odch::get_type($user);
 	$ip = odch::get_ip($user);
@@ -50,8 +50,9 @@ sub splitDescription() {
 
 	$tmpdata = odch::get_description($user);
 	if($tmpdata eq "") {return 1;}
+	
 	$tmpdata =~ s/'//g;
-	$fullDescription = "$tmpdata";
+	$fullDescription = " ";
 	my($pos1) = rindex($tmpdata, "<") +1;
 	my($pos2) = rindex($tmpdata, ">");
 	if($pos2 < 10){return 1;}

@@ -190,11 +190,7 @@ sub hub_timer() {
 #Data has received
 sub data_arrival(){
 	my($user,$data)=@_;
-	if($data =~ /GetNickList/)
-	{
-		odch::data_to_user($user,"\$MyINFO \$ALL $botname $description\$ \$DSL\$\$0\$|");
-	} 
-	
+
 	if($data =~ /\$To: $botname From: (.*)\|/)
 	{
 		my($pm )= $1;
@@ -281,7 +277,6 @@ sub data_arrival(){
 					{&msgAll("usage: +auser nick");}
 				else
 					{&delRegUser($user,$param2);}
-
 			}
 			else
 				{#Send to OPChat
