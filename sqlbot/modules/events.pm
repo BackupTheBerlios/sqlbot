@@ -92,8 +92,9 @@ sub processEvent(){
 			&addToKick($user,$REASON);
 			&buildRules($user);
 			$delayedKickTime = &getHubVar("delayed_kick_time");
-			&msgUser("$user","Your client does meet the required rules $rules.");
-			&msgUser("$user","Please get within these rules. You will be autokicked in $delayedKickTime Seconds");
+			&msgUser("$user","Your client does meet the required rules\r $rules");
+			&msgUser("$user","Your client does meet the required rules Reason : $REASON");
+			&msgUser("$user","Please get within these ruleYou will be autokicked in $delayedKickTime Seconds");
 		}
 	}
 	elsif (lc($ACTION) eq lc($nuked)){
@@ -122,10 +123,9 @@ sub kickKickTable()
 				if (&getVerboseOption("verbose_notagkicks"))	{
 					&msgAll("Kicking $ref->{'user'} for breaking the $ref->{'reason'} rule");}}
 			else{&msgAll("Kicking $ref->{'user'} for breaking the $ref->{'reason'} rule");}}
+		&msgUser("$kickuser","You have been kicked for breaking the Rules\r Reason: $reason ");
 		odch::kick_user($kickuser); # GoodBye..
 		&debug("Kicked - $kickuser - $reason");
-		&buildRules($user);
-		&msgUser("$kickuser","You have been kicked for breaking the Rules Reason: $reason .Check the current rules\r $rules.");
 	}
 	$sth->finish();
 	&delFromKick();
