@@ -372,7 +372,6 @@ echo "<tr>
 							hidden_value(uiIp, $uiIp);
 						if ($useSearch == "1") {
 							hidden_value(useSearch, 1);
-							hidden_value(useSearch, 1);
 							hidden_value(searchvalue, $searchvalue);
 							hidden_value(searchfield, $searchfield);
 							;}

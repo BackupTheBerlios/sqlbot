@@ -136,6 +136,27 @@ primary key(hubID, uiNick));
 
 
 
+#and one for the <!-- LOG SEARCH -->:
+CREATE TABLE logSearch (
+lsTime VARCHAR(14) NOT NULL,
+hubID INT(3) NOT NULL,
+lsNick VARCHAR(40) NOT NULL,
+lsSearch VARCHAR(50),
+lsType int(1),
+primary key(lsTime, hubID, lsNick));
+
+
+#and one for the <!-- LOG Chat -->:
+CREATE TABLE logChat (
+lcTime VARCHAR(14) NOT NULL,
+hubID INT(3) NOT NULL,
+lcNick VARCHAR(40) NOT NULL,
+lcMessage TINYTEXT,
+primary key(lcTime, hubID, lcNick));
+
+
+
+
 #Finally the last table for the IP-Country database.
 #Create the table with:
 
