@@ -135,7 +135,7 @@ sub calcOnlineTime(){
 
 	$differenceEpochSeconds = $outTimeEpochSeconds - $inTimeEpochSeconds;
 
-	if($differenceEpochSeconds eq 0){return("$onlineTime");}
+	if($differenceEpochSeconds eq 0){return("0");}
 	$onlineSeconds = $onlineSeconds + $differenceEpochSeconds;
 
 return("$onlineSeconds");
