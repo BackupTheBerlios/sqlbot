@@ -141,7 +141,7 @@ sub banUser (){
 				    	lastAction='$lastAction'
 				    	WHERE nick='$user' AND allowStatus='Banned'");
 		if(&getLogOption("log_bans"))
-			{&addToLog($user,$mode,$reason);}			
+			{&addToLog($user,$lastAction,$reason);}			
 		return(1);}
 	else{return(1);}
 	$dbh->do("UPDATE userDB SET tBanCountTot='$tBanCountTot',
