@@ -19,7 +19,7 @@
 sub userIsOnline(){
 	my($user,$ip) = @_;
 	my($value) = $dbh->selectrow_array("SELECT COUNT(*) FROM userDB 
-					WHERE ((nick='$user' OR IP='$ip') AND status='Online' AND lastAction!='P-Banned')");
+				WHERE ((nick='$user' OR IP='$ip') AND status='Online' AND lastAction!='P-Banned')");
 	if($value eq 1)
 	{return 1;}
 	return 0;
@@ -27,7 +27,6 @@ sub userIsOnline(){
 # Is there a match for this user ?
 sub userInDB(){
 	my($user,$ip) = @_;
-
 	my($value) = $dbh->selectrow_array("SELECT COUNT(DISTINCT(nick)) FROM userDB 
 					WHERE ((nick='$user' OR IP='$ip') AND lastAction!='P-Banned')");	
 	if($value eq 1) 
@@ -103,7 +102,6 @@ sub userOffline(){
 	my($outTime)="$date $time";
 	my($inTime) = "$ref->{'inTime'}";
 	my($onlineTime) = "$ref->{'onlineTime'}";
-# TODO
 	my($totOnlineTime) = &calcOnlineTime($outTime,$inTime,$onlineTime);
 	$uoth->finish();
 
