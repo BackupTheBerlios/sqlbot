@@ -30,8 +30,7 @@ sub userIsOnline(){
 sub userInDB(){
 	my($user,$ip) = @_;
 	my($sqluser) = &sqlConvertNick($user);
-	my($value) = $dbh->selectrow_array("SELECT COUNT(nick) FROM userDB 
-					WHERE nick='$sqluser' ");	
+	my($value) = $dbh->selectrow_array("SELECT COUNT(nick) FROM userDB WHERE nick='$sqluser' ");	
 	if($value eq 1) 
 		{my($value1) = $dbh->selectrow_array("SELECT COUNT(nick) FROM userDB 
 				WHERE nick='$sqluser' AND allowStatus='allow'");
@@ -58,10 +57,10 @@ sub updateUserRecordRecheck(){
 	$connection = &getConnection($conn);
 	my($sqluser) = &sqlConvertNick($user);
 
-	$dbh->do("UPDATE userDB SET nick='$sqluser',slots='$NSlots',hubs='$NbHubs',
-			limiter='$UploadLimit',fullDescription='$fullDescription',
-			shareByte='$shareBytes',status='Online'
-			WHERE nick='$sqluser' )");
+	$dbh->do("UPDATE userDB SET nick='$sqluser',slots='$NSlots',hubs='$NbHubs',limiter='$UploadLimit'
+			,fullDescription='$fullDescription',shareByte='$shareBytes',
+			status='Online'	WHERE nick='$sqluser'");
+
 }
 
 # User record exists so update the details
@@ -78,8 +77,10 @@ sub updateUserRecord(){
 	$loginCount++;
 	$uurth->finish();
 	my($connection) = &getConnection($conn);
-
-	$dbh->do("UPDATE userDB SET nick='$sqluser',utype='$utype',dcClient='$dcClient',
+	my($userInDB) = &userInDB($user,$ip);
+	if($userInDB eq 2)
+	{
+		$dbh->do("UPDATE userDB SET nick='$sqluser',utype='$utype',dcClient='$dcClient',
 					dcVersion='$dcVersion',slots='$NSlots',hubs='$NbHubs',
 					limiter='$UploadLimit',connection='$connection',
 					connectionMode='$connectionMode',country='$country',
@@ -87,7 +88,21 @@ sub updateUserRecord(){
 					avShareBytes='$shareBytes',loginCount='$loginCount',
 					fullDescription='$fullDescription',shareByte='$shareBytes',
 					IP='$ip'
-					WHERE nick='$sqluser' ");
+					WHERE nick='$sqluser' OR IP='$ip'");
+	}
+	else
+	{
+		$dbh->do("UPDATE userDB SET nick='$sqluser',utype='$utype',dcClient='$dcClient',
+					dcVersion='$dcVersion',slots='$NSlots',hubs='$NbHubs',
+					limiter='$UploadLimit',connection='$connection',
+					connectionMode='$connectionMode',country='$country',
+					hostname='$hostname',IP='$ip',inTime='$inTime',
+					avShareBytes='$shareBytes',loginCount='$loginCount',
+					fullDescription='$fullDescription',shareByte='$shareBytes',
+					IP='$ip'
+					WHERE nick='$sqluser'");
+	}
+
 }
 
 # Check the allow status of this user
