@@ -204,7 +204,6 @@ $result=mysql_query("SELECT * FROM hubConfig WHERE hubID='$hubID'");
 							<tr><?php check(join4, 8, "Show Op-Admin Joins", $hcVerboseJoin); ?></tr>
 							<tr><?php check(join5, 16, "Show Bot-Master Joins", $hcVerboseJoin); ?></tr>
 							<tr><?php check(join6, 32, "Show Bot Joins", $hcVerboseJoin); ?></tr>
-							<tr><td><a href="javascript:CheckAll();">Check All</a></td><td></td></tr>
 							<tr>
 								<td><input type="submit" value="Update" class="menubutton"></td>
 								<td></td>
