@@ -162,7 +162,7 @@ $total_userresult=mysql_query("SELECT *,DATE_FORMAT(uiLastSeenTime, '%d/%m/%Y %H
 
 $total_selection=mysql_num_rows($total_userresult);
 
-$total_bytes_q=mysql_query("SELECT SUM(uiShare) FROM userInfo WHERE hubID='$hubID' $parseoption $parseoptionextra");
+$total_bytes_q=mysql_query("SELECT SUM(uiShare) FROM userInfo WHERE hubID='$hubID' AND uiBanFlag < '3' $parseoption $parseoptionextra");
 
 $totshared_bytes=mysql_result($total_bytes_q,$i);
 
