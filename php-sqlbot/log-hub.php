@@ -129,6 +129,30 @@ while ($data=mysql_fetch_array($result))
 	<? $i++; } 
 echo "</table>";
 ?></div>
+
+
+<? if ($offset!=0) { 
+    $prevoffset=$offset-$defaultLogEntries;
+    print "<a href=\"user-manage.php?offset=$prevoffset&ipsearch=$ipsearch&nicksearch=$nicksearch\">PREV</a> &nbsp; \n";
+}
+$pages=intval($numrows/$limit);
+
+if ($numrows%$limit) {
+    $pages++; }
+
+for ($i=1;$i<=$pages;$i++) { // loop thru
+    $newoffset=$limit*($i-1);
+    print "<a href=\"user-manage.php?offset=$newoffset&ipsearch=$ipsearch&nicksearch=$nicksearch\">$i</a> &nbsp; \n"; }
+
+if (!(($offset/$limit)==$pages-1) && $pages!=1) {
+    // not last page so give NEXT link
+    $newoffset=$offset+$limit;
+    print "<a href=\"user-manage.php?offset=$newoffset&ipsearch=$ipsearch&nicksearch=$nicksearch\">NEXT</a><p>\n";
+}
+
+?></div>
+
+
 <? echo "$fontend";?>
 </body>
 </html>

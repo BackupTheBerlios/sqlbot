@@ -28,7 +28,7 @@ echo "Total Number of Fakers $numrows<br>";
 <th><? echo "$font";?>Connection Mode<? echo "$fontend";?></th>
 <th><? echo "$font";?># Hubs<? echo "$fontend";?></th>
 <th><? echo "$font";?># Slots<? echo "$fontend";?></th>
-<th><? echo "$font";?>Shared [Gb] (bytes)<? echo "$fontend";?></th>
+<th><? echo "$font";?>Shared_bytes<br>[hover]<? echo "$fontend";?></th>
 </tr> 
 <? 
 while ($data=mysql_fetch_array($result)) 
@@ -46,7 +46,14 @@ while ($data=mysql_fetch_array($result))
 	$connectionMode=mysql_result($result,$i,"connectionMode");
 	$hubs=mysql_result($result,$i,"hubs");
 	$slots=mysql_result($result,$i,"slots");
-	$shareBytes=mysql_result($result,$i,"shareByte");
+	$byteShare=mysql_result($result,$i,"shareByte");
+	
+	
+	if (($byteShare / 1024 / 1024 / 1024 / 1024) > 1) { $Shared=round(($byteShare / 1024 / 1024 / 1024 / 1024), 2); $Share="$Shared TB";}
+	else if (($byteShare / 1024 / 1024 / 1024) > 1) { $Shared=round(($byteShare / 1024 / 1024 / 1024), 2); $Share="$Shared GB";}
+	else if (($byteShare / 1024 / 1024) > 1) { $Shared=round(($byteShare / 1024 / 1024), 2); $Share="$Shared MB";}
+	else if (($byteShare / 1024) > 1) { $Shared=round(($byteShare / 1024), 2); $Share="$Shared KB";};
+
 
 	// Colour Rows
 	if(($uType == "Operator") || ($uType == "Op-Admin")) {echo "<TR bgcolor="; echo "$OpRowColour"; echo ">\n";}
@@ -67,7 +74,7 @@ while ($data=mysql_fetch_array($result))
 	<td nowrap><div align="center"><? echo "$font$connectionMode$fontend"; ?></div></td>
 	<td nowrap><div align="center"><? echo "$font$hubs$fontend"; ?></div></td>
 	<td nowrap><div align="center"><? echo "$font$slots$fontend"; ?></div></td>
-	<td nowrap><div align="center"><a title="<? echo "$shareBytes bytes" ?>"><? echo "$font$shareBigs$fontend"; ?></a></div></td>
+	<td nowrap><div align="center"><a title="<? echo "$Share" ?>" style="cursor:help"><? echo "$font$byteShare$fontend"; ?></a></div></td>
 	</tr>
 	<?
 	$i++; 

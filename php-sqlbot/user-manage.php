@@ -27,7 +27,7 @@ mysql_connect($databasehost,$username,$password);
 @mysql_select_db($database) or die( "Unable to select database");
 $numresult=mysql_query("SELECT * FROM userDB");
 $numrows=mysql_num_rows($numresult);
-$result=mysql_query("SELECT * FROM userDB $where ORDER by uType ASC LIMIT $offset,$defaultLogEntries");
+$result=mysql_query("SELECT * FROM userDB $where ORDER by uType,nick ASC LIMIT $offset,$defaultLogEntries");
 mysql_close();
 ?>
 <b>Filter Users Stats</b>
@@ -82,7 +82,7 @@ echo "Totals :Users $numrows<br>";
 <th><? echo "$font";?>pBanCountTot<? echo "$fontend";?></th>
 <th><? echo "$font";?>lineCount<? echo "$fontend";?></th> 
 <th><? echo "$font";?>avShareBytes<? echo "$fontend";?></th> -->
-<th><? echo "$font";?>shareByte<? echo "$fontend";?></th>
+<th><? echo "$font";?>shared_bytes<br>[hover]<? echo "$fontend";?></th>
 <th><? echo "$font";?>lastAction<? echo "$fontend";?></th>
 <th><? echo "$font";?>lastReason<? echo "$fontend";?></th>
 
@@ -123,9 +123,14 @@ while ($data=mysql_fetch_array($result))
 //	$pBanCountTot=mysql_result($result,$i,"pBanCountTot");
 //	$lineCount=mysql_result($result,$i,"lineCount");
 //	$avShareBytes=mysql_result($result,$i,"avShareBytes");
-	$shareByte=mysql_result($result,$i,"shareByte");
+	$byteShare=mysql_result($result,$i,"shareByte");
 	$lastAction=mysql_result($result,$i,"lastAction");
 	$lastReason=mysql_result($result,$i,"lastReason");
+
+	if (($byteShare / 1024 / 1024 / 1024 / 1024) > 1) { $Shared=round(($byteShare / 1024 / 1024 / 1024 / 1024), 2); $Share="$Shared TB";}
+	else if (($byteShare / 1024 / 1024 / 1024) > 1) { $Shared=round(($byteShare / 1024 / 1024 / 1024), 2); $Share="$Shared GB";}
+	else if (($byteShare / 1024 / 1024) > 1) { $Shared=round(($byteShare / 1024 / 1024), 2); $Share="$Shared MB";}
+	else if (($byteShare / 1024) > 1) { $Shared=round(($byteShare / 1024), 2); $Share="$Shared KB";};
 
 	// Colour Rows
 	if(($uType == "Operator") || ($uType == "Op-Admin")) {echo "<TR bgcolor="; echo "$OpRowColour"; echo ">\n";}
@@ -170,7 +175,7 @@ while ($data=mysql_fetch_array($result))
 <td nowrap><? echo "$font$pBanCountTot$fontend"; ?></td>
 <td nowrap><? echo "$font$lineCount$fontend"; ?></td>
 <td nowrap><? echo "$font$avShareBytes$fontend"; ?></td> -->
-<td nowrap><? echo "$font$shareByte$fontend"; ?></td>
+<td nowrap><a title="<? echo "$Share" ?>" style="cursor:help"><? echo "$font$byteShare$fontend"; ?></a></td>
 <td nowrap><a href="<? echo "user-type.php?nicksearch=$nick" ?>"<? echo "$font$lastAction$fontend"; ?></a></td> 
 <td nowrap><? echo "$font$lastReason$fontend"; ?></td>
 	
