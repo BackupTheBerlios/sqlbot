@@ -107,10 +107,9 @@ sub clientRecheck()
 		$checkUserCount ++;
 		&parseClient($user);
 
-		if ($ip eq '') {}
+		if (($ip eq '') || ($user eq $botname)) {}
 		else {
 		$userInDB = &userInDB($user,$ip);
-		&debug("Recheck - $nick($userInDB)");
 		if ($userInDB eq 2) {}#If they are set to allow then do nothing
 		elsif ($userInDB eq 0) #If they dont exist create a record
 			{&createNewUserRecord($user);
