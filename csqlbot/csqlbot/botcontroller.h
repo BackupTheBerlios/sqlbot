@@ -26,6 +26,7 @@
 #include <dclib/core/cmanager.h>
 #include <dclib/core/cstring.h>
 #include <dclib/cfilemanager.h>
+#include <dclib/clistenmanager.h>
 #include <dclib/cquerymanager.h>
 //#include <dclib/cpluginmanager.h>
 #include <dclib/cconnectionmanager.h>

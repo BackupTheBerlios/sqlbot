@@ -30,7 +30,8 @@ BotController::BotController(){
      cconfig = new CConfig(".sqlbot");
 
      CFileManager::SetInstance(new CFileManager());
-
+     CListenManager::SetInstance(new CListenManager());
+     
      CDownloadManager::SetInstance(new CDownloadManager());
      CQueryManager::SetInstance(new CQueryManager());
      CConnectionManager::SetInstance(new CConnectionManager());
@@ -134,7 +135,10 @@ void BotController::JoinHub(CString hubid,CString host)
      }
 
      dcclient = new DCClient(botController,mySqlCon,CString(hubid).asINT(),mySqlBot->GetBotMaster(),mySqlBot->GetBotName());
+     // disable send myinfo
      dcclient->SetSendMyinfo(FALSE);
+     // disable transfer
+     dcclient->HandleTransfer(FALSE);
      hubList.Add(hubid, (CObject*&)dcclient);
      CConnectionManager::Instance()->Connect(host,host,dcclient);
 }
