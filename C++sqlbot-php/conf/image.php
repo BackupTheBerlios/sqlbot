@@ -1,4 +1,4 @@
-<?php
+<?php header ("Content-type: image/png");
 $image = imagecreate($w,10);
 $gold = imagecolorallocate($image, 8, 3, 158);
 imagepng($image);

@@ -18,6 +18,15 @@ else
 </head>
 <body>
 <?php
+ function utime (){
+ // WORK OUT LOAD TIME (FOR INTEREST)
+$time = explode( " ", microtime());
+$usec = (double)$time[0];
+$sec = (double)$time[1];
+return $sec + $usec;
+}
+$start = utime();
+
 	include("conf/dbinfo.inc.php");
 	include("conf/forms.php");
 // CONNECT TO MYSQL SERVER
@@ -104,13 +113,13 @@ $result=mysql_query("SELECT * FROM hubConfig WHERE hubID='$hubID'");
 						</tr>
 						<tr>
 							<td>
-						<!-- STATS SEARCH TYPE -->
+						<!-- FILE SEARCH STATS SEARCH TYPE -->
 							<FIELDSET>
 								<LEGEND><font color="#FFFFFF"> &nbsp; Summary Search Types since <?php echo "$firstSearchDate"; ?> &nbsp;</font></LEGEND>	
 									<table width="100%" cellspacing="0" border="0" class="stats">
 										<tr>
-											<th>Type</th>
-											<th>Count</th>
+											<td><strong>Type</strong></td>
+											<td><strong>Count</strong></td>
 											<th>% of <?php echo "$total_search"; ?> searches</th>
 										</tr>
 <?php
@@ -153,7 +162,7 @@ $i++;
 						</td>
 					</tr>
 				</table>
-			<!-- STATS LAYOUT -->
+			<!-- FILE SEARCH STATS LAYOUT -->
 			</td>
 			<td valign="top">
 				<!-- TABLE TOP SEARCHES -->
@@ -161,15 +170,48 @@ $i++;
 					<tr>
 						<td>
 							<FIELDSET>
-								<LEGEND><font color="#FFFFFF"> &nbsp; Summary Top 10 Searches since <?php echo "$firstSearchDate"; ?> &nbsp;</font></LEGEND>
+<?php //DEFINE SEARCH TYPES
+if (empty($searchfield)) {$SearchType = "All"; $parse_option = "";}
+else if ($searchfield == "1") {$SearchType = "Any"; $parse_option = "&& lsType='$searchfield'";}
+else if ($searchfield == "2") {$SearchType = "MP3"; $parse_option = "&& lsType='$searchfield'";}
+else if ($searchfield == "3") {$SearchType = "Compressed"; $parse_option = "&& lsType='$searchfield'";}
+else if ($searchfield == "4") {$SearchType = "Document"; $parse_option = "&& lsType='$searchfield'";}
+else if ($searchfield == "5") {$SearchType = "Executable"; $parse_option = "&& lsType='$searchfield'";}
+else if ($searchfield == "6") {$SearchType = "Picture"; $parse_option = "&& lsType='$searchfield'";}
+else if ($searchfield == "7") {$SearchType = "Video"; $parse_option = "&& lsType='$searchfield'";}
+else if ($searchfield == "8") {$SearchType = "Folder"; $parse_option = "&& lsType='$searchfield'";}
+
+?>
+								<LEGEND><font color="#FFFFFF"> &nbsp; Top 10 Searches
+												<?php echo "($SearchType)"; ?>
+												since <?php echo "$firstSearchDate"; ?> &nbsp;</font></LEGEND>
 									<table width="100%" cellspacing="0" border="0" class="stats">
 										<tr>
-											<th>#</th>
-											<th>File</th>
+											<td><strong>Count</strong></td>
+											<td align="right" nowrap>
+<?php
+// DEFINE SEARCH TYPES
+	echo "<form action=\"$PHP_SELF\" method=\"post\">";
+				hidden_value(hubID, $hubID);
+	echo 	"<select name=\"searchfield\" class=\"form_select\">
+					<option value=\"\"> All
+					<option value=\"1\"> Any
+					<option value=\"2\"> MP3
+					<option value=\"3\"> Compressed
+					<option value=\"4\"> Document
+					<option value=\"5\"> Executable
+					<option value=\"6\"> Picture
+					<option value=\"7\"> Video
+					<option value=\"8\"> Folder
+				</select>
+				<input type=\"submit\" value=\"Go\" class=\"userdbnicknormal\" title=\"View Selection\"></form>";
+
+?>
+											</td>
 										</tr>
 <?php
 //GET TOP SEARCHES
-$topSearchResults=mysql_query("SELECT lsSearch,COUNT(lsSearch) as count from logSearch WHERE hubID='$hubID' GROUP BY lsSearch ORDER BY count DESC LIMIT 10");
+$topSearchResults=mysql_query("SELECT lsSearch,COUNT(lsSearch) as count from logSearch WHERE hubID='$hubID' $parse_option GROUP BY lsSearch ORDER BY count DESC LIMIT 10");
 while ($data=mysql_fetch_array($topSearchResults)) 
 {
 	$COUNT=mysql_result($topSearchResults,$ts,"count");
@@ -187,11 +229,65 @@ while ($data=mysql_fetch_array($topSearchResults))
 				<!-- END TABLE TOP SEARCHES -->
 				</td>
 			</tr>
+			<tr>
+				<td valign="top">
+					<table cellpadding="0" cellspacing="0" class="statsarea">
+						<tr>
+							<td>
+					<!-- CLIENT STATS LAYOUT -->
+<?php
+// STATS CLIENT TYPE
+$totalClientsQuery=mysql_query("SELECT * from userInfo where hubID='$hubID'");
+$total_clients=mysql_num_rows($totalClientsQuery);
+?>
+							<FIELDSET>
+								<LEGEND><font color="#FFFFFF"> &nbsp; Summary Client Types Recorded &nbsp;</font></LEGEND>	
+									<table width="100%" cellspacing="0" border="0" class="stats">
+										<tr>
+											<td><strong>Client</strong></td>
+											<td><strong>Count</strong></td>
+											<th>% of <?php echo "$total_clients"; ?> logged users</th>
+										</tr>
+<?php
+$clientType=mysql_query("SELECT uiClient,COUNT(uiClient) from userInfo where hubID='$hubID' GROUP BY uiClient");
+
+while ($data=mysql_fetch_array($clientType)) 
+{
+	$uiClient=mysql_result($clientType,$j,"uiClient");
+	$COUNT=mysql_result($clientType,$j,"COUNT(uiClient)");
+	if (($COUNT > "0") && ($total_clients > "0")) { $percentage = round(((100 / $total_clients) * $COUNT), 2); }
+	else { $percentage = 0; }
+	
+$percentage_width = ($percentage * 2);
+
+if ($percentage > "1") { $percentage_pic = "<img src=\"conf/image.php?w=${percentage_width}\" alt=\"\">"; }
+else { $percentage_pic = ""; }
+
+echo "<tr>
+			<td>$uiClient</td>
+			<td>$COUNT</td>
+			<td class=\"stats\">$percentage_pic $percentage%</td>
+		</tr>";
+$j++;
+}
+?>
+									</table>
+							</FIELDSET>
+						</td>
+					</tr>
+				</table>
+			<!-- CLIENT STATS LAYOUT -->					
+				</td>
+				<td valign="top">
+				</td>
 			</table>
 		</td>
 	</tr>
 </table>
 <!-- END MAIN TABLE -->
-<?php mysql_close(); }?>
+<?php mysql_close();
+// SHOW LOAD TIME
+$end = utime(); $run = $end - $start; echo "<em>Loaded in " . substr($run, 0, 5) . "s</em>";
+}?>
 </body>
 </html>

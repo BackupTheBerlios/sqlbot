@@ -14,8 +14,8 @@
 		<?php hidden_value(hubID, $hubID); ?>
 		<input type="submit" value="Chat Log" class="menubutton"></form>
 		
-		<form action="<?php echo "searchstats.php"; ?>" method="post">
+		<form action="<?php echo "hubstats.php"; ?>" method="post">
 		<?php hidden_value(hubID, $hubID); ?>
-		<input type="submit" value="Search Stats" class="menubutton"></form>
+		<input type="submit" value="Hub Stats" class="menubutton"></form>
 		
 </FIELDSET>
