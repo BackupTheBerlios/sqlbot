@@ -307,7 +307,7 @@ $dbh->do("INSERT INTO hub_variables VALUES (	'',
 $dbh->do("INSERT INTO hub_variables VALUES (	'',
 						'external_ip',
 						'',
-						'Country of Hub/User on Local Lan");
+						'Country of Hub/User on Local Lan')");
 						print "	data \"external_ip\" inserted\n";
 $dbh->do("INSERT INTO hub_variables VALUES (	'',
 						'debug_user',
