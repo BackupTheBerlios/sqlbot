@@ -31,6 +31,32 @@ echo "<td>$value_description &nbsp;</td>
 			<option selected value=\"0\">$no_value</option>";}
 			echo "</select></td>";}
 
+
+// LOGGING OPTIONS
+function list_logging($description, $value, $value_orig) {
+if ("$value_orig" == "$value") { echo "<option selected value=\"$value\">$description</option>\n";}
+else { echo "<option value=\"$value\">$description</option>\n";}
+}
+
+function logging_options($value_description, $value, $value_orig) {
+if ($value_orig == "") { $value_orig = "0"; }
+echo "<td>$value_description &nbsp;</td>
+		<td align=\"right\"><select name=\"$value\" class=\"form_select\">";
+		list_logging(None, 0, $value_orig);
+		list_logging(Txt, 1, $value_orig);
+		list_logging(MySQL, 2, $value_orig);
+		list_logging("Both", 3, $value_orig);
+		echo "</select></td>";
+}
+
+
+
+
+
+
+
+
+
 // TEXT AREA FORM
 function textarea_form($value_description, $value, $value_orig) {
 echo "<td valign=\"top\">$value_description &nbsp;</td>

@@ -85,9 +85,9 @@ hcEnableCloneCheck SET('0','1'),
 hcVerboseKickNoTag SET('0','1'),
 hcVerboseKick SET('0','1'),
 hcVerboseBan SET('0','1'),
-hcLogChat  SET('0','1'),
-hcLogSearches  SET('0','1'),
-hcLogSystem  SET('0','1'));
+hcLogChat  SET('0','1','2','3'),
+hcLogSearches  SET('0','1','2','3'),
+hcLogSystem  SET('0','1','2','3'));
 
 
 

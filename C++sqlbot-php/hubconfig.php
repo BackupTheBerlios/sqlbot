@@ -205,9 +205,9 @@ $hcStatus = "<font color=\"#FF1D28\"><strong>Offline</strong></font>";
 								<td align="right"><font size="+1"><strong><u>Bot Configuration</u></strong></font>
 								</td>
 							</tr>
-							<tr><?php dual_select_form(Yes,No, "Log System", hcLogSystem, $hcLogSystem); ?></tr>
-							<tr><?php dual_select_form(Yes,No, "Log Main Chat", hcLogChat, $hcLogChat); ?></tr>
-							<tr><?php dual_select_form(Yes,No, "Log Searches", hcLogSearches, $hcLogSearches); ?></tr>
+							<tr><?php logging_options("Log System", hcLogSystem, $hcLogSystem); ?></tr>
+							<tr><?php logging_options("Log Main Chat", hcLogChat, $hcLogChat); ?></tr>
+							<tr><?php logging_options("Log Searches", hcLogSearches, $hcLogSearches); ?></tr>
 							<tr><?php dual_select_form(Yes,No, "Enable Clone Check", hcEnableCloneCheck, $hcEnableCloneCheck); ?></tr>
 							<tr><?php dual_select_form(Yes,No, "Check Filelists", hcFileListDl, $hcFileListDl); ?></tr>
 							<tr><?php line_form("Max Users", 5, hcMaxUsers, $hcMaxUsers); ?></tr>
