@@ -22,8 +22,15 @@ sub sqlConvertNick() {
 	$cleanUser =~ s/^(')//;
 	$cleanUser =~ s/(')$//;
 	return($cleanUser);
-}
 
+}
+sub sqldeConvertNick() {
+	my($user) = @_;
+	my($cleanUser) = $user;
+	$cleanUser =~ s/\\\'/'/g;
+	
+	return($cleanUser);
+}
 sub setTime() {
         use POSIX qw(strftime);
         $time = strftime "%H:%M:%S", localtime;

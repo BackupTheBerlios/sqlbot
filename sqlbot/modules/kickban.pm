@@ -20,10 +20,12 @@
 sub kickWorker()
 {
 	my($kwth) = $dbh->prepare("SELECT nick,information FROM botWorker WHERE function LIKE'1%'");
+	
 	$kwth->execute();
 	while ($ref = $kwth->fetchrow_hashref())
 	{
-		my($user) = "$ref->{'nick'}";
+		my($nick) = "$ref->{'nick'}";
+		my $user  = &sqldeConvertNick($nick);
 		my($information) = "$ref->{'information'}";
 		
 		if (&getVerboseOption("verbose_kicks")){
@@ -62,7 +64,9 @@ sub kickUser(){
 	my($user,$lastReason)=@_;
 	my($ip) = odch::get_ip($user);
 	if ($ip =~ /192.168/) {$ip = &getHubVar("external_ip"); }
-	$dbh->do("INSERT INTO botWorker VALUES ('mysql_insertid','10','$user','$ip','$lastReason')");
+
+	my($sqluser) = &sqlConvertNick($user);
+	$dbh->do("INSERT INTO botWorker VALUES ('mysql_insertid','10','$sqluser','$ip','$lastReason')");
 }
 ##############################################################################################
 # Read the botWorker table and Ban users
@@ -72,7 +76,8 @@ sub banWorker()
 	$bwth->execute();
 	while ($ref = $bwth->fetchrow_hashref()){
 		my($function) = "$ref->{'function'}";
-		my($user) = "$ref->{'nick'}";
+		my($sqluser) = "$ref->{'nick'}";
+		my $user  = &sqldeConvertNick($sqluser);
 		my($ip) = "$ref->{'IP'}";
 		my($information) = "$ref->{'information'}";
 		
@@ -89,10 +94,10 @@ sub banWorker()
 #		elsif($function=='26'){
 #			&banUser($user,$information,$ip,"nban");}
 		elsif($function=='27'){
-			$dbh->do("UPDATE userDB SET tBanCount='0',kickCount='0'	WHERE nick='$user' AND lastAction!='P-Banned'");
-		}
 			
-		$dbh->do("DELETE FROM botWorker WHERE nick='$user'");
+			$dbh->do("UPDATE userDB SET tBanCount='0',kickCount='0'	WHERE nick='$sqluser' AND lastAction!='P-Banned'");
+		}
+		$dbh->do("DELETE FROM botWorker WHERE (nick='$sqluser' OR IP='$ip')");
 	}
 	$bwth->finish();
 }
@@ -100,8 +105,8 @@ sub banWorker()
 #Read the botWorker table and Ban users
 sub banUser (){
 	my($user,$reason,$ip,$mode)=@_;
-
-	my($buth) = $dbh->prepare("SELECT lastReason,tBanCount,tBanCountTot,pBanCountTot FROM userDB WHERE nick='$user' AND lastAction!='P-Banned'");
+	my($sqluser) = &sqlConvertNick($user);
+	my($buth) = $dbh->prepare("SELECT lastReason,tBanCount,tBanCountTot,pBanCountTot FROM userDB WHERE nick='$sqluser' AND lastAction!='P-Banned'");
 	$buth->execute();
 	my $ref = $buth->fetchrow_hashref();
 	my($tBanCount) = "$ref->{'tBanCount'}";
@@ -155,7 +160,7 @@ sub banUser (){
 					allowStatus='Normal',
 					lastReason='Removed',
 				    	lastAction='$lastAction'
-				    	WHERE nick='$user' AND allowStatus='Banned'");
+				    	WHERE nick='$sqluser' AND allowStatus='Banned'");
 
 		if(&getLogOption("log_bans"))
 			{&addToLog($user,$lastAction,"Removed");}			
@@ -172,7 +177,7 @@ sub banUser (){
 				allowStatus='Banned',
 				lastReason='$reason',
 			    	lastAction='$lastAction'
-			    	WHERE nick='$user' AND IP='$ip'");
+			    	WHERE nick='$sqluser' AND IP='$ip'");
 	
 	if(&getLogOption("log_bans"))
     		{&addToLog($user,$lastAction,$reason);}
