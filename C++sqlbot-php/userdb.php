@@ -125,7 +125,7 @@ $hcStatus = "<font color=\"#FF1D28\"><strong>Offline</strong></font>";
 <?php
 if ($parse == "All") { $parseoption = "";}
 if ($parse == "Online") { $parseoption = "&& uiStatus='1'"; }
-if ($parse == "Fakers") { $parseoption = ""; }
+if ($parse == "Banned") { $parseoption = "&& uiBanTotal > '0'"; }
 if ($useSearch == "1") { 
 $alteredsearchfiled = ereg_replace ("\*", "%", $searchvalue);
 $parseoptionextra= "&& $searchfield LIKE '$alteredsearchfiled'";}
@@ -137,7 +137,9 @@ $total_result=mysql_query("SELECT * FROM userInfo WHERE hubID='$hubID'");
 $total_users=mysql_num_rows($total_result);
 
 $userresult=mysql_query("SELECT *,DATE_FORMAT(uiLastSeenTime, '%d/%m/%Y %H:%i') AS date,
-DATE_FORMAT(uiBanTime, '%d/%m/%Y %H:%i') AS BanTime FROM userInfo WHERE hubID='$hubID' $parseoption $parseoptionextra ORDER BY uiUserLevel  DESC,$parseorder LIMIT $offset,$defaultLogEntries");
+DATE_FORMAT(uiBanTime, '%d/%m/%Y %H:%i') AS BanTime,
+DATE_FORMAT(uiBanExpire, '%d/%m/%Y %H:%i') AS BanExpire
+FROM userInfo WHERE hubID='$hubID' $parseoption $parseoptionextra ORDER BY uiUserLevel  DESC,$parseorder LIMIT $offset,$defaultLogEntries");
 
 $total_userresult=mysql_query("SELECT *,DATE_FORMAT(uiLastSeenTime, '%d/%m/%Y %H:%i') AS date FROM userInfo WHERE hubID='$hubID' $parseoption $parseoptionextra ORDER BY uiUserLevel  DESC,$parseorder");
 
@@ -277,6 +279,7 @@ while ($data=mysql_fetch_array($userresult))
 
 	$conv_time=mysql_result($userresult,$i,"date");
 	$BanTime=mysql_result($userresult,$i,"BanTime");
+	$BanExpire=mysql_result($userresult,$i,"BanExpire");
 	if ($uiClient == "Unknown") { $CLIENT = "<img src=\"img/clients/NoTag.gif\" alt=\"\">"; }
 	if ($uiClient == "DCGUI") { $CLIENT = "<img src=\"img/clients/DCGUI.gif\" alt=\"$uiClient\">"; }
 	if ($uiClient == "++") { $CLIENT = "<img src=\"img/clients/DCpp.gif\" alt=\"$uiClient\">"; }
@@ -322,7 +325,7 @@ if ((($uiUserLevel == "0") || ($uiUserLevel == "")) && ($uiIsAdmin == "0")) { $c
 
 if ($uiBanTotal == "0") { $user_info = "Logins</td><td>$uiLoginCount</td></tr><tr><td>Kicks</td><td>$uiKickTotal</td></tr><tr><td>Bans</td><td>$uiBanTotal</td>"; }
 
-if ($uiBanTotal > "0") { $user_info = "Logins</td><td>$uiLoginCount</td></tr><tr><td>Kicks</td><td>$uiKickTotal</td></tr><tr><td>Bans</td><td>$uiBanTotal ($BanTime)</td>"; }
+if ($uiBanTotal > "0") { $user_info = "Logins</td><td>$uiLoginCount</td></tr><tr><td>Kicks</td><td>$uiKickTotal</td></tr><tr><td valign=top>Bans</td><td>$uiBanTotal<br>Banned: $BanTime<br>Expires: $BanExpire</td>"; }
 
 
 // PAGE DATA

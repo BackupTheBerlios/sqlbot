@@ -129,7 +129,7 @@ uiSayTotal INT(5),
 uiShareChckd  SET('0','1'),       
 uiShareChckdStart VARCHAR(14),
 uiShareChckdExpire VARCHAR(14),
-uiBanFlag VARCHAR(14),
+uiBanFlag SET('0','1','2','3','4','5'),
 uiBanTime VARCHAR(14),
 uiBanExpire VARCHAR(14),
 uiLoginCount int(7));

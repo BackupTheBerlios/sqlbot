@@ -82,8 +82,10 @@ $hcStatus = "<font color=\"#FF1D28\"><strong>Offline</strong></font>";
 <table class="userdb">
 <?php
 $userresult=mysql_query("SELECT *,DATE_FORMAT(uiLastSeenTime, '%d/%m/%Y %H:%i') AS lastdate,
-									DATE_FORMAT(uiFirstSeenTime, '%d/%m/%Y %H:%i') AS firstdate FROM userInfo
-									WHERE hubID='$hubID' && uiNick='$uiNick'");
+									DATE_FORMAT(uiFirstSeenTime, '%d/%m/%Y %H:%i') AS firstdate,
+									DATE_FORMAT(uiBanTime, '%d/%m/%Y %H:%i') AS BanTime,
+									DATE_FORMAT(uiBanExpire, '%d/%m/%Y %H:%i') AS BanExpire
+									FROM userInfo WHERE hubID='$hubID' && uiNick='$uiNick'");
 
 	$rowID=mysql_result($userresult,$i,"rowID");
 	$uiNick=htmlentities(mysql_result($userresult,$i,"uiNick"));
@@ -120,8 +122,8 @@ $userresult=mysql_query("SELECT *,DATE_FORMAT(uiLastSeenTime, '%d/%m/%Y %H:%i') 
 	$uiShareChckdStart=mysql_result($userresult,$i,"uiShareChckdStart");
 	$uiShareChckdExpire=mysql_result($userresult,$i,"uiShareChckdExpire");
 	$uiBanFlag=mysql_result($userresult,$i,"uiBanFlag");
-	$uiBanTime=mysql_result($userresult,$i,"uiBanTime");
-	$uiBanExpire=mysql_result($userresult,$i,"uiBanExpire");
+	$uiBanTime=mysql_result($userresult,$i,"BanTime");
+	$uiBanExpire=mysql_result($userresult,$i,"BanExpire");
 	$uiLoginCount=mysql_result($userresult,$i,"uiLoginCount");
 
 // DATE CONVERSIONS
@@ -220,8 +222,14 @@ $country_query  = "SELECT country_code2,country_name FROM iptoc ".
 					<td nowrap> : &nbsp; <?php echo "$uiKickTotal"; ?></td>
 				</tr>
 				<tr>
-					<td nowrap>Bans</td>
-					<td nowrap> : &nbsp; <?php echo "$uiBanTotal"; ?></td>
+					<td nowrap valign="top">BanFlag</td>
+					<td nowrap> : &nbsp; <?php echo "$uiBanFlag"; ?></td>
+				</tr>
+				<tr>
+					<td nowrap valign="top">Bans</td>
+					<td nowrap> : &nbsp; <?php echo "$uiBanTotal";
+						if ($uiBanTotal > "0") { echo "<br> &nbsp; <em>[$uiBanTime - $uiBanExpire]</em>";}
+						?></td>
 				</tr>
 				<tr>
 					<td nowrap>Password</td>
