@@ -61,7 +61,7 @@ sub updateUserRecordRecheck(){
 	$dbh->do("UPDATE userDB SET nick='$sqluser',slots='$NSlots',hubs='$NbHubs',
 			limiter='$UploadLimit',fullDescription='$fullDescription',
 			shareByte='$shareBytes',status='Online'
-			WHERE ((nick='$sqluser' OR IP='$ip') AND lastAction !='P-Banned')");
+			WHERE (nick='$sqluser' AND lastAction !='P-Banned')");
 }
 
 # User record exists so update the details
@@ -114,7 +114,7 @@ sub userOffline(){
 	$dbh->do("UPDATE userDB SET 	status='Offline',
 					onlineTime='$totOnlineTime',
 					outTime='$outTime'
-					WHERE (nick='$sqluser' OR IP='$ip') ");
+					WHERE nick='$sqluser' ");
 }
 
 sub userOnline(){
@@ -124,7 +124,7 @@ sub userOnline(){
 	my($sqluser) = &sqlConvertNick($user);
 	$dbh->do("UPDATE userDB SET status='$online',
 					inTime='$date $time'
-					WHERE (nick='$sqluser' OR IP='$ip') AND lastAction!='P-Banned'");
+					WHERE nick='$sqluser' AND lastAction!='P-Banned'");
 }
 
 
