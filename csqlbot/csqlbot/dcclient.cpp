@@ -892,23 +892,19 @@ bool DCClient::ClientCheck(UserInfo *info,CString nick)
 		}
 	}
 
-	// check if we have found a rule for the client
-	if ( (matchrule == 0) && (res == FALSE) )
+	// test if we dont have found a rule
+	if ( !matchrule )
 	{
-		// no rule found, use default
-		matchrule = defaultrule;
-	}
-
-	// if we have a default rule
-	if ( matchrule == 0 )
-	{
-		printf("No Rule found !\n");
-		res = TRUE;
-	}
-	else
-	{
-		// check client with default rule
-		res = ClientCheck(info,matchrule);
+		// use default rule if exist
+		if ( defaultrule )
+		{
+			res = ClientCheck(info,defaultrule);
+		}
+		else
+		{
+			printf("No Rule found !\n");
+			res = TRUE;
+		}
 	}
 
      	if ( res )
