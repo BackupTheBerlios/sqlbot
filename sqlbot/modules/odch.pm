@@ -152,13 +152,12 @@ sub hub_timer() {
 		my($webAddress) = &getHubVar("hub_website_address");
 		&msgAll("Hub has been running for $days days,$hours hours and $mins mins. Visit $webAddress");
 	}
-	
 }
 
 #Data has received
 sub data_arrival(){
 	my($user,$data)=@_;
-
+	&debug("$data");
 	if($data =~ /\$To: $botname From: (.*)\|/)
 	{
 		my($pm )= $1;
@@ -251,7 +250,8 @@ sub data_arrival(){
 				{#Send to OPChat
 				$pos1 = rindex($pm,"\$"); #Get to end of data
 				$opmsg = substr($pm, $pos1+1);
-				&msgOPs("$user","$opmsg");}
+				&msgOPs("$user","$opmsg");
+				&incLineCount($user);}
 		}
 	}
 	# Public main chat commands
@@ -268,7 +268,8 @@ sub data_arrival(){
 			{&myInfo($user);}
 		elsif($data =~ /^<.*> [\+-]uptime\|/i)
 			{&totalUptime();
-			&msgAll("Uptime: $days d $hours h $mins m");}
+			my($webAddress) = &getHubVar("hub_website_address");
+			&msgAll("The Hub has been running for $days days,$hours hours and $mins mins.");}
 		elsif($data =~ /^<.*> [\+-]help\|/i)
 			{&buildHelp($user);
 			&msgUser("$user","$helpmsg");}
@@ -304,7 +305,13 @@ sub data_arrival(){
 			{&msgAll("RTFM!  Try +help");}
 		elsif($data =~ /^<.*>(.*)/)
 			{&incLineCount($user);
-			&userBack($user);}
+#			&printolog($data);
+#NEW FEATURE CHAT LOGGING			
+#			logfile_name
+#
+#
+#
+			}
 
 		#OpAdmin ONLY public commands
 
