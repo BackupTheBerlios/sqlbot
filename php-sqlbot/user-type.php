@@ -15,10 +15,9 @@ else {$where = ""; }
 
 $numresults=mysql_query("SELECT * FROM userDB $where");
 $numrows=mysql_num_rows($numresults);
-if (empty($offset)) {$offset=0;}
 if (!empty($numrows)){
-$result=mysql_query("SELECT * FROM userDB $where ORDER by inTime DESC LIMIT $offset,$defaultLogEntries");
-}
+$result=mysql_query("SELECT * FROM userDB $where ORDER by inTime DESC LIMIT $defaultLogEntries");
+
 mysql_close();
 if (!empty($numrows)){
 	$nick=htmlentities(mysql_result($result,$i,"nick"));
@@ -152,19 +151,20 @@ if (!empty($numrows)){
 </table>
 </td></tr>
 </table>
-<?}?>
+<?}
+}
+else{
+?>
+<br><br>
+<table>
+<tr>
+This User record has been updated by another user  with the same IP.
+<?
+
+}
+?>
 </tr>
 </table>
-
-
-
-
-
-
-
-
-
-
 
 </div>
 
