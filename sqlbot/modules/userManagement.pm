@@ -72,14 +72,16 @@ sub updateUserRecord(){
 	$loginCount++;
 	$uurth->finish();
 	my($connection) = &getConnection($conn);
-	$dbh->do("UPDATE userDB SET 	nick='$user', utype='$utype', dcClient='$dcClient',
-					dcVersion='$dcVersion',slots='$NSlots',
-					hubs='$NbHubs',limiter='$UploadLimit',
-					connection='$connection',connectionMode='$connectionMode',
-					country='$country',hostname='$hostname',
-					IP='$ip',inTime='$inTime',avShareBytes='$shareBytes',
-					loginCount='$loginCount',fullDescription='$fullDescription',
-					shareByte='$shareBytes'	WHERE (nick='$user' OR IP='$ip') ");
+
+	if(&userIsOnline($user) eq 0)
+		{$dbh->do("UPDATE userDB SET nick='$user',utype='$utype',dcClient='$dcClient',
+					dcVersion='$dcVersion',slots='$NSlots',hubs='$NbHubs',
+					limiter='$UploadLimit',connection='$connection',
+					connectionMode='$connectionMode',country='$country',
+					hostname='$hostname',IP='$ip',inTime='$inTime',
+					avShareBytes='$shareBytes',loginCount='$loginCount',
+					fullDescription='$fullDescription',shareByte='$shareBytes'
+					WHERE (nick='$user' OR IP='$ip') ");}
 }
 
 # Check the allow status of this user
@@ -99,6 +101,7 @@ sub userOffline(){
 	my($outTime)="$date $time";
 	my($inTime) = "$ref->{'inTime'}";
 	my($onlineTime) = "$ref->{'onlineTime'}";
+# TODO
 #	my($totOnlineTime) =
 #	&calcOnlineTime($outTime,$inTime,$onlineTime);
 	$uoth->finish();
