@@ -16,6 +16,14 @@
 
 use Time::Local;
 
+sub sqlConvertNick() {
+	my($user) = @_;
+	my $cleanUser = $dbh->quote($user);
+	$cleanUser =~ s/^(')//;
+	$cleanUser =~ s/(')$//;
+	return($cleanUser);
+}
+
 sub setTime() {
         use POSIX qw(strftime);
         $time = strftime "%H:%M:%S", localtime;
@@ -117,7 +125,8 @@ sub addToLog(){
 	my($user,$ACTION,$REASON) = @_;
 	&setTime();
 	my($dtime)="$date $time";
-	$dbh->do("INSERT INTO hubLog VALUES ('mysql_insertid','$user','$dtime','$ACTION','$REASON')");
+	my($sqluser) = &sqlConvertNick($user);
+	$dbh->do("INSERT INTO hubLog VALUES ('mysql_insertid',$sqluser,'$dtime','$ACTION','$REASON')");
 }
 
 sub calcOnlineTime(){

@@ -51,7 +51,8 @@ sub splitDescription() {
 	$tmpdata = odch::get_description($user);
 #	if($tmpdata eq "") {return 1;}
 	
-	$tmpdata =~ s/'//g;
+	$tmpdata =~ s/'//g;	
+
 	$fullDescription = "$tmpdata";
 	my($pos1) = rindex($tmpdata, "<") +1;
 	my($pos2) = rindex($tmpdata, ">");
@@ -153,20 +154,6 @@ sub clientRecheck()
 		$type = odch::get_type($nick);
 		if($type eq 0 )	{&userOffline($nick);}}
 	$cth->finish();
-	
-	# Read all users from DB who are T-Bbanned and see if any have expired
-#	my ($cibth) = $dbh->prepare("SELECT nick,IP FROM userDB WHERE lastAction='T-Banned'");
-#	$cibth->execute();
-#	while (my $ref = $cibth->fetchrow_hashref()) {
-#		my($nick) = "";
-#		$nick = "$ref->{'nick'}";
-#		$ip = "$ref->{'IP'}"; 
-#		$banned = odch::check_if_banned($nick,NICKBAN);
-#		if($banned eq 1 ){&debug("$nick Is Banned");}
-#		else{&debug("$nick Is Not Banned");}
-#	}
-#	$cibth->finish();
-	
 }
 
 
@@ -286,9 +273,10 @@ sub parseClient(){
 sub checkKicks(){
 	my($user) = @_;
 	&setTime();
+	my($sqluser) = &sqlConvertNick($user);
 	if (&getConfigOption("check_kicks"))
 		{my($ckth) = $dbh->prepare("SELECT kickCount,tBanCount FROM userDB 
-				WHERE nick = '$user' AND lastAction!='P-Banned'");
+				WHERE nick = '$sqluser' AND lastAction!='P-Banned'");
 		$ckth->execute();
 		my($ref) = $ckth->fetchrow_hashref();
 		my($kickCount) = "$ref->{'kickCount'}";
@@ -302,7 +290,6 @@ sub checkKicks(){
 		elsif ($kickCount > $kick_before_tban) 
 			{&msgUser("$user","You have now been kicked $kick_before_tban times . You have been T-Banned !");
 			$ACTION = "T-Banned";}}
-		
 }
 
 sub checkClones(){

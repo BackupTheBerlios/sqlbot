@@ -30,62 +30,48 @@ sub kicked_user()
 sub new_user_connected(){
 	my($user) = @_;
 	
-	if (&checkNick($user) eq 1){
-		&msgUser($user,"Remove the ' from your nick, You have been Kicked");
-		odch::kick_user($user);
-		&debug("Kick $user for ' in nick ");}
-	else
-	{
-		&parseClient($user);
-		my($userInDB) = &userInDB($user,$ip);
-		if($userInDB eq 1)
-			{&updateUserRecord($user);
-			&userConnect($user);	
-			&checkClones($user);
-			&processEvent($user);			
-		}
-		elsif($userInDB eq 0)
-			{&createNewUserRecord($user);
-			&userConnect($user);	
-			&checkClones($user);
-			&processEvent($user);
-		}
-		elsif($userInDB eq 2)
-			{&updateUserRecord($user);}
-			
-		&userOnline($user);
+	&parseClient($user);
+	my($userInDB) = &userInDB($user,$ip);
+	if($userInDB eq 1)
+		{&updateUserRecord($user);
+		&userConnect($user);	
+		&checkClones($user);
+		&processEvent($user);			
 	}
+	elsif($userInDB eq 0)
+		{&createNewUserRecord($user);
+		&userConnect($user);	
+		&checkClones($user);
+		&processEvent($user);
+	}
+	elsif($userInDB eq 2)
+		{&updateUserRecord($user);}
+	
+	&userOnline($user);
 }
 
 # Fires when a registered user has connected
 sub reg_user_connected(){
 	my($user) = @_;
 	
-	if (&checkNick($user) eq 1){
-		&msgUser($user,"Remove the ' from your nick, You have been Kicked");
-		odch::kick_user($user);
-		&debug("Kick $user for ' in nick ");}
-	else
-	{
-		&parseClient($user);
-		my($userInDB) = &userInDB($user,$ip);
-		if($userInDB eq 1)
-			{&updateUserRecord($user);
-			&userConnect($user);	
-			if (&getConfigOption("check_reg")) 
-			{	&checkClones($user);
-				&processEvent($user);}
-		}
-		elsif($userInDB eq 0)
-			{&createNewUserRecord($user);
-			&userConnect($user);	
-			if (&getConfigOption("check_reg")) 
-			{	&checkClones($user);
-				&processEvent($user);}
-		}
-		elsif($userInDB eq 2)
-			{&updateUserRecord($user);}
+	&parseClient($user);
+	my($userInDB) = &userInDB($user,$ip);
+	if($userInDB eq 1)
+		{&updateUserRecord($user);
+		&userConnect($user);	
+		if (&getConfigOption("check_reg")) 
+		{	&checkClones($user);
+			&processEvent($user);}
 	}
+	elsif($userInDB eq 0)
+		{&createNewUserRecord($user);
+		&userConnect($user);	
+		if (&getConfigOption("check_reg")) 
+		{	&checkClones($user);
+			&processEvent($user);}
+	}
+	elsif($userInDB eq 2)
+		{&updateUserRecord($user);}
 	&userOnline($user);
 	
 	if (&getVerboseOption("verbose_op_connect"))
@@ -97,31 +83,25 @@ sub reg_user_connected(){
 sub op_connected(){
 	my($user) = @_;
 	
-	if (&checkNick($user) eq 1){
-		&msgUser($user,"Remove the ' from your nick, You have been Kicked");
-		odch::kick_user($user);
-		&debug("Kick $user for ' in nick ");}
-	else
-	{
-		&parseClient($user);
-		my($userInDB) = &userInDB($user,$ip);
-		if($userInDB eq 1)
-			{&updateUserRecord($user);
-			&userConnect($user);	
-			if (&getConfigOption("check_op")) 
-			{	&checkClones($user);
-				&processEvent($user);}
-		}
-		elsif($userInDB eq 0)
-			{&createNewUserRecord($user);
-			&userConnect($user);	
-			if (&getConfigOption("check_op")) 
-			{	&checkClones($user);
-				&processEvent($user);}
-		}
-		elsif($userInDB eq 2)
-			{&updateUserRecord($user);}
+	&parseClient($user);
+	my($userInDB) = &userInDB($user,$ip);
+	if($userInDB eq 1)
+		{&updateUserRecord($user);
+		&userConnect($user);	
+		if (&getConfigOption("check_op")) 
+		{	&checkClones($user);
+			&processEvent($user);}
 	}
+	elsif($userInDB eq 0)
+		{&createNewUserRecord($user);
+		&userConnect($user);	
+		if (&getConfigOption("check_op")) 
+		{	&checkClones($user);
+			&processEvent($user);}
+	}
+	elsif($userInDB eq 2)
+		{&updateUserRecord($user);}
+
 	
 	&userOnline($user);
 
@@ -134,33 +114,25 @@ sub op_admin_connected()
 {
 	my($user) = @_;
 	
-
-	if (&checkNick($user) eq 1){
-		&msgUser($user,"Remove the ' from your nick, You have been Kicked");
-		odch::kick_user($user);
-		&debug("Kick $user for ' in nick ");}
-	else
-	{
-		&parseClient($user);
-		my($userInDB) = &userInDB($user,$ip);
-		if($userInDB eq 1)
-			{&updateUserRecord($user);
-			&userConnect($user);	
-			if (&getConfigOption("check_opadmin"))
-			{	&checkClones($user);
-				&processEvent($user);}	
-		}
-		elsif($userInDB eq 0)
-			{&createNewUserRecord($user);
-			&userConnect($user);	
-			if (&getConfigOption("check_opadmin"))
-			{	&checkClones($user);
-				&processEvent($user);}	
-		}
-		elsif($userInDB eq 2)
-			{&updateUserRecord($user);}
+	&parseClient($user);
+	my($userInDB) = &userInDB($user,$ip);
+	if($userInDB eq 1)
+		{&updateUserRecord($user);
+		&userConnect($user);	
+		if (&getConfigOption("check_opadmin"))
+		{	&checkClones($user);
+			&processEvent($user);}	
 	}
-	
+	elsif($userInDB eq 0)
+		{&createNewUserRecord($user);
+		&userConnect($user);	
+		if (&getConfigOption("check_opadmin"))
+		{	&checkClones($user);
+			&processEvent($user);}	
+	}
+	elsif($userInDB eq 2)
+		{&updateUserRecord($user);}
+
 	&userOnline($user);
 	
 	if (&getVerboseOption("verbose_op_connect"))

@@ -18,8 +18,10 @@
 # Is this userOnline now ?
 sub userIsOnline(){
 	my($user,$ip) = @_;
-	my($value) = $dbh->selectrow_array("SELECT COUNT(*) FROM userDB 
-				WHERE ((nick='$user' OR IP='$ip') AND status='Online' AND lastAction!='P-Banned')");
+
+	my($sqluser) = &sqlConvertNick($user);
+	my($value) = $dbh->selectrow_array("SELECT COUNT(nick) FROM userDB 
+				WHERE ((nick='$sqluser' OR IP='$ip') AND status='Online' ");
 	if($value eq 1)
 	{return 1;}
 	return 0;
@@ -27,11 +29,12 @@ sub userIsOnline(){
 # Is there a match for this user ?
 sub userInDB(){
 	my($user,$ip) = @_;
-	my($value) = $dbh->selectrow_array("SELECT COUNT(DISTINCT(nick)) FROM userDB 
-					WHERE ((nick='$user' OR IP='$ip') AND lastAction!='P-Banned')");	
+	my($sqluser) = &sqlConvertNick($user);
+	my($value) = $dbh->selectrow_array("SELECT COUNT(nick) FROM userDB 
+					WHERE ((nick='$sqluser' OR IP='$ip') AND lastAction!='P-Banned')");	
 	if($value eq 1) 
-		{my($value1) = $dbh->selectrow_array("SELECT COUNT(DISTINCT(nick)) FROM userDB 
-				WHERE ((nick='$user' OR IP='$ip') AND allowStatus='allow')");
+		{my($value1) = $dbh->selectrow_array("SELECT COUNT(nick) FROM userDB 
+				WHERE ((nick='$sqluser' OR IP='$ip') AND allowStatus='allow')");
 		if($value1 eq 1) 
 			{return 2;}
 		else 
@@ -42,10 +45,10 @@ sub userInDB(){
 sub createNewUserRecord(){
 	my($user) = @_;
 	&setTime();
-		
+	my($sqluser) = &sqlConvertNick($user);	
 	my($dtime)="$date $time";
 	$connection = &getConnection($conn);
-	$dbh->do("INSERT INTO userDB VALUES ('','$user','not set','0','$utype','$type','Normal','off',' ',	
+	$dbh->do("INSERT INTO userDB VALUES ('','$sqluser','not set','0','$utype','$type','Normal','off',' ',	
 		'$fullDescription','$dcClient','$dcVersion','$NSlots','$NbHubs','$UploadLimit','$connection','$connectionMode','$country',
 		'$ip','$hostname','$dtime','0','$dtime','0','1','0','0','0','0','0','0','0','$shareBytes','$shareBytes',' ',' ')");
 }
@@ -53,11 +56,12 @@ sub createNewUserRecord(){
 sub updateUserRecordRecheck(){
 	my($user,$ip) = @_;
 	$connection = &getConnection($conn);
+	my($sqluser) = &sqlConvertNick($user);
 
-	$dbh->do("UPDATE userDB SET nick='$user',slots='$NSlots',hubs='$NbHubs',
+	$dbh->do("UPDATE userDB SET nick='$sqluser',slots='$NSlots',hubs='$NbHubs',
 			limiter='$UploadLimit',fullDescription='$fullDescription',
-			shareByte='$shareBytes' 
-			WHERE ((nick='$user' OR IP='$ip') AND status='Online' AND lastAction !='P-Banned')");
+			shareByte='$shareBytes',status='Online'
+			WHERE ((nick='$sqluser' OR IP='$ip') AND lastAction !='P-Banned')");
 }
 
 # User record exists so update the details
@@ -65,9 +69,9 @@ sub updateUserRecord(){
 	my($user) = @_;
 	&setTime();
 	my($inTime)="$date $time";
-	
+	my($sqluser) = &sqlConvertNick($user);
 	my($uurth) = $dbh->prepare("SELECT loginCount FROM userDB 
-			WHERE ((nick='$user' OR IP='$ip') AND lastAction!='P-Banned')");
+			WHERE ((nick='$sqluser' OR IP='$ip') AND lastAction!='P-Banned')");
 	$uurth->execute();
 	my($ref) = $uurth->fetchrow_hashref();
 	my($loginCount) = "$ref->{'loginCount'}";
@@ -75,14 +79,15 @@ sub updateUserRecord(){
 	$uurth->finish();
 	my($connection) = &getConnection($conn);
 
-	$dbh->do("UPDATE userDB SET nick='$user',utype='$utype',dcClient='$dcClient',
+	$dbh->do("UPDATE userDB SET nick='$sqluser',utype='$utype',dcClient='$dcClient',
 					dcVersion='$dcVersion',slots='$NSlots',hubs='$NbHubs',
 					limiter='$UploadLimit',connection='$connection',
 					connectionMode='$connectionMode',country='$country',
 					hostname='$hostname',IP='$ip',inTime='$inTime',
 					avShareBytes='$shareBytes',loginCount='$loginCount',
-					fullDescription='$fullDescription',shareByte='$shareBytes'
-					WHERE ((nick='$user' OR IP='$ip') AND lastAction!='P-Banned')");
+					fullDescription='$fullDescription',shareByte='$shareBytes',
+					IP='$ip'
+					WHERE ((nick='$sqluser' OR IP='$ip') AND lastAction!='P-Banned')");
 }
 
 # Check the allow status of this user
@@ -95,7 +100,8 @@ sub userStatus(){
 sub userOffline(){
 	my($user) = @_;
 	&setTime();
-	my($uoth) = $dbh->prepare("SELECT inTime,onlineTime FROM userDB WHERE nick='$user' ");
+	my($sqluser) = &sqlConvertNick($user);
+	my($uoth) = $dbh->prepare("SELECT inTime,onlineTime FROM userDB WHERE nick='$sqluser' ");
 	$uoth->execute();
 	my($ref) = $uoth->fetchrow_hashref();
 
@@ -108,16 +114,17 @@ sub userOffline(){
 	$dbh->do("UPDATE userDB SET 	status='Offline',
 					onlineTime='$totOnlineTime',
 					outTime='$outTime'
-					WHERE nick='$user' ");
+					WHERE (nick='$sqluser' OR IP='$ip') ");
 }
 
 sub userOnline(){
 	my($user) = @_;
 	my($online) ="Online";
 	&setTime();
+	my($sqluser) = &sqlConvertNick($user);
 	$dbh->do("UPDATE userDB SET status='$online',
 					inTime='$date $time'
-					WHERE (nick='$user' OR IP='$ip') AND lastAction!='P-Banned'");
+					WHERE (nick='$sqluser' OR IP='$ip') AND lastAction!='P-Banned'");
 }
 
 
@@ -125,22 +132,23 @@ sub userOnline(){
 ###
 sub incLineCount(){
 	my($user)=@_;
-
-	my($ilcth) = $dbh->prepare("SELECT lineCount FROM userDB WHERE nick='$user' AND lastAction!='P-Banned' ");
+	my($sqluser) = &sqlConvertNick($user);
+	my($ilcth) = $dbh->prepare("SELECT lineCount FROM userDB WHERE nick='$sqluser' AND lastAction!='P-Banned' ");
 	$ilcth->execute();
 	my($ref) = $ilcth->fetchrow_hashref();
 
 	my($lineCount) = "$ref->{'lineCount'}";
 	$ilcth->finish();
 	$lineCount=$lineCount+1;
-	$dbh->do("UPDATE userDB SET lineCount='$lineCount' WHERE nick='$user' AND lastAction!='P-Banned'");
+
+	$dbh->do("UPDATE userDB SET lineCount='$lineCount' WHERE nick='$sqluser' AND lastAction!='P-Banned'");
 	
 }
 # Change the level of this user
 # level - 2 =op-Admin, 1=Op, 0=RegUser 
 sub setRegUser(){
 	my($user,$setUser,$passwd,$level) = @_;	
-
+	my($sqluser) = &sqlConvertNick($user);
 	my($userLevel) = odch::check_if_registered($setUser);
 	my($type)  = odch::get_type($user);
 	my($ip) = odch::get_ip($setUser);
@@ -157,7 +165,7 @@ sub setRegUser(){
 	&msgUser($setUser,">>>> $user has changed your level to $level your password is $passwd");
 	# Change this user type in the userDB
 	my($utype)  = odch::get_type($setUser);
-	$dbh->do("UPDATE userDB SET type='$utype',passwd='$passwd' WHERE (nick='$user' AND lastAction!='P-Banned')");
+	$dbh->do("UPDATE userDB SET type='$utype',passwd='$passwd' WHERE (nick='$sqluser' AND lastAction!='P-Banned')");
 	&addToLog($setUser,"Add/Edit User",$user);	
 	
 }
@@ -191,8 +199,9 @@ sub aUserWorker(){
 		my($information) = "$ref->{'information'}";
 		
 		if ($function=='50'){
-			$dbh->do("UPDATE userDB SET allowStatus='Allow'	WHERE nick='$user' OR IP='$ip'");}	
-		$dbh->do("DELETE FROM botWorker WHERE nick='$user'");
+			my($sqluser) = &sqlConvertNick($user);
+			$dbh->do("UPDATE userDB SET allowStatus='Allow'	WHERE nick='$sqluser' OR IP='$ip'");}	
+		$dbh->do("DELETE FROM botWorker WHERE nick='$sqluser'");
 	
 	$auwth->finish();
 }
@@ -201,13 +210,14 @@ sub aUserWorker(){
 sub chPassUser(){
 	my($user,$oldPass,$newPass) = @_;	
 	my($level) = odch::check_if_registered($setUser);
+	my($sqluser) = &sqlConvertNick($user);
 	if(($level eq 0)) # User is not registered
 		{&msgUser("You are not registered.");
 		return(1);}
 	else
 	{	
 		my($value) = $dbh->do("SELECT passwd FROM userDB 
-					WHERE nick='$user' AND passwd='$oldPass'");
+					WHERE nick='$sqluser' AND passwd='$oldPass'");
 		if($value eq 1)
 			{# Remove this user from reg list
 			my($type)  = odch::get_type($user);
@@ -215,7 +225,7 @@ sub chPassUser(){
 			odch::add_reg_user($user, $newPass, ($level-1));
 			# Change this user type in the userDB
 			$dbh->do("UPDATE userDB SET type='$type',passwd='$newPass' 
-					WHERE nick='$user' AND lastAction!='P-Banned'");
+					WHERE nick='$sqluser' AND lastAction!='P-Banned'");
 			&msgUser($user,"Your Password has now been set to $newPass");
 			&addToLog($user,"Change Pass",$user);}
 		else
@@ -223,7 +233,8 @@ sub chPassUser(){
 	}
 }
 sub delRegUser(){
-	my($user) = @_;	
+	my($user) = @_;
+	my($sqluser) = &sqlConvertNick($user);
 	my($currentUserLevel) = odch::check_if_registered($user);
 	if(($currentUserLevel eq 3))
 		{&msgUser($user,"You cannot delete an OpAdmin");
@@ -233,25 +244,26 @@ sub delRegUser(){
 		odch::remove_reg_user($user);}
 	&addToLog($user,"Del User",$user);
 	$dbh->do("UPDATE userDB SET type='User',passwd='not set' 
-				WHERE nick='$setUser' ");
+				WHERE nick='$sqluser' ");
 }
 
 
 sub userAway(){
 	my($user,$data) = @_;
 	my($tmp_ptr) = index($data,"+away");
-
+	my($sqluser) = &sqlConvertNick($user);
 	my($awayMsg) = substr($data, $tmp_ptr+5);
 	chop($awayMsg);
 	$dbh->do("UPDATE userDB SET awayMsg='$awayMsg',awayStatus='on' 
-			WHERE nick='$user' AND lastAction!='P-Banned'");
+			WHERE nick='$sqluser' AND lastAction!='P-Banned'");
 }
 sub userBack(){
 	my($user) = @_;
+	my($sqluser) = &sqlConvertNick($user);
 	my($value) = $dbh->do("SELECT awayStatus FROM userDB 
-			WHERE awayStatus='on' AND nick='$user' AND lastAction!='P-Banned'");
+			WHERE awayStatus='on' AND nick='$sqluser' AND lastAction!='P-Banned'");
 	if($value eq 1)
-		{$dbh->do("UPDATE userDB SET awayStatus='off' WHERE nick='$user' AND lastAction!='P-Banned'");
+		{$dbh->do("UPDATE userDB SET awayStatus='off' WHERE nick='$sqluser' AND lastAction!='P-Banned'");
 		&msgAll("$user returns after being away");}
 
 }

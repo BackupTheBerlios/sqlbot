@@ -25,8 +25,7 @@ $dbh->do("SET OPTION SQL_BIG_TABLES = 1");
 
 $botDescription = "I am $botname, PRAY you meet the Rules. Powered by sqlBOT (http://sqlbot.berlios.de)";
 $botConnection = "LAN(T3)";
-$botShare = 0;
-
+$botShare = 715112000000; #666
 # Import the other modules,
 
 require "$modules_path/common.pm";
