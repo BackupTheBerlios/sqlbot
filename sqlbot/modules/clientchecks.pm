@@ -192,7 +192,7 @@ sub parseClient(){
 					$ACTION = "Kicked";}}
 			else
 				{my($minslots) = &getConnectionSlots($conn,1);
-				if ($NSlots < min_slots)
+				if ($NSlots < $minslots)
 					{$REASON = "Slots(min)";
 					$ACTION = "Kicked";}}
 			## MAX SLOTS ##
