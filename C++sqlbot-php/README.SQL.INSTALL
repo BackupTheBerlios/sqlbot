@@ -136,7 +136,18 @@ uiLoginCount int(7));
 
 
 
-#finally the last table for the IP-Country database.
+#Finally the last table for the IP-Country database.
+#Create the table with:
+
+CREATE TABLE iptoc (
+ip_from int(10) unsigned zerofill not null,
+ip_to int(10) unsigned zerofill not null,
+country_code2 char(2) not null,
+country_code3 char(3) not null,
+country_name varchar(50) not null,
+primary key(ip_from, ip_to));
+
+
 # Download this file http://ip-to-country.directi.com/downloads/ip-to-country.csv.zip and extract it into /tmp
 #Then in your mysql do this to import the file:
 
