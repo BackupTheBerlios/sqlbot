@@ -268,10 +268,10 @@ sub banLog()
 {
 	my($user)=@_;
 	my($defaultLogEntries) = &getHubVar("nr_log_entries");
-	my($blth) = $dbh->prepare("SELECT logTime,action,reason,nick FROM hubLog WHERE action like 'Ban' ORDER by rowID DESC LIMIT 0,$defaultLogEntries");
+	my($blth) = $dbh->prepare("SELECT logTime,action,reason,nick FROM hubLog WHERE action like '%Banned%' ORDER by nick DESC LIMIT 0,$defaultLogEntries");
 	$blth->execute();
 	$result = "";
-	while (my($ref) = $blth->fetchrow_hashref()) {
+	while ($ref = $blth->fetchrow_hashref()) {
 		$result .= "\r\n$ref->{'logTime'} [$ref->{'action'} - $ref->{'reason'}] $ref->{'nick'}"; }
 	$blth->finish();
 	&msgUser("$user","$result");
@@ -281,11 +281,11 @@ sub fakersLog()
 {
 	my($user)=@_;
 	my($defaultLogEntries) = &getHubVar("nr_log_entries");
-	my($flth) = $dbh->prepare("SELECT outTime,nick,IP FROM userDB WHERE lastReason='Faker' ORDER by rowID DESC LIMIT 0,$defaultLogEntries");
+	my($flth) = $dbh->prepare("SELECT outTime,nick,IP FROM userDB WHERE lastReason LIKE 'Fake%' ORDER by nick DESC LIMIT 0,$defaultLogEntries");
 	$flth->execute();
 	$result = "Fakers are :\r";
 	while ($ref = $flth->fetchrow_hashref()) {
-		$result .= "\r$ref->{'nick'}($ref->{'IP'}) $ref->{'outTime'} "; }
+		$result .= "\r\n$ref->{'nick'}($ref->{'IP'}) $ref->{'outTime'} "; }
 	$flth->finish();
 	&msgUser("$user","$result");
 
