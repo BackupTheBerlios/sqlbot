@@ -110,7 +110,10 @@ sub clientRecheck()
 		if (($ip eq '') || ($user eq $botname)) {}
 		else {
 		$userInDB = &userInDB($user,$ip);
-		if ($userInDB eq 2) {}#If they are set to allow then do nothing
+		if ($userInDB eq 2) {
+			if (&userIsOnline($user,$ip) ne 1)
+				{&userOnline($user);}	
+		}#If they are set to allow then do nothing
 		elsif ($userInDB eq 0) #If they dont exist create a record
 			{&createNewUserRecord($user);
 			&userConnect($user);	
@@ -124,10 +127,10 @@ sub clientRecheck()
 					{&userOffline($user);}
 				if($type eq 32 )
 				{ #If Opadmin
-				# Check OP admins if set
-				if (&getConfigOption("check_opadmin")) {
-					&checkKicks($user);  # Check kick counter
-					&processEvent($user);}}    # take action if any
+					# Check OP admins if set
+					if (&getConfigOption("check_opadmin")) {
+						&checkKicks($user);  # Check kick counter
+						&processEvent($user);}}    # take action if any
 				elsif($type eq 16) { # if Op
 					# Check OPs if set
 					if (&getConfigOption("check_op")) {
@@ -176,13 +179,18 @@ sub parseClient(){
 	$ACTION = "";
 	
 	## CHECK FAKERS ##
-	if(($shareBytes =~ /(\d)\1{5,}/) || ($shareBytes =~ 100100100))
+	if(($shareBytes =~ /(\d)\1{5,}/))
 		{$REASON = "Fake(Share)";
 		$ACTION = "P-Banned";
 		if ((&getClientExists($dcClient)) && ($dcVersion ne "")){}
 		else{	$dcClient = "";
 			$dcClientname = "";
 			$dcVersion = "";}
+	}
+	elsif(($shareBytes eq 11534336) || ($fullDescription =~ "mldc"  )) 
+	{	$REASON = "MLDC";
+		$ACTION = "P-Banned";
+		$dcClientname = "mldc";
 	}
 	else {
 	## CHECK CLIENT ##
