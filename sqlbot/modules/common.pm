@@ -82,7 +82,7 @@ sub getConnection(){
 
 sub getConfigOption(){
 	my($data) = @_;
-	my($value) = $dbh->do("SELECT value FROM hub_config WHERE rule='$data' && value='on'");
+	my($value) = $dbh->do("SELECT value FROM hub_config WHERE rule='$data' AND value='on'");
 	if($value eq 1)
 	{return 1;}
 	return 0;
@@ -90,7 +90,7 @@ sub getConfigOption(){
 
 sub getVerboseOption(){
 	my($data) = @_;
-	my($value) = $dbh->do("SELECT value FROM verbosity WHERE rule='$data' && value='on'");
+	my($value) = $dbh->do("SELECT value FROM verbosity WHERE rule='$data' AND value='on'");
 	if($value eq 1)
 	{return 1;}
 	return 0;
@@ -98,7 +98,7 @@ sub getVerboseOption(){
 
 sub getLogOption() {
 	my($data) = @_;
-	my($value) = $dbh->do("SELECT value FROM log_config WHERE rule='$data' && value='on'");
+	my($value) = $dbh->do("SELECT value FROM log_config WHERE rule='$data' AND value='on'");
 	if($value eq 1)
 	{return 1;}
 	return 0;

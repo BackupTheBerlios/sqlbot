@@ -19,12 +19,16 @@ sub myInfo()
 {
 	my($user)=@_;
 
-	my($loginCount) = $dbh->selectrow_array("SELECT loginCount FROM userDB WHERE nick='$user'");
-	my($avShareBytes) = $dbh->selectrow_array("SELECT avShareBytes FROM userDB WHERE nick='$user'");
-	my($shareByte) = $dbh->selectrow_array("SELECT shareByte FROM userDB WHERE nick='$user'");
-	my($firstTime) = $dbh->selectrow_array("SELECT firstTime FROM userDB WHERE nick='$user'");
+	my($loginCount) = $dbh->selectrow_array("SELECT loginCount FROM userDB 
+				WHERE nick='$user' AND allowStatus!='Banned'");
+	my($avShareBytes) = $dbh->selectrow_array("SELECT avShareBytes FROM userDB 
+				WHERE nick='$user' AND allowStatus!='Banned'");
+	my($shareByte) = $dbh->selectrow_array("SELECT shareByte FROM userDB 
+				WHERE nick='$user' AND allowStatus!='Banned'");
+	my($firstTime) = $dbh->selectrow_array("SELECT firstTime FROM userDB 
+				WHERE nick='$user' AND allowStatus!='Banned'");
 
-	my($mith) = $dbh->prepare("SELECT * FROM userDB WHERE nick='$user'");
+	my($mith) = $dbh->prepare("SELECT * FROM userDB WHERE nick='$user' AND allowStatus!='Banned'");
 	$mith->execute();
 	my($ref) = $mith->fetchrow_hashref();
 	&msgUser("$user","Your Info:\r
@@ -55,13 +59,15 @@ sub seen()
 	my($defaultLogEntries) = &getHubVar("nr_log_entries");
 	my($userCount) = $dbh->selectrow_array("SELECT COUNT(*) FROM userDB WHERE nick like '$userseen'");
 	if ($userCount ne 0)	
-		{my($sth) = $dbh->prepare("SELECT * FROM userDB WHERE nick like '$userseen' LIMIT $defaultLogEntries");
+		{my($sth) = $dbh->prepare("SELECT * FROM userDB 
+					WHERE nick like '$userseen' LIMIT $defaultLogEntries");
 		$sth->execute();
 		while($ref = $sth->fetchrow_hashref()){
 			my($outTime) = $ref->{'outTime'};
 			my($nick) = $ref->{'nick'};
 			my($status)="Online";
-			my($userOnline) = $dbh->selectrow_array("SELECT COUNT(*) FROM userDB WHERE nick='$userseen' AND status='$status' ");
+			my($userOnline) = $dbh->selectrow_array("SELECT COUNT(*) FROM userDB 
+						WHERE nick='$userseen' AND status='$status' ");
 			if (($userOnline) ne 1)
 				{$seenresult .= "$nick was last online on $outTime\n\r";}
 			else
@@ -69,11 +75,13 @@ sub seen()
 			$match++;
 		}
 		$sth->finish();
-		my($userCount) = $dbh->selectrow_array("SELECT COUNT(*) FROM userDB WHERE nick like '$userseen'");
+		my($userCount) = $dbh->selectrow_array("SELECT COUNT(*) FROM userDB 
+					WHERE nick like '$userseen'");
 		$seenresult .= "Returned $match of $userCount for \'$seensearch\' \n\r";
 	}
 	else
-		{my($userOnline) = $dbh->selectrow_array("SELECT COUNT(*) FROM userDB WHERE nick='$userseen' AND status='$status'");
+		{my($userOnline) = $dbh->selectrow_array("SELECT COUNT(*) FROM userDB 
+					WHERE nick='$userseen' AND status='$status'");
 		if (($userOnline) eq 0)
 				{$seenresult .= "No Matches found for \'$seensearch\'\r";}
 			else

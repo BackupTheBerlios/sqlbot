@@ -263,7 +263,8 @@ sub checkKicks(){
 	my($user) = @_;
 	&setTime();
 	if (&getConfigOption("check_kicks"))
-		{my($ckth) = $dbh->prepare("SELECT kickCount,tBanCount FROM userDB WHERE nick = '$user'");
+		{my($ckth) = $dbh->prepare("SELECT kickCount,tBanCount FROM userDB 
+				WHERE nick = '$user' AND allowStatus!='Banned'");
 		$ckth->execute();
 		my($ref) = $ckth->fetchrow_hashref();
 		my($kickCount) = "$ref->{'kickCount'}";

@@ -32,6 +32,7 @@ sub new_user_connected(){
 	&parseClient($user);
 	
 	my($userInDB) = &userInDB($user,$ip);
+	
 	if($userInDB eq 1)
 		{&updateUserRecord($user);}
 	elsif($userInDB eq 2)

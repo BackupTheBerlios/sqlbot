@@ -69,7 +69,8 @@ sub updateUserRecord(){
 	&setTime();
 	my($inTime)="$date $time";
 	
-	my($uurth) = $dbh->prepare("SELECT loginCount FROM userDB WHERE (nick='$user' OR IP='$ip') AND allowStatus!='Banned'");
+	my($uurth) = $dbh->prepare("SELECT loginCount FROM userDB 
+			WHERE (nick='$user' OR IP='$ip') AND allowStatus!='Banned'");
 	$uurth->execute();
 	my($ref) = $uurth->fetchrow_hashref();
 	my($loginCount) = "$ref->{'loginCount'}";
@@ -112,7 +113,7 @@ sub userOffline(){
 
 	$dbh->do("UPDATE userDB SET 	status='Offline',
 					outTime='$outTime'
-					WHERE nick='$user' ");
+					WHERE nick='$user'  ");
 
 #					onlineTime='$totOnlineTime'					
 }
@@ -178,7 +179,7 @@ sub setRegUser(){
 	&msgUser($setUser,">>>> $user has changed your level to $level your password is $passwd");
 	# Change this user type in the userDB
 	my($utype)  = odch::get_type($setUser);
-	$dbh->do("UPDATE userDB SET type='$utype',passwd='$passwd' WHERE (nick='$user' AND allowStatus!='Banned'");
+	$dbh->do("UPDATE userDB SET type='$utype',passwd='$passwd' WHERE (nick='$user' AND allowStatus!='Banned')");
 	&addToLog($setUser,"Add/Edit User",$user);	
 	
 }
@@ -211,7 +212,8 @@ sub chPassUser(){
 		return(1);}
 	else
 	{	
-		my($value) = $dbh->do("SELECT passwd FROM userDB WHERE nick='$user' && passwd='$oldPass'");
+		my($value) = $dbh->do("SELECT passwd FROM userDB 
+					WHERE nick='$user' AND passwd='$oldPass'");
 		if($value eq 1)
 			{# Remove this user from reg list
 			my($type)  = odch::get_type($user);
@@ -219,7 +221,8 @@ sub chPassUser(){
 			&msgUser("nutter","$user,$oldPass,$newPass,$type,$level");
 			odch::add_reg_user($user, $newPass, ($level-1));
 			# Change this user type in the userDB
-			$dbh->do("UPDATE userDB SET type='$type',passwd='$newPass' WHERE nick='$user'");
+			$dbh->do("UPDATE userDB SET type='$type',passwd='$newPass' 
+					WHERE nick='$user' AND allowStatus!='Banned'");
 			&msgUser($user,"Your Password has now been set to $newPass");
 			&addToLog($user,"Change Pass",$user);}
 		else
@@ -236,7 +239,8 @@ sub delRegUser(){
 		{# Remove this user from reg list
 		odch::remove_reg_user($user);}
 	&addToLog($user,"Del User",$user);
-	$dbh->do("UPDATE userDB SET type='User',passwd='not set' WHERE nick='$setUser'");
+	$dbh->do("UPDATE userDB SET type='User',passwd='not set' 
+				WHERE nick='$setUser' ");
 }
 
 
@@ -246,11 +250,13 @@ sub userAway(){
 
 	my($awayMsg) = substr($data, $tmp_ptr+5);
 	chop($awayMsg);
-	$dbh->do("UPDATE userDB SET awayMsg='$awayMsg',awayStatus='on'	WHERE nick='$user'");
+	$dbh->do("UPDATE userDB SET awayMsg='$awayMsg',awayStatus='on' 
+			WHERE nick='$user' AND allowStatus!='Banned'");
 }
 sub userBack(){
 	my($user) = @_;
-	my($value) = $dbh->do("SELECT awayStatus FROM userDB WHERE awayStatus='on' && nick='$user'");
+	my($value) = $dbh->do("SELECT awayStatus FROM userDB 
+			WHERE awayStatus='on' AND nick='$user' AND allowStatus!='Banned'");
 	if($value eq 1)
 		{$dbh->do("UPDATE userDB SET awayStatus='off' WHERE nick='$user'");
 		&msgAll("$user returns after being away");}
