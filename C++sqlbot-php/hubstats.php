@@ -171,7 +171,7 @@ $i++;
 						<td>
 							<FIELDSET>
 <?php //DEFINE SEARCH TYPES
-if (empty($searchfield)) {$SearchType = "All"; $parse_option = "";}
+if ($searchfield == "") {$SearchType = "All"; $parse_option = "";}
 else if ($searchfield == "1") {$SearchType = "Any"; $parse_option = "&& lsType='$searchfield'";}
 else if ($searchfield == "2") {$SearchType = "MP3"; $parse_option = "&& lsType='$searchfield'";}
 else if ($searchfield == "3") {$SearchType = "Compressed"; $parse_option = "&& lsType='$searchfield'";}
@@ -181,9 +181,13 @@ else if ($searchfield == "6") {$SearchType = "Picture"; $parse_option = "&& lsTy
 else if ($searchfield == "7") {$SearchType = "Video"; $parse_option = "&& lsType='$searchfield'";}
 else if ($searchfield == "8") {$SearchType = "Folder"; $parse_option = "&& lsType='$searchfield'";}
 
+function isselected($searchfield, $number, $meaning) {
+if ($number == "$searchfield") { echo "<option value=\"$number\" selected>$meaning"; }
+else { echo "<option value=\"$number\">$meaning";}
+}
+
 ?>
 								<LEGEND><font color="#FFFFFF"> &nbsp; Top 10 Searches
-												<?php echo "($SearchType)"; ?>
 												since <?php echo "$firstSearchDate"; ?> &nbsp;</font></LEGEND>
 									<table width="100%" cellspacing="0" border="0" class="stats">
 										<tr>
@@ -193,17 +197,17 @@ else if ($searchfield == "8") {$SearchType = "Folder"; $parse_option = "&& lsTyp
 // DEFINE SEARCH TYPES
 	echo "<form action=\"$PHP_SELF\" method=\"post\">";
 				hidden_value(hubID, $hubID);
-	echo 	"<select name=\"searchfield\" class=\"form_select\">
-					<option value=\"\"> All
-					<option value=\"1\"> Any
-					<option value=\"2\"> MP3
-					<option value=\"3\"> Compressed
-					<option value=\"4\"> Document
-					<option value=\"5\"> Executable
-					<option value=\"6\"> Picture
-					<option value=\"7\"> Video
-					<option value=\"8\"> Folder
-				</select>
+	echo 	"<select name=\"searchfield\" class=\"form_select_long\">";
+					isselected($searchfield, "", All);
+					isselected($searchfield, 1, Any);
+					isselected($searchfield, 2, MP3);
+					isselected($searchfield, 3, Compressed);
+					isselected($searchfield, 4, Document);
+					isselected($searchfield, 5, Executable);
+					isselected($searchfield, 6, Picture);
+					isselected($searchfield, 7, Video);
+					isselected($searchfield, 8, Folder);
+		echo "</select>
 				<input type=\"submit\" value=\"Go\" class=\"userdbnicknormal\" title=\"View Selection\"></form>";
 
 ?>
