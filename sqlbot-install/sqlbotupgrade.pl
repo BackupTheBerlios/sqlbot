@@ -42,7 +42,7 @@ login name and password you gave in this script.\n\n";
 	$dbh = DBI->connect("DBI:mysql:$sqldbname:$sql_server","$sql_username","$sql_password",{ RaiseError => 1, AutoCommit => 0 });
 	$dbh->do("SET OPTION SQL_BIG_TABLES = 1");
 
-eval { $dbh->do("ALTER TABLE client_rules ADD min_limit TINYINT(4)");
+eval { $dbh->do("ALTER TABLE client_rules ADD min_limit TINYINT(4) ");
 			print "ALTER TABLE client_rules ADD min_limit TINYINT(4)\n";
 		}; print "ALTER TABLE client_rules ADD min_limit TINYINT(4) : failed $@\n" if $@;
 
