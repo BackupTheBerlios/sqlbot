@@ -23,6 +23,9 @@ use Date::Simple ('date', 'today');
 $dbh = DBI->connect("DBI:mysql:odch:$sql_server","$sql_username","$sql_password",{ RaiseError => 1, AutoCommit => 0 });
 $dbh->do("SET OPTION SQL_BIG_TABLES = 1");
 
+$botDescription = "I am $botname, PRAY you meet the Rules. Powered by sqlBOT (http://sqlbot.berlios.de)";
+$botConnection = "LAN(T3)";
+$botShare = 0;
 
 # Import the other modules,
 
@@ -42,6 +45,8 @@ sub main(){
         if (&getVerboseOption("verbose_botjoin")){
 		&version();
         }
+	
+	odch::data_to_all("\$MyINFO \$ALL $botname $botDescription\$ \$$botConnection\$\$$botShare\$|");
 	&addToLog($botname,"Restart","Reloadscripts");
 }
 
