@@ -150,10 +150,10 @@ sub data_arrival(){
 			{&buildRules($user);
 			&msgUser("$user","$rules");}
 		elsif($data =~ /\$To: $botname From: $user \$\<$user\> !help/)
-			{&buildHelp(@_);
+			{&buildHelp($user);
 			&msgUser("$user","$helpmsg");}
 		elsif($data =~ /\$To: $botname From: $user \$\<$user\> !myinfo/)
-			{&myinfo(@_);}
+			{&myInfo($user);}
 		#Op commands
 		elsif($type eq 32 or $type eq 16)
 		{
