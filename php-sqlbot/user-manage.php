@@ -10,14 +10,13 @@ if (!empty($field))
 	{$where="WHERE $field LIKE '%$search%'";}
 	
 
-if ($function == delete)
+if ($f == delete)
 	{$sql = "DELETE FROM userDB $where";$result = mysql_query($sql) or die(mysql_error());}
 if ($f == uType){
 	$sql = "INSERT INTO botWorker VALUES ('mysql_insertid',$uType,'$search','$ip','$passwd')";
 	echo "$nicksearch($ip) status changed.<br>";
 	$result = mysql_query($sql) or die(mysql_error());}
 else if ($f == aStatus){
-	
 	$sql = "INSERT INTO botWorker VALUES ('mysql_insertid',$aStatus,'$search','$ip','Admin')";
 	echo "$search($ip) status changed.<br>";
 	$result = mysql_query($sql) or die(mysql_error());}
@@ -28,7 +27,21 @@ $numresult=mysql_query("SELECT * FROM userDB $where");
 $numrows=mysql_num_rows($numresult);
 $result=mysql_query("SELECT * FROM userDB $where ORDER by uType,nick LIMIT $offset,$defaultLogEntries");
 mysql_close();
+?>
+<table border="<? echo "$tableborders";?> cellspacing="2" cellpadding="2">
+<tr>
 
+	<th><? echo " Filters Applied $font$field $search$fontend";?></th>
+	<th><form action="<? echo "user-manage.php" ?>" method="post">
+	<input type="Submit" value="Reset Filters"></form></th>
+	<th><form action="<? echo "user-manage.php?f=delete&field=$field&search=$search" ?>" method="post">
+	<input type="Submit" value="Delete ALL" onClick="return confirmDelete()"></form></th>
+	</tr><tr>
+	<th><form action="<? echo "user-manage.php?field=nick&search=$search" ?>" method="post">
+	<input type="text" name="search" value=""><? echo "$font";?></th><th>
+	<input type="Submit" value="Nick Search"></form></th>
+</tr>
+</table><?
 echo "Totals :Users $numrows<br>";
 ?>
 <table border="$tableborders" cellspacing="2" cellpadding="2">

@@ -4,34 +4,22 @@ include("header.ini");
 ?>
 <br>
 	<div align="center"><form action="log-hub.php" method="post">
-	<input class="button" type="Submit" value="Reset search"></form><br>
+	<input class="button" type="Submit" value="Refresh"></form><br>
 <div align="center"><?
 $entry=0;
 mysql_connect($databasehost,$username,$password);
 @mysql_select_db($database) or die( "Unable to select database");
-if (!empty($nicksearch))  
-	{$wheresearch="nick LIKE '%$nicksearch%'";
-	$ipsearch = "";
-	$clisearch = "";
-}
 
-if ((!empty($rfilter)) && (!empty($afilter))){
-	$wherefilter="reason='$rfilter' AND action='$afilter'";}
-else if (!empty($afilter))  {
-	$wherefilter="action='$afilter'";}
-else if (!empty($rfilter)){
-	$wherefilter="reason='$rfilter'";}
+$where = "";
+if (!empty($field))  
+	{$where="WHERE $field LIKE '%$search%'";}
 
-if ((!empty($wheresearch)) && (!empty($wherefilter))){$where = "WHERE $wheresearch AND $wherefilter"; }
-else if (!empty($wheresearch)) {$where = "WHERE $wheresearch";}
-else if (!empty($wherefilter)) {$where = "WHERE $wherefilter";}
-else {$where = ""; }
 // Delete a Row if requested
-if ($delete == logrow)
+if ($f == row)
 {	$sql = "DELETE FROM hubLog WHERE rowID=$id"; 
 	$result = mysql_query($sql) or die(mysql_error());}
 // Delete ALL rows
-if ($delete == log)
+if ($f == delete)
 {	$sql = "DELETE FROM hubLog $where";
 	$result = mysql_query($sql) or die(mysql_error());}
 
@@ -40,70 +28,34 @@ if (empty($offset)) {$offset=0;}
 
 $numresults=mysql_query("SELECT * FROM hubLog $where ");
 $numrows=mysql_num_rows($numresults);
+$result=mysql_query("SELECT * FROM hubLog $where ORDER by rowID DESC  LIMIT $offset,$defaultLogEntries");
+mysql_close();
+?>
 
-
-$result=mysql_query("SELECT * FROM hubLog $where ORDER by rowID DESC LIMIT $offset,$defaultLogEntries");?>
-<b>Apply Filers</b>
-<table> 
-	<td nowrap><form method="get" class='inline' action="log-hub.php">
-		Nick Search<input  TYPE="text" VALUE="<? echo "$nicksearch";?>" NAME="nicksearch" SIZE="30" MAXLENGTH="50" >
-	
-		<tr>Action Filter</tr>
-		<tr>
-			<select name='afilter'>
-				<option value="">No Filter</option>
-				<option value="Kicked">Kicked</option>
-				<option value="Banned">Banned</option>
-				<option value="Nuked">Nuked</option>
-				<option value="LogOn">Log On</option>
-				<option value="LogOff">Log Off</option>
-				<option value="Connect">Connect</option>
-				<option value="Disconnect">Disconnect</option>
-				<option value="Restart">Reload Scripts</option>
-				<option value="un-Ban">Un Ban</option>
-				<option value="Add/Edit User">Add/Edit User</option>
-				<option value="Del User">Del User</option>
-			</select>
-		</tr>
-		<tr>Reason Filter</tr>
-		<tr>
-			<select name='rfilter'>
-				<option value="">No Filter</option>
-				<option value="NoTags">No Tags</option>
-				<option value="10 kicks">10 Kicks</option>
-				<option value="Version">Version</option>
-				<option value="Hubs">Hubs</option>
-				<option value="Slots(min)">Slots (Min)</option>
-				<option value="Slots(max)">Slots (Max)</option>
-				<option value="Share">Share</option>
-				<option value="SlotRatio">Slot Ratio</option>
-				<option value="Limiter">Limiter</option>
-				<option value="Connection">Connection</option>
-				<option value="Clone">Clone</option>
-			</select>
-		</tr>
-	</td>
-	<td nowrap>
-		<tr><input type="submit" value="Apply"></tr>
-	</td>
-</form>
-</td>
+<table border="<? echo "$tableborders";?> cellspacing="2" cellpadding="2">
+<tr>
+	<th><? echo " Filters Applied $font$field $search$fontend";?></th>
+	<th><form action="<? echo "log-hub.php" ?>" method="post">
+	<input type="Submit" value="Reset Filters"></form></th>
+	<th><form action="<? echo "log-hub.php?f=delete&field=$field&search=$search" ?>" method="post">
+	<input type="Submit" value="Delete ALL" onClick="return confirmDelete()"></form></th>
+	</tr><tr>
+	<th><form action="<? echo "log-hub.php?field=nick&search=$search" ?>" method="post">
+	<input type="text" name="search" value=""><? echo "$font";?></th><th>
+	<input type="Submit" value="Nick Search"></form></th>
+</tr>
 </table>
-<p>Filters Applied <? 
-	if ((empty($rfilter)) && (empty($afilter)) && (empty($nicksearch)))
-		{echo "None";}
-	else
-		{echo "<b> $afilter $rfilter $nicksearch </b>";}
+<?
 echo "<br>Total Number of Matching Entries <b>$numrows</b><br>"; ?>
 
 <table border="<? echo "$tableborders";?> cellspacing="2" cellpadding="2"> 
-<tr>
+<tr>  
 	<th><? echo "$font";?>Nick<? echo "$fontend";?></th> 
 	<th><? echo "$font";?>Date Time<? echo "$fontend";?></th>
 	<th><? echo "$font";?>Action<? echo "$fontend";?></th> 
 	<th><? echo "$font";?>Reason<? echo "$fontend";?></th> 
 	<th>
-	<form action="<? echo "log-hub.php?delete=log&offset=$offset&nicksearch=$nicksearch&afilter=$afilter&rfilter=$rfilter" ?>" method="post">
+	<form action="<? echo "log-hub.php?f=delete&offset=$offset&field=$field&search=$search" ?>" method="post">
 	<input type="Submit" value="Delete ALL" onClick="return confirmDelete()"></form></th>
 </tr> 
 <? 
@@ -124,11 +76,11 @@ while ($data=mysql_fetch_array($result))
 	else{echo "<TR bgcolor="; echo "$rowColourAlt"; echo ">\n";}
 
 	?>
-	<form action="<? echo "log-hub.php?delete=logrow&id=$id&offset=$offset&nicksearch=$nicksearch&afilter=$afilter&rfilter=$rfilter" ?>" method="post">
-	<td nowrap><a href="<? echo "log-hub.php?nicksearch=$nick" ?>" title="Search log for: <?echo "$nick"?>" <? echo "$font$nick$fontend"; ?></a> <a href="<? echo "user-type.php?nicksearch=$nick" ?>" title="<?echo "$nick"?>'s info" <? echo "<font color=\"#2400FF\" size=\"-1\">(i)</font>"?></a></td>
+	<form action="<? echo "log-hub.php?f=row&id=$id&offset=$offset&search=$search" ?>" method="post"> 
+	<td nowrap><a href="<? echo "user-type.php?nicksearch=$nick" ?>"><? echo "$font$nick$fontend"; ?></a></td>
 	<td nowrap><? echo "$font$logTime$fontend"; ?></td> 
-	<td nowrap><a href="<? echo "log-hub.php?nicksearch=&afilter=$action" ?>"<? echo "$font$action$fontend"; ?></a></td>
-	<td nowrap><a href="<? echo "log-hub.php?nicksearch=&rfilter=$reason" ?>"<? echo "$font$reason$fontend"; ?></a></td>
+	<td nowrap><a href="<? echo "log-hub.php?field=action&search=$action"; ?>"><? echo "$font$action$fontend"; ?></a></td>
+	<td nowrap><a href="<? echo "log-hub.php?field=reason&search=$reason"; ?>"><? echo "$font$reason$fontend"; ?></a></td>
 	<td nowrap><center><input type="Submit" value="Delete"></center></td>
 	</form>
 	</tr>
@@ -137,7 +89,7 @@ echo "</table></div>";
 
 if ($offset!=0) { 
     $prevoffset=$offset-$defaultLogEntries;
-    print "<a href=\"log-hub.php?offset=$prevoffset&nicksearch=$nicksearch&afilter=$afilter&rfilter=$rfilter\">PREV</a> &nbsp; \n";
+    print "<a href=\"log-hub.php?offset=$prevoffset&field=$field&search=$search\">PREV</a> &nbsp; \n";
 }
 $pages=intval($numrows/$limit);
 
@@ -146,11 +98,11 @@ if ($numrows%$limit) {
 
 for ($i=1;$i<=$pages;$i++) { // loop thru
     $newoffset=$limit*($i-1);
-    print "<a href=\"log-hub.php?offset=$newoffset&nicksearch=$nicksearch&afilter=$afilter&rfilter=$rfilter\">$i</a> &nbsp; \n"; }
+    print "<a href=\"log-hub.php?offset=$newoffset&field=$field&search=$search\">$i</a> &nbsp; \n"; }
 
 if (!(($offset/$limit)==$pages) && $pages!=1) {
     $newoffset=$offset+$limit;
-    print "<a href=\"log-hub.php?offset=$newoffset&nicksearch=$nicksearch&afilter=$afilter&rfilter=$rfilter\">NEXT</a><p>\n";
+    print "<a href=\"log-hub.php?offset=$newoffset&field=$field&search=$search\">NEXT</a><p>\n";
 }
 ?></div>
 
