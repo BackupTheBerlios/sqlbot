@@ -182,10 +182,7 @@ sub data_arrival(){
 			if ($param1 =~ /!pass/){
 				if($param1 =~ /!pass\|/i)
 					{&msgUser("$user","!pass oldpassword newpass");}
-				else
-					{
-#					&chPassUser($user,$param2,$param3,$param4);
-}}
+				else{&chPassUser($user,$param2,$param3,$param4);}}
 		}
 		elsif($type eq 32 or $type eq 16)
 		{
@@ -214,7 +211,7 @@ sub data_arrival(){
 				else 
 					{&kickUser($user,$param);}}
 			elsif ($param1 =~ /!fakerslog/i)
-				{&fakerslog($user);}
+				{&fakersLog($user);}
 			elsif ($param1 =~ /!history/i)
 				{if($param1 =~ /!history\|/i)
 					{&msgUser("$user","usage: !history username");}
@@ -254,7 +251,7 @@ sub data_arrival(){
 	else
 	{
 		if($data =~ /^<.*> \+fakers\|/i)
-			{&showFakers($user);}
+			{&fakersLog($user);}
 		elsif($data =~ /^<.*> \+time\|/i)
 			{&setTime();
 			&msgAll("Server Time = $date $time");}

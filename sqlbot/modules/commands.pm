@@ -13,21 +13,6 @@
 #	http://axljab.homelinux.org:8080/			
 #
 ##############################################################################################
-## Channel Stats Request ##
-sub showFakers()
-{
-	my($user)=@_;
-	my $sfth = $dbh->prepare("SELECT outTime,IP,country,shareByte FROM userDB WHERE lastReason='Faker'");
-	$sfth->execute();
-	$log = "";
-	while (my $ref = $sth->fetchrow_hashref()) 
-		{$log .= "$ref->{'outTime'} - $ref->{'IP'} $ref->{'country'} $ref->{'shareByte'} \r"; 
-	}
-	$sfth->finish();
-	&msgAll("Fakers detected are\n\r $log");
-	&debug("$user - fakers built");
-}
-
 
 # User requested his own info
 sub myInfo()
@@ -220,7 +205,7 @@ sub info()
 	if ($userCount ne 0)
 	{
 		my $ith = $dbh->prepare("SELECT nick,status,allowStatus,awayStatus,uType,loginCount,firstTime,kickCountTot,
-			dcClient,dcVersion,connectionMode,IP,country,inTime,shareBytes,avShareBytes FROM userDB where nick='$infoUser'");
+			dcClient,dcVersion,connectionMode,IP,country,inTime,shareByte,avShareBytes FROM userDB where nick='$infoUser'");
 		$ith->execute();
 		my $ref = $ith->fetchrow_hashref();
 		&msgUser("$user","$ref->{'nick'}'s Info (MySQL)\r
@@ -249,12 +234,12 @@ sub log()
 	my($user)=@_;
 	&setTime();
 	my($defaultLogEntries) = &getHubVar("nr_log_entries");
-	my $sth = $dbh->prepare("SELECT logTime,action,reason,nick FROM hubLog ORDER by rowID DESC LIMIT 0,$defaultLogEntries");
-	$sth->execute();
+	my($lth) = $dbh->prepare("SELECT logTime,action,reason,nick FROM hubLog ORDER by rowID DESC LIMIT 0,$defaultLogEntries");
+	$lth->execute();
 	$result = "";
-	while (my $ref = $sth->fetchrow_hashref()) {
+	while (my $ref = $lth->fetchrow_hashref()) {
 			$result .= "\r\n$ref->{'logTime'} [$ref->{'action'} - $ref->{'reason'}] $ref->{'nick'}"; }
-	$sth->finish();
+	$lth->finish();
 	&msgUser("$user","$result");
 }
 
@@ -262,12 +247,12 @@ sub kickLog()
 {
 	my($user)=@_;
 	my($defaultLogEntries) = &getHubVar("nr_log_entries");
-	my $sth = $dbh->prepare("SELECT logTime,action,reason,nick FROM hubLog WHERE action like 'Kicked' ORDER by rowID DESC LIMIT 0,$defaultLogEntries");
-	$sth->execute();
+	my($klth) = $dbh->prepare("SELECT logTime,action,reason,nick FROM hubLog WHERE action like 'Kicked' ORDER by rowID DESC LIMIT 0,$defaultLogEntries");
+	$klth->execute();
 	$result = "";
-	while (my $ref = $sth->fetchrow_hashref()) {
+	while (my $ref = $klth->fetchrow_hashref()) {
 		$result .= "\r\n$ref->{'logTime'} [$ref->{'action'} - $ref->{'reason'}] $ref->{'nick'}"; }
-	$sth->finish();
+	$klth->finish();
 	&msgUser("$user","$result");
 }
 
@@ -275,25 +260,25 @@ sub banLog()
 {
 	my($user)=@_;
 	my($defaultLogEntries) = &getHubVar("nr_log_entries");
-	my $sth = $dbh->prepare("SELECT logTime,action,reason,nick FROM hubLog WHERE action like 'Ban' ORDER by rowID DESC LIMIT 0,$defaultLogEntries");
-	$sth->execute();
+	my($blth) = $dbh->prepare("SELECT logTime,action,reason,nick FROM hubLog WHERE action like 'Ban' ORDER by rowID DESC LIMIT 0,$defaultLogEntries");
+	$blth->execute();
 	$result = "";
-	while (my $ref = $sth->fetchrow_hashref()) {
+	while (my $ref = $blth->fetchrow_hashref()) {
 		$result .= "\r\n$ref->{'logTime'} [$ref->{'action'} - $ref->{'reason'}] $ref->{'nick'}"; }
-	$sth->finish();
+	$blth->finish();
 	&msgUser("$user","$result");
 }
 
 sub fakersLog()
 {
 	my($user)=@_;
-	&setTime();
-	my $sth = $dbh->prepare("SELECT logTime,nick FROM hubLog WHERE reason='Fakers'");
-	$sth->execute();
-	$result = "";
-	while (my $ref = $sth->fetchrow_hashref()) {
-		$log .= "\r$ref->{'logTime'} $ref->{'nick'}"; }
-	$sth->finish();
+	my($defaultLogEntries) = &getHubVar("nr_log_entries");
+	my($flth) = $dbh->prepare("SELECT outTime,nick,IP FROM userDB WHERE lastReason='Faker' ORDER by rowID DESC LIMIT 0,$defaultLogEntries");
+	$flth->execute();
+	$result = "Fakers are :\r";
+	while (my $ref = $flth->fetchrow_hashref()) {
+		$result .= "\r$ref->{'nick'}($ref->{'IP'}) $ref->{'outTime'} "; }
+	$flth->finish();
 	&msgUser("$user","$result");
 
 }
@@ -303,23 +288,23 @@ sub history()
 	my($user,$hUser)=@_;
 	my($defaultLogEntries) = &getHubVar("nr_log_entries");
 	my($if_exist) = $dbh->selectrow_array("SELECT COUNT(*) FROM hubLog WHERE nick='$hUser'");
-	my $sth = $dbh->prepare("SELECT logTime,action,reason,nick FROM hubLog WHERE nick='$hUser' ORDER by rowID DESC LIMIT 0,$defaultLogEntries");
-	$sth->execute();
-	$$result = "";
-	while (my $ref = $sth->fetchrow_hashref()) {
-		$$result .= "\r\n$ref->{'logTime'} [$ref->{'action'} - $ref->{'reason'}] $ref->{'nick'}"; }
-	$sth->finish();
+	my($hth) = $dbh->prepare("SELECT logTime,action,reason FROM hubLog WHERE nick='$hUser' ORDER by rowID DESC LIMIT 0,$defaultLogEntries");
+	$hth->execute();
+	$result = "";
+	while (my $ref = $hth->fetchrow_hashref()) {
+		$result .= "\r\n$ref->{'logTime'} [$ref->{'action'} - $ref->{'reason'}] $ref->{'nick'}"; }
+	$hth->finish();
 	&msgUser("$user","$result");
 }
 
 
 sub showOps(){
 	$result = "";
-	my $sth = $dbh->prepare("SELECT nick FROM userDB WHERE status='Online' AND (uType='Operator' OR uType='Op-Admin')");
-	$sth->execute();
-	while (my $ref = $sth->fetchrow_hashref()){
+	my($soth) = $dbh->prepare("SELECT nick FROM userDB WHERE status='Online' AND (uType='Operator' OR uType='Op-Admin')");
+	$soth->execute();
+	while (my $ref = $soth->fetchrow_hashref()){
 		$result .= " $ref->{'nick'} ";}
-	$sth->finish();
+	$soth->finish();
 }
 ## Required in every module ##
 1;
