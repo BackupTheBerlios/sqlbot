@@ -41,16 +41,15 @@ sub processEvent(){
 	my($user)=@_;
 
 	# Select the appropriate action
-		
 	if (lc($REASON) eq lc("Fake(Share)"))
 		{&banUser($user,"Fake(Share)",$ip,"pban");}
 	elsif (lc($ACTION) eq lc("P-Banned"))
-		{&banUser($user,$REASON,$ip,"pban");}
+		{&banUser($user,"$REASON",$ip,"pban");}
 	elsif (lc($ACTION) eq lc("Kicked")){
 		if (&getConfigOption("client_check")){
 			&kickUser($user,$REASON);}}
 	elsif (lc($ACTION) eq lc("T-Banned")){
-		&banUser($user,$REASON,$ip,"tban");}
+		&banUser($user,"$REASON",$ip,"tban");}
 }
 
 sub botWorker(){
@@ -91,7 +90,6 @@ sub ipFilterWorker(){
 			odch::add_ban_entry($banMask);
 			if (&getVerboseOption("verbose_banned"))
 				{&msgAll("Banned IP Ban Range ($banMask) $information");}
-			# Check users for ip range address match, mark as banned
 		}
 		elsif($function=='41')
 		{ # Delete this IP range ban
