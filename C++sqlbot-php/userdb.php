@@ -173,6 +173,8 @@ $totshared_bytes=mysql_result($total_bytes_q,$i);
 					<option value="uiNick"> Nick
 					<option value="uiIp"> IP
 					<option value="uiShare"> Share
+					<option value="uiClient"> Client
+					<option value="uiVersion"> Client Version
 				</select>
 				<input type="submit" value="Search" class="userdbnicknormal" title="Search users"></form>
 			</td>
@@ -281,10 +283,10 @@ while ($data=mysql_fetch_array($userresult))
 	if ($uiClient == "DC") { $CLIENT = "<img src=\"img/clients/DC.gif\" alt=\"$uiClient\">"; }
 	if ($uiUserLevel == "5") { $CLIENT = "<img src=\"img/clients/Bot.gif\" alt=\"Bot\">"; }
 	
-	if  (($uiStatus == "1") && ($uiIsAway == "0")) { $uiStatus ="<img src=\"img/Online.gif\" alt=\"Online\" title=\"Online\">";}
-	if  (($uiStatus == "1") && ($uiIsAway == "1")) { $uiStatus ="<img src=\"img/Away.gif\" alt=\"Away\" title=\"Away\">";}
-	if  ($uiStatus == "0") { $uiStatus ="<img src=\"img/Offline.gif\" alt=\"Offline\" title=\"Offline\">";}
-	if  (($uiBanTotal > "0")) { $uiStatus ="<img src=\"img/Ban.gif\" alt=\"Offline\" title=\"Banned\">";}
+	if  (($uiStatus == "1") && ($uiIsAway == "0")) { $Status ="<img src=\"img/Online.gif\" alt=\"Online\" title=\"Online\">";}
+	if  (($uiStatus == "1") && ($uiIsAway == "1")) { $Status ="<img src=\"img/Away.gif\" alt=\"Away\" title=\"Away\">";}
+	if  ($uiStatus == "0") { $Status ="<img src=\"img/Offline.gif\" alt=\"Offline\" title=\"Offline\">";}
+	if  (($uiBanTotal > "0") && ($uiStatus == "0")) { $Status ="<img src=\"img/Ban.gif\" alt=\"Offline\" title=\"Banned\">";}
 
 
 
@@ -325,7 +327,7 @@ if ($uiBanTotal > "0") { $user_info = "Logins</td><td>$uiLoginCount</td></tr><tr
 
 // PAGE DATA
 echo "<tr>
-		<td width=\"5\">$uiStatus</td>
+		<td width=\"5\">$Status</td>
 		<td>
 			<form action=\"userinfo.php\" method=\"post\">
 			<input type=\"hidden\" name=\"hubID\" value=\"$hubID\">
