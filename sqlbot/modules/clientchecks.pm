@@ -177,7 +177,7 @@ sub clientRecheck()
 			if (&userIsOnline($user,$ip) ne 1)
 				{&userOnline($user);}	
 			else{
-				&updateUserRecordRecheck($user);
+				&updateUserRecordRecheck($user,$ip);
 				if($type eq 0 )	
 					{&userOffline($user);}
 				if($type eq 32 )
