@@ -253,7 +253,7 @@ sub data_arrival(){
 				{if($param1 =~ /^[\!+-]kick\|/i)
 					{&msgUser("$user","usage: +kick username reason");}
 				else 
-					{&kickUser($user,$param);}}
+					{&kickUser($param2,$param3);}}
 			elsif ($param1 =~ /^[\!+-]fakerslog/i)
 				{&fakersLog($user);}
 			elsif ($param1 =~ /^[\!+-]history/i)
