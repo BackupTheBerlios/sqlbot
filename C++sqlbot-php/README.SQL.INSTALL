@@ -95,7 +95,6 @@ hcLogSystem  SET('0','1'));
 
 
 CREATE TABLE userInfo (
-rowID INT(8) NOT NULL AUTO_INCREMENT PRIMARY KEY,
 uiNick VARCHAR(40),
 uiIp VARCHAR(16),
 uiHost VARCHAR(40),
@@ -132,7 +131,8 @@ uiShareChckdExpire VARCHAR(14),
 uiBanFlag SET('0','1','2','3','4','5'),
 uiBanTime VARCHAR(14),
 uiBanExpire VARCHAR(14),
-uiLoginCount int(7));
+uiLoginCount int(7),
+primary key(hubID, uiNick));
 
 
 

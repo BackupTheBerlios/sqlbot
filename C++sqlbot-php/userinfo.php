@@ -99,7 +99,6 @@ $userresult=mysql_query("SELECT *,DATE_FORMAT(uiLastSeenTime, '%d/%m/%Y %H:%i') 
 									DATE_FORMAT(uiBanExpire, '%d/%m/%Y %H:%i') AS BanExpire
 									FROM userInfo WHERE hubID='$hubID' && uiNick='$uiNick'");
 
-	$rowID=mysql_result($userresult,$i,"rowID");
 	$uiNick=htmlentities(mysql_result($userresult,$i,"uiNick"));
 	$uiIp=mysql_result($userresult,$i,"uiIp");
 	$uiHost=mysql_result($userresult,$i,"uiHost");

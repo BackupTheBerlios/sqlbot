@@ -266,7 +266,6 @@ $totshared_bytes=mysql_result($total_bytes_q,$i);
 while ($data=mysql_fetch_array($userresult)) 
 {
 
-	$rowID=mysql_result($userresult,$i,"rowID");
 	$uiNick=htmlentities(mysql_result($userresult,$i,"uiNick"));
 	$uiIp=mysql_result($userresult,$i,"uiIp");
 	$uiHost=mysql_result($userresult,$i,"uiHost");
