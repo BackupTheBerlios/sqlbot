@@ -55,6 +55,20 @@ table.config {
 	width: 375px;
 }
 
+table.statsarea {
+	vertical-align: top;
+	border: solid;
+	border-color: #010101;
+	margin: 0px;
+	padding: 0px;
+	background-color: #598FE3;
+	color: #FFFFFF;
+	padding-left: 5px;
+	padding-right: 5px;
+	padding-bottom: 5px;
+	width: 375px;
+}
+
 table.userdbarea {
 	vertical-align: top;
 	border: solid;
@@ -113,6 +127,17 @@ table.chatlog {
 	width: 100%;
 }
 
+table.stats {
+	font-family: arial, helvetica, sans-serif;
+	font-size: 10px;
+	vertical-align: top;
+	border: none;
+	margin: 0px;
+	padding: 0px;
+	color: #FFFFFF;
+	width: 100%;
+}
+
 td.chatlog {
 	font-family: arial, helvetica, sans-serif;
 	font-size: 10px;
@@ -147,6 +172,11 @@ td.main {
 	background-color: #FFFFFF;
 }
 
+td.stats {
+	width: 200px;
+	color: #010101;
+	background-color: #d8faff;
+}
 
 .form_input {
 	font-family: arial, helvetica, sans-serif;
