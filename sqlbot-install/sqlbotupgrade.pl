@@ -41,13 +41,13 @@ login name and password you gave in this script.\n\n";
 	$dbh = DBI->connect("DBI:mysql:$sqldbname:$sql_server","$sql_username","$sql_password",{ RaiseError => 1, AutoCommit => 0 });
 	$dbh->do("SET OPTION SQL_BIG_TABLES = 1");
 
-eval { $dbh->do("ALTER TABLE userDB MODFIY (nick varchar(50)");
+eval { $dbh->do("ALTER TABLE userDB MODIFY nick VARCHAR(50)");
 					print "ALTER TABLE userDB MODFIY (nick varchar(50)\n";
-		}; print "ALTER TABLE userDB MODFIY (nick varchar(50) failed: $@\n" if $@;
+		}; print "ALTER TABLE userDB MODFIY (nick varchar(50))  : failed $@\n" if $@;
 	
-eval { $dbh->do("ALTER TABLE hubLog MODFIY (nick varchar(50)");
+eval { $dbh->do("ALTER TABLE hubLog MODIFY nick VARCHAR(50)");
 					print "ALTER TABLE userDB MODFIY (nick varchar(50)\n";
-		}; print "ALTER TABLE hubLog MODFIY (nick varchar(50) failed: $@\n" if $@;
+		}; print "ALTER TABLE hubLog MODFIY (nick varchar(50)) : failed $@\n" if $@;
 
 eval { $dbh->do("CREATE TABLE ipFiltering (rowID 	INT(7) NOT NULL AUTO_INCREMENT PRIMARY KEY,
 					ipStart		VARCHAR(15),
@@ -55,7 +55,7 @@ eval { $dbh->do("CREATE TABLE ipFiltering (rowID 	INT(7) NOT NULL AUTO_INCREMENT
 					ipMask		VARCHAR(15),
 					function	VARCHAR(10),
 					information	VARCHAR(50),
-					log		char(3)");
+					log		char(3))");
 					print "CREATE TABLE ipFiltering\n";
 		}; print "CREATE TABLE ipFiltering failed: $@\n" if $@;
 
@@ -82,7 +82,7 @@ sub exit()
 print "\n\n\n		## Upgrade ##
 You have hopefully now upgraded the required tables for the sqlbot.
 
-1] Ensure that you PHP and perl for sqlbot is now at this latest release level.
+1] Ensure that you PHP and perl for sqlbot is now at this latest release level.";
 print "Script exiting...\n";
 exit;
 }
