@@ -1,4 +1,8 @@
 ******** SQLBOT INSTALL (SHORT VERSION) *********
+#NOTES
+# This is just a temp file explaining how the sql should be configured. It's not a propper README
+
+
 #Log into your mysql server as the user you plan of using for sqlbot:
 
 				mysql -h <host> -u <user> -p
@@ -10,6 +14,7 @@
 #Now we tell sql we want to use that databse:
 
 				use database sqlbot;
+
 #(it should say "Database changed"
 
 
@@ -127,20 +132,3 @@ uiBanTime VARCHAR(14),
 uiBanExpire VARCHAR(14),
 uiLoginCount int(7));
 
-
-
-
-
-
-<!-- IP-COUNTRY DB -->
-## List to be downloaded from http://ip-to-country.directi.com/downloads/ip-to-country.csv.zip
-
-CREATE TABLE iptoc (
-ip_from int(10) unsigned zerofill not null,
-ip_to int(10) unsigned zerofill not null,
-country_code2 char(2) not null,
-country_code3 char(3) not null,
-country_name varchar(50) not null,
-primary key(ip_from, ip_to));
-
-sql> LOAD DATA INFILE '/tmp/ip-to-country.csv' INTO TABLE iptoc FIELDS TERMINATED BY ',' ENCLOSED BY '"' LINES TERMINATED BY '\n';
