@@ -82,8 +82,9 @@ $result=mysql_query("SELECT * FROM hubConfig WHERE hubID='$hubID'");
 		$total_search=mysql_num_rows($searchtotal);
 		
 		// GET FIRST ENTRY FOR SEARCH
-		$first_query=mysql_query("SELECT *,DATE_FORMAT(lsTime, '%d/%m/%Y %H:%i') AS date FROM logSearch LIMIT 1");
-		$firstSearchDate=mysql_result($first_query,$i,"date");
+		$first_query=mysql_query("SELECT *,DATE_FORMAT(lsTime, '%d/%m/%Y %H:%i') AS date FROM logSearch WHERE hubID='$hubID' LIMIT 1");
+		$first_query_total=mysql_num_rows($first_query);
+		if ($first_query_total > "0") { $firstSearchDate=mysql_result($first_query,$i,"date"); }
 
 // RESET BUTTON
 						echo "<form action=\"$PHP_SELF\" method=\"post\">";
@@ -116,8 +117,8 @@ while ($data=mysql_fetch_array($searchType))
 {
 	$lsType=mysql_result($searchType,$i,"lsType");
 	$COUNT=mysql_result($searchType,$i,"COUNT(lsType)");
-	if ($COUNT > "0") {	$percentage = round(((100 / $total_search) * $COUNT), 2); }
-	else {$percentage = 0; }
+	if (($COUNT > "0") && ($total_search > "0")) { $percentage = round(((100 / $total_search) * $COUNT), 2); }
+	else { $percentage = 0; }
 	
 // DEFINE SEARCH TYPES
 if ($lsType == "0") {$Type = "";}
