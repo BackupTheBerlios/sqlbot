@@ -17,24 +17,36 @@ sub splitDescription() {
 	my($user) = @_;
 
 	#Initialise globals
-	$type=""; $ip=""; $shared="";$GigsShared="";
-	$tmpdata=""; $fullDescription=""; $dcClient="";
-	$dcVersion=""; $NbHubs=""; $NSlots=""; $slt_ratio=""; $country="";
-	$UploadLimit=""; $conn=""; $connection=""; $email="";
 
-	my($pos1)="";my($pos2)="";my($tmpdata)="";my($verdata)="";my($tmpModeAP)="";
-	my(@verdata2)=("","","","","","");
-	my(@tmpdata2)=("","","","","","");
 	
 	$type = odch::get_type($user);
 	$ip = odch::get_ip($user);
 	$shareBytes = odch::get_share($user);
 	$GigsShared = &roundToGB($shareBytes);
+	$conn = odch::get_connection($user);
+	$email = odch::get_email($user);
+
+	## Check for internal networks ##
+	if ($ip =~ /192.168/) {$ip = &getHubVar("external_ip"); }
+
+	## Get Country code for user #
+	my($reg) = IP::Country::Fast->new();
+	$country = $reg->inet_atocc($ip);
+	$hostname = odch::get_hostname($user);
+	## Get user Type ##
+	if($type =~ /8/){$utype = "Registered";}
+	elsif($type =~ /16/){$utype = "Operator";}
+	elsif($type =~ /32/){$utype = "Op-Admin";}
+	else {$utype = "User";}
+
 	$tmpdata = odch::get_description($user);
+	if($tmpdata eq "") {return 1;}
 	$tmpdata =~ s/'//g;
 	$fullDescription = "$tmpdata";
 	$pos1 = rindex($tmpdata, "<") +1;
 	$pos2 = rindex($tmpdata, ">");
+
+	if($pos2 < 10) {return 1;}
 
 	$verdata = substr($tmpdata, $pos1, $pos2 - $pos1);
 	@verdata2 = split(/\ /, $verdata);
@@ -63,22 +75,6 @@ sub splitDescription() {
 
 	$NSlots = $tmp3[1];
 	$UploadLimit = $tmp4[1];
-
-	$conn = odch::get_connection($user);
-	$email = odch::get_email($user);
-
-	## Check for internal networks ##
-	if ($ip =~ /192.168/) {$ip = &getHubVar("external_ip"); }
-
-	## Get Country code for user #
-	my($reg) = IP::Country::Fast->new();
-	$country = $reg->inet_atocc($ip);
-	$hostname = odch::get_hostname($user);
-	## Get user Type ##
-	if($type =~ /8/){$utype = "Registered";}
-	elsif($type =~ /16/){$utype = "Operator";}
-	elsif($type =~ /32/){$utype = "Op-Admin";}
-	else {$utype = "User";}
 
 	## Slot Ratio ##
 	if ($NSlots > 0)
@@ -159,7 +155,7 @@ sub parseClient(){
 	$ACTION = "";
 	
 	## CHECK FAKERS ##
-	if($shared =~ /(\d)\1{5,}/) 
+	if($shareBytes =~ /(\d)\1{5,}/) 
 		{$REASON = "FAKER";
 		$ACTION = "Nuked";
 		if ((&getClientExists($dcClient)) && ($dcVersion ne "")){}

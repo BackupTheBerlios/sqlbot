@@ -67,8 +67,6 @@ sub processEvent(){
 			{&msgAll("$ACTION $user for : $REASON");}}
 }
 
-## Register KickTable Timer function
-$SIG{ALRM} = \&botWorker;
 sub botWorker(){
 	# Check for Kick Events
 	my($WKicks) = $dbh->selectrow_array("SELECT COUNT(*) FROM botWorker WHERE function LIKE '1%'");
@@ -84,7 +82,7 @@ sub botWorker(){
 	my($WUsers) = $dbh->selectrow_array("SELECT COUNT(*) FROM botWorker WHERE function LIKE '3%'"); # Or 31 or 32 or 33
 	if($WBans ne 0)
 		{&userWorker();}
-	alarm(60);
+	
 }
 
 ## Required in every module ##

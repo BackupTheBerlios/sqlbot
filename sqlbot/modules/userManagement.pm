@@ -32,10 +32,10 @@ sub createNewUserRecord(){
 	my($dtime)="$date $time";
 	$connection = &getConnection($conn);
 
-	$dbh->do("INSERT INTO userDB VALUES ('mysql_insertid','$user','not set',
+	$dbh->do("INSERT INTO userDB VALUES ('','$user','not set',
 		'','$utype','$type','Normal','off','',	
 		'$fullDescription','$dcClient','$dcVersion','$NSlots','$NbHubs','$UploadLimit','$connection','$connectionMode','$country',
-		'$ip','$hostname','$dtime','','$dtime','0000-00-00 00:00:00','1','0','0','0',
+		'$ip','$hostname','$dtime','','$dtime','','1','0','0','0',
 		'0','0','0','0','$shareBytes','$shareBytes','','')");
 
 }
