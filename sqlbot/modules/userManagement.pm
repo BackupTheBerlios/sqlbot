@@ -82,7 +82,7 @@ sub updateUserRecord(){
 					hostname='$hostname',IP='$ip',inTime='$inTime',
 					avShareBytes='$shareBytes',loginCount='$loginCount',
 					fullDescription='$fullDescription',shareByte='$shareBytes'
-					WHERE ((nick='$user' OR IP='$ip') AND status!='Online' AND lastAction!='P-Banned')");
+					WHERE ((nick='$user' OR IP='$ip') AND lastAction!='P-Banned')");
 }
 
 # Check the allow status of this user
