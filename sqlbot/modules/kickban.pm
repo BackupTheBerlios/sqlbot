@@ -122,7 +122,7 @@ sub banUser (){
 		$lastAction = "T-Banned";
 		$tBanCount++;
 		$tBanCountTot++;
-		
+		my($allowStatus) = "Normal";
 		my($temp_ban_time)=&getHubVar("temp_ban_time");
 		if (&getVerboseOption("verbose_banned")){
 			&msgAll("T-BANNED($temp_ban_time Mins) $user($ip) $reason");}
@@ -137,7 +137,7 @@ sub banUser (){
 		$lastAction = "P-Banned";
 		$pBanCountTot++;
 		odch::add_ban_entry($ip);
-
+		my($allowStatus) = "Banned";
 		my($userInDB) = &userInDB($user,$ip);
 		if($userInDB ne 2)
 			{odch::add_nickban_entry($user);}
@@ -173,7 +173,7 @@ sub banUser (){
 	$dbh->do("UPDATE userDB SET tBanCountTot='$tBanCountTot',
 				tBanCount='$tBanCount',
 				pBanCountTot='$pBanCountTot',
-				allowStatus='Banned',
+				allowStatus='$allowStatus',
 				lastReason='$reason',
 			    	lastAction='$lastAction'
 			    	WHERE nick='$sqluser' AND IP='$ip' AND allowStatus!='Banned'");
