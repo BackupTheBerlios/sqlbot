@@ -190,52 +190,52 @@ sub parseClient(){
 			## MIN VERSION ##
 			if ($dcVersion =~/(\d)\1{2,}/){
 				if ($ref->{'min_version'} > $dcVersion)
-					{$REASON = "Version";
+					{$REASON = "Version($dcVersion)";
 					$ACTION = "Kicked";}}
 			## MIN SLOTS ##
 			if ($ref->{'min_slots'} > 0 )
 				{if ($NSlots < $ref->{'min_slots'})
-					{$REASON = "Slots(min)";
+					{$REASON = "Slots(min)($NSlots)";
 					$ACTION = "Kicked";}}
 			else
 				{my($minslots) = &getConnectionSlots($conn,1);
 				if ($NSlots < $minslots)
-					{$REASON = "Slots(min)";
+					{$REASON = "Slots(min)($NSlots)";
 					$ACTION = "Kicked";}}
 			## MAX SLOTS ##
 			if ($ref->{'max_slots'} > 0 )
 				{if ($NSlots > $ref->{'max_slots'})
-					{$REASON = "Slots(max)";
+					{$REASON = "Slots(max)($NSlots)";
 					$ACTION = "Kicked";}}
 			else
 				{my($maxslots) = &getConnectionSlots($conn,2);
 				if ($NSlots > $maxslots)
-					{$REASON = "Slots(max)";
+					{$REASON = "Slots(max)($NSlots)";
 					$ACTION = "Kicked";}}
 			## SLOT RATIO ##
 			if ($ref->{'slot_ratio'} ne 0 )
 				{if ($ref->{'slot_ratio'} > $slt_ratio)
-					{$REASON = "SlotRatio";
+					{$REASON = "SlotRatio($slt_ratio)";
 					$ACTION = "Kicked";}}
 			## SPEED LIMIT ## 
 			if ( $UploadLimit > 0 ) 
 				{if ($ref->{'min_limit'} ne 0 )
 					{if  ($UploadLimit < ($ref->{'min_limit'})) 
-						{$REASON = "Speed Limit";
+						{$REASON = "Speed Limit($UploadLimit)";
 						$ACTION = "Kicked";
 					}}}
 			## MAX HUBS ##
 			if ($ref->{'max_hubs'} ne 0 )
 				{if ($ref->{'max_hubs'} < $NbHubs)
-					{$REASON = "Hubs";
+					{$REASON = "Hubs($NbHubs)";
 					$ACTION = "Kicked";}}
 			## MIN CONNECTION ##
 			if ($ref->{'min_connection'} > $conn)
-				{$REASON = "Connection";
+				{$REASON = "Connection($conn)";
 				$ACTION = "Kicked";}
 			## MIN SHARE ##
 			if ($ref->{'min_share'} > $GigsShared)
-				{$REASON = "Share";
+				{$REASON = "Share($GigsShared Gb)";
 				$ACTION = "Kicked";}
 
 			## Add new client checks here ##
@@ -254,11 +254,11 @@ sub parseClient(){
 
 			## MIN SHARE ##
 			if ($ref1->{'min_share'} > $GigsShared)
-				{$REASON = "Share";
+				{$REASON = "Share($GigsShared Gb)";
 				$ACTION = "Kicked";}
 			## MIN CONNECTION ##
 			elsif ($ref1->{'min_connection'} > $conn){
-				$REASON = "Connection";
+				$REASON = "Connection($conn)";
 				$ACTION = "Kicked";}
 			$dcClient = "No Tag";
 			$dcClientname = "Not Known";
