@@ -6,17 +6,17 @@ body {
 }
 
 a:active {
-	color: #15E8FF;
+	color: #FFFFFF;
 }
 a:hover {
 	text-decoration: underline;
-	color: #15E8FF;
+	color: #FFFFFF;
 }
 a:link {
-	color: #15E8FF;
+	color: #FFFFFF;
 }
 a:visited {
-	color: #15E8FF;
+	color: #FFFFFF;
 }
 
 table.top {

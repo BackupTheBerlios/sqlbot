@@ -163,6 +163,12 @@ $country_query  = "SELECT country_code2,country_name FROM iptoc ".
     $country_name=$ccode_array['country_name'];
 
 
+//CONVERSION FOR SHARE
+	if (($uiShare / 1024 / 1024 / 1024 / 1024) > 1) { $Shared=round(($uiShare / 1024 / 1024 / 1024 / 1024), 2); $Share="$Shared TB";}
+	else if (($uiShare / 1024 / 1024 / 1024) > 1) { $Shared=round(($uiShare / 1024 / 1024 / 1024), 2); $Share="$Shared GB";}
+	else if (($uiShare / 1024 / 1024) > 1) { $Shared=round(($uiShare / 1024 / 1024), 2); $Share="$Shared MB";}
+	else if (($uiShare / 1024) > 1) { $Shared=round(($uiShare / 1024), 2); $Share="$Shared KB";}
+	else if ($uiShare == "0") { $Share = "0 KB";}
 
 ?>
 	<tr>
@@ -266,8 +272,15 @@ $country_query  = "SELECT country_code2,country_name FROM iptoc ".
 					<td nowrap> : &nbsp; <?php echo "$uiSpeed"; ?></td>
 				</tr>
 				<tr>
-					<td nowrap>Hubs Tot (Op/Reg/Usr)</td>
-					<td nowrap> : &nbsp; <?php echo "$uiHubs &nbsp; [$uiHubsOp/$uiHubsReg/$uiHubsNorm]"; ?></td>
+					<td nowrap>Slots</td>
+					<td nowrap> : &nbsp; <?php echo "$uiSlots"; ?></td>
+				</tr>
+				<tr>
+					<td nowrap>Hubs Tot [Op/Reg/Usr]</td>
+					<td nowrap> : &nbsp; <?php
+						if ( ($uiHubsOp == "0") && ($uiHubsReg == "0") && ($uiHubsNorm == "0") ) {
+						echo "$uiHubs";}
+						else { echo "$uiHubs &nbsp; [$uiHubsOp/$uiHubsReg/$uiHubsNorm]";}					?></td>
 				</tr>
 				<tr>
 					<td nowrap>Limiter</td>
@@ -279,7 +292,7 @@ $country_query  = "SELECT country_code2,country_name FROM iptoc ".
 				</tr>
 				<tr>
 					<td nowrap>Current Share</td>
-					<td nowrap> : &nbsp; <?php echo "$uiShare bytes"; ?></td>
+					<td nowrap> : &nbsp; <?php echo "$uiShare bytes  ($Share)"; ?></td>
 				</tr>
 				<tr>
 					<td nowrap>Total Time on hub</td>

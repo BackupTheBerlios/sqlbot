@@ -218,6 +218,13 @@ while ($data=mysql_fetch_array($userresult))
 if ($uiIsAdmin == "1") { $class = "userdbnickop"; }
 else {$class = "userdbnicknormal"; }
 
+//CONVERSION FOR SHARE
+	if (($uiShare / 1024 / 1024 / 1024 / 1024) > 1) { $Shared=round(($uiShare / 1024 / 1024 / 1024 / 1024), 2); $Share="$Shared TB";}
+	else if (($uiShare / 1024 / 1024 / 1024) > 1) { $Shared=round(($uiShare / 1024 / 1024 / 1024), 2); $Share="$Shared GB";}
+	else if (($uiShare / 1024 / 1024) > 1) { $Shared=round(($uiShare / 1024 / 1024), 2); $Share="$Shared MB";}
+	else if (($uiShare / 1024) > 1) { $Shared=round(($uiShare / 1024), 2); $Share="$Shared KB";}
+	else if ($uiShare == "0") { $Share = "0 KB";}
+
 
 	echo "<tr>
 		<td width=\"5\">$uiStatus</td>
@@ -233,7 +240,7 @@ else {$class = "userdbnicknormal"; }
 		<td nowrap align=\"center\">$uiSpeed</td>
 		<td nowrap align=\"center\">$uiIp</td>
 		<td nowrap align=\"center\">$conv_time</td>
-		<td nowrap align=\"center\">$uiShare</td>
+		<td nowrap align=\"center\"><a title=\"$Share\" style=\"cursor:help;\">$uiShare</a></td>
 	</tr>";
 	$i++;
 }
