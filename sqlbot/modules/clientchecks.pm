@@ -19,7 +19,7 @@ sub splitDescription() {
 
 	#Initialise globals
 	$type=0; $ip=""; ;$GigsShared="";
-	$tmpdata=""; $fullDescription=""; $dcClient="";$limiter=0;
+	$tmpdata=""; $fullDescription=""; $dcClient="";$UploadLimit=0;
 	$dcVersion=""; $NbHubs=0; $NSlots=0; $slt_ratio=""; $country="";
 	$UploadLimit=0; $conn=""; $connection=""; $email="";$tmpModeAP="";
 	$connectionMode="unknown";$tmp0="";$shareBytes=0;
