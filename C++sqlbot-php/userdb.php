@@ -27,35 +27,10 @@ $botresult=mysql_query("SELECT * FROM botConfig");
 // MySQL Connection
 $result=mysql_query("SELECT * FROM hubConfig WHERE hubID='$hubID'");
 	$hubID=htmlentities(mysql_result($result,$i,"hubID"));
-	$hcPwd=htmlentities(mysql_result($result,$i,"hcPwd"));
 	$hcStatus=htmlentities(mysql_result($result,$i,"hcStatus"));
-	$hcAutoConnect=mysql_result($result,$i,"hcAutoConnect");
 	$hcName=htmlentities(mysql_result($result,$i,"hcName"));
-	$hcDescription=htmlentities(mysql_result($result,$i,"hcDescription"));
 	$hcHost=mysql_result($result,$i,"hcHost");
-	$hcMaxUsers=mysql_result($result,$i,"hcMaxUsers");
-	$hcMinShare=mysql_result($result,$i,"hcMinShare");
-	$hcMinShareMultiplier=mysql_result($result,$i,"hcMinShareMultiplier");
-	$hcRedirectHost=mysql_result($result,$i,"hcRedirectHost");
-	$hcTempBan=mysql_result($result,$i,"hcTempBan");
-	$hcTempBanMultiplier=mysql_result($result,$i,"hcTempBanMultiplier");
-	$hcShareCheckTimeout=mysql_result($result,$i,"hcShareCheckTimeout");
-	$hcShareCheckTimeoutMultiplier=mysql_result($result,$i,"hcShareCheckTimeoutMultiplier");
-	$hcOwner=htmlentities(mysql_result($result,$i,"hcOwner"));
-	$hcSoftware=htmlentities(mysql_result($result,$i,"hcSoftware"));
-	$hcVersion=htmlentities(mysql_result($result,$i,"hcVersion"));
-	$hcMotd=htmlentities(mysql_result($result,$i,"hcMotd"));
-	$hcMinConnection=mysql_result($result,$i,"hcMinConnection");
-	$hcMinSlots=mysql_result($result,$i,"hcMinSlots");
-	$hcMaxSlots=mysql_result($result,$i,"hcMaxSlots");
-	$hcMaxHubs=mysql_result($result,$i,"hcMaxHubs");
-	$hcSlotRatio=mysql_result($result,$i,"hcSlotRatio");
-	$hcEnableTagCheck=mysql_result($result,$i,"hcEnableTagCheck");
-	$hcKickNoTag=mysql_result($result,$i,"hcKickNoTag");
-	$hcLogChat=mysql_result($result,$i,"hcLogChat");
-	$hcLogSearches=mysql_result($result,$i,"hcLogSearches");
-	$hcLogSystem=mysql_result($result,$i,"hcLogSystem");
-	$hcFileListDl=mysql_result($result,$i,"hcFileListDl");
+
 
 // ADD ONLINE/OFFLINE COLOUR
 if ($hcStatus == "Online"){

@@ -36,7 +36,7 @@ if ($action == "delete_hub")
 }
 if ($action == "add_hub")
 {
-	$add_to_hubConfig = "INSERT INTO hubConfig VALUES('','','','0','','','','','','','','','','','','','','','','','','','','','','','','','','')";
+	$add_to_hubConfig = "INSERT INTO hubConfig VALUES('','','','0','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','')";
 	$result = mysql_query($add_to_hubConfig) or die(mysql_error());
 }
 
@@ -123,21 +123,12 @@ $result=mysql_query("SELECT * FROM hubConfig ORDER BY 'hcName'");
 while ($data=mysql_fetch_array($result)) 
 {
 	$hubID=htmlentities(mysql_result($result,$d,"hubID"));
-	$hcPwd=htmlentities(mysql_result($result,$d,"hcPwd"));
 	$hcStatus=htmlentities(mysql_result($result,$d,"hcStatus"));
 	$hcAutoConnect=mysql_result($result,$d,"hcAutoConnect");
 	$hcName=htmlentities(mysql_result($result,$d,"hcName"));
-	$hcDescription=htmlentities(mysql_result($result,$d,"hcDescription"));
 	$hcHost=mysql_result($result,$d,"hcHost");
-	$hcMaxUsers=mysql_result($result,$d,"hcMaxUsers");
-	$hcMinShare=mysql_result($result,$d,"hcMinShare");
-	$hcRedirectHost=mysql_result($result,$d,"hcRedirectHost");
-	$hcTempBan=mysql_result($result,$d,"hcTempBan");
-	$hcShareCheckTimeout=mysql_result($result,$d,"hcShareCheckTimeout");
 	$hcOwner=htmlentities(mysql_result($result,$d,"hcOwner"));
-	$hcSoftware=htmlentities(mysql_result($result,$d,"hcSoftware"));
-	$hcVersion=htmlentities(mysql_result($result,$d,"hcVersion"));
-	$hcMotd=htmlentities(mysql_result($result,$d,"hcMotd"));
+
 	
 // CHECK IF CONFIGURED ~ ELSE SPECIFY
 if ($hcName == "" || $hcHost == "" ){

@@ -30,10 +30,14 @@ if ($action == "update")
 		hcMinShare='$hcMinShare',
 		hcMinShareMultiplier='$hcMinShareMultiplier',
 		hcRedirectHost='$hcRedirectHost',
-		hcTempBan='$hcTempBan',
-		hcTempBanMultiplier='$hcTempBanMultiplier',
+		hcSBan='$hcSBan',
+		hcSBanMultiplier='$hcSBanMultiplier',
+		hcLBan='$hcLBan',
+		hcLBanMultiplier='$hcLBanMultiplier',
+		hcSBansBeforeLBans='$hcSBansBeforeLBans',
 		hcShareCheckTimeout='$hcShareCheckTimeout',
 		hcShareCheckTimeoutMultiplier='$hcShareCheckTimeoutMultiplier',
+		hcFileListDl='$hcFileListDl',
 		hcOwner='$hcOwner',
 		hcMotd='$hcMotd',
 		hcMinConnection='$hcMinConnection',
@@ -43,10 +47,13 @@ if ($action == "update")
 		hcSlotRatio='$hcSlotRatio',
 		hcEnableTagCheck='$hcEnableTagCheck',
 		hcKickNoTag='$hcKickNoTag',
+		hcEnableCloneCheck='$hcEnableCloneCheck',
+		hcVerboseKickNoTag='$hcVerboseKickNoTag',
+		hcVerboseKick='$hcVerboseKick',
+		hcVerboseBan='$hcVerboseBan',
 		hcLogChat='$hcLogChat',
 		hcLogSearches='$hcLogSearches',
-		hcLogSystem='$hcLogSystem',
-		hcFileListDl='$hcFileListDl'
+		hcLogSystem='$hcLogSystem'		
 	WHERE hubID='$hubID'";
 	$result = mysql_query($update_into_hubConfig) or die(mysql_error());
 }
@@ -91,10 +98,14 @@ $result=mysql_query("SELECT * FROM hubConfig WHERE hubID='$hubID'");
 	$hcMinShare=mysql_result($result,$i,"hcMinShare");
 	$hcMinShareMultiplier=mysql_result($result,$i,"hcMinShareMultiplier");
 	$hcRedirectHost=mysql_result($result,$i,"hcRedirectHost");
-	$hcTempBan=mysql_result($result,$i,"hcTempBan");
-	$hcTempBanMultiplier=mysql_result($result,$i,"hcTempBanMultiplier");
+	$hcSBan=mysql_result($result,$i,"hcSBan");
+	$hcSBanMultiplier=mysql_result($result,$i,"hcSBanMultiplier");
+	$hcLBan=mysql_result($result,$i,"hcLBan");
+	$hcLBanMultiplier=mysql_result($result,$i,"hcLBanMultiplier");
+	$hcSBansBeforeLBans=mysql_result($result,$i,"hcSBansBeforeLBans");
 	$hcShareCheckTimeout=mysql_result($result,$i,"hcShareCheckTimeout");
 	$hcShareCheckTimeoutMultiplier=mysql_result($result,$i,"hcShareCheckTimeoutMultiplier");
+	$hcFileListDl=mysql_result($result,$i,"hcFileListDl");
 	$hcOwner=htmlentities(mysql_result($result,$i,"hcOwner"));
 	$hcSoftware=htmlentities(mysql_result($result,$i,"hcSoftware"));
 	$hcVersion=htmlentities(mysql_result($result,$i,"hcVersion"));
@@ -106,10 +117,14 @@ $result=mysql_query("SELECT * FROM hubConfig WHERE hubID='$hubID'");
 	$hcSlotRatio=mysql_result($result,$i,"hcSlotRatio");
 	$hcEnableTagCheck=mysql_result($result,$i,"hcEnableTagCheck");
 	$hcKickNoTag=mysql_result($result,$i,"hcKickNoTag");
+	$hcEnableCloneCheck=mysql_result($result,$i,"hcEnableCloneCheck");
+	$hcVerboseKickNoTag=mysql_result($result,$i,"hcVerboseKickNoTag");
+	$hcVerboseKick=mysql_result($result,$i,"hcVerboseKick");
+	$hcVerboseBan=mysql_result($result,$i,"hcVerboseBan");
 	$hcLogChat=mysql_result($result,$i,"hcLogChat");
 	$hcLogSearches=mysql_result($result,$i,"hcLogSearches");
 	$hcLogSystem=mysql_result($result,$i,"hcLogSystem");
-	$hcFileListDl=mysql_result($result,$i,"hcFileListDl");
+	
 
 // ADD ONLINE/OFFLINE COLOUR
 if ($hcStatus == "Online"){
@@ -193,7 +208,9 @@ $hcStatus = "<font color=\"#FF1D28\"><strong>Offline</strong></font>";
 							<tr><?php line_form("Redirect Host", 40, hcRedirectHost, $hcRedirectHost); ?></tr>
 							<tr><?php size_form("Min Share", "Minimum share to enter hub", 3, hcMinShare, $hcMinShare, hcMinShareMultiplier, $hcMinShareMultiplier); ?></tr>
 							<tr><?php time_form("Share Check Timeout", "Set this low", 3, hcShareCheckTimeout, $hcShareCheckTimeout, hcShareCheckTimeoutMultiplier, $hcShareCheckTimeoutMultiplier); ?></tr>
-							<tr><?php time_form("Temp Ban", "How long you want to Temp Ban kicked clients", 3, hcTempBan, $hcTempBan, hcTempBanMultiplier, $hcTempBanMultiplier); ?></tr>
+							<tr><?php line_form("Kicks before Bans", 2, hcSBansBeforeLBans, $hcSBansBeforeLBans); ?></tr>
+							<tr><?php time_form("Short Ban", "How long you want to Short-Ban kicked clients", 3, hcSBan, $hcSBan, hcSBanMultiplier, $hcSBanMultiplier); ?></tr>
+							<tr><?php longtime_form("Long Ban", "How long you want to Long-Ban kicked clients", 3, hcLBan, $hcLBan, hcLBanMultiplier, $hcLBanMultiplier); ?></tr>
 						</table>
 					</td>
 					<td valign="top">
@@ -204,8 +221,11 @@ $hcStatus = "<font color=\"#FF1D28\"><strong>Offline</strong></font>";
 								</td>
 							</tr>
 							<tr><?php dual_select_form(Yes,No, "Enable Tag Check", hcEnableTagCheck, $hcEnableTagCheck); ?></tr>
-							<tr><?php dual_select_form(Yes,No, "Kick No-Tags", hcKickNoTag, $hcKickNoTag); ?></tr>
 							<tr><?php dual_select_form(Yes,No, "Check Filelists", hcFileListDl, $hcFileListDl); ?></tr>
+							<tr><?php dual_select_form(Yes,No, "Kick No-Tags", hcKickNoTag, $hcKickNoTag); ?></tr>
+							<tr><?php dual_select_form(Yes,No, "Verbose No-Tag Kicks", hcVerboseKickNoTag, $hcVerboseKickNoTag); ?></tr>
+							<tr><?php dual_select_form(Yes,No, "Verbose Kicks", hcVerboseKick, $hcVerboseKick); ?></tr>
+							<tr><?php dual_select_form(Yes,No, "Verbose Bans", hcVerboseBan, $hcVerboseBan); ?></tr>
 							<tr><?php connection_choice("Minimum Connection", hcMinConnection, $hcMinConnection); ?></tr>
 							<tr><?php line_form("Minimum Slots", 2, hcMinSlots, $hcMinSlots); ?></tr>
 							<tr><?php line_form("Maximum Slots", 3, hcMaxSlots, $hcMaxSlots); ?></tr>

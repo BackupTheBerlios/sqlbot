@@ -27,35 +27,10 @@ $botresult=mysql_query("SELECT * FROM botConfig");
 // MySQL Connection
 $result=mysql_query("SELECT * FROM hubConfig WHERE hubID='$hubID'");
 	$hubID=htmlentities(mysql_result($result,$i,"hubID"));
-	$hcPwd=htmlentities(mysql_result($result,$i,"hcPwd"));
 	$hcStatus=htmlentities(mysql_result($result,$i,"hcStatus"));
-	$hcAutoConnect=mysql_result($result,$i,"hcAutoConnect");
 	$hcName=htmlentities(mysql_result($result,$i,"hcName"));
-	$hcDescription=htmlentities(mysql_result($result,$i,"hcDescription"));
 	$hcHost=mysql_result($result,$i,"hcHost");
-	$hcMaxUsers=mysql_result($result,$i,"hcMaxUsers");
-	$hcMinShare=mysql_result($result,$i,"hcMinShare");
-	$hcMinShareMultiplier=mysql_result($result,$i,"hcMinShareMultiplier");
-	$hcRedirectHost=mysql_result($result,$i,"hcRedirectHost");
-	$hcTempBan=mysql_result($result,$i,"hcTempBan");
-	$hcTempBanMultiplier=mysql_result($result,$i,"hcTempBanMultiplier");
-	$hcShareCheckTimeout=mysql_result($result,$i,"hcShareCheckTimeout");
-	$hcShareCheckTimeoutMultiplier=mysql_result($result,$i,"hcShareCheckTimeoutMultiplier");
-	$hcOwner=htmlentities(mysql_result($result,$i,"hcOwner"));
-	$hcSoftware=htmlentities(mysql_result($result,$i,"hcSoftware"));
-	$hcVersion=htmlentities(mysql_result($result,$i,"hcVersion"));
-	$hcMotd=htmlentities(mysql_result($result,$i,"hcMotd"));
-	$hcMinConnection=mysql_result($result,$i,"hcMinConnection");
-	$hcMinSlots=mysql_result($result,$i,"hcMinSlots");
-	$hcMaxSlots=mysql_result($result,$i,"hcMaxSlots");
-	$hcMaxHubs=mysql_result($result,$i,"hcMaxHubs");
-	$hcSlotRatio=mysql_result($result,$i,"hcSlotRatio");
-	$hcEnableTagCheck=mysql_result($result,$i,"hcEnableTagCheck");
-	$hcKickNoTag=mysql_result($result,$i,"hcKickNoTag");
-	$hcLogChat=mysql_result($result,$i,"hcLogChat");
-	$hcLogSearches=mysql_result($result,$i,"hcLogSearches");
-	$hcLogSystem=mysql_result($result,$i,"hcLogSystem");
-	$hcFileListDl=mysql_result($result,$i,"hcFileListDl");
+
 
 // ADD ONLINE/OFFLINE COLOUR
 if ($hcStatus == "Online"){
@@ -143,6 +118,11 @@ $userresult=mysql_query("SELECT *,DATE_FORMAT(uiLastSeenTime, '%d/%m/%Y %H:%i') 
 // DATE CONVERSIONS
 $uiFirstSeenTime=mysql_result($userresult,$i,"firstdate");
 $uiLastSeenTime=mysql_result($userresult,$i,"lastdate");
+//TIME CONVERSIONS
+$days=(int)($uiTimeOnline / 86400);
+if ($days > "0") { $total_days = "$days days";}
+$Grandtotal = date("H:i:s", mktime(0,0,$uiTimeOnline));
+
 //USER STATUS CONVERSIONS
 if ($uiIsAway == "1") { $away = "(Away)"; }
 if ($uiStatus == "1") { $online_status = "<font color=\"#23FF07\">Online</font> $away";
@@ -179,6 +159,10 @@ if ($uiStatus == "0") { $online_status = "<font color=\"#EBEBEB\">Offline</font>
 					<td nowrap> : &nbsp; <?php echo "$uiLoginCount"; ?></td>
 				</tr>
 				<tr>
+					<td nowrap>Total Searches</td>
+					<td nowrap> : &nbsp; <?php echo "$uiTotalSearches"; ?></td>
+				</tr>
+				<tr>
 					<td nowrap>First Seen</td>
 					<td nowrap> : &nbsp; <?php echo "$uiFirstSeenTime"; ?></td>
 				</tr>
@@ -189,6 +173,14 @@ if ($uiStatus == "0") { $online_status = "<font color=\"#EBEBEB\">Offline</font>
 				<tr>
 					<td nowrap>Lines Spoken</td>
 					<td nowrap> : &nbsp; <?php echo "$uiSayTotal"; ?></td>
+				</tr>
+				<tr>
+					<td nowrap>Kicks</td>
+					<td nowrap> : &nbsp; <?php echo "$uiKickTotal"; ?></td>
+				</tr>
+				<tr>
+					<td nowrap>Bans</td>
+					<td nowrap> : &nbsp; <?php echo "$uiBanTotal"; ?></td>
 				</tr>
 			</table>			
 		</td>
@@ -233,7 +225,7 @@ if ($uiStatus == "0") { $online_status = "<font color=\"#EBEBEB\">Offline</font>
 				</tr>
 				<tr>
 					<td nowrap>Total Time on hub</td>
-					<td nowrap> : &nbsp; <?php echo "$uiTimeOnline seconds"; ?></td>
+					<td nowrap> : &nbsp; <?php echo "$total_days $Grandtotal"; ?></td>
 				</tr>
 			</table>
 		</td>

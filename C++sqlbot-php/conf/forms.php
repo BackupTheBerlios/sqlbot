@@ -71,12 +71,14 @@ echo "<select name=\"$value\" class=\"form_select\">";
 		list_connection("28.8Kbps", $value_orig);
 		list_connection("33.6Kbps", $value_orig);
 		list_connection("56Kbps", $value_orig);
-		list_connection("Satellite", $value_orig);
 		list_connection("ISDN", $value_orig);
 		list_connection("DSL", $value_orig);
+		list_connection("Satellite", $value_orig);
 		list_connection("Cable", $value_orig);
 		list_connection("LAN(T1)", $value_orig);
 		list_connection("LAN(T3)", $value_orig);
+		list_connection("WIRELESS", $value_orig);
+		list_connection("MICROWAVE", $value_orig);
 		echo "</select></td>";
 }
 
@@ -95,6 +97,17 @@ echo "<td>$value_description</td>
 			list_times("minutes", $value_orig_multiplier);
 			list_times("hours", $value_orig_multiplier);
 			list_times("days", $value_orig_multiplier);
+
+echo "</select></td>";
+}
+
+function longtime_form($value_description, $shorthint, $maxlength, $value,$value_orig, $value_multiplier, $value_orig_multiplier) {
+echo "<td>$value_description</td>
+		<td align=\"right\"><input type=\"text\" name=\"$value\" value=\"$value_orig\" maxlength=\"$maxlength\" class=\"form_time\" title=\"$shorthint\"><select name=\"$value_multiplier\" class=\"form_time\">";
+
+			list_times("hours", $value_orig_multiplier);
+			list_times("days", $value_orig_multiplier);
+			list_times("weeks", $value_orig_multiplier);
 
 echo "</select></td>";
 }
