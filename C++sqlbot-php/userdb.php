@@ -327,7 +327,9 @@ while ($data=mysql_fetch_array($userresult))
 	if  (($uiStatus == "1") && ($uiIsAway == "0")) { $Status ="<img src=\"img/Online.gif\" alt=\"Online\" title=\"Online\">";}
 	if  (($uiStatus == "1") && ($uiIsAway == "1")) { $Status ="<img src=\"img/Away.gif\" alt=\"Away\" title=\"Away\">";}
 	if  ($uiStatus == "0") { $Status ="<img src=\"img/Offline.gif\" alt=\"Offline\" title=\"Offline\">";}
-	if  (($uiBanFlag > "0") && ($uiStatus == "0")) { $Status ="<img src=\"img/Ban.gif\" alt=\"Offline\" title=\"Banned\">";}
+	if  (($uiBanFlag == "3") && ($uiStatus == "0")) { $Status ="<img src=\"img/Ban.gif\" alt=\"Banned\" title=\"Banned\">";}
+	if  (($uiBanFlag == "1")  && ($uiStatus == "0")) { $Status ="<img src=\"img/Kick.gif\" alt=\"Short-Banned\" title=\"Short-Banned\">";}
+	if  (($uiBanFlag == "2")  && ($uiStatus == "0")) { $Status ="<img src=\"img/Kick1.gif\" alt=\"Long-Banned\" title=\"Long-Banned\">";}
 
 	if (!empty($uiCountry)) {$flag = "<img src=\"img/flags/${uiCountry}.PNG\" alt=\"$uiCountry\" ONMOUSEOVER=\"popup('$uiCountry</td>','yellow')\"; ONMOUSEOUT=\"kill()\">"; }
 	else {$flag = "";}

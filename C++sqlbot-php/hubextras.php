@@ -105,7 +105,7 @@ $result=mysql_query("SELECT * FROM hubConfig WHERE hubID='$hubID'");
 				<form action="<?php echo "$PHP_SELF"; ?>" method="post">
 				<tr>
 					<td valign="top">
-				<!-- HUB DETAILS -->
+				<!-- HUB RULES -->
 						<table cellpadding="0" cellspacing="0" class="config">
 						<input type="hidden" name="hubID" value="<?php echo "$hubID"; ?>">
 						<input type="hidden" name="action" value="update">
@@ -113,15 +113,14 @@ $result=mysql_query("SELECT * FROM hubConfig WHERE hubID='$hubID'");
 						Add your rules for your hub in here. The user will see it when he types
 						+rules", hxHubRules, $hxHubRules); ?></tr>
 						</table>
-							<!-- END HUB DETAILS -->
 					</td>
 					<td valign="top">
-							<!-- HUB INFO -->
+				<!-- HUB NICK BANS -->
 						<table cellpadding="0" cellspacing="0" class="config">
-							<tr><?php textarea_form_long("<strong><u>Nick Ban</u></strong><br>
+							<tr><td>TODO</td><!--<?php textarea_form_long("<strong><u>Nick Ban</u></strong><br>
 						Here you can insert partial or full names that the bot will place an
 						immediate ban on when a user mathing such a nick enters the hub.
-						", hxBanNicks, $hxBanNicks); ?></tr>
+						", hxBanNicks, $hxBanNicks); ?> --></tr>
 						</table>
 						<!-- END HUB DETAILS -->
 					</td>
@@ -129,30 +128,30 @@ $result=mysql_query("SELECT * FROM hubConfig WHERE hubID='$hubID'");
 				<tr>
 					<td valign="top">
 						<table cellpadding="0" cellspacing="0" class="config">
-							<tr><?php textarea_form_long("<strong><u>Search Ban</u></strong><br>
+							<tr><td>TODO</td><!--<?php textarea_form_long("<strong><u>Search Ban</u></strong><br>
 						Here you can insert words you don't want users searching for on your
 						hub (like rape, child-porn, etc...).<p>
-						", hxBanSearch, $hxBanSearch); ?></tr>
+						", hxBanSearch, $hxBanSearch); ?>--></tr>
 						</table>
 					</td>
 					<td valign="top">
 						<table cellpadding="0" cellspacing="0" class="config">
-							<tr><?php textarea_form_long("<strong><u>Chat Ban</u></strong><br>
+							<tr><td>TODO</td><!--<?php textarea_form_long("<strong><u>Chat Ban</u></strong><br>
 						Add words you don't want users to say in your main chat. This will ban them
 						so be carefull what you add here. This feature is mainly used for spam-bots with 
 						certain web addresses.<p>
-						", hxBanChat, $hxBanChat); ?></tr>
+						", hxBanChat, $hxBanChat); ?>--></tr>
 						</table>
 					</td>
 				</tr>
 				<tr>
 					<td valign="top">
 						<table cellpadding="0" cellspacing="0" class="config">
-							<tr><?php textarea_form_long("<strong><u>Ban Shared Files</u></strong><br>
+							<tr><td>TODO</td><!--<?php textarea_form_long("<strong><u>Ban Shared Files</u></strong><br>
 						The bot will eventualyl be able todownload filelists of users and check their files.
 						Insert here words of common files you do not want them to share, and if found, they
 						will be banned.<p>
-						", hxBanSharedFiles, $hxBanSharedFiles); ?></tr>
+						", hxBanSharedFiles, $hxBanSharedFiles); ?>--></tr>
 						</table>
 					</td>
 					<td valign="top">

@@ -151,6 +151,13 @@ if ($uiStatus == "1") { $online_status = "<font color=\"#23FF07\">Online</font> 
 							$uiLastSeenTime = "Currently online";}
 if ($uiStatus == "0") { $online_status = "<font color=\"#EBEBEB\">Offline</font>"; }
 
+// BAN FLAGS
+
+if ($uiBanFlag == 0) {$BanFlag = "None"; }
+if ($uiBanFlag == 1) {$BanFlag = "Short Ban"; }
+if ($uiBanFlag == 2) {$BanFlag = "Long Ban"; }
+if ($uiBanFlag == 3) {$BanFlag = "<font color=\"#EBEBEB\">Permanent Ban</font>"; }
+
 
 
 // COUNTRY CODES
@@ -233,13 +240,16 @@ $country_query  = "SELECT country_code2,country_name FROM iptoc ".
 					<td nowrap> : &nbsp; <?php echo "$uiKickTotal"; ?></td>
 				</tr>
 				<tr>
-					<td nowrap valign="top">BanFlag</td>
-					<td nowrap> : &nbsp; <?php echo "$uiBanFlag"; ?></td>
+					<td nowrap valign="top">Ban Type</td>
+					<td nowrap> : &nbsp; <?php echo "$BanFlag"; ?></td>
 				</tr>
 				<tr>
-					<td nowrap valign="top">Bans</td>
-					<td nowrap> : &nbsp; <?php echo "$uiBanTotal";
-						if ($uiBanTotal > "0") { echo "<br> &nbsp; <em>[$uiBanTime - $uiBanExpire]</em>";}
+					<td nowrap valign="top">Total Bans</td>
+					<td nowrap> : &nbsp; <?php echo "$uiBanTotal"; ?></td>
+				</tr>
+				<tr>
+					<td nowrap valign="top">Bans Times</td>
+					<td nowrap> : &nbsp; <?php if ($uiBanTotal > "0") { echo "$uiBanTime - $uiBanExpire";}
 						?></td>
 				</tr>
 				<tr>
