@@ -41,20 +41,16 @@ sub processEvent(){
 	my($user)=@_;
 
 	# Select the appropriate action
-	$kicked = "Kicked";
-	$banned = "Banned";
-	$nuked = "Nuked";
-	$notags = "NoTags";
 		
 	if (lc($REASON) eq lc("Fake(Share)"))
 		{&banUser($user,"Fake(Share)",$ip,"pban");}
-	elsif (lc($ACTION) eq lc($banned))
-		{&banUser($user,$REASON,$ip,"tban");}
-	elsif (lc($ACTION) eq lc($kicked)){
+	elsif (lc($ACTION) eq lc("P-Banned"))
+		{&banUser($user,$REASON,$ip,"pban");}
+	elsif (lc($ACTION) eq lc("Kicked")){
 		if (&getConfigOption("client_check")){
 			&kickUser($user,$REASON);}}
-	elsif (lc($ACTION) eq lc($nuked)){
-		&banUser($user,$REASON,$ip,"pban");}
+	elsif (lc($ACTION) eq lc("T-Banned")){
+		&banUser($user,$REASON,$ip,"tban");}
 }
 
 sub botWorker(){
@@ -74,6 +70,10 @@ sub botWorker(){
 	my($WIpFilter) = $dbh->selectrow_array("SELECT COUNT(*) FROM botWorker WHERE function LIKE '4%'"); # Or 40 or 41
 	if($WIpFilter ne 0)
 		{&ipFilterWorker();}
+	#User is marked as allowed	
+	my($WAUser) = $dbh->selectrow_array("SELECT COUNT(*) FROM botWorker WHERE function LIKE '5%'"); # Or 50
+	if($WAUser ne 0)
+		{&aUserWorker();}
 }
 
 sub ipFilterWorker(){
