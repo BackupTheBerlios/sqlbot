@@ -284,6 +284,7 @@ while ($data=mysql_fetch_array($userresult))
 	if ($uiClient == "DCGUI") { $CLIENT = "<img src=\"img/clients/DCGUI.gif\" alt=\"$uiClient\">"; }
 	if ($uiClient == "++") { $CLIENT = "<img src=\"img/clients/DCpp.gif\" alt=\"$uiClient\">"; }
 	if ($uiClient == "DC") { $CLIENT = "<img src=\"img/clients/DC.gif\" alt=\"$uiClient\">"; }
+	if ($uiClient == "DCTC") { $CLIENT = "<img src=\"img/clients/DCTC.gif\" alt=\"$uiClient\">"; }
 	if ($uiUserLevel == "5") { $CLIENT = "<img src=\"img/clients/Bot.gif\" alt=\"Bot\">"; }
 	
 	if  (($uiStatus == "1") && ($uiIsAway == "0")) { $Status ="<img src=\"img/Online.gif\" alt=\"Online\" title=\"Online\">";}
@@ -307,7 +308,7 @@ if ($uiMode == "Active") { $uiMode = "A"; }
 //DECLARE POPUPS FOR USER-NICK
 if ($uiClient == "Unknown") { $clientHover = "ONMOUSEOVER=\"popup('Unknown</td>','yellow')\"; ONMOUSEOUT=\"kill()\""; }
 if ($uiUserLevel == "5") { $clientHover = "ONMOUSEOVER=\"popup('Bot</td>','yellow')\"; ONMOUSEOUT=\"kill()\""; }
-else  { $clientHover = "ONMOUSEOVER=\"popup('Client</td><td>$uiClient</td></tr><tr><td>Version</td><td>$uiVersion</td></tr><tr><td>Details</td><td>M:$uiMode,H:$uiHubs,S:$uiSlots,L:$uiLimiter</td>','yellow')\"; ONMOUSEOUT=\"kill()\""; }
+elseif ($uiClient != "Unknown")  { $clientHover = "ONMOUSEOVER=\"popup('Client</td><td>$uiClient</td></tr><tr><td>Version</td><td>$uiVersion</td></tr><tr><td>Details</td><td>M:$uiMode,H:$uiHubs,S:$uiSlots,L:$uiLimiter</td>','yellow')\"; ONMOUSEOUT=\"kill()\""; }
 
 
 // DECLARE USER-STATES
@@ -325,7 +326,7 @@ if ((($uiUserLevel == "0") || ($uiUserLevel == "")) && ($uiIsAdmin == "0")) { $c
 
 if ($uiBanTotal == "0") { $user_info = "Logins</td><td>$uiLoginCount</td></tr><tr><td>Kicks</td><td>$uiKickTotal</td></tr><tr><td>Bans</td><td>$uiBanTotal</td>"; }
 
-if ($uiBanTotal > "0") { $user_info = "Logins</td><td>$uiLoginCount</td></tr><tr><td>Kicks</td><td>$uiKickTotal</td></tr><tr><td valign=top>Bans</td><td>$uiBanTotal<br>Banned: $BanTime<br>Expires: $BanExpire</td>"; }
+if ($uiBanTotal > "0") { $user_info = "Logins</td><td>$uiLoginCount</td></tr><tr><td>Kicks</td><td>$uiKickTotal</td></tr><tr><td valign=top>Bans</td><td>Total: $uiBanTotal<br>Banned: $BanTime<br>Expires: $BanExpire</td>"; }
 
 
 // PAGE DATA
@@ -357,12 +358,33 @@ echo "<tr>
 <!-- PREVIOUS / NEXT PAGE -->
 	<table width="100%">
 		<tr>
-			<td>
-			<?php
-			// CODE FOR PREVIOUS BUTTON
+			<td width="25%">
+				<?php
+				// CODE FOR FIRST-PAGE BUTTON
+				$last_divide = floor($total_selection / $defaultLogEntries);
+				$last_offset = $last_divide * $defaultLogEntries;
+				$is_there_a_last = $total_selection - $offset;
+				if ($offset > "0") { 
+				?>
+						<form action="<?php echo "$PHP_SELF"; ?>" method="post">
+							<?php hidden_value(hubID, $hubID); ?>
+							<?php hidden_value(parse, $parse); ?>
+							<?php hidden_value(parseorder, $parseorder); ?>
+							<?php hidden_value(offset, 0); ?>
+							<?php if ($useSearch == "1") {
+							hidden_value(useSearch, 1);
+							hidden_value(useSearch, 1);
+							hidden_value(searchvalue, $searchvalue);
+							hidden_value(searchfield, $searchfield);
+							;} ?>
+							<input type="submit" value="<<< First Page" class="userdbnicknormal" title="Go to First Page"></form>
+				<?php ;} ?>
+			</td>
+			<td align="right" width="25%">
+				<?php
+				// CODE FOR PREVIOUS BUTTON
 				if ($offset >= $defaultLogEntries){
-				$offset_value = $offset - $defaultLogEntries
-			?>
+				$offset_value = $offset - $defaultLogEntries ?>
 						<form action="<?php echo "$PHP_SELF"; ?>" method="post">
 							<?php hidden_value(hubID, $hubID); ?>
 							<?php hidden_value(parse, $parse); ?>
@@ -375,15 +397,15 @@ echo "<tr>
 							hidden_value(searchfield, $searchfield);
 							;} ?>
 							<input type="submit" value="<< Previous Page" class="userdbnicknormal" title="Go to Previous Page"></form>
-			<?php ;} ?>
+				<?php ;} ?>
 			</td>
-			<td align="right">
-			<?php
-			// CODE FOR NEXT BUTTON
-			$offset_value = $offset + $defaultLogEntries;
-			$is_there_next = ($total_selection -$offset_value) /$defaultLogEntries;
-			if ($is_there_next > 0){ 
-			?>
+			<td width="25%">
+				<?php
+				// CODE FOR NEXT BUTTON
+				$offset_value = $offset + $defaultLogEntries;
+				$is_there_next = ($total_selection -$offset_value) /$defaultLogEntries;
+				if ($is_there_next > 0){ 
+				?>
 						<form action="<?php echo "$PHP_SELF"; ?>" method="post">
 							<?php hidden_value(hubID, $hubID); ?>
 							<?php hidden_value(parse, $parse); ?>
@@ -396,7 +418,29 @@ echo "<tr>
 							hidden_value(searchfield, $searchfield);
 							;} ?>
 							<input type="submit" value="Next Page >>" class="userdbnicknormal" title="Go to Next Page"></form>
-			<?php ;} ?>
+				<?php ;} ?>
+			</td>
+			<td align="right">
+				<?php
+				// CODE FOR LAST-PAGE BUTTON
+				$last_divide = floor($total_selection / $defaultLogEntries);
+				$last_offset = $last_divide * $defaultLogEntries;
+				$is_there_a_last = $total_selection - $offset;
+				if ($is_there_a_last > $defaultLogEntries) { 
+				?>
+						<form action="<?php echo "$PHP_SELF"; ?>" method="post">
+							<?php hidden_value(hubID, $hubID); ?>
+							<?php hidden_value(parse, $parse); ?>
+							<?php hidden_value(parseorder, $parseorder); ?>
+							<?php hidden_value(offset, $last_offset); ?>
+							<?php if ($useSearch == "1") {
+							hidden_value(useSearch, 1);
+							hidden_value(useSearch, 1);
+							hidden_value(searchvalue, $searchvalue);
+							hidden_value(searchfield, $searchfield);
+							;} ?>
+							<input type="submit" value="Last Page >>>" class="userdbnicknormal" title="Go to Last Page"></form>
+				<?php ;} ?>
 			</td>
 		</tr>
 	</table>
