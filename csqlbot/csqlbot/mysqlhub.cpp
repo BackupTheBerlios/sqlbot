@@ -66,6 +66,7 @@ MySqlHub::MySqlHub(int hubID,MySqlCon * mySql){
      hxBanChat =              "";
      hxBanSharedFiles =       "";
      
+     m_pDefaultRule = 0;
 
 }     
 MySqlHub::~MySqlHub(){
@@ -118,6 +119,66 @@ void MySqlHub::LoadHubConfig(){
      }
      hMySql->FreeRes(result);
 
+	// get client rules
+	m_ClientRules.Clear();
+	
+	if ( m_pDefaultRule )
+	{
+		delete m_pDefaultRule;
+		m_pDefaultRule = 0;
+	}
+
+	result = hMySql->Query(hcHubID,"*","clientRules","");
+	
+	if ( result )
+	{
+		while ( (row = hMySql->FetchResult(result)) )
+		{
+			int i = 0;
+			CClientRule * cr = new CClientRule();
+			
+			cr->m_nID                        = CString(row[i++]).asULL();
+			i++; // hubID
+			cr->m_sName                      = row[i++];
+			cr->m_eClientVersion             = eUserClientVersion(CString(row[i++]).asINT());
+			cr->m_bAllow                     = CString(row[i++]).asINT();
+			cr->m_eMinUserSpeed              = eUserSpeed(CString(row[i++]).asINT());
+			cr->m_eMaxUserSpeed              = eUserSpeed(CString(row[i++]).asINT());
+			cr->m_nMinShared                 = CString(row[i++]).asULL();
+			cr->m_nMaxShared                 = CString(row[i++]).asULL();
+			cr->m_nMinLimit                  = CString(row[i++]).asDOUBLE();
+			cr->m_nMaxLimit                  = CString(row[i++]).asDOUBLE();
+			cr->m_nMinSlots                  = CString(row[i++]).asULL();
+			cr->m_nMaxSlots                  = CString(row[i++]).asULL();
+			cr->m_nMinHubs                   = CString(row[i++]).asULL();
+			cr->m_nMaxHubs                   = CString(row[i++]).asULL();
+			cr->m_MinVersion.m_nVersionMajor = CString(row[i++]).asINT();
+			cr->m_MinVersion.m_nVersionMinor = CString(row[i++]).asINT();
+			cr->m_MinVersion.m_nVersionPatch = CString(row[i++]).asINT();
+			cr->m_MaxVersion.m_nVersionMajor = CString(row[i++]).asINT();
+			cr->m_MaxVersion.m_nVersionMinor = CString(row[i++]).asINT();
+			cr->m_MaxVersion.m_nVersionPatch = CString(row[i++]).asINT();
+			cr->m_nSlotHubRatio              = CString(row[i++]).asDOUBLE();
+			cr->m_bMotd                      = CString(row[i++]).asINT();
+			cr->m_sMotd                      = row[i++];
+			
+			if ( cr->m_sName == "DEFAULT" )
+			{
+				if ( m_pDefaultRule )
+					printf("WARNING: found double DEFAULT client rules\n");
+				else
+					m_pDefaultRule = cr;
+			}
+			else
+				m_ClientRules.Add( CString().setNum(cr->m_nID), cr );
+			
+			printf("Load client rule: '%s'\n",cr->m_sName.Data());
+		}
+		
+		hMySql->FreeRes(result);
+	}
+
+	
      result = hMySql->Query(hcHubID,"*","hubExtras","");
      row = hMySql->FetchResult(result);
      if (row)
@@ -263,6 +324,8 @@ void MySqlHub::SetHubKickNoTag(CString kickNoTag)
      hcKickNoTag=CString(kickNoTag).asINT();
      hMySql->Update(hcHubID,"hubConfig","hcKickNoTag='" + kickNoTag + "'","");     
 }
+
+/** */
 int MySqlHub::ConvertSpeed(CString speed)
 {
           if ( speed == "28.8Kbps" )

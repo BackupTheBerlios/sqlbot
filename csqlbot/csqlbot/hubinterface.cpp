@@ -22,12 +22,17 @@
 using std::cout;
 using std::endl;
 
-HubInterface::HubInterface(class DCClient * hidcclient,MySqlHub *hubCfg,eHubInterface interface){
-     dcclient = hidcclient;
-     hubInterface = interface;
-     hubConfig = hubCfg;
+/** */
+HubInterface::HubInterface(class DCClient * hidcclient,MySqlHub *hubCfg,eHubInterface interface)
+{
+     	dcclient     = hidcclient;
+     	hubInterface = interface;
+     	hubConfig    = hubCfg;
 }
-HubInterface::~HubInterface(){
+
+/** */
+HubInterface::~HubInterface()
+{
 }
 
 
@@ -66,115 +71,169 @@ bool HubInterface::HubVersion(CString msg)
 
      return(FALSE);
 }
-CString HubInterface::KickBanMsgs(eKickBanTypes kickBanType,UserInfo * info)
+
+/** */
+CString HubInterface::KickBanMsgs( eKickBanTypes kickBanType, UserInfo * info, CClientRule * rule )
 {
-     CString message;
-     switch (kickBanType)
-     {
-          case ehikb_UnTagged:
-          {
-               message = "Untagged Client/Client not recognised.";
-          break;
-          }
-          case ehikb_Share:
-          {
-              message =  "Failed Min Share[" + CUtils::GetSizeString(info->GetShare(),euAUTO) +
-                    "] requires[" + CUtils::GetSizeString(hubConfig->GetHubMinShare(),euAUTO) +
-                    "] Short by[" + CUtils::GetSizeString(hubConfig->GetHubMinShare()-info->GetShare(),euAUTO) +"].";
-          break;
-          }
-          case ehikb_MxHubs:
-          {
-               message = "Failed Max Hubs[" + CString().setNum(info->GetHubs()) +
-                    "] Max[" + CString().setNum(hubConfig->GetHubMaxHubs()) +
-                    "]Hubs. Over by[" + CString().setNum(info->GetHubs()-hubConfig->GetHubMaxHubs()) +
-                    "]Hubs.";
+	CString message;
+	
+     	switch (kickBanType)
+     	{
+          	case ehikb_UnTagged:
+          	{
+               		message = "Untagged Client/ Unknown Client not recognised.";
+			
+          		break;
+          	}
+		
+          	case ehikb_Share:
+          	{
+			message = "Failed Min Share";
+			
+			if ( rule )
+			{
+				message += " [" + CUtils::GetSizeString(info->GetShare(),euAUTO) + "]" +
+					   " requires [" + CUtils::GetSizeString(rule->m_nMinShared,euAUTO) +
+					   "] Short by [" + CUtils::GetSizeString(rule->m_nMinShared-info->GetShare(),euAUTO) +"].";
+			}
+			
+          		break;
+          	}
+		
+          	case ehikb_MxHubs:
+          	{
+               		message = "Failed Max Hubs";
+			
+			if ( rule )
+			{	
+				message += " [" + CString().setNum(info->GetHubs()) +
+                    			   "] Max[" + CString().setNum(rule->m_nMaxHubs) +
+                    			   "]Hubs. Over by[" + CString().setNum(info->GetHubs()-rule->m_nMaxHubs) +
+                    			   "]Hubs.";
+			}
 
-          break;
-          }
-          case ehikb_MxSlots:
-          {
-               message = "Failed Max Slots[" + CString().setNum(info->GetSlots()) +
-                    "] requires Max of[" + CString().setNum(hubConfig->GetHubMaxSlots()) +
-                    "]slots. Over by[" + CString().setNum(info->GetSlots()-hubConfig->GetHubMaxSlots()) +
-                    "]slots.";
+          		break;
+          	}
 
-          break;
-          }
-          case ehikb_MnSlots:
-          {
-               message = "Failed Min Slots[" + CString().setNum(info->GetSlots()) +
-                    "] requires[" + CString().setNum(hubConfig->GetHubMinSlots()) +
-                    "]slots. Short by[" + CString().setNum(hubConfig->GetHubMinSlots()-info->GetSlots()) +
-                    "]slots.";
+          	case ehikb_MxSlots:
+          	{
+               		message = "Failed Max Slots"; 
+			
+			if ( rule )
+			{
+				message += " [" + CString().setNum(info->GetSlots()) +
+                    			"] requires Max of[" + CString().setNum(rule->m_nMaxSlots) +
+                    			"]slots. Over by[" + CString().setNum(info->GetSlots()-rule->m_nMaxSlots) +
+                    			"]slots.";
+			}
 
-          break;
-          }
-          case ehikb_SlotRatio:
-          {
-               message = "Failed Slot Ratio [" + CString().setNum(info->GetSlots()) +
-                    "Slots/" + CString().setNum(info->GetHubs()) +
-                    "hubs=" + CString().setNum((double)info->GetSlots()/(double)info->GetHubs(),3) +
-                    "] Requires a ratio of [" + CString().setNum(hubConfig->GetHubSlotRatio(),3) +
-                    "] Slots/Hubs.";
+          		break;
+          	}
+		
+		
+          	case ehikb_MnSlots:
+          	{
+               		message = "Failed Min Slots";
+			
+			if ( rule )
+			{
+				message += " [" + CString().setNum(info->GetSlots()) +
+                    			"] requires[" + CString().setNum(rule->m_nMinSlots) +
+                    			"]slots. Short by[" + CString().setNum(rule->m_nMinSlots-info->GetSlots()) +
+                    			"]slots.";
+			}
 
-          break;
-          }
-          case ehikb_HackedTag:
-          {
-               message = " Hacked Tag";
+          		break;
+          	}
+		
+          	case ehikb_SlotRatio:
+          	{
+               		message = "Failed Slot Ratio";
+			 
+			if ( rule )
+			{
+				message += " [" + CString().setNum(info->GetSlots()) +
+                    			"Slots/" + CString().setNum(info->GetHubs()) +
+                    			"hubs=" + CString().setNum((double)info->GetSlots()/(double)info->GetHubs(),3) +
+                    			"] Requires a ratio of [" + CString().setNum(rule->m_nSlotHubRatio,3) +
+                    			"] Slots/Hubs.";
+			}
 
-          break;
-          }
-          case ehikb_MinConnection:
-          {
-               message = "Failed Min Speed[" + info->GetSpeed() +
-                    "] Requires a[" + hubConfig->GetHubMinSpeed() + "]Connection.";
+          		break;
+          	}
+		
+		
+          	case ehikb_HackedTag:
+          	{
+               		message = " Hacked Tag";
+			
+			break;
+          	}
+		
+          	case ehikb_MinConnection:
+          	{
+               		message = "Failed Min Speed";
+			
+			if ( rule )
+			{
+				// TODO: convert speed
+//				message += " [" + info->GetSpeed() +
+//                    			"] Requires a[" + rule->m_eMinUserSpeed + "]Connection.";
+			}
 
-          break;
-          }
-          case ehikb_BadWord:
-          {
-
-          break;
-          }
-          case ehikb_IllegalSearch:
-          {
-
-          break;
-          }
-          case ehikb_IllegalShare:
-          {
-
-          break;
-          }
-          case ehikb_BanNick:
-          {
-
-          break;
-          }
-          case ehikb_Clone:
-          {
-               message = " Clones are not welcome here.";
-
-          break;
-          }
-          case ehikb_Operator:
-          {
-               message = " Operator request";
-          break;
-          }
-          default:
-               break;
-     }
-     return(message);
+          		break;
+          	}
+		
+          	case ehikb_BadWord:
+          	{
+			break;
+          	}
+		
+          	case ehikb_IllegalSearch:
+          	{
+			break;
+          	}
+          
+	  	case ehikb_IllegalShare:
+          	{
+			break;
+          	}
+          
+	  	case ehikb_BanNick:
+          	{
+			break;
+          	}
+          
+	  	case ehikb_Clone:
+          	{
+			break;
+          	}
+          
+	  	case ehikb_Operator:
+          	{
+               		message = " Operator request";
+			
+          		break;
+          	}
+		
+          	default:
+		{
+               		break;
+		}
+     	}
+	
+     	return(message);
 }
-bool HubInterface::Kick(eKickBanTypes kickBanType, UserInfo * info,CString nick)
+
+/** */
+bool HubInterface::Kick( eKickBanTypes kickBanType, UserInfo * info, CClientRule * rule )
 {
      if (info == 0){return(FALSE);}
 
-     CString message = KickBanMsgs(kickBanType,info);
-                                    
+     UserInfo * botInfo = dcclient->GetNickInfo(dcclient->GetBotNick());
+
+     CString message = KickBanMsgs(kickBanType,info,rule);
+
      if (botInfo->GetIsAdmin())
      {
           info->IncKickTotal();
@@ -186,22 +245,22 @@ bool HubInterface::Kick(eKickBanTypes kickBanType, UserInfo * info,CString nick)
                     " warning Kicks remaining.";
 
           
-               dcclient->SendPrivateMessage( dcclient->GetBotNick(), nick.Data(), hubConfig->GetHubName() + 
+               dcclient->SendPrivateMessage( dcclient->GetBotNick(), info->GetNick(), hubConfig->GetHubName() + 
                     ": You are being kicked because: " + message );
 
                // Show this kick based on verbosity setting
                if(dcclient->GetHubConfig()->GetHubVerboseKick() & kickBanType)
                {
-                    dcclient->SendChat(dcclient->GetBotNick(), " Kicking " + nick + " because: " + message);
+                    dcclient->SendChat(dcclient->GetBotNick(), " Kicking " + info->GetNick() + " because: " + message);
                }
                
                //Send the kick
-               dcclient->SendKick(nick);
+               dcclient->SendKick(info->GetNick());
           }
           else    //KickBan them
           {
-               dcclient->SendKick(nick);
-               Ban(kickBanType,info,nick);
+               dcclient->SendKick(info->GetNick());
+               Ban(kickBanType,info,rule);
           }
 
           info->WriteUserInfo();
@@ -213,24 +272,25 @@ bool HubInterface::Kick(eKickBanTypes kickBanType, UserInfo * info,CString nick)
           return(FALSE);
           
      }
-     dcclient->GetLogger()->WriteSysLog(hubConfig->GetHubName() + nick  + message); 
-     dcclient->SendConsole("KICKED",nick,message);
+     dcclient->GetLogger()->WriteSysLog(hubConfig->GetHubName() + info->GetNick()  + message); 
+     dcclient->SendConsole("KICKED",info->GetNick(),message);
      return(TRUE);
 }
-void HubInterface::Ban(eKickBanTypes kickBanTypes, UserInfo * info,CString nick)
-{
 
+/** */
+void HubInterface::Ban( eKickBanTypes kickBanTypes, UserInfo * info, CClientRule * rule )
+{
      if (info == 0){return;}
 
-     CString message = KickBanMsgs(kickBanTypes,info);
+     CString message = KickBanMsgs(kickBanTypes,info,rule);
      
      if (info->GetBanTotal() < dcclient->GetHubConfig()->GetKickB4SBan())
      {
-          TimeBan(kickBanTypes,euibfSBan,info,nick,message);
+          TimeBan(kickBanTypes,euibfSBan,info,info->GetNick(),message);
      }
      else
      {
-          TimeBan(kickBanTypes,euibfLBan,info,nick,message);
+          TimeBan(kickBanTypes,euibfLBan,info,info->GetNick(),message);
      }
 }
      
@@ -337,6 +397,8 @@ void HubInterface::UnBan( UserInfo * info, CString nick)
 //This function is sent to the hub, Chat handler looks for the reply coming back
 void HubInterface::CallForUserIp(CString nick)
 {
+	UserInfo * botInfo = dcclient->GetNickInfo(dcclient->GetBotNick());
+	
      if (botInfo->GetIsAdmin())
      {
           dcclient->SendChat(dcclient->GetBotNick(),"!getip " + nick );
@@ -416,8 +478,8 @@ bool HubInterface::SetUserIp(CString msg)
                
                dcclient->GetLogger()->WriteSysLog(nick + "is a Clone of [" + nickClone + "]" );
                          //Kick clones
-               Kick(ehikb_Clone,info,nick);
-               Kick(ehikb_Clone,infoClone,nickClone);               
+               Kick(ehikb_Clone,info,0);
+               Kick(ehikb_Clone,infoClone,0);               
                return(TRUE);
           }
      }

@@ -21,9 +21,67 @@
 #include <config.h>
 #endif
 #include <dclib/core/cstring.h>
+#include <dclib/core/cstringlist.h>
 #include <dclib/core/types.h>  //For speed enums
+#include <dclib/dcobject.h>
+
 #include "mysqlcon.h"
-  
+
+class CClientRule : public CObject {
+public:
+	/** */
+	CClientRule() {}
+	/** */
+	virtual ~CClientRule() {}
+	
+	/** */
+	ulonglong m_nID;
+	/** */
+	CString m_sName;
+	/** */
+	eUserClientVersion m_eClientVersion;
+	/** */
+	bool m_bAllow;
+
+	/** */
+	eUserSpeed m_eMinUserSpeed;
+	/** */
+	eUserSpeed m_eMaxUserSpeed;
+	
+	/** */
+	ulonglong m_nMinShared;
+	/** */
+	ulonglong m_nMaxShared;
+	
+	/** */
+	double m_nMinLimit;
+	/** */
+	double m_nMaxLimit;
+	
+	/** */
+	ulonglong m_nMinSlots;
+	/** */
+	ulonglong m_nMaxSlots;
+	
+	/** */
+	ulonglong m_nMinHubs;
+	/** */
+	ulonglong m_nMaxHubs;
+
+	/** */
+	CMessageLock m_MinVersion;
+	/** */
+	CMessageLock m_MaxVersion;
+
+	/** */
+	double m_nSlotHubRatio;
+	
+	/** */
+	bool m_bMotd;
+	/** */
+	CString m_sMotd;
+};
+
 class MySqlHub {
 public: 
 	MySqlHub(int hubID,MySqlCon * mySql);
@@ -96,7 +154,13 @@ public:
      CString   GetHubExBanChat(void) {return hxBanChat;}
      CString   GetHubExBanNick(void) {return hxBanNicks;}
      CString   GetHubExBanSearch(void) {return hxBanSearch;}
-     CString   GetHubExBanSharedFiles(void) {return hxBanSharedFiles;}                                                                                                                                                                                                                                                
+     CString   GetHubExBanSharedFiles(void) {return hxBanSharedFiles;}
+	
+	/** */
+	CStringList * GetClientRules() { return &m_ClientRules; };
+	/** */
+	CClientRule * GetDefaultClientRule() { return m_pDefaultRule; };
+	
 private:
      int       hcHubID;
      CString   hcPwd;
@@ -145,6 +209,11 @@ private:
      CString   hxBanChat;
      CString   hxBanSharedFiles;
 
+     	/** */
+	CStringList m_ClientRules;
+	/** */
+     	CClientRule * m_pDefaultRule;
+     
      MySqlCon * hMySql;
 };
 

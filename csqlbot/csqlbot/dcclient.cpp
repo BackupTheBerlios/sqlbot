@@ -332,7 +332,10 @@ void DCClient::Hello( CMessageHello * MessageHello )
                }
           }
           SendConsole("JOIN",nick);
-          SendPrivateMessage( GetBotNick(), nick.Data(),GetHubConfig()->GetHubMotd());
+          
+	  if ( GetHubConfig()->GetHubMotd() != "" )
+	  	SendPrivateMessage( GetBotNick(), nick.Data(), GetHubConfig()->GetHubMotd() );
+
           //Announce user level joins
           CString joinAnnouncement = "";
           int userVerbose = 0;
@@ -468,7 +471,7 @@ void DCClient::MyInfo( CMessageMyInfo * MessageMyInfo )
      CString s,
           nick = MessageMyInfo->m_sNick,
           hubName = GetHubName();
-
+	  
      UserInfo * info = 0;
      UserInfo * userinfo = 0;
      if ( nickList->Get( nick, (CObject*&)info ) == -1 )
@@ -504,7 +507,10 @@ void DCClient::MyInfo( CMessageMyInfo * MessageMyInfo )
                break;
           }
      }
-     
+
+	// set user client version
+	info->UserClientVersion(MessageMyInfo->m_eClientVersion);
+
 	switch(MessageMyInfo->m_eClientVersion)
 	{
 		case eucvDCPP:
@@ -539,12 +545,14 @@ void DCClient::MyInfo( CMessageMyInfo * MessageMyInfo )
           	}
      	}
 	
-     if (MessageMyInfo->m_sComment != "")
-          {info->SetDescription(MessageMyInfo->m_sComment);}
+     	if (MessageMyInfo->m_sComment != "")
+	{
+		info->SetDescription(MessageMyInfo->m_sComment);
+	}
 
-     //Set Tag
-     info->SetTag(MessageMyInfo->m_sVerComment);
-     interface->CallForUserIp(nick);  //Request ip from hub
+     	// Set Tag
+     	info->SetTag(MessageMyInfo->m_sVerComment);
+     	interface->CallForUserIp(nick);  //Request ip from hub
 
      if(VERBOSITY & VERBOSE_CONSOLE_INFO_OUTPUT)
      {
@@ -802,119 +810,160 @@ bool DCClient::CheckForCommand(eMsgSrc msgSrc,CString nick, CString cmd)
 
 bool DCClient::ClientCheck(UserInfo *info,CString nick)
 {
-     if (info == 0){return FALSE;}
+	if (info == 0){return FALSE;}
 
-     //Tag checks disabled
-     if (!hubConfig->GetHubEnableTagCheck())
-     {
-          return(TRUE);
-     }
+	//Tag checks disabled
+	if (!hubConfig->GetHubEnableTagCheck())
+	{
+          	return(TRUE);
+     	}
 
-     //Do not Check Admins
-     if(info->GetIsAdmin())
-     {
-          return(TRUE);
-     }
-     
-     //Check min share
-     if (info->GetShare() < hubConfig->GetHubMinShare())
-     {
-          CString userShare = CUtils::GetSizeString(info->GetShare(),euAUTO);
-          CString minHubShare = CUtils::GetSizeString(hubConfig->GetHubMinShare(),euAUTO);
-          ulonglong diff =  hubConfig->GetHubMinShare() - info->GetShare();
-          CString difference = CUtils::GetSizeString(diff,euAUTO);
+	//Do not Check Admins
+	if(info->GetIsAdmin())
+	{
+		return(TRUE);
+	}
+	
+	CClientRule * rule;
+	CClientRule * matchrule;
+	CClientRule * defaultrule = hubConfig->GetDefaultClientRule();;
+	CStringList * rules = hubConfig->GetClientRules();
+	
+	if ( !rules )
+		return(TRUE);
+	if ( rules->Count() == 0 )
+		return(TRUE);
+	
+	rule = 0;
+	matchrule = 0;
 
-          //Kick Share is too small
-          interface->Kick(ehikb_Share,info,nick);
+	// walking the rule list
+	while( rules->Next((CObject*&)rule) )
+	{
+		if ( info->UserClientVersion() == rule->m_eClientVersion )
+		{
+			printf("Rule found '%s'\n",rule->m_sName.Data());
+			
+			matchrule = rule;
+			break;
+		}
+	}
+
+	if ( matchrule == 0 )
+		matchrule = defaultrule;
+	if ( matchrule == 0 )
+	{
+		printf("No Rule found !\n");
+		return TRUE;
+	}
+	
+	// Check min share
+     	if ( info->GetShare() < matchrule->m_nMinShared )
+     	{
+          	//Kick Share is too small
+          	interface->Kick(ehikb_Share,info,matchrule);
           
-          return(FALSE);
-     }
+          	return(FALSE);
+     	}
      
 	// Check if client is recognised
-	if (info->GetClient() == "NOTAG")
+	if ( info->UserClientVersion() == eucvNONE )
 	{                                      
 		if ( hubConfig->GetHubKickNoTag() )
 		{
 			//Kick untagged clients
-			interface->Kick(ehikb_UnTagged,info,nick);
+			interface->Kick(ehikb_UnTagged,info,matchrule);
 			return(FALSE);
 		}
-
-		return(TRUE);
 	}
 
-     //Check Min Slots
-     if (info->GetSlots() < hubConfig->GetHubMinSlots())
-     {
-           interface->Kick(ehikb_MnSlots,info,nick);
+     	// Check Min Slots
+     	if ( info->GetSlots() < matchrule->m_nMinSlots )
+     	{
+           	interface->Kick(ehikb_MnSlots,info,matchrule);
                                         
-           return(FALSE);
-     }
-     //Check Max Slots
-     if (info->GetSlots() > hubConfig->GetHubMaxSlots())
-     {
+           	return(FALSE);
+     	}
+	
+     	// Check Max Slots
+     	if ( (matchrule->m_nMaxSlots > 0) &&
+	     (info->GetSlots() > matchrule->m_nMaxSlots) )
+     	{
+		interface->Kick(ehikb_MxSlots,info,matchrule);
 
-           interface->Kick(ehikb_MxSlots,info,nick);
+           	return(FALSE);
+     	}
 
-           return(FALSE);
-     }
-     //Check max hubs
-     if (info->GetHubs() > hubConfig->GetHubMaxHubs())
-     {
-          interface->Kick(ehikb_MxHubs,info,nick);
-         return(FALSE);
-                             
-     }
-     else
-     {
-          //do a simple check to see if x/y/z tags make sense.
-          if((info->GetUiHubsOp() != 0) &&
-              (info->GetUiHubsReg() == 0) &&
-              (info->GetUiHubsNorm() == 0) &&
-              (info->GetClient() == "++"))
-          {
-               cout << "Invalid tag check Manually inspect "<< nick.Data() << " tag" << endl;
-          }
-     }
+     	// Check max hubs
+     	if ( (matchrule->m_nMaxHubs > 0) && 
+	     (info->GetHubs() > matchrule->m_nMaxHubs) )
+     	{
+          	interface->Kick(ehikb_MxHubs,info,matchrule);
+		
+         	return(FALSE);
+     	}
+     	else
+     	{
+          	// do a simple check to see if x/y/z tags make sense.
+          	if( (info->GetUiHubsOp() != 0) &&
+              	    (info->GetUiHubsReg() == 0) &&
+              	    (info->GetUiHubsNorm() == 0) &&
+              	    (info->GetClient() == "++"))
+          	{
+               		cout << "Invalid tag check Manually inspect "<< nick.Data() << " tag" << endl;
+          	}
+     	}
 
-     //Check connection
-     if (hubConfig->ConvertSpeed(info->GetSpeed()) <
-          hubConfig->ConvertSpeed(hubConfig->GetHubMinSpeed()))
-     {
-          interface->Kick(ehikb_MinConnection,info,nick);
+     	// Check connection
+     	if ( hubConfig->ConvertSpeed(info->GetSpeed()) < matchrule->m_eMinUserSpeed )
+     	{
+          	interface->Kick(ehikb_MinConnection,info,matchrule);
 
-          return(FALSE);     
-     }
-     /*For Hacked DC++ tags, version 0.24 and above have tags x/y/z,
-          clients claiming to be newer than this without x/y/z have been hacked at some point. ASTA LA VISTA BABY*/
-     if (info->GetClient() == "++")
-     {
-          CString minHackedTag = "0.24";
-          if (CString(info->GetClientVersion()).asDOUBLE() > CString(minHackedTag).asDOUBLE())
-          {
-               if ((info->GetUiHubs() != 0) &&
-                   (info->GetUiHubsReg() == 0) &&
-                   (info->GetUiHubsNorm() == 0) &&
-                   (info->GetUiHubsOp() == 0))
-               {
-                    interface->Kick(ehikb_HackedTag,info,nick);
-                    return(FALSE);
-               }
-          }
-     }
-     // Check slot Ratio
-     double userSlotRatio = ((double)info->GetSlots()/(double)info->GetHubs());
-     if (userSlotRatio < hubConfig->GetHubSlotRatio())
-     {
-          interface->Kick(ehikb_SlotRatio,info,nick);
-          return(FALSE);
-     }        
+          	return(FALSE);     
+     	}
 
-     //Download file list
+     	/* For Hacked DC++ tags, version 0.24 and above have tags x/y/z,
+           clients claiming to be newer than this without x/y/z have been hacked at some point. ASTA LA VISTA BABY*/
+     	if ( info->UserClientVersion() == eucvDCPP )
+     	{
+          	CString minHackedTag = "0.24";
+		
+          	if (CString(info->GetClientVersion()).asDOUBLE() > CString(minHackedTag).asDOUBLE())
+          	{
+               		if ((info->GetUiHubs() != 0) &&
+                   	(info->GetUiHubsReg() == 0) &&
+                   	(info->GetUiHubsNorm() == 0) &&
+                   	(info->GetUiHubsOp() == 0))
+               		{
+                    		interface->Kick(ehikb_HackedTag,info,matchrule);
+				
+                    		return(FALSE);
+               		}
+          	}
+     	}
+	
+     	// Check slot Ratio
+     	double userSlotRatio = ((double)info->GetSlots()/(double)info->GetHubs());
+	
+     	if ( userSlotRatio < matchrule->m_nSlotHubRatio )
+     	{
+          	interface->Kick(ehikb_SlotRatio,info,matchrule);
+		
+          	return(FALSE);
+     	}        
 
-     //The client checks ok, make sure ban flag is none
-     info->SetBanFlag(euibfNone);
-     return(TRUE);
+     	//Download file list
+
+     	//The client checks ok, make sure ban flag is none
+     	info->SetBanFlag(euibfNone);
+	
+	// send client motd
+	if ( matchrule->m_bMotd && (matchrule->m_sMotd != "") )
+	{
+		SendPrivateMessage( GetNick(), info->GetNick(), matchrule->m_sMotd );
+	}
+	
+     	return(TRUE);
 }
 
 void DCClient::SaveUserList(void)

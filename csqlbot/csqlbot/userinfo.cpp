@@ -28,6 +28,7 @@ UserInfo::UserInfo(int hubID,MySqlCon * mySql,CString nick){
      MySql = mySql;
      uiNick = nick;
      uiHubID = hubID;
+     
      //Escape some strings for mysql
      if ( (uiNick.Find("\'") != -1) ||
           (uiNick.Find("\\") != -1))
@@ -40,6 +41,8 @@ UserInfo::UserInfo(int hubID,MySqlCon * mySql,CString nick){
           uiEscNick = uiNick;
      }
 
+     m_eUserClientVersion = eucvNONE;
+     
      uiIp = "";
      uiHost = "Not known";
      uiStatus = euisOnline;
@@ -186,18 +189,15 @@ void UserInfo::WriteUserInfo(void){
      
      if(sqlDataUptoDate) {return;} //Must reset this to write into Sql
      
-     CString uiEscDescription;     
-     //Escape some strings for mysql
-      if (uiDescription.Find("\'") != -1)
-     {
-          uiEscDescription = uiDescription.Replace("\'","\\'");
-     }
-     else
-     {
-          uiEscDescription = uiDescription;
-     }
-     
+     	CString uiEscDescription;     
+	
+	//Escape some strings for mysql
+	uiEscDescription = uiDescription;
 
+	if (uiEscDescription.Find("\\") != -1)
+		uiEscDescription = uiDescription.Replace("\\","\\\\");
+	if (uiEscDescription.Find("\'") != -1)
+		uiEscDescription = uiDescription.Replace("\'","\\'");
      
      if(sqlUserExists)
      {

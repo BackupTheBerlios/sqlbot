@@ -183,7 +183,7 @@ bool BotCommands::OpBotCommands(CString nick, CString cmd)
                UserInfo * kickUserInfo = dcclient->GetNickInfo(kickUser);
                if (kickUserInfo)
                {
-                    dcclient->interface->Kick(ehikb_Operator, kickUserInfo,kickUser);
+                    dcclient->interface->Kick(ehikb_Operator, kickUserInfo,0);
                     kickUserInfo->IncKickTotal();
                }
                else

@@ -23,31 +23,34 @@
 #include <dclib/core/cstring.h>
 #include "timehand.h"
 
+class CClientRule;
+
 class HubInterface {
-public: 
+public:
+	/** */
 	HubInterface(class DCClient * hidcclient, MySqlHub *hubCfg, eHubInterface interface);
+	/** */
 	~HubInterface();
-     /** Fill Kick Ban Message */
-     CString KickBanMsgs(eKickBanTypes kickBanType,UserInfo * info);
-     /** Kick the user from hub*/
-     bool Kick(eKickBanTypes kickBanType, UserInfo * info, CString nick);
-     /** Ban the user on the hub, will work out if LBan or SBan*/
-     void Ban(eKickBanTypes kickBanTypes,UserInfo * info,CString nick);
-     /** Force a Ban of type flag*/
-     void TimeBan(eKickBanTypes kickBanTypes,euiBanFlag banFlag, UserInfo * info, CString nick, CString reason);
-     /** Unban the user*/
-     void UnBan( UserInfo * info, CString nick);
-     /** Configure the version of the Hub*/
-     bool HubVersion(CString msg);
-     /** Send request for User IP*/
-     void CallForUserIp(CString nick);
-     /** Parse the IP request return*/
-     bool SetUserIp(CString msg);
+	
+     	/** Fill Kick Ban Message */
+     	CString KickBanMsgs( eKickBanTypes kickBanType, UserInfo * info, CClientRule * rule );
+     	/** Kick the user from hub*/
+     	bool Kick( eKickBanTypes kickBanType, UserInfo * info, CClientRule * rule );
+     	/** Ban the user on the hub, will work out if LBan or SBan*/
+     	void Ban( eKickBanTypes kickBanTypes,UserInfo * info, CClientRule * rule );
+     	/** Force a Ban of type flag*/
+     	void TimeBan(eKickBanTypes kickBanTypes,euiBanFlag banFlag, UserInfo * info, CString nick, CString reason);
+     	/** Unban the user*/
+     	void UnBan( UserInfo * info, CString nick);
+     	/** Configure the version of the Hub*/
+     	bool HubVersion(CString msg);
+     	/** Send request for User IP*/
+     	void CallForUserIp(CString nick);
+     	/** Parse the IP request return*/
+     	bool SetUserIp(CString msg);
 
 private:
      DCClient * dcclient;
-
-     UserInfo * botInfo;
 
      MySqlHub *hubConfig;
      eHubInterface hubInterface;

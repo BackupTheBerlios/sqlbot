@@ -30,15 +30,25 @@
 
 class UserInfo : public CObject {
 public: 
-     UserInfo(int hubID,class MySqlCon * mySql,CString nick);
-     virtual ~UserInfo();
+	/** */
+	UserInfo(int hubID,class MySqlCon * mySql,CString nick);
+	/** */
+     	virtual ~UserInfo();
 
+     	/** */
+	void SetClient(CString client);
+	/** */
+	CString GetClient(void) { return uiClient;}
+	/** */
+	void UserClientVersion( enum eUserClientVersion e ) { m_eUserClientVersion = e; }
+	/** */
+	enum eUserClientVersion UserClientVersion() { return m_eUserClientVersion; }
+     
      void SetIsAdmin(int admin);
      void SetSpeed(CString speed);
      void SetShare(ulonglong share);
      void SetStatus(euiStatus status);
      void SetIsAway(euiIsAway away);
-     void SetClient(CString client);
      void SetDescription(CString description);
      void SetIp(CString ip);
      void SetTag(CString tag);
@@ -66,7 +76,6 @@ public:
      CString GetClientVersion(void) { return uiVersion;}
      CString GetDescription(void) { return uiDescription;}
      int GetUserLevel(void) { return uiUserLevel;}
-     CString GetClient(void) { return uiClient;}
      int GetIsAdmin(void){return uiIsAdmin;}
      int GetIsAway(void){return uiIsAway;}
      int GetBanFlag(void){return uiBanFlag;}
@@ -88,6 +97,10 @@ public:
      void lockSqlUser(void) { sqlDataUptoDate = 1; }
                                                                   
 private:
+
+	/** */
+	enum eUserClientVersion m_eUserClientVersion;
+	
      CString   uiEscNick;              // an SQL safe version of the nick
 
      CString   uiNick;               // nick name of user
