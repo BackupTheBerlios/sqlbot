@@ -36,7 +36,8 @@ sub new_user_connected(){
 	if($userInDB eq 1)
 		{&updateUserRecord($user);}
 	elsif($userInDB eq 2)
-		{&userOnline($user);
+		{&updateUserRecord($user);
+		&userOnline($user);
 		return;}
 	else
 		{&createNewUserRecord($user);}
@@ -60,7 +61,8 @@ sub reg_user_connected(){
 	if($userInDB eq 1)
 		{&updateUserRecord($user);}
 	elsif($userInDB eq 2)
-		{&userOnline($user);
+		{&updateUserRecord($user);
+		&userOnline($user);
 		return;}
 	else # if new
 		{&createNewUserRecord($user);}
@@ -87,7 +89,8 @@ sub op_connected(){
 	if($userInDB eq 1)
 		{&updateUserRecord($user);}
 	elsif($userInDB eq 2)
-		{&userOnline($user);
+		{&updateUserRecord($user);
+		&userOnline($user);
 		return;}
 	else
 		{&createNewUserRecord($user);}
@@ -114,7 +117,7 @@ sub op_admin_connected()
 	if($userInDB eq 1)
 		{&updateUserRecord($user);}
 	elsif($userInDB eq 2)
-		{&debug("$user is set to allow and has not been logged");
+		{&updateUserRecord($user);
 		&userOnline($user);
 		return;}
 	else
