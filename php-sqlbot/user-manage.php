@@ -8,6 +8,8 @@ mysql_connect($databasehost,$username,$password);
 $where = "";
 if ($field == shareByte)
 	{$where="WHERE $field = '$search'";}
+if ($field == dcVersion)
+	{$where="WHERE $field = '$search'";}	
 else if (!empty($field))  
 	{$where="WHERE $field LIKE '%$search%'";}
 if (!empty($order))  
