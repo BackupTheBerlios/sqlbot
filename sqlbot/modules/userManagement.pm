@@ -124,7 +124,7 @@ sub userOnline(){
 	my($sqluser) = &sqlConvertNick($user);
 	$dbh->do("UPDATE userDB SET status='$online',
 					inTime='$date $time'
-					WHERE (nick='$sqluser' OR IP='$ip')");
+					WHERE (nick='$sqluser' OR IP='$ip') AND allowStatus!='Banned'");
 }
 
 
@@ -222,10 +222,14 @@ sub chPassUser(){
 			{# Remove this user from reg list
 			my($type)  = odch::get_type($user);
 			odch::remove_reg_user($user);
-			odch::add_reg_user($user, $newPass, ($level-1));
+			if($type == 32){$level = 2}
+			elsif($type == 16){$level = 1}
+			elsif($type == 8){$level = 0}
+
+			odch::add_reg_user($user, $newPass, $level);
 			# Change this user type in the userDB
 			$dbh->do("UPDATE userDB SET type='$type',passwd='$newPass' 
-					WHERE nick='$sqluser' AND lastAction!='P-Banned'");
+					WHERE nick='$sqluser' AND allowStatus!='Banned'");
 			&msgUser($user,"Your Password has now been set to $newPass");
 			&addToLog($user,"Change Pass",$user);}
 		else
@@ -255,13 +259,13 @@ sub userAway(){
 	my($awayMsg) = substr($data, $tmp_ptr+5);
 	chop($awayMsg);
 	$dbh->do("UPDATE userDB SET awayMsg='$awayMsg',awayStatus='on' 
-			WHERE nick='$sqluser' AND lastAction!='P-Banned'");
+			WHERE nick='$sqluser' AND allowStatus!='Banned'");
 }
 sub userBack(){
 	my($user) = @_;
 	my($sqluser) = &sqlConvertNick($user);
 	my($value) = $dbh->do("SELECT awayStatus FROM userDB 
-			WHERE awayStatus='on' AND nick='$sqluser' AND lastAction!='P-Banned'");
+			WHERE awayStatus='on' AND nick='$sqluser' AND allowStatus!='Banned'");
 	if($value eq 1)
 		{$dbh->do("UPDATE userDB SET awayStatus='off' WHERE nick='$sqluser' AND lastAction!='P-Banned'");
 		&msgAll("$user returns after being away");}
