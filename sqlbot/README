@@ -1,0 +1,197 @@
+-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+				    sqlbot README
+-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+
+About
+-=-=-
+Sqlbot is a full-featured perl bot for opendchub, designed around MySQL. All of its
+functions are parsed to and from MySQL, making it configurable on_the_fly via a
+webserver, and hopefully some time in the near future partally configurable via
+the bot itself.
+
+Why MySQL? Well, others had started in this field using MySQL purely for logging
+purposes, which is what we started with, but soon realised that MySQL could do a
+heck-of-a-lot more. We both came up with a simple idea to actually have almost all
+hard-coded data in MySQL (like client rules, options, logging and so on), making it
+possible to allow remote hub configuration via a web interface, this was a big bonus
+for the hub allowing the hub owner to montior the  hub remotly, and check on whats
+happening. A big plus for hub owners who have to leave the hub unattended while
+doing normal daily things.
+
+
+
+Requirements (external)
+-=-=-=-=-=-=-=-=-=-=-=-
+opendchub => 0.7.10	http://opendchub.sourceforge.net/
+apache			With php module support (most distros have this)
+php-mysql		Module for Apache to connect and use MySQL (most distros have this)
+MySQL server		Running with a configured user
+DBI::MySql            	(Included with all distros)
+IP::Country::Fast     	http://nutter.kicks-ass.net:35600/software/odchscripts/sqlbot/Required Modules/
+Geography-Countries		"
+Date::Simple			"
+
+Without MySQL or these perl modules, you will not be able to run the bot! It's that
+simple. There is no way around this, other than to re-write the whole script.
+
+Bugs/Updates/Feature Requests/Support
+-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+Speak to Nutter or Axllent 
+
+dchubs --  	nutter.kicks-ass.net:41412
+		axljab.homelinux.org:9000
+
+www's  --  	http://nutter.kicks-ass.net:35600/
+		http://axljab.homelinux.org:8080/
+
+
+
+External Requirements
+-=-=-=-=-=-=-=-=-=-=-
+opendchub		I will not explain how to configure and run opendchub. There
+			are enough README's and Forums to visit for info on it. It's
+			not hard, I promise.
+
+apache			Used to configure your bot. Without it you cannot easily
+			configure the bot, unless you want to go manually via MySQL
+			(not advised)
+
+php-mysql		Required for php/apache to connect to the MySQL server. It should
+			be included with your distro, so no extra compiling should be
+			neccissary.
+
+MySQL server		This speaks for itself. I will also not go into all the ins & outs
+			of MySQL, because this would require about 5000 pages. Yes, it is
+			comlex,	but once you have a basic setup, the rest should be easy.
+			MySQL is included with your Linux distro (it always is, isn't it?!)
+
+DBI::MySql		These Perl modules allow Perl to communicate with MySQL. Without it
+			this script simply will not work. It has different file names,
+			depending on which distro you use, but it is, as most of the other
+			external requirements found in your distro.
+
+IP::Country::Fast	Ok, here we have 2 required Perl modules which will have to be 
+			downloaded and manually compiled & installed. There are included
+			README files included with both sources. Just folow this and you
+			should be fine.
+			You can download the modules from:
+				http://search.cpan.org/author/NWETTERS/IP-Country-2.11/
+				http://search.cpan.org/author/ABIGAIL/Geography-Countries-1.4/
+			NOTE: You have to install Geography-Countries first, as IP-Country
+			requires it for installation (else you will get this warning).
+
+Date::Simple		Lastly, sqlbot requires this small and simple data module for it's
+			date format. You can download the module from:
+				http://www.cpan.org/authors/id/J/JT/JTOBEY/
+
+
+
+
+
+sqlbot Installation
+-=-=-=-=-=-=-=-=-=-
+OK, for arguments sake, I am going to assume you have your opendchub running smoothly
+on your server. People can log in and out. Also, I am going to assume you have your
+MySQL server running on the same computer (although it is possible to run it on
+another). The last assumption I will make is that you do have access to the MySQL
+server, and can log in and out with a user name & password, and have database read-write
+permissions.
+
+Then we are all set:
+
+Install mysql tables:
+	First thing to do is log in (manually, or via webmin) as your user (not root)
+	and create a database called "odch". This will be the databse that sqlbot will
+	use for all it's logging and configs. Right, installed?
+
+	I have included a sqlbot_install.pl file. You have to edit this file to include
+	the server, username and password. After you have edited it, run it as:
+
+		`perl sqlbot_install.pl`
+
+	it should hopefully install your required tables, and default data. If you get
+	errors, look at the errors, as they probably will tell you what is wrong.
+	
+
+
+
+
+
+www & php Installation
+-=-=-=-=-=-=-=-=-=-=-=
+You will to have a webserver server up and running. You must have php and php-mysql
+installed and running. Test it with a simple <?phpinfo();?> in a blank php file
+(like test.php). Make sure its running ok. Untar the php modules into an area on your
+webserver,
+
+
+edit dbinfo.inc.php:
+	Edit the "dbinfo.inc.php" with the same username ,password and server just like
+	you did with the installer script.
+
+
+You might want to create access restrictions using .htaccess and .htpasswd (refer to
+the apache documentation to find out how to do this).
+
+
+Open the admin/index.php file in your browser (via your webserver, for instance
+http://localhost/admin/index.php),  and configure !!
+
+
+
+
+sqlbot Installation
+-=-=-=-=-=-=-=-=-=-
+Ok, one thing to note here is that the main script (sqlbot.pl) IS your bot, but it 
+needs to load the other modules. The script and the modules do NOT HAVE TO BE in the
+same directory, and it is probably a better idea to keep them separate for future
+updates. The sqlbot.pl should only need editing once, and in the future updates should
+only require new/updated modules, and not sqlbot.pl. We did it this way to save you
+editing the script each time.
+
+The best way to set up the bot to run on your opendchub server is this way:
+
+sqlbot.pl	move this file to your /home/<user>/.opendchub/scripts/ folder, open it
+		up with a text editor, and edit it with the same username, password and
+		server you used to install the MySQL tables with.
+		Also, here you need to configure your bot's name, and other details
+		required to configure your bot. And IMPORTANT thing to note here is the
+		"$modules_path". The $modules_path is the full patch to the modules your
+		bot requires to run. I would suggest using a folder like 
+
+			/home/<user>/.opendchub/scripts/sqlbot/
+
+		This would configured in your sqlbot.pl as:
+			$modules_path = "/home/<user>/.opendchub/scripts/sqlbot/";
+		(<user> being your username you are running the hub as)
+
+
+<modules>.pm	All these modules should be coppied/moved to this directory you have
+		just configured. They require no editing at all.
+
+
+
+
+
+
+Run sqlbot
+-=-=-=-=-=
+That should about sum up all the configuring required to run the bot. Once all has been
+done, you can finally load the bot into your opendchub by running "!reloadscripts" in
+the main chat as your OP-Admin, and hopefully your new bot will run, and do exactly
+what you asked of it.
+
+
+
+Notes
+-=-=-
+Once your bot is running, configuring it should be easy. Just return to your www config
+page and alter / adjust values... try it, try everything, just to get the hang of it :-)
+The script does not need to be re-loaded for these changes, as they are read directly
+from sql each time data gets parsed.
+
+A great load of time and effort has been put into the creation of this sqlbot.
+Nevertheless, it may (and probably does) contain bugs. This script is distributed as_is,
+and you are welcome to change the code in whatever way. The only thing we ask is for you
+to please contact us with bugs / bug_fixes, or just come and join us to chat about
+features you may require in the bot / config. We are open to ideas :D

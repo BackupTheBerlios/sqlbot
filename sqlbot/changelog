@@ -1,0 +1,207 @@
+
+SQLBot Changelog
+-=-=-=-=-=-=-=-=-
+
+CVS
+-=-=-=-=-=-=-=-=-=-=-=-=-
+
+Added	: Bot description, hardcoded Title and Connection DSL
+Fixed	: Method for selecting a user from DB, use lastReason=P-Banned
+Added	: Option in php to Reset the Kick & Ban counters
+Changed	: Removed the LastReason of xKicks & xBans to preserve the Real Reason was kicked originally
+Added	: Line count to include Main Chat & Op Chat
+Added	: First Draft at Statistics, Some useful info about users(Needs more work)
+Changed : Split Fakers in Fake(Share) and Fake(Client)
+Changed : Search and sorting facilities in user-manage.php
+Deleted	: Delayed kick timer
+Changed	: External IP of User on LAN changed to Country of Hub, LAN users Local IP is shown in hublog
+Fixed	: Temporary Bans
+Added	: Added "IP Filtering" Option to ban complete subnets.
+Added	: Addtional Check for Fake Shares
+Added	: Option to specify a Ban or a Kick Reason from the PHP
+Added	: Allow configuration, this will allow a user /nick not to be checked for any rules when they log in. Matches by IP or Nick.
+Changed : Locate a user by same nick or same IP
+Added	: The abilty Ban and remove IP ranges. PHP and SQL table
+Added	: Public Commands can be prefixed with - or + . PM commands with ! - or +
+Changed : The length of the nick in hubLog and userDB has been increased to 50
+
+0.2.0
+-=-=-=-=-=-=-=-=-=-=-=-=-
+
+Added	 : The abilty for ops / reg users to change their password, Once added via bot or webinterface.
+Added	 : Bot worker which reads SQL table to find out if anything to do from web interface. Bans,Kicks User changes.
+Changed	 : the central table for storing user info. Allow user and banmangement, And removes duplication of tables. Like Online/ Fakers etc.
+Fixed	 : The reason given to user on kick
+Fixed	 : Disabled sending empty help msg text
+Fixed	 : parameter to indicate a login or logout on update stats to prevent login count incremeating on both
+
+0.1.3.1     	10/05/03
+-=-=-=-=-=-=-=-=-=-=-=-=-
+Changed  : Disabled the building of help on user join
+Fixed	 : PM of usernames with [ ] in the nick.
+Fixed	 : Modified the clone checker NOT to check if the ip is same as an op/opadmin or reguser, 
+		to prevent accidental kicks/bans of ops, by lamers
+Added	 : A nick client or IP search to the userStats page, and Delete ALL button(Deletes all with a filter)
+Fixed	 : The sub call to myInfo in PM 
+Added	 : OP Only Chat, Bot PM, reworked to prevent false command triggers,
+Added	 : OP command !addfaker <username>, adds afaker and nukes him, then adds to log
+Changed  : +seen to do partial search, send results in PM. requires wildcards '*' for partial searches
+Fixed	 : php extension on NEXT and PREV in log tables
+Fixed	 : Check if a faker has a valid client, to prevent spurious client tags entered into the log
+Changed  : Reworked some of the admin page, Hub name added to menu bar, Hover mosue over shared GB, to 
+		get byte value, Hover mouse over nick to show Email
+
+
+0.1.3     	07/05/03	(This version requires MySQL tables to be deleted and reinstalled)
+-=-=-=-=-=-=-=-=-=-=-=-=-
+
+Added	 : Refresh update button on ALL php logging tables
+Changed	 : Create new look for front page admin.
+Fixed    : IP length in tables from 14 to 15 length, 14 was 1 char to short
+Changed  : The PHP split into smaller groups with new names, Complete overall of php interface
+Fixed	 : CRITICAL.Clone Check IP bug, leads to spurious IP entries and false kicks
+Fixed	 : Clone Check config option
+Added    : Nick filtering Table and Configuration
+Added 	 : Public +time function, returns server data and time
+
+0.1.2     	03/05/03	(This version requires MySQL tables to be deleted and reinstalled)
+-=-=-=-=-=-=-=-=-=-=-=-=-
+
+Fixed	 : Global font settings, take font type and size from dbinfo.inc.php
+Added 	 : Reset hub Records to Admin php
+Added 	 : Rules table processing in script.
+Added    : New table and php page for adding/Updating/Deleting customised Static Rules.
+Added	 : Clonechecker, will kick a user if one already exists on same IP. Different user name only.
+		Clonechecker is configurable (in hub_config) 
+Added	 : Configuration of Hub Variables like Times to kick before TBan, Times to TBan before PBan
+Added    : Set minSlots AND/OR MaxSlots to 0 in client rules actives the Connection Slots Table. I.E Min/Max
+ 		Slots done on a per connection setting. Configurable via New Table.
+Fixed    : Ensure a version AND tag are present before processing client rules. Should prevent false client
+		checking triggers, caused by users with DCGUI in description, but not displaying a tag.
+Fixed	 : Client tag in client_rules is case senstive (binary)
+
+0.1.1     	01/05/03	(This version requires MySQL tables to be deleted and reinstalled)
+-=-=-=-=-=-=-=-=-=-=-=-=-
+
+Added	 : Record Verbosity function to suppress announcments of New Hub Records (Records still calculated)
+Fixed	 : Initialsation of global split description variables
+Fixed	 : Fixed the duplication of Faker entries in Fakers Log
+Fixed	 : Allowed manual ReCheck to be done even if "post_client_check" is off
+Added    : Website mirror host to Version tag.
+Added	 : Max slots function to client config
+Changed  : Removed the broadcast of users IP in the main chat when being kicked
+Changed  : +rules and +stats in main chat PM the user
+Fixed	 : Fixed all references of "index" to "index.php" in php pages
+Addition : All logging features can be indiviually enabled or disabled. New configuration table in Admin console
+Addition : Added a check when re-checking connected clients, in case odch cannot return the odch user details.
+Fixed	 : Fixed the function calls for banlog and fakers log
+Removed	 : The +shutdown and +restart function
+
+0.1.0		26/04/03 
+-=-=-=-=-=-=-=-=-=-=-=-=-
+Fixed	 : Display off < and > in all php pages using tables, use htmlentities to change < & > into html tags
+Addition : Total unique users added into +stats,!stats
+Fixed	 : Fixed update stats when user disconnects,last seen date & time didnt get updated.
+Addition : Added public OpAdmin command +shutdown, disconnects the Bot from SQL, Bot cant dont anything, use
+		 +restart to reconnect and "wake up"
+Fixed	 : Processing of dynamic Rules, Added minimum connection.
+Additon	 : sub getConnection, returns readable format of integer connection
+Fixed	 : Fixed deleting of online user in hubonline, also fixed the first users description duplicated
+		 throughtout
+Bug	 : Fixed untagged clients, getting passed min share and minimum connection setting (currently uses
+		 hardcoded client)
+Addition : +records, force a check of channel records.Report if new one,direct to +stats if not
+Bug 	 : index.php check_reg user option never got set.
+Change 	 : All modules have been re-written and the duplication of SQL code has been removed and put into a
+		 mysql.pm module.
+Change   : pmcommands.pm and pubcommands.pm have been merged. into commands.pm.
+Change   : main.pm to include the new renamed modules and the additionalmysql.pm
+Addition : Of getConfig to return 1 or 0, based on hubconfig table
+Addition : Of getVerbose to return 1 or 0, based on hubverbosity table
+Addition : Of msgUser() to send a msg to a user,simpler to follow and read
+Addition : Of msgAll() to send a msg to everyone,simpler to follow and read
+Additiom : Of debug() to privde debugggin output to a selected username, all subs have entry and exit debug
+		statements. Some have inlne var output. Allows the flow of sub calls, to be followed. And 
+		debug. Bit like a backtrace in gdb.
+Addition : Fully formed README file created.
+
+0.0.13		23/04/03 
+-=-=-=-=-=-=-=-=-=-=-=-=-
+unfortunalty 0.0.13 is NOT backwards compatible with 0.0.12 (Addition in sql
+tables).Sql tables will need deleting and reinstalling :(
+Added 	: description into the online,log and fakers tables.
+Added 	: function !recheck for ops to manually invoke the recheck all online clients function, before the 15min timer.
+Addition : perl install script created, adds tables and default values to sql (requires a valid user and a
+		 database called odch to exist)
+Fixed bug in rechecking where the bot adds an entry to the log, logging himself every 15mins. Bot ignores
+		 himself, when processing the odch user list.
+Fixed bug in no tag kicking, It now no longer kicks everyone. !!!! ooops
+
+Stores only recognised clients in the client field. All untagged clients are marked as empty.
+Fixed parsing of clients and hub stats,
+
+
+0.0.12		22/04/03
+-=-=-=-=-=-=-=-=-=-=-=-=-
+MAJOR rewrite --
+The script has been split into modules, with subs common in each module.This makes it much easier to add
+	 something, modify it.
+Hub config is the script, so module updates, wont require the script to be reconfigured. 
+Everything is now a sub, so it can be called from anywhere, common subs like rules, help construct strings. And
+	 odch.pm which handles data arrivals, display to pm or main chat depending on where the request came
+	from.
+Header info added to ALL modules, descriptions etc
+
+0.0.11		21/04/03
+-=-=-=-=-=-=-=-=-=-=-=-=-
+Update of online table, if user share , slots have changed since the last client re-scan
+New command - !stats in bot PM,All users
+Added help commands sub, !help and +help triggers
+Added Public command +fakers, displays all detected fakers
+Added public command +version, shows the version the bot is running
+Added OP command !history username use in PM to display the default number last entries of a user,(op only
+Fixed bug in client re-check, big change in this area, code optimised, now updates & verifies all client 
+	entries in the online log are valid and correct. Uses 900sec hubtime
+Check the online sql table for ghosts
+Add verbosity function for bot announcements on !reloadscripts. PHP updated accordingly
+
+0.0.10		20/04/03
+-=-=-=-=-=-=-=-=-=-=-=-=-
+Additon of hub records, intial records a Maximum share, and maximum user count, 
+NEW MySQL table records
+
+0.0.9		19/04/03
+-=-=-=-=-=-=-=-=-=-=-=-=-
+Creation of a timer to delay a kick of a user.
+NEW MySQL table kick. Uses variable timer defaults to 20secs.
+
+0.0.8		03/04/03
+-=-=-=-=-=-=-=-=-=-=-=-=-
+Change in the Action / string parser
+
+0.0.7		03/04/03
+-=-=-=-=-=-=-=-=-=-=-=-=-
+Addition of the +seen table and command interface
+
+0.0.6		31/03/03
+-=-=-=-=-=-=-=-=-=-=-=-=-
+Public commands and pm private commands enhanced
+
+0.0.5		31/03/03
+-=-=-=-=-=-=-=-=-=-=-=-=-
+Change in log event and kick ban function.
+
+0.0.4		31/03/03
+-=-=-=-=-=-=-=-=-=-=-=-=-
+If a user drops unoticed and is already in the online log, replace there entry and dont add a new one
+
+0.0.3		30/03/03
+-=-=-=-=-=-=-=-=-=-=-=-=-
+Tidy up of the kick functions
+
+0.0.2		30/03/03
+-=-=-=-=-=-=-=-=-=-=-=-=-
+Re checks clients after initial log on
+
+
+
