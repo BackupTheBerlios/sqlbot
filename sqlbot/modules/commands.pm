@@ -174,7 +174,6 @@ Public Commands (Main Chat):-\r
 . +fakers = List share fakers detected\r
 . +version = Shows which version the bot is running\r
 . +stats = Channel statistics\r
-. +myinfo = Show your information \r
 . +away reason = Mark yourself away for the reason\r
 . +back = Mark yourself back. (Auto back on hub chat)\r
 . +topchat = Top 10 talkers....\r
@@ -205,7 +204,7 @@ Public commands(Private Msg with Bot) Available to ALL:-\r
 . +tban username \"reason\" = Temp Ban user for the reason\r
 . +pban username \"reason\" = Perm Ban user for the reason\r
 . +uban username = Un Ban user\r
-. +pm username \"Message\" = Get thee bot to send a message to any user\r
+. +pm username \"Message\" = Send a private message to User\r
 . +say \"Message\" = Get thee bot to say something publicly\r
 Any command NOT recognised is sent to ALL OPs as OP CHAT \r";
 	}
