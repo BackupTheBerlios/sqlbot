@@ -17,7 +17,7 @@ if (!empty($order))
 else {$orderby="uType,nick";}
 
 if ($f == parselog)
-	{$sql = "DELETE FROM userDB WHERE loginCount='1' && pBanCountTot='0' && status='Offline'"; $result = mysql_query($sql) or die(mysql_error());}
+	{$sql = "DELETE FROM userDB WHERE loginCount='1' && pBanCountTot='0' && status='Offline' && uType='User'"; $result = mysql_query($sql) or die(mysql_error());}
 if ($f == delete)
 	{$sql = "DELETE FROM userDB $where";$result = mysql_query($sql) or die(mysql_error());}
 if ($f == uType){
