@@ -202,8 +202,8 @@ sub data_arrival(){
 		my($type) = odch::get_type($user);
 		#Public PM commands
 		if($param1 =~ /^[\!+-]seen/i)
-			{if($param1 =~ /^[\!+-]seen\|/i)
-				{&msgUser("$user","usage: +seen username");}
+			{if($param2 eq "")
+				{&msgUser("$user","usage: +seen username (Wildcard = *)");}
 			else 
 				{&seen($param2);
 				&msgUser("$user","$seenresult");}}
@@ -221,17 +221,17 @@ sub data_arrival(){
 		#Op commands
 		elsif($type eq 8)
 			{if ($param1 =~ /^[\!+-]pass/){
-				if($param1 =~ /^[\!+-]pass\|/i)
+				if(($param2 eq "") or ($param3 eq ""))
 					{&msgUser("$user","+pass oldpassword newpass");}
 				else{&chPassUser($user,$param2,$param3,$param4);}}}
 		elsif($type eq 32 or $type eq 16)
 			{if ($param1 =~ /^[\!+-]info/){
-				if($param1 =~ /^[\!+-]info\|/i)
+				if($param2 eq "")
 					{&msgUser("$user","+info username");}
 				else
 					{&info($user,$param2);}}
 			elsif($param1 =~ /^[\!+-]pass/i){
-				if($param1 =~ /^[\!+-]pass\|/i)
+				if(($param2 eq "")  or ($param3 eq ""))
 					{&msgUser("$user","+pass oldpass newpass");}
 				else
 					{&chPassUser($user,$param2,$param3);}}
@@ -246,16 +246,16 @@ sub data_arrival(){
 			elsif ($param1 =~ /^[\!+-]banlog/i)
 				{&banLog($user);}
 			elsif ($param1 =~ /^[\!+-]kick/i)
-				{if($param1 =~ /^[\!+-]kick\|/i)
-					{&msgUser("$user","usage: +kick 'username' 'reason'");}
+				{if(($param2 eq "")  or ($param3 eq ""))
+					{&msgUser("$user","usage: +kick username reason");}
 				else 
-					{&splitDescription($user);
+					{&splitDescription($param2);
 					@reason = split(/\"/, $pm);
 					$reason = $reason[1];$reason =~ s/^(")//;$reason =~ s/(")$//;
 					&kickUser($param2,$reason);}}
 			elsif ($param1 =~ /^[\!+-]tban/i)
-				{if($param1 =~ /^[\!+-]tban\|/i)
-					{&msgUser("$user","usage: +tban 'username' 'reason'");}
+				{if(($param2 eq "")  or ($param3 eq ""))
+					{&msgUser("$user","usage: +tban username reason");}
 				else 
 					{@reason = split(/\"/, $pm);
 					$reason = $reason[1];$reason =~ s/^(")//;$reason =~ s/(")$//;
@@ -263,8 +263,8 @@ sub data_arrival(){
 					&banUser($param2,$reason,$userip,"tban");
 					&kickUser($param2,$reason);}}
 			elsif ($param1 =~ /^[\!+-]pban/i)
-				{if($param1 =~ /^[\!+-]pban\|/i)
-					{&msgUser("$user","usage: +pban 'username' 'reason'");}
+				{if(($param2 eq "")  or ($param3 eq ""))
+					{&msgUser("$user","usage: +pban username reason");}
 				else 
 					{@reason = split(/\"/, $pm);
 					$reason = $reason[1];$reason =~ s/^(")//;$reason =~ s/(")$//;
@@ -272,40 +272,55 @@ sub data_arrival(){
 					&banUser($param2,$reason,$userip,"pban");
 					&kickUser($param2,$reason);}}
 			elsif ($param1 =~ /^[\!+-]uban/i)
-				{if($param1 =~ /^[\!+-]uban\|/i)
-					{&msgUser("$user","usage: +uban username reason");}
+				{if(($param2 eq "")  or ($param3 eq ""))
+					{&msgUser("$user","usage: +uban username");}
 				else 
 					{@reason = split(/\"/, $pm);
 					$reason = $reason[1];$reason =~ s/^(")//;$reason =~ s/(")$//;
 					my($userip) = &getUserIp($param2);
 					&banUser($param2,$reason,$userip,"uban");
 					&kickUser($param2,$reason);}}
+			elsif ($param1 =~ /^[\!+-]pm/i)
+				{if(($param2 eq "")  or ($param3 eq ""))
+					{&msgUser("$user","usage: +pm username Message");}
+				else 
+					{@msg = split(/\"/, $pm);
+					$msg = $msg[1];$msg =~ s/^(")//;$msg =~ s/(")$//;
+					&msgUser("$param2","$msg");}}
+			elsif ($param1 =~ /^[\!+-]say/i)
+				{if(($param2 eq "")  or ($param3 eq ""))
+					{&msgUser("$user","usage: +say Message");}
+				else 
+					{@msg = split(/\"/, $pm);
+					$msg = $msg[1];$msg =~ s/^(")//;$msg =~ s/(")$//;
+					&msgAll("$msg");}}
 			elsif ($param1 =~ /^[\!+-]fakerslog/i)
 				{&fakersLog($user);}
-			elsif ($param1 =~ /^[\!+-]history/i)
-				{if($param1 =~ /^[\!+-]history\|/i)
+			elsif ($param1 =~ /^[\+]history/i)
+				{if($param2 eq "")
 					{&msgUser("$user","usage: +history username");}
 				else 
 					{&history("$user","$param2");}}
 			elsif ($param1 =~ /^[\!+-]addfaker/i)
-				{if($param1 =~ /^[\!+-]addfaker\|/)
+				{if($param2 eq "")
 					{&msgUser("$user","usage: +addfaker username");}
 				else 
 					{my($ip) = odch::get_ip($param2);
 					&banUser($param2,"Faker",$ip,"pban");}}
 			# Add new op commands here
-			elsif($param1 =~ /^[\!+-]auser/i)
+
+			# OP Admin commands
+			elsif(($type eq 32) && ($param1 =~ /^[\!+-]auser/i))
 			{
-				if($param1 =~ /^[\!+-]auser\|/)
-					{&msgAll("usage: !auser nick pass level");}
+				if(($param2 eq "")  or ($param3 eq "") or ($param4 eq ""))
+					{&msgUser("$user","usage: !auser nick pass level");}
 				else
 					{&setRegUser($user,$param2,$param3,$param4);}
-
 			}
-			elsif($param1 =~ /^[\!+-]duser/i)
+			elsif(($type eq 32) && ($param1 =~ /^[\!+-]duser/i))
 			{
-				if($param1 =~ /^[\!+-]duser\|/)
-					{&msgAll("usage: +auser nick");}
+				if($param2 eq "")
+					{&msgUser("$user","usage: +duser nick");}
 				else
 					{&delRegUser($user,$param2);}
 			}

@@ -178,7 +178,7 @@ Public Commands (Main Chat):-\r
 . +back = Mark yourself back. (Auto back on hub chat)\r
 . +topchat = Top 10 talkers....\r
 . +uptime = The Up Time of the hub\r
-. +seen username = show when the specified user was last online\r
+. +seen username = show when the specified user was last online (Wildcard = *)\r\r
 Public commands(Private Msg with Bot) Available to ALL:-\r
 . +help = Shows these commands in a PM\r
 . +seen username = show when the specified user was last online\r 
@@ -203,7 +203,9 @@ Public commands(Private Msg with Bot) Available to ALL:-\r
 . +kick username \"reason\" = Kick the user for the reason\r
 . +tban username \"reason\" = Temp Ban user for the reason\r
 . +pban username \"reason\" = Perm Ban user for the reason\r
-. +uban username = Un Ban user for the reason\r
+. +uban username = Un Ban user\r
+. +pm username \"Message\" = Get thee bot to send a message to any user\r
+. +say \"Message\" = Get thee bot to say something publicly\r
 Any command NOT recognised is sent to ALL OPs as OP CHAT \r";
 	}
 	if($type eq 32)

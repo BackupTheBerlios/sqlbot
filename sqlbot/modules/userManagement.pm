@@ -218,13 +218,13 @@ sub aUserWorker(){
 	$auwth->execute();
 	while ($ref = $auwth->fetchrow_hashref()){
 		my($function) = "$ref->{'function'}";
-		my($user) = "$ref->{'nick'}";
+		my($auser) = "$ref->{'nick'}";
 		my($ip) = "$ref->{'IP'}";
 		my($information) = "$ref->{'information'}";
 		
 		if ($function=='50'){
-			my($sqluser) = &sqlConvertNick($user);
-			$dbh->do("UPDATE userDB SET allowStatus='Allow'	WHERE (nick='$sqluser' OR IP='$ip') AND allowStatus!='Banned'");}	
+			my($sqluser) = &sqlConvertNick($auser);
+			$dbh->do("UPDATE userDB SET allowStatus='Allow'	WHERE nick='$sqluser' AND allowStatus!='Banned'");}	
 		$dbh->do("DELETE FROM botWorker WHERE nick='$sqluser'");
 	
 	$auwth->finish();
@@ -233,7 +233,7 @@ sub aUserWorker(){
 }
 sub chPassUser(){
 	my($user,$oldPass,$newPass) = @_;	
-	my($level) = odch::check_if_registered($setUser);
+	my($level) = odch::check_if_registered($user);
 	my($sqluser) = &sqlConvertNick($user);
 	if(($level eq 0)) # User is not registered
 		{&msgUser("You are not registered.");
