@@ -13,7 +13,7 @@
 
 #Now we tell sql we want to use that databse:
 
-				use database sqlbot;
+				use sqlbot;
 
 or
 				use sqlbot;
