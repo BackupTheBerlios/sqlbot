@@ -139,7 +139,7 @@ eval { $dbh->do("CREATE TABLE client_rules (rowID INT(7) NOT NULL AUTO_INCREMENT
 					max_hubs tinyint(3) UNSIGNED, 
 					min_share tinyint(4) UNSIGNED, 
 					min_connection tinyint(1) UNSIGNED NOT NULL,
-					client_name VARCHAR(10) NOT NULL)
+					client_name VARCHAR(10) NOT NULL,
 					min_limit TINYINT(4)");
 					print "Created table \"client_rules\"\n"
 			}; print "CREATE \"client_rules\" failed: $@\n" if $@;
