@@ -398,8 +398,6 @@ echo "<tr>
 		</td>
 	</tr>
 </table>
-
-<a href="http://webmonkey.com" ONMOUSEOVER="popup('Tutorials and tips for the advanced webmaster','lightgreen')"; ONMOUSEOUT="kill()">WebMonkey</a>
 <!-- END MAIN TABLE -->
 <?php mysql_close(); }?>
 </body>
