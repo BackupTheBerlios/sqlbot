@@ -27,7 +27,7 @@ mysql_connect($databasehost,$username,$password);
 @mysql_select_db($database) or die( "Unable to select database");
 $numresult=mysql_query("SELECT * FROM userDB");
 $numrows=mysql_num_rows($numresult);
-$result=mysql_query("SELECT * FROM userDB $where ORDER by uType,nick ASC LIMIT $offset,$defaultLogEntries");
+$result=mysql_query("SELECT * FROM userDB $where ORDER by inTime DESC LIMIT $offset,$defaultLogEntries");
 mysql_close();
 ?>
 <b>Filter Users Stats</b>
