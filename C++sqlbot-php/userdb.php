@@ -354,9 +354,9 @@ if ((($uiUserLevel == "0") || ($uiUserLevel == "")) && ($uiIsAdmin == "0")) { $c
 
 //USER INFO / BANS
 
-if ($uiBanFlag == "0") { $user_info = "Logins</td><td>$uiLoginCount</td></tr><tr><td>Kicks</td><td>$uiKickTotal</td></tr><tr><td>Bans</td><td>$uiBanTotal</td>"; }
+if ($uiBanFlag == "0") { $user_info = "Login/Srchs</td><td>$uiLoginCount / $uiTotalSearches</td></tr><tr><td>Kicks</td><td>$uiKickTotal</td></tr><tr><td>Bans</td><td>$uiBanTotal</td>"; }
 
-if ($uiBanFlag > "0") { $user_info = "Logins</td><td>$uiLoginCount</td></tr><tr><td>Kicks</td><td>$uiKickTotal</td></tr><tr><td valign=top>Bans</td><td>Total: $uiBanTotal<br>Banned: $BanTime<br>Expires: $BanExpire</td>"; }
+if ($uiBanFlag > "0") { $user_info = "Login</td><td>$uiLoginCount</td></tr><tr><td>Kicks</td><td>$uiKickTotal</td></tr><tr><td valign=top>Bans</td><td>Total: $uiBanTotal<br>Banned: $BanTime<br>Expires: $BanExpire</td>"; }
 
 
 // PAGE DATA
