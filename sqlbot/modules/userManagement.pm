@@ -221,15 +221,11 @@ sub aUserWorker(){
 		my($auser) = "$ref->{'nick'}";
 		my($ip) = "$ref->{'IP'}";
 		my($information) = "$ref->{'information'}";
-		
+		my($sqluser) = &sqlConvertNick($auser);
 		if ($function=='50'){
-			my($sqluser) = &sqlConvertNick($auser);
-			$dbh->do("UPDATE userDB SET allowStatus='Allow'	WHERE nick='$sqluser' AND allowStatus!='Banned'");}	
+			$dbh->do("UPDATE userDB SET allowStatus='Allow'	WHERE nick='$sqluser'");}	
 		$dbh->do("DELETE FROM botWorker WHERE nick='$sqluser'");
-	
-	$auwth->finish();
-}
-
+		$auwth->finish();}
 }
 sub chPassUser(){
 	my($user,$oldPass,$newPass) = @_;	
