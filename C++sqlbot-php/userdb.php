@@ -282,6 +282,7 @@ while ($data=mysql_fetch_array($userresult))
 	if  (($uiStatus == "1") && ($uiIsAway == "0")) { $uiStatus ="<img src=\"img/Online.gif\" alt=\"Online\" title=\"Online\">";}
 	if  (($uiStatus == "1") && ($uiIsAway == "1")) { $uiStatus ="<img src=\"img/Away.gif\" alt=\"Away\" title=\"Away\">";}
 	if  ($uiStatus == "0") { $uiStatus ="<img src=\"img/Offline.gif\" alt=\"Offline\" title=\"Offline\">";}
+	if  (($uiBanTotal > "0")) { $uiStatus ="<img src=\"img/Ban.gif\" alt=\"Offline\" title=\"Banned\">";}
 
 
 
@@ -308,7 +309,8 @@ if ($uiUserLevel == "1") { $class = "userdbVIP"; $Level = "VIP";  }
 if ($uiNick == "$bcMaster") { $class = "userdbMASTER"; $Level = "Master"; }
 if (($uiUserLevel > "1") && ($uiIsAdmin == "0")) { $class = "userdbERROR"; $Level = "Misconfigured"; }
 if (($uiUserLevel < "2") && ($uiIsAdmin == "1")) { $class = "userdbERROR"; $Level = "Misconfigured"; }
-if (($uiUserLevel == "0") && ($uiIsAdmin == "0")) { $class = "userdbnicknormal"; $Level = "User";}
+if ((($uiUserLevel == "0") || ($uiUserLevel == "")) && ($uiIsAdmin == "0")) { $class = "userdbnicknormal"; $Level = "User";}
+
 
 
 

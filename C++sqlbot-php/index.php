@@ -119,7 +119,7 @@ $result=mysql_query("SELECT * FROM botConfig WHERE rowID='1'");
 
 <?php
 // LIST CONFIGURED HUBS
-$result=mysql_query("SELECT * FROM hubConfig ORDER BY 'hcName'");
+$result=mysql_query("SELECT * FROM hubConfig ORDER BY 'huiID'");
 while ($data=mysql_fetch_array($result)) 
 {
 	$hubID=htmlentities(mysql_result($result,$d,"hubID"));
