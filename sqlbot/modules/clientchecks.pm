@@ -234,8 +234,8 @@ sub parseClient(){
 			if ( $UploadLimit > 0 ) 
 				{if ($ref->{'min_limit'} ne 0 )
 					{if  ($UploadLimit < ($ref->{'min_limit'})) 
-						{#$REASON = "Speed Limit";
-						#$ACTION = "Kicked";
+						{$REASON = "Speed Limit";
+						$ACTION = "Kicked";
 					}}}
 			## MAX HUBS ##
 			if ($ref->{'max_hubs'} ne 0 )
