@@ -23,6 +23,16 @@ sub kicked_user()
 	my($user,$kickedby) = @_;
 	&userOffline($user);
 	&addToLog($user,"Kicked",$kickedby);
+
+	my($kw1th) = $dbh->prepare("SELECT kickCountTot,kickCount FROM userDB WHERE nick='$user' AND allowStatus!='Banned'");
+	$kw1th->execute();
+	$ref1 = $kw1th->fetchrow_hashref();
+	my($kickCountTot) = "$ref1->{'kickCountTot'}";
+	my($kickCount) = "$ref1->{'kickCount'}";
+	$kickCount++;
+	$kickCountTot++;
+	$kw1th->finish();
+	$dbh->do("UPDATE userDB SET kickCountTot='$kickCountTot',kickCount='$kickCount',lastAction='Kicked' WHERE nick='$user' AND allowStatus!='Banned'");
 	
 }
 
@@ -48,7 +58,10 @@ sub new_user_connected(){
 		&processEvent($user);
 	}
 	elsif($userInDB eq 2)
-		{&updateUserRecord($user);}
+		{&updateUserRecord($user);
+		&userConnect($user);
+		&userOnline($user);
+	}
 	
 	&userOnline($user);
 }
@@ -77,8 +90,10 @@ sub reg_user_connected(){
 			&processEvent($user);}
 	}
 	elsif($userInDB eq 2)
-		{&updateUserRecord($user);}
-	&userOnline($user);
+		{&updateUserRecord($user);
+		&userConnect($user);
+		&userOnline($user);
+	}
 	
 	if (&getVerboseOption("verbose_op_connect"))
 		{&msgAll("Reg User $user just connected");}
@@ -109,8 +124,10 @@ sub op_connected(){
 			&processEvent($user);}
 	}
 	elsif($userInDB eq 2)
-		{&updateUserRecord($user);}
-
+		{&updateUserRecord($user);
+		&userConnect($user);
+		&userOnline($user);
+	}
 	
 	&userOnline($user);
 
@@ -143,8 +160,10 @@ sub op_admin_connected()
 			&processEvent($user);}	
 	}
 	elsif($userInDB eq 2)
-		{&updateUserRecord($user);}
-
+		{&updateUserRecord($user);
+		&userConnect($user);
+		&userOnline($user);
+	}
 	&userOnline($user);
 	
 	if (&getVerboseOption("verbose_op_connect"))
@@ -235,19 +254,19 @@ sub data_arrival(){
 				{&banLog($user);}
 			elsif ($param1 =~ /^[\!+-]kick/i)
 				{if($param1 =~ /^[\!+-]kick\|/i)
-					{&msgUser("$user","usage: +kick username reason");}
+					{&msgUser("$user","usage: +kick 'username' 'reason'");}
 				else 
 					{&kickUser($param2,$param3);}}
 			elsif ($param1 =~ /^[\!+-]tban/i)
 				{if($param1 =~ /^[\!+-]tban\|/i)
-					{&msgUser("$user","usage: +kick username reason");}
+					{&msgUser("$user","usage: +tban 'username' 'reason'");}
 				else 
 					{&splitDescription($param2);
 					&banUser($param2,$param3,$ip,"tban");
 					&kickUser($param2,$param3);}}
 			elsif ($param1 =~ /^[\!+-]pban/i)
 				{if($param1 =~ /^[\!+-]pban\|/i)
-					{&msgUser("$user","usage: +pban username reason");}
+					{&msgUser("$user","usage: +pban 'username' 'reason'");}
 				else 
 					{&splitDescription($param2);
 					&banUser($param2,$param3,$ip,"pban");
