@@ -58,8 +58,8 @@ $numresults=mysql_query("SELECT * FROM log $where ");
 $numrows=mysql_num_rows($numresults);
 
 if (empty($offset)) {$offset=0;}
-$result=mysql_query("SELECT * FROM log $where  ORDER by rowID DESC  LIMIT $offset,$defaultLogEntries");?> 
-mysql_close();
+$result=mysql_query("SELECT * FROM log $where  ORDER by rowID DESC  LIMIT $offset,$defaultLogEntries"); 
+mysql_close();?>
 <b>Apply Filers</b>
 <table> 
 	<td nowrap><form method="get" class='inline' action="log-hub.php">
