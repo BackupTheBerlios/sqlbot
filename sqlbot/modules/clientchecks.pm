@@ -164,18 +164,11 @@ sub parseClient(){
 	## CHECK FAKERS ##
 	if($shareBytes =~ /(\d)\1{5,}/) 
 		{$REASON = "Fake(Share)";
-		$ACTION = "Nuked";
+		$ACTION = "P-Banned";
 		if ((&getClientExists($dcClient)) && ($dcVersion ne "")){}
 		else{	$dcClient = "";
 			$dcClientname = "";
 			$dcVersion = "";}
-		
-	}
-	## CHECK MLDONKEY CLIENTS
-	elsif($fulldescription =~ /mldonkey client/)
-		{if (&getConfigOption("check_mldonkey"))
-			{$REASON = "MLDonkey";
-			$ACTION = "Nuked";}
 	}
 	else {
 	## CHECK CLIENT ##
@@ -274,13 +267,13 @@ sub checkKicks(){
 		my($kick_before_tban) = &getHubVar("kick_before_tban");
 		my($tban_before_pban) = &getHubVar("tban_before_pban");
 		if ($tBanCount > $tban_before_pban)
-			{&msgUser("$user","You have now been banned more than $tban_before_pban times. You have been permantly banned!");
-			$REASON = "tban_before_pban tBans";
-			$ACTION = "Nuked";}
+			{&msgUser("$user","You have now been T-Banned $tban_before_pban times. You have been permantly banned!");
+			$REASON = "$tban_before_pban T-Bans";
+			$ACTION = "T-Banned";}
 		elsif ($kickCount > $kick_before_tban) 
-			{&msgUser("$user","You have now been kicked more than $kick_before_tban times in the last day. You have been banned !");
+			{&msgUser("$user","You have now been kicked $kick_before_tban times . You have been T-Banned !");
 			$REASON = "$kick_before_tban Kicks";
-			$ACTION = "Banned";}}
+			$ACTION = "P-Banned";}}
 		
 }
 
@@ -288,9 +281,6 @@ sub checkClones(){
 	my($newuser) = @_;
 	if (&getConfigOption("clone_check")){
 # userIsOnline
-
-
-
 		$newip = odch::get_ip($newuser);
 		my ($usersonline) = odch::get_user_list(); #Get space separated list of who is online
 		my ($numonlineusers) = odch::count_users(); #And how many
