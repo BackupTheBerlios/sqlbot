@@ -54,6 +54,8 @@ if ($action == "add_hub")
 
 // Get botConfig values 
 $result=mysql_query("SELECT * FROM botConfig WHERE rowID='1'");
+if ( $result )
+{
 	$rowID=mysql_result($result,$i,"rowID");
 	$bcName=htmlentities(mysql_result($result,$i,"bcName"));
 	$bcMaster=htmlentities(mysql_result($result,$i,"bcMaster"));
@@ -65,6 +67,7 @@ $result=mysql_query("SELECT * FROM botConfig WHERE rowID='1'");
 	$bcDescription=htmlentities(mysql_result($result,$i,"bcDescription"));
 	$bcSharePath=htmlentities(mysql_result($result,$i,"bcSharePath"));
 	$bcLogDir=htmlentities(mysql_result($result,$i,"bcLogDir"));
+}
 ?>
 
 <!-- TOP BANNER -->
