@@ -247,7 +247,7 @@ sub data_arrival(){
 				{&banLog($user);}
 			elsif ($param1 =~ /^[\!+-]kick/i)
 				{if(($param2 eq "")  or ($param3 eq ""))
-					{&msgUser("$user","usage: +kick username reason");}
+					{&msgUser("$user","usage: +kick username \"reason\"");}
 				else 
 					{&splitDescription($param2);
 					@reason = split(/\"/, $pm);
@@ -255,7 +255,7 @@ sub data_arrival(){
 					&kickUser($param2,$reason);}}
 			elsif ($param1 =~ /^[\!+-]tban/i)
 				{if(($param2 eq "")  or ($param3 eq ""))
-					{&msgUser("$user","usage: +tban username reason");}
+					{&msgUser("$user","usage: +tban username \"reason\"");}
 				else 
 					{@reason = split(/\"/, $pm);
 					$reason = $reason[1];$reason =~ s/^(")//;$reason =~ s/(")$//;
@@ -264,7 +264,7 @@ sub data_arrival(){
 					&kickUser($param2,$reason);}}
 			elsif ($param1 =~ /^[\!+-]pban/i)
 				{if(($param2 eq "")  or ($param3 eq ""))
-					{&msgUser("$user","usage: +pban username reason");}
+					{&msgUser("$user","usage: +pban username \"reason\"");}
 				else 
 					{@reason = split(/\"/, $pm);
 					$reason = $reason[1];$reason =~ s/^(")//;$reason =~ s/(")$//;
@@ -282,18 +282,21 @@ sub data_arrival(){
 					&kickUser($param2,$reason);}}
 			elsif ($param1 =~ /^[\!+-]pm/i)
 				{if(($param2 eq "")  or ($param3 eq ""))
-					{&msgUser("$user","usage: +pm username Message");}
+					{&msgUser("$user","usage: +pm username \"Message\"");}
 				else 
 					{@msg = split(/\"/, $pm);
 					$msg = $msg[1];$msg =~ s/^(")//;$msg =~ s/(")$//;
 					&msgUser("$param2","$msg");}}
 			elsif ($param1 =~ /^[\!+-]say/i)
-				{if(($param2 eq "")  or ($param3 eq ""))
-					{&msgUser("$user","usage: +say Message");}
+				{if($param2 eq "")
+					{&msgUser("$user","usage: +say \"Message\"");}
 				else 
 					{@msg = split(/\"/, $pm);
 					$msg = $msg[1];$msg =~ s/^(")//;$msg =~ s/(")$//;
-					&msgAll("$msg");}}
+					if($msg eq "")
+						{&msgUser("$user","usage: +say \"Message\"");}
+					else
+					{&msgAll("$msg");}}}
 			elsif ($param1 =~ /^[\!+-]fakerslog/i)
 				{&fakersLog($user);}
 			elsif ($param1 =~ /^[\+]history/i)
