@@ -205,7 +205,9 @@ Private Msg Me (Type in here) the following\r
 - !log = show the last $defaultLogEntries Entries from the hublog\r
 - !kicklog = show the last $defaultLogEntries kicks log\r
 - !banlog = show the last $defaultLogEntries bans log\r
-- !history \'username\' = show the last $defaultLogEntries log entries of the user\r";
+- !history \'username\' = show the last $defaultLogEntries log entries of the user\r
+- !addfaker \'username\' = Add the user to the fakers log, then Nuke\r
+Any command NOT recognised is sent to ALL OPs as OP CHAT \r";
 	}
 	if($type eq 32)
 	{
@@ -329,6 +331,13 @@ sub history()
 	$sth->finish();
 	&msgUser("$user","$log");
 }
-
+sub addFaker(){
+	my($faker)=@_;
+	&splitDescription($faker);
+	$REASON = "FAKER";
+	$ACTION = "Nuked";
+	&msgAll("$faker is $REASON gonna $ACTION him");
+	&processEvent($faker);
+}
 ## Required in every module ##
 1;
