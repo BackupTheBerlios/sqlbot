@@ -75,10 +75,48 @@ sub botWorker(){
 
 	#Check for User List events
 	my($WUsers) = $dbh->selectrow_array("SELECT COUNT(*) FROM botWorker WHERE function LIKE '3%'"); # Or 31 or 32 or 33
-	if($WBans ne 0)
+	if($WUsers ne 0)
 		{&userWorker();}
+
+	#Check for User List events # 40 - add  41 - Delete  42 - Allow Status
+	my($WIpFilter) = $dbh->selectrow_array("SELECT COUNT(*) FROM botWorker WHERE function LIKE '4%'"); # Or 40 or 41
+	if($WIpFilter ne 0)
+		{&ipFilterWorker();}
 	
 }
+
+sub ipFilterWorker(){
+	my($bwth) = $dbh->prepare("SELECT function,nick,information,IP FROM botWorker WHERE function LIKE '4%'");
+	$bwth->execute();
+	while ($ref = $bwth->fetchrow_hashref())
+	{	my($function) = "$ref->{'function'}";
+		my($mask) = "$ref->{'nick'}";
+		my($ip) = "$ref->{'IP'}";
+		my($information) = "$ref->{'information'}";
+		my($banMask) = "$ip/$mask";		
+
+		if ($function=='40')
+		{ # Add this IP range ban
+			odch::add_ban_entry($banMask);
+			if (&getVerboseOption("verbose_banned"))
+				{&msgAll("Banned IP Ban Range ($banMask) $information");}
+			# Check users for ip range address match, mark as banned
+		}
+		elsif($function=='41')
+		{ # Delete this IP range ban
+			odch::remove_ban_entry($banMask);
+			if (&getVerboseOption("verbose_banned"))
+				{&msgAll("Removed IP Ban Range ($banMask) $information");}
+		}
+		elsif($function=='42')
+		{ # Any user with IP in range is set to allowed
+			# Do a scan of all users and mark any states in range as allowed
+		}
+		$dbh->do("DELETE FROM botWorker WHERE function LIKE '4%' AND IP='$ip'");
+	}
+	$bwth->finish();
+}
+
 
 ## Required in every module ##
 1;
