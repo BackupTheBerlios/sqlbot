@@ -102,7 +102,7 @@ sub userOffline(){
 	my($outTime)="$date $time";
 	my($inTime) = "$ref->{'inTime'}";
 	my($onlineTime) = "$ref->{'onlineTime'}";
-	my($totOnlineTime) = &calcOnlineTime($outTime,$inTime,$onlineTime);
+#	my($totOnlineTime) = &calcOnlineTime($outTime,$inTime,$onlineTime);
 	$uoth->finish();
 
 	$dbh->do("UPDATE userDB SET 	status='Offline',
