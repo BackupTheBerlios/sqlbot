@@ -18,12 +18,13 @@ sub splitDescription() {
 	my($user) = @_;
 
 	#Initialise globals
-	$type=""; $ip=""; ;$GigsShared="";
+	$type=0; $ip=""; ;$GigsShared="";
 	$tmpdata=""; $fullDescription=""; $dcClient="";
-	$dcVersion=""; $NbHubs=""; $NSlots=""; $slt_ratio=""; $country="";
-	$UploadLimit=""; $conn=""; $connection=""; $email="";$tmpModeAP="";
-	$connectionMode="";$tmp0="";$shareBytes=0;
-	@tmp0 = ("","");@tmp1 = ("","");@tmp2 = ("","");@tmp3 = ("","");@tmp4 = ("","","");my($tmpdata)="";my($verdata)="";my($tmpModeAP)="";
+	$dcVersion=""; $NbHubs=0; $NSlots=0; $slt_ratio=""; $country="";
+	$UploadLimit=0; $conn=""; $connection=""; $email="";$tmpModeAP="";
+	$connectionMode="unknown";$tmp0="";$shareBytes=0;
+	@tmp0 = ("","");@tmp1 = ("","");@tmp2 = ("","");@tmp3 = ("","");
+	@tmp4 = ("","","");my($tmpdata)="";my($verdata)="";my($tmpModeAP)="";
 	my(@verdata2)=("","","","","","");my(@tmpdata2)=("","","","","","");
 	
 	$type = odch::get_type($user);
@@ -34,7 +35,7 @@ sub splitDescription() {
 	$email = odch::get_email($user);
 
 	## Check for internal networks ##
-	if ($ip =~ /192.168/) {$ip = &getHubVar("external_ip"); }
+	if ($ip =~ /192.168/)  {$ip = &getHubVar("external_ip"); }
 
 	## Get Country code for user #
 	my($reg) = IP::Country::Fast->new();
@@ -105,37 +106,39 @@ sub clientRecheck()
 		$checkUserCount ++;
 		&parseClient($user);
 
-
-
-
-		if (&userInOnline($user) ne 1){
-			if(lc($botname) ne lc($user)) #if not a bot, should be in the online table
-				{if(&userInDB($user) eq 1)
-					{&updateUserRecord($user);}
-				else
-					{&createNewUserRecord($user);}}}	
+		if ($ip eq '') {}
+		else {
+		$userInDB = &userInDB($user,$ip);
+		if ($userInDB eq 2) {}#If they are set to allow then do nothing
+		elsif ($userInDB eq 0) #If they dont exist create a record
+			{&createNewUserRecord($user);
+			&userConnect($user);	
+			&userOnline($user);}
 		else{
-			&updateUserRecordRecheck($user);
-			if($type eq 0 )	
-				{&userOffline($user);}
-			if($type eq 32 )
-			{ #If Opadmin
-			# Check OP admins if set
-			if (&getConfigOption("check_opadmin")) {
+			if (&userIsOnline($user) ne 1)
+				{&userOnline($user);}	
+			else{
+				&updateUserRecordRecheck($user);
+				if($type eq 0 )	
+					{&userOffline($user);}
+				if($type eq 32 )
+				{ #If Opadmin
+				# Check OP admins if set
+				if (&getConfigOption("check_opadmin")) {
 					&checkKicks($user);  # Check kick counter
 					&processEvent($user);}}    # take action if any
-			elsif($type eq 16) { # if Op
-				# Check OPs if set
-				if (&getConfigOption("check_op")) {
+				elsif($type eq 16) { # if Op
+					# Check OPs if set
+					if (&getConfigOption("check_op")) {
+						&checkKicks($user);  # Check kick counter
+						&processEvent($user); }}   # take action if any
+				elsif($type eq 8) { # if Reg User
+					if (&getConfigOption("check_reg")) {
+						&checkKicks($user);  # Check kick counter
+						&processEvent($user); }}   # take action if any
+				else {	# Normal user
 					&checkKicks($user);  # Check kick counter
-					&processEvent($user); }}   # take action if any
-			elsif($type eq 8) { # if Reg User
-				if (&getConfigOption("check_reg")) {
-					&checkKicks($user);  # Check kick counter
-					&processEvent($user); }}   # take action if any
-			else {	# Normal user
-				&checkKicks($user);  # Check kick counter
-				&processEvent($user); }}}   # take action if any
+					&processEvent($user); }}}}}  # take action if any
 	# Make sure the online sql table does not contain ghosts
 	my ($cth) = $dbh->prepare("SELECT * FROM userDB WHERE status='Online'");
 	$cth->execute();
@@ -282,6 +285,10 @@ sub checkKicks(){
 sub checkClones(){
 	my($newuser) = @_;
 	if (&getConfigOption("clone_check")){
+# userIsOnline
+
+
+
 		$newip = odch::get_ip($newuser);
 		my ($usersonline) = odch::get_user_list(); #Get space separated list of who is online
 		my ($numonlineusers) = odch::count_users(); #And how many
