@@ -59,7 +59,7 @@ $numrows=mysql_num_rows($numresults);
 
 if (empty($offset)) {$offset=0;}
 $result=mysql_query("SELECT * FROM log $where  ORDER by rowID DESC  LIMIT $offset,$defaultLogEntries");?> 
-
+mysql_close();
 <b>Apply Filers</b>
 <table> 
 	<td nowrap><form method="get" class='inline' action="log-hub.php">
@@ -157,7 +157,7 @@ while ($data=mysql_fetch_array($result))
     	} else { //if there isn't a remainder we will do the else
         echo "<TR bgcolor="; echo "$rowColourAlt"; echo ">\n"; } 
 	?>
-<!-- 		<form action="<? echo "log-hub.php?delete=log&offset=$offset&ipsearch=$ipsearch&clisearch=$clisearch&nicksearch=$nicksearch&afilter=$afilter&rfilter=$rfilter" ?>" method="post"> -->
+	<form action="<? echo "log-hub.php?delete=logrow&id=$id&offset=$offset&ipsearch=$ipsearch&clisearch=$clisearch&nicksearch=$nicksearch&afilter=$afilter&rfilter=$rfilter" ?>" method="post"> 
 	<td nowrap><? echo "$font$id$fontend"; ?></td>
 	<td nowrap><? echo "$font$date$fontend"; ?></td> 
 	<td nowrap><? echo "$font$time$fontend"; ?></td> 
@@ -196,7 +196,7 @@ if (!(($offset/$limit)==$pages) && $pages!=1) {
     $newoffset=$offset+$limit;
     print "<a href=\"log-hub?offset=$newoffset&ipsearch=$ipsearch&clisearch=$clisearch&nicksearch=$nicksearch&afilter=$afilter&rfilter=$rfilter\">NEXT</a><p>\n";
 }
-mysql_close();
+
 ?></div>
 <? echo "$fontend";?>
 </body>
