@@ -98,6 +98,37 @@ table.userinfo {
 	width: 50%;
 }
 
+table.chatlog {
+	font-family: arial, helvetica, sans-serif;
+	font-size: 10px;
+	vertical-align: top;
+	border: solid;
+	border-color: #010101;
+	margin: 0px;
+	padding: 0px;
+	color: #FFFFFF;
+	padding-left: 5px;
+	padding-right: 5px;
+	padding-bottom: 5px;
+	width: 100%;
+}
+
+td.chatlog {
+	font-family: arial, helvetica, sans-serif;
+	font-size: 10px;
+	vertical-align: top;
+	border: solid;
+	border-color: #281AFF;
+	color: #FFFFFF;
+	padding-left: 5px;
+	padding-bottom: 3px;
+	width: 100%;
+	border-top-width: 0;
+	border-right-width: 0;
+	border-left-width: 0.1px;
+	border-bottom-width: 0.5px;
+}
+
 td.menu {
 	border-bottom: solid;
 	border-right: solid;
