@@ -30,14 +30,16 @@ using std::endl;
 
 int DCClient::hubCount = 0;
 CStringList DCClient::hubList;
+
 /** */
 DCClient::DCClient(BotController * bController,MySqlCon * mySql,int hubId,CString s_botMaster,CString s_botNick)
+	: CClient()
 {
      dcHubId = hubId;
      botController = bController;
      MySql = mySql;
      botMaster = s_botMaster;
-botNick = s_botNick;
+     botNick = s_botNick;
      chatFloodCounter = 0;
      nickList = new CStringList();
      opList = new CStringList();
@@ -48,7 +50,6 @@ botNick = s_botNick;
      hubCount++;
      DCClient * client = this;
      hubList.Add(CString().setNum(dcHubId),(CObject*&)client);
-     
 }
 
 /** */
