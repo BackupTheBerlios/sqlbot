@@ -284,7 +284,7 @@ td.stats {
 	color: #000000;
 	font-size: 10px;
 	width: 200px;
-	height: 140px;
+	height: 135px;
 }
 
 
@@ -326,6 +326,20 @@ input.menubutton {
 	font-weight: normal;
 	padding: 0px;
 }
+
+input.menubuttonselected {
+	font-family: arial, helvetica, sans-serif;
+	font-weight: bold;
+	font-size: 10px;
+	width: 80px;
+	background-color: #598FE3;
+	color: #FFFFFF;
+	border-color: #598FE3;
+	border-style: solid;
+	border-width: 1px;
+	padding: 0px;
+}
+
 
 input.userdbcol {
 	font-weight: bold;

@@ -225,19 +225,19 @@ while ($data=mysql_fetch_array($topSearchResults))
 }
 ?>
 									
-									</table>
-								</FIELDSET>
-							</td>
-						</tr>
-					</table>
-				<!-- END TABLE TOP SEARCHES -->
-				</td>
-			</tr>
-			<tr>
-				<td valign="top">
-					<table cellpadding="0" cellspacing="0" class="statsarea">
-						<tr>
-							<td>
+								</table>
+							</FIELDSET>
+						</td>
+					</tr>
+				</table>
+			<!-- END TABLE TOP SEARCHES -->
+			</td>
+		</tr>
+		<tr>
+			<td valign="top">
+				<table cellpadding="0" cellspacing="0" class="statsarea">
+					<tr>
+						<td>
 					<!-- CLIENT STATS LAYOUT -->
 <?php
 // STATS CLIENT TYPE

@@ -75,8 +75,34 @@ $result=mysql_query("SELECT * FROM hubConfig WHERE hubID='$hubID'");
 				<?php include("conf/mainmenu.php"); ?>
 		</td>
 		<td class="main"><!-- MAIN BODY -->
-				<form action="<?php echo "$PHP_SELF"; ?>" method="post">
 				<table>
+				<!-- HUB CONFIG MENU -->
+				<tr>
+					<td>
+						<table cellspacing="0" cellpadding="0">
+							<tr>
+								<td>
+									<form action="<?php echo "hubconfig.php"; ?>" method="post">
+									<?php hidden_value(hubID, $hubID); ?>
+									<input type="submit" value="Hub Config" class="menubutton"></form>
+								</td>
+								<td>
+									<form action="<?php echo "hubverbosity.php"; ?>" method="post">
+									<?php hidden_value(hubID, $hubID); ?>
+									<input type="submit" value="Hub Verbosity" class="menubutton"></form>
+								</td>
+								<td>
+									<form action="<?php echo "hubextras.php"; ?>" method="post">
+									<?php hidden_value(hubID, $hubID); ?>
+									<input type="submit" value="Hub Extras" class="menubuttonselected"></form>
+								</td>
+							<tr>
+						</table>
+					</td>
+					<td></td>
+				</tr>
+				<!-- END HUB CONFIG MENU -->
+				<form action="<?php echo "$PHP_SELF"; ?>" method="post">
 				<tr>
 					<td valign="top">
 				<!-- HUB DETAILS -->
@@ -94,8 +120,8 @@ $result=mysql_query("SELECT * FROM hubConfig WHERE hubID='$hubID'");
 						<table cellpadding="0" cellspacing="0" class="config">
 							<tr><?php textarea_form_long("<strong><u>Nick Ban</u></strong><br>
 						Here you can insert partial or full names that the bot will place an
-						immediate ban on when a user mathing such a nick enters the hub.<p>
-						Add one per line", hxBanNicks, $hxBanNicks); ?></tr>
+						immediate ban on when a user mathing such a nick enters the hub.
+						", hxBanNicks, $hxBanNicks); ?></tr>
 						</table>
 						<!-- END HUB DETAILS -->
 					</td>
@@ -106,7 +132,7 @@ $result=mysql_query("SELECT * FROM hubConfig WHERE hubID='$hubID'");
 							<tr><?php textarea_form_long("<strong><u>Search Ban</u></strong><br>
 						Here you can insert words you don't want users searching for on your
 						hub (like rape, child-porn, etc...).<p>
-						Add one per line", hxBanSearch, $hxBanSearch); ?></tr>
+						", hxBanSearch, $hxBanSearch); ?></tr>
 						</table>
 					</td>
 					<td valign="top">
@@ -115,7 +141,7 @@ $result=mysql_query("SELECT * FROM hubConfig WHERE hubID='$hubID'");
 						Add words you don't want users to say in your main chat. This will ban them
 						so be carefull what you add here. This feature is mainly used for spam-bots with 
 						certain web addresses.<p>
-						Add one per line", hxBanChat, $hxBanChat); ?></tr>
+						", hxBanChat, $hxBanChat); ?></tr>
 						</table>
 					</td>
 				</tr>
@@ -126,7 +152,7 @@ $result=mysql_query("SELECT * FROM hubConfig WHERE hubID='$hubID'");
 						The bot will eventualyl be able todownload filelists of users and check their files.
 						Insert here words of common files you do not want them to share, and if found, they
 						will be banned.<p>
-						Add one per line", hxBanSharedFiles, $hxBanSharedFiles); ?></tr>
+						", hxBanSharedFiles, $hxBanSharedFiles); ?></tr>
 						</table>
 					</td>
 					<td valign="top">

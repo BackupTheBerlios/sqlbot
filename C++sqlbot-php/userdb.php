@@ -86,7 +86,7 @@ $parseoptionextra= "&& $searchfield LIKE '$alteredsearchfiled'";}
 
 if ($action == "deleteUser")
 {
-	$delete_from_userInfo = "DELETE FROM userInfo WHERE hubID='$hubID' && uiNick='$uiNick' && uiIp='$uiIp'";
+	$delete_from_userInfo = "DELETE FROM userInfo WHERE hubID='$hubID' && uiNick='$uiNick'";
 	$result = mysql_query($delete_from_userInfo) or die(mysql_error());
 }
 

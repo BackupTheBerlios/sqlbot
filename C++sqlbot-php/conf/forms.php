@@ -87,7 +87,7 @@ function checkbox($value_description, $value, $value_orig) {
 if ($value_orig == "1"){ $if_checked = " checked"; }
 if ($value_orig == "0"){ $if_checked = "not_checked"; }
 echo "<td valign=\"top\">$value_description ($value_orig) &nbsp;</td>
-	<td><input type=\"checkbox\" name=\"$value\" value=\"1\"$if_checked class=\"form_checkbox\">";}
+	<td><input type=\"checkbox\" name=\"$value\" value=\"1\" $if_checked class=\"form_checkbox\">";}
 
 // TABLE CONNECTIONS
 function list_connection($con_variable, $value) {

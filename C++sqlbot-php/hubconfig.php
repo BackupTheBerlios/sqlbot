@@ -49,9 +49,6 @@ if ($action == "update")
 		hcEnableTagCheck='$hcEnableTagCheck',
 		hcKickNoTag='$hcKickNoTag',
 		hcEnableCloneCheck='$hcEnableCloneCheck',
-		hcVerboseKickNoTag='$hcVerboseKickNoTag',
-		hcVerboseKick='$hcVerboseKick',
-		hcVerboseBan='$hcVerboseBan',
 		hcLogChat='$hcLogChat',
 		hcLogSearches='$hcLogSearches',
 		hcLogSystem='$hcLogSystem'		
@@ -120,9 +117,6 @@ $result=mysql_query("SELECT * FROM hubConfig WHERE hubID='$hubID'");
 	$hcEnableTagCheck=mysql_result($result,$i,"hcEnableTagCheck");
 	$hcKickNoTag=mysql_result($result,$i,"hcKickNoTag");
 	$hcEnableCloneCheck=mysql_result($result,$i,"hcEnableCloneCheck");
-	$hcVerboseKickNoTag=mysql_result($result,$i,"hcVerboseKickNoTag");
-	$hcVerboseKick=mysql_result($result,$i,"hcVerboseKick");
-	$hcVerboseBan=mysql_result($result,$i,"hcVerboseBan");
 	$hcLogChat=mysql_result($result,$i,"hcLogChat");
 	$hcLogSearches=mysql_result($result,$i,"hcLogSearches");
 	$hcLogSystem=mysql_result($result,$i,"hcLogSystem");
@@ -157,8 +151,34 @@ $hcStatus = "<font color=\"#FF1D28\"><strong>Offline</strong></font>";
 				<?php include("conf/mainmenu.php"); ?>
 		</td>
 		<td class="main"><!-- MAIN BODY -->
-				<form action="<?php echo "$PHP_SELF"; ?>" method="post">
 				<table>
+				<!-- HUB CONFIG MENU -->
+				<tr>
+					<td>
+						<table cellspacing="0" cellpadding="0">
+							<tr>
+								<td>
+									<form action="<?php echo "hubconfig.php"; ?>" method="post">
+									<?php hidden_value(hubID, $hubID); ?>
+									<input type="submit" value="Hub Config" class="menubuttonselected"></form>
+								</td>
+								<td>
+									<form action="<?php echo "hubverbosity.php"; ?>" method="post">
+									<?php hidden_value(hubID, $hubID); ?>
+									<input type="submit" value="Hub Verbosity" class="menubutton"></form>
+								</td>
+								<td>
+									<form action="<?php echo "hubextras.php"; ?>" method="post">
+									<?php hidden_value(hubID, $hubID); ?>
+									<input type="submit" value="Hub Extras" class="menubutton"></form>
+								</td>
+							<tr>
+						</table>
+					</td>
+					<td></td>
+				</tr>
+				<form action="<?php echo "$PHP_SELF"; ?>" method="post">
+				<!-- END HUB CONFIG MENU -->
 				<tr>
 					<td valign="top">
 				<!-- HUB DETAILS -->
@@ -210,7 +230,6 @@ $hcStatus = "<font color=\"#FF1D28\"><strong>Offline</strong></font>";
 							<tr><?php dual_select_form(Yes,No, "Check Filelists", hcFileListDl, $hcFileListDl); ?></tr>
 							<tr><?php line_form("Max Users", 5, hcMaxUsers, $hcMaxUsers); ?></tr>
 							<tr><?php line_form("Redirect Host", 40, hcRedirectHost, $hcRedirectHost); ?></tr>
-							<tr><?php size_form("Min Share", "Minimum share to enter hub", 3, hcMinShare, $hcMinShare, hcMinShareMultiplier, $hcMinShareMultiplier); ?></tr>
 							<tr><?php time_form("Share Check Timeout", "Set this low", 3, hcShareCheckTimeout, $hcShareCheckTimeout, hcShareCheckTimeoutMultiplier, $hcShareCheckTimeoutMultiplier); ?></tr>
 							<tr><?php line_form("Kicks before Bans", 2, hcSBansBeforeLBans, $hcSBansBeforeLBans); ?></tr>
 							<tr><?php time_form("Short Ban", "How long you want to Short-Ban kicked clients", 3, hcSBan, $hcSBan, hcSBanMultiplier, $hcSBanMultiplier); ?></tr>
@@ -226,15 +245,17 @@ $hcStatus = "<font color=\"#FF1D28\"><strong>Offline</strong></font>";
 							</tr>
 							<tr><?php dual_select_form(Yes,No, "Enable Tag Check", hcEnableTagCheck, $hcEnableTagCheck); ?></tr>
 							<tr><?php dual_select_form(Yes,No, "Kick No-Tags", hcKickNoTag, $hcKickNoTag); ?></tr>
-							<tr><?php dual_select_form(Yes,No, "Verbose No-Tag Kicks", hcVerboseKickNoTag, $hcVerboseKickNoTag); ?></tr>
-							<tr><?php dual_select_form(Yes,No, "Verbose Kicks", hcVerboseKick, $hcVerboseKick); ?></tr>
-							<tr><?php dual_select_form(Yes,No, "Verbose Bans", hcVerboseBan, $hcVerboseBan); ?></tr>
 							<tr><?php connection_choice("Minimum Connection", hcMinSpeed, $hcMinSpeed); ?></tr>
+							<tr><?php size_form("Min Share", "Minimum share to enter hub", 3, hcMinShare, $hcMinShare, hcMinShareMultiplier, $hcMinShareMultiplier); ?></tr>
 							<tr><?php line_form("Minimum Slots", 2, hcMinSlots, $hcMinSlots); ?></tr>
 							<tr><?php line_form("Maximum Slots", 3, hcMaxSlots, $hcMaxSlots); ?></tr>
 							<tr><?php line_form("Maximum Hubs", 3, hcMaxHubs, $hcMaxHubs); ?></tr>
 							<tr><?php line_form("Minimal Limiter (KB/s)", 2, hcMinLimiter, $hcMinLimiter); ?></tr>
-							<tr><?php line_form("Slot Ratio", 4, hcSlotRatio, $hcSlotRatio); ?></tr>					
+							<tr><?php line_form("Slot Ratio", 4, hcSlotRatio, $hcSlotRatio); ?></tr>
+							<tr>
+								<td></td>
+								<td> &nbsp; </td>
+							</tr>							
 							<tr>
 								<td></td>
 								<td align="right"><input type="submit" value="Update" class="button"></td>
