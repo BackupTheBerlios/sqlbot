@@ -34,6 +34,8 @@ public:
 	
      	/** Fill Kick Ban Message */
      	CString KickBanMsgs( eKickBanTypes kickBanType, UserInfo * info, CClientRule * rule );
+     	/** Redirect the user */
+     	bool Redirect( eKickBanTypes kickBanType, UserInfo * info, CClientRule * rule );
      	/** Kick the user from hub*/
      	bool Kick( eKickBanTypes kickBanType, UserInfo * info, CClientRule * rule );
      	/** Ban the user on the hub, will work out if LBan or SBan*/

@@ -225,6 +225,43 @@ CString HubInterface::KickBanMsgs( eKickBanTypes kickBanType, UserInfo * info, C
      	return(message);
 }
 
+/** Redirect the user */
+bool HubInterface::Redirect( eKickBanTypes kickBanType, UserInfo * info, CClientRule * rule )
+{
+	if (!info)
+		return(FALSE);
+
+     	UserInfo * botInfo = dcclient->GetNickInfo(dcclient->GetBotNick());
+
+     	CString message = KickBanMsgs(kickBanType,info,rule);
+
+     	if ( botInfo->GetIsAdmin() )
+     	{
+               // Show this kick based on verbosity setting
+//               if(dcclient->GetHubConfig()->GetHubVerboseKick() & kickBanType)
+//               {
+//                    dcclient->SendChat(dcclient->GetBotNick(), " Kicking " + info->GetNick() + " because: " + message);
+//               }
+               
+	       // never send a empty redirect message
+	       if ( message == "" )
+	       		message = " ";
+               //Send the redirect
+	       dcclient->SendOpForceMove(info->GetNick(),rule->m_sRedirectHost,message);
+     }
+     else
+     {
+          dcclient->GetLogger()->WriteSysLog(hubConfig->GetHubName()+ "  WARNING: Require Operator/Admin in this hub.");
+          dcclient->SendConsole("WARNING",dcclient->GetBotNick(),"Need Operator/Admin in this Hub.");
+          return(FALSE);
+          
+     }
+     dcclient->GetLogger()->WriteSysLog(hubConfig->GetHubName() + info->GetNick()  + message); 
+     dcclient->SendConsole("REDIRECTED",info->GetNick(),message);
+     return(TRUE);
+
+}
+
 /** */
 bool HubInterface::Kick( eKickBanTypes kickBanType, UserInfo * info, CClientRule * rule )
 {

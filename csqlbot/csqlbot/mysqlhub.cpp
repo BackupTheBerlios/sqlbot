@@ -141,7 +141,8 @@ void MySqlHub::LoadHubConfig(){
 			i++; // hubID
 			cr->m_sName                      = row[i++];
 			cr->m_eClientVersion             = eUserClientVersion(CString(row[i++]).asINT());
-			cr->m_bAllow                     = CString(row[i++]).asINT();
+			cr->m_nClientCommand             = CString(row[i++]).asINT();
+			cr->m_nRuleCommand               = CString(row[i++]).asINT();
 			cr->m_eMinUserSpeed              = eUserSpeed(CString(row[i++]).asINT());
 			cr->m_eMaxUserSpeed              = eUserSpeed(CString(row[i++]).asINT());
 			cr->m_nMinShared                 = CString(row[i++]).asULL();
@@ -161,6 +162,7 @@ void MySqlHub::LoadHubConfig(){
 			cr->m_nSlotHubRatio              = CString(row[i++]).asDOUBLE();
 			cr->m_bMotd                      = CString(row[i++]).asINT();
 			cr->m_sMotd                      = row[i++];
+			cr->m_sRedirectHost              = row[i++];
 			
 			if ( cr->m_sName == "DEFAULT" )
 			{

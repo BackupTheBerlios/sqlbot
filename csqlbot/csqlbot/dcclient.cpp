@@ -921,63 +921,66 @@ bool DCClient::ClientCheck(UserInfo *info,CString nick)
 /** Check the client tag */
 bool DCClient::ClientCheck( UserInfo *info, CClientRule * rule )
 {
+	bool rulecmd = FALSE;
+	eKickBanTypes kickBanTypes;
+
 	// first we send client motd
 	if ( rule->m_bMotd && (rule->m_sMotd != "") )
 	{
 		SendPrivateMessage( GetNick(), info->GetNick(), rule->m_sMotd );
 	}
 	
-	// check if the client allowed
-	if ( rule->m_bAllow == FALSE )
+	// check for command
+	switch(rule->m_nClientCommand)
 	{
-		interface->Kick(ehikb_None,info,rule);
+		case 1:
+			interface->Kick(ehikb_None,info,rule);
 
-		return FALSE;
-	}
+			return FALSE;
+		
+		case 2:
+			interface->Redirect(ehikb_None,info,rule);
+
+			return FALSE;
+
+		default:
+			break;	
+	}			
 
      	// Check min speed
      	if ( hubConfig->ConvertSpeed(info->GetSpeed()) < rule->m_eMinUserSpeed )
      	{
-          	interface->Kick(ehikb_MinConnection,info,rule);
-
-          	return(FALSE);     
+		rulecmd = TRUE;
+		kickBanTypes = ehikb_MinConnection;
      	}
-
 	// Check min share
-     	if ( info->GetShare() < rule->m_nMinShared )
+     	else if ( info->GetShare() < rule->m_nMinShared )
      	{
-          	//Kick Share is too small
-          	interface->Kick(ehikb_Share,info,rule);
-          
-          	return(FALSE);
+		rulecmd = TRUE;
+		kickBanTypes = ehikb_Share;
      	}
 
 	// TODO: Check max share
 
      	// Check Min Slots
-     	if ( info->GetSlots() < rule->m_nMinSlots )
+     	else if ( info->GetSlots() < rule->m_nMinSlots )
      	{
-           	interface->Kick(ehikb_MnSlots,info,rule);
-                                        
-           	return(FALSE);
+		rulecmd = TRUE;
+		kickBanTypes = ehikb_MnSlots;
      	}
-	
      	// Check Max Slots
-     	if ( (rule->m_nMaxSlots > 0) &&
-	     (info->GetSlots() > rule->m_nMaxSlots) )
+	else if ( (rule->m_nMaxSlots > 0) &&
+	          (info->GetSlots() > rule->m_nMaxSlots) )
      	{
-		interface->Kick(ehikb_MxSlots,info,rule);
-
-           	return(FALSE);
+		rulecmd = TRUE;
+		kickBanTypes = ehikb_MxSlots;
      	}
-
      	// Check max hubs
-     	if ( (rule->m_nMaxHubs > 0) && 
+     	else if ( (rule->m_nMaxHubs > 0) && 
 	     (info->GetHubs() > rule->m_nMaxHubs) )
      	{
-          	interface->Kick(ehikb_MxHubs,info,rule);
-		
-         	return(FALSE);
+		rulecmd = TRUE;
+		kickBanTypes = ehikb_MxHubs;
      	}
      	else
      	{
@@ -993,7 +996,7 @@ bool DCClient::ClientCheck( UserInfo *info, CClientRule * rule )
 
      	/* For Hacked DC++ tags, version 0.24 and above have tags x/y/z,
            clients claiming to be newer than this without x/y/z have been hacked at some point. ASTA LA VISTA BABY*/
-     	if ( info->UserClientVersion() == eucvDCPP )
+     	if ( !rulecmd && (info->UserClientVersion() == eucvDCPP) )
      	{
           	CString minHackedTag = "0.24";
 		
@@ -1004,9 +1007,8 @@ bool DCClient::ClientCheck( UserInfo *info, CClientRule * rule )
                    	(info->GetUiHubsNorm() == 0) &&
                    	(info->GetUiHubsOp() == 0))
                		{
-                    		interface->Kick(ehikb_HackedTag,info,rule);
-				
-                    		return(FALSE);
+				rulecmd = TRUE;
+				kickBanTypes = ehikb_HackedTag;
                		}
           	}
      	}
@@ -1014,13 +1016,32 @@ bool DCClient::ClientCheck( UserInfo *info, CClientRule * rule )
      	// Check slot Ratio
      	double userSlotRatio = ((double)info->GetSlots()/(double)info->GetHubs());
 	
-     	if ( userSlotRatio < rule->m_nSlotHubRatio )
+     	if ( !rulecmd && (userSlotRatio < rule->m_nSlotHubRatio) )
      	{
-          	interface->Kick(ehikb_SlotRatio,info,rule);
-		
-          	return(FALSE);
+		rulecmd = TRUE;
+		kickBanTypes = ehikb_SlotRatio;
      	}
-	
+
+	if ( rulecmd )
+	{
+		// check for command
+		switch(rule->m_nClientCommand)
+		{
+			case 1:
+				interface->Kick(kickBanTypes,info,rule);
+
+				return FALSE;
+		
+			case 2:
+				interface->Redirect(kickBanTypes,info,rule);
+
+				return FALSE;
+
+			default:
+				break;	
+		}
+	}
+
 	return TRUE;
 }
 

@@ -41,7 +41,9 @@ public:
 	/** */
 	eUserClientVersion m_eClientVersion;
 	/** */
-	bool m_bAllow;
+	int m_nClientCommand;
+	/** */
+	int m_nRuleCommand;
 
 	/** */
 	eUserSpeed m_eMinUserSpeed;
@@ -80,6 +82,9 @@ public:
 	bool m_bMotd;
 	/** */
 	CString m_sMotd;
+	
+	/** */
+	CString m_sRedirectHost;
 };
 
 class MySqlHub {
