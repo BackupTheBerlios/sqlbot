@@ -138,7 +138,7 @@ void BotController::JoinHub(CString hubid,CString host)
      // disable send myinfo
      dcclient->SetSendMyinfo(FALSE);
      // disable transfer
-     dcclient->HandleTransfer(FALSE);
+     dcclient->SetHandleTransfer(FALSE);
      hubList.Add(hubid, (CObject*&)dcclient);
      CConnectionManager::Instance()->Connect(host,host,dcclient);
 }
