@@ -46,7 +46,7 @@ UserInfo::UserInfo(int hubID,MySqlCon * mySql,CString nick){
      uiIsAway = euiiaOnline;
      uiLastSeenTime = timeHand.getDate() + timeHand.getTime();   // Raw time now
      uiShare = 0;
-     uiClient = "Unknown";
+     uiClient = "NOTAG";
      uiTag = "Not known";
      uiDescription = "Not Set";
      uiHubs = 0;
