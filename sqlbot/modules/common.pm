@@ -45,7 +45,7 @@ sub msgAll() {
 sub version()
 {
 	&msgAll("Im running version $botVersion of sqlBot");
-	&msgAll("     Available from http://nutter.kicks-ass.net:35600 & http://axljab.homelinux.org:8080");
+	&msgAll("     Available from http://sqlbot.berlios.de");
 	&debug("$user - Version sent");
 }
 sub getConnection(){
