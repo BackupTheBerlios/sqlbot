@@ -19,12 +19,12 @@ sub splitDescription() {
 
 	#Initialise globals
 	$type=0; $ip=""; ;$GigsShared="";
-	$tmpdata=""; $fullDescription="Not Set"; $dcClient="";$UploadLimit="";
+	$tmpdata=""; $fullDescription="Not Set"; $dcClient="";
 	$dcVersion=""; $NbHubs=0; $NSlots=0; $slt_ratio=""; $country="";
 	$UploadLimit=0; $conn=""; $connection=""; $email="";$tmpModeAP="";
 	$connectionMode="unknown";$tmp0="";$shareBytes=0;
 	my($tmpdata)="";my($verdata)="";my($tmpModeAP)="";
-	@tmp0 = ("","");@tmp1 = ("","");@tmp2 = ("","");@tmp3 = ("","");@tmp4 = ("","");
+	@tmp0 = ("","");@tmp1 = ("","");@tmp2 = (0,0);@tmp3 = (0,0);@tmp4 = (0,0);
 	my(@verdata2)=("","");my(@tmpdata2)=("","","","","");
 	
 	$type = odch::get_type($user);
@@ -49,7 +49,7 @@ sub splitDescription() {
 	else {$utype = "User";}
 
 	$tmpdata = odch::get_description($user);
-	if($tmpdata eq "") {return 1;}
+#	if($tmpdata eq "") {return 1;}
 	
 	$tmpdata =~ s/'//g;
 	$fullDescription = "$tmpdata";
@@ -230,6 +230,13 @@ sub parseClient(){
 				{if ($ref->{'slot_ratio'} > $slt_ratio)
 					{$REASON = "SlotRatio";
 					$ACTION = "Kicked";}}
+			## SPEED LIMIT ## 
+			if ( $UploadLimit > 0 ) 
+				{if ($ref->{'min_limit'} ne 0 )
+					{if  ($UploadLimit < ($ref->{'min_limit'})) 
+						{#$REASON = "Speed Limit";
+						#$ACTION = "Kicked";
+					}}}
 			## MAX HUBS ##
 			if ($ref->{'max_hubs'} ne 0 )
 				{if ($ref->{'max_hubs'} < $NbHubs)

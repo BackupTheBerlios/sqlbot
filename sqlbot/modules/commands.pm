@@ -101,6 +101,7 @@ sub buildRules {
 		my($minShare) = $ref->{'min_share'};
 		my($minVersion) = $ref->{'min_version'};
 		my($minSlots) = $ref->{'min_slots'};
+		my($minLimit) = $ref->{'min_limit'};
 		my($maxSlots) = $ref->{'max_slots'};
 		my($slotRatio) = $ref->{'slot_ratio'};
 		my($maxHubs) = $ref->{'max_hubs'};
@@ -117,6 +118,7 @@ sub buildRules {
 if ($minSlots ne 0){$rules .= "- You must NOT have less than $minSlots slots available.\n\r";}
 else	{my($minslots) = &getConnectionSlots($uconn,1);
 	$rules .= "- Minimum Required slots are currently based on connection, For your connection($uconnection) you need at least $minslots Slots\n\r";}
+if ($minlimit ne 0){$rules .= "- The minimum Speed Limit for this hub is $minLimit KB/s\n\r";}
 if ($maxSlots ne 0){$rules .= "- You must NOT have more than $maxSlots slots available.\n\r";}
 else	{my($maxslots) = &getConnectionSlots($uconn,2);
 	$rules .= "- Maximum Required slots are currently based on connection, For your connection($uconnection) you can have a Maximum of $maxslots Slots\n\r";}
