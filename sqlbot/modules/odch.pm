@@ -286,7 +286,7 @@ sub data_arrival(){
 				else 
 					{@msg = split(/\"/, $pm);
 					$msg = $msg[1];$msg =~ s/^(")//;$msg =~ s/(")$//;
-					&msgUser("$param2","$msg");}}
+					&msgUser("$param2","PM from $user>>   $msg");}}
 			elsif ($param1 =~ /^[\!+-]say/i)
 				{if($param2 eq "")
 					{&msgUser("$user","usage: +say \"Message\"");}
