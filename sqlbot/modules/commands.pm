@@ -21,8 +21,7 @@ sub showFakers()
 	$sth->execute();
 	$log = "";
 	while (my $ref = $sth->fetchrow_hashref()) 
-	{
-		$log .= "$ref->{'date'}($ref->{'time'}) $ref->{'name'} - $ref->{'ip'} $ref->{'country'} $ref->{'shared_bytes'} \r"; 
+		{$log .= "$ref->{'date'}($ref->{'time'}) $ref->{'name'} - $ref->{'ip'} $ref->{'country'} $ref->{'shared_bytes'} \r"; 
 	}
 	$sth->finish();
 	&msgAll("Fakers detected are\n\r $log");
@@ -34,17 +33,11 @@ sub showFakers()
 sub myInfo()
 {
 	my($user)=@_;
-	my($type) = odch::get_type($user);
-	if($type eq 32 or $type eq 16 or $type eq 8)
-		{$QUERY_LOGON = "LogOn";}
-	else
-		{$QUERY_LOGON = "Connect";}
 
 	my($totalconnect) = $dbh->selectrow_array("SELECT total_logins FROM user_stats where name = '$user'");
 	my($average_gigs) = $dbh->selectrow_array("SELECT average_shared_gigs FROM user_stats where name = '$user'");
 	my($first_login_date) = $dbh->selectrow_array("SELECT first_date FROM user_stats where name = '$user'");
 	my($first_login_time) = $dbh->selectrow_array("SELECT first_time FROM user_stats where name = '$user'");
-
 
 	my $sth = $dbh->prepare("SELECT * FROM online where name = '$user'");
 	$sth->execute();
@@ -75,8 +68,7 @@ sub seen()
 	my($match) = 0;
 	my($user_count) = $dbh->selectrow_array("SELECT COUNT(*) FROM user_stats where name like '%$2%'");
 	if ($user_count ne 1)	
-	{
-		my $sth = $dbh->prepare("SELECT * FROM user_stats where name like '%$2%'");
+		{my($sth) = $dbh->prepare("SELECT * FROM user_stats where name like '%$2%'");
 		$sth->execute();
 		while(my $ref = $sth->fetchrow_hashref()){
 			my($last_date) = $ref->{'last_date'};
@@ -92,8 +84,8 @@ sub seen()
 		$sth->finish();
 		$seenresult .= "Matches found for $2: $match\n\r";
 	}
-	else{
-		my($user_online) = $dbh->selectrow_array("SELECT COUNT(*) FROM online where name like '$2'");
+	else
+		{my($user_online) = $dbh->selectrow_array("SELECT COUNT(*) FROM online where name like '$2'");
 		if (($user_online) ne 1)
 				{$seenresult .= "No Matches found for $2\r";}
 			else
@@ -109,8 +101,8 @@ sub buildRules {
 	&parseClient($user);
 	$rules = "";
 	
-	if (&getClientExists($dcClient)) {
-		my $sth = $dbh->prepare("SELECT * FROM client_rules WHERE client='$dcClient'");
+	if (&getClientExists($dcClient)) 
+		{my ($sth) = $dbh->prepare("SELECT * FROM client_rules WHERE client='$dcClient'");
 		$sth->execute();
 		my $ref = $sth->fetchrow_hashref();
 		my($minShare) = $ref->{'min_share'};
@@ -142,17 +134,12 @@ $rules .= "- You may connect to a maximum of $maxHubs hubs. \r
 		
 	}
 	else 
-	{	
-		if ((lc($dcClientname) eq lc(""))  )
-		{
-			if (&getConfigOption("kick_notags")) 
-			{
-			$rules = "$user.. Your client is NOT displaying a Tag, and Clients NOT displaying TAGS will be Auto-kicked. Sort it out !";
-			&debug("$user - Rules noTag Warning");
-			}
+		{if ((lc($dcClientname) eq lc(""))  )
+			{if (&getConfigOption("kick_notags")) 
+				{$rules = "$user.. Your client is NOT displaying a Tag, and Clients NOT displaying TAGS will be Auto-kicked. Sort it out !";
+				&debug("$user - Rules noTag Warning");}
 			else
-			{
-				my $sth = $dbh->prepare("SELECT * FROM client_rules WHERE client='++'");
+				{my ($sth) = $dbh->prepare("SELECT * FROM client_rules WHERE client='++'");
 				$sth->execute();
 				my $ref = $sth->fetchrow_hashref();
 				my($minshare) = $ref->{'min_share'};
