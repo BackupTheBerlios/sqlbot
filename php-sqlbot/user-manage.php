@@ -53,7 +53,7 @@ mysql_close();
 	<th><form action="<?php  echo "user-manage.php" ?>" method="post">
 	<input type="Submit" value="Reset Filters"></form></th>
 	<th><form action="<?php  echo "user-manage.php?f=delete&field=$field&search=$search" ?>" method="post">
-	<input type="Submit" value="Delete ALL" onClick="return confirmDelete()"></form></th>
+	<input type="Submit" value="Delete ALL" onClick="return confirmDelete()" title="Delete all in selection"></form></th>
 	
 	<th><form action="<?php  echo "user-manage.php?f=parselog" ?>" method="post">
 	<input type="Submit" value="Delete Single Entries" onClick="return confirmLogParse()"></form>
