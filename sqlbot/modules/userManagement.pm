@@ -114,7 +114,7 @@ sub userOffline(){
 	$dbh->do("UPDATE userDB SET 	status='Offline',
 					onlineTime='$totOnlineTime',
 					outTime='$outTime'
-					WHERE nick='$sqluser' AND allowStatus!='Banned'");
+					WHERE (nick='$sqluser' OR IP='$ip') ");
 }
 
 sub userOnline(){
@@ -124,7 +124,7 @@ sub userOnline(){
 	my($sqluser) = &sqlConvertNick($user);
 	$dbh->do("UPDATE userDB SET status='$online',
 					inTime='$date $time'
-					WHERE nick='$sqluser' AND allowStatus!='Banned'");
+					WHERE (nick='$sqluser' OR IP='$ip')");
 }
 
 
@@ -217,7 +217,7 @@ sub chPassUser(){
 	else
 	{	
 		my($value) = $dbh->do("SELECT passwd FROM userDB 
-					WHERE nick='$sqluser' AND passwd='$oldPass'");
+					WHERE nick='$sqluser' AND (passwd='$oldPass' OR passwd='not set')");
 		if($value eq 1)
 			{# Remove this user from reg list
 			my($type)  = odch::get_type($user);
