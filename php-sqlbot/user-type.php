@@ -17,7 +17,7 @@ $numresults=mysql_query("SELECT * FROM userDB $where");
 $numrows=mysql_num_rows($numresults);
 if (empty($offset)) {$offset=0;}
 if (!empty($numrows)){
-$result=mysql_query("SELECT * FROM userDB $where ORDER by loginCount DESC LIMIT $offset,$defaultLogEntries");
+$result=mysql_query("SELECT * FROM userDB $where ORDER by inTime DESC LIMIT $offset,$defaultLogEntries");
 }
 mysql_close();
 if (!empty($numrows)){
@@ -115,7 +115,7 @@ if (!empty($numrows)){
 <tr><td><? echo "$font";?>Total Lines Spoken:<? echo "$fontend";?></td><td nowrap><? echo "$font$totalMessages lines$fontend"; ?></td></tr>
 <tr><td><? echo "$font";?>Last Login:<? echo "$fontend";?></td><td nowrap><? echo "$font$inTime$fontend"; ?></td></tr>
 <tr><td><? echo "$font";?>First Login:<? echo "$fontend";?></td><td nowrap><? echo "$font$firstLogin$fontend"; ?></td></tr>
-<tr><td><? echo "$font";?>Total time on hub:<? echo "$fontend";?></td><td nowrap><? echo "$font$totalOnline$fontend"; ?></td></tr>
+<!--<tr><td><? echo "$font";?>Total time on hub:<? echo "$fontend";?></td><td nowrap><? echo "$font$totalOnline$fontend"; ?></td></tr>-->
 </table>
 </td>
 </tr>
