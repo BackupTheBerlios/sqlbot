@@ -39,7 +39,7 @@ mysql_close();
 	<input type="Submit" value="Online"></form></th>
 	<th><form action="<? echo "user-manage.php?field=lastAction&search=Kicked" ?>" method="post">
 	<input type="Submit" value="Kicked"></form></th>
-	<th><form action="<? echo "user-manage.php?field=lastReason&search=Faker" ?>" method="post">
+	<th><form action="<? echo "user-manage.php?field=lastReason&search=Fake" ?>" method="post">
 	<input type="Submit" value="Faker"></form></th>
 	<th><form action="<? echo "user-manage.php?field=allowStatus&search=Banned" ?>" method="post">
 	<input type="Submit" value="Banned"></form></th>

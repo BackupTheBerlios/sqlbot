@@ -46,18 +46,13 @@ sub processEvent(){
 	$nuked = "Nuked";
 	$notags = "NoTags";
 		
-	if (lc($REASON) eq lc("Faker"))
-		{&msgUser("$user","Do Not Fake your Client or your Share... Your IP has been [Banned]");}
-	elsif (lc($REASON) eq lc("MLDonkey"))
-		{&msgUser("$user","No MLDonkey... Your IP has been [Banned]");}
-	
-	if (lc($ACTION) eq lc($banned))
+	if (lc($REASON) eq lc("Fake(Share)"))
+		{&banUser($user,"Fake(Share)",$ip,"pban");}
+	elsif (lc($ACTION) eq lc($banned))
 		{&banUser($user,$REASON,$ip,"tban");}
-
 	elsif (lc($ACTION) eq lc($kicked)){
 		if (&getConfigOption("client_check")){
 			&kickUser($user,$REASON);}}
-
 	elsif (lc($ACTION) eq lc($nuked)){
 		&banUser($user,$REASON,$ip,"pban");}
 }
@@ -67,22 +62,18 @@ sub botWorker(){
 	my($WKicks) = $dbh->selectrow_array("SELECT COUNT(*) FROM botWorker WHERE function LIKE '1%'");
 	if($WKicks ne 0)
 		{&kickWorker();}
-
 	#Check for pban Events
 	my($WBans) = $dbh->selectrow_array("SELECT COUNT(*) FROM botWorker WHERE function LIKE '2%'"); # Or 22 or 23
 	if($WBans ne 0)
 		{&banWorker();}
-
 	#Check for User List events
 	my($WUsers) = $dbh->selectrow_array("SELECT COUNT(*) FROM botWorker WHERE function LIKE '3%'"); # Or 31 or 32 or 33
 	if($WUsers ne 0)
 		{&userWorker();}
-
 	#Check for User List events # 40 - add  41 - Delete  42 - Allow Status
 	my($WIpFilter) = $dbh->selectrow_array("SELECT COUNT(*) FROM botWorker WHERE function LIKE '4%'"); # Or 40 or 41
 	if($WIpFilter ne 0)
 		{&ipFilterWorker();}
-	
 }
 
 sub ipFilterWorker(){

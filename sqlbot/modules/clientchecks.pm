@@ -163,7 +163,7 @@ sub parseClient(){
 	
 	## CHECK FAKERS ##
 	if($shareBytes =~ /(\d)\1{5,}/) 
-		{$REASON = "Faker";
+		{$REASON = "Fake(Share)";
 		$ACTION = "Nuked";
 		if ((&getClientExists($dcClient)) && ($dcVersion ne "")){}
 		else{	$dcClient = "";

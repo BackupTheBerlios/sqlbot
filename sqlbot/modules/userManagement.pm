@@ -124,21 +124,6 @@ sub userOnline(){
 					WHERE (nick='$user' OR IP='$ip') AND allowStatus!='Banned'");
 }
 
-sub addToFakers(){
-	my($user) = @_;
-	my($atfth) = $dbh->prepare("SELECT pBanCount FROM userDB WHERE nick='$user' AND allowStatus!='Banned'");
-	$atfth->execute();
-	my($ref) = $atfth->fetchrow_hashref();
-
-	my($pBanCount) = "$ref->{'pBanCount'}";
-	$atfth->finish();
-	$pBanCount++;
-	$dbh->do("UPDATE userDB SET allowStatus='Banned', 
-					pBanCount='$pBanCount', 
-					lastAction='Nuked', 
-					lastReason='Faker' 
-					WHERE (nick='$user' OR IP='$ip') AND allowStatus!='Banned'");
-}
 
 # User has spoken increment line count
 ###
