@@ -100,6 +100,7 @@ int DCClient::DC_CallBack( CObject * Object )
                     chatFloodCounter = 0;
                     MySql->Update(dcHubId,"hubConfig","hcStatus='Offline'","");
                     SendConsole("Disconnected",hubConfig->GetHubHost());
+                    delete(this);
                }
                break;
           }
@@ -592,9 +593,10 @@ void DCClient::PrivateChat( CMessagePrivateChat * MessageChat)
                Nick = info->GetNick();
 
 	       if (Nick != MessageChat->m_sSrcNick &&
-	       		Nick != GetBotNick())
+               Nick != GetBotNick() &&
+               info->GetUserLevel() != euiBot)
                {
-		    SendPrivateMessage( GetBotNick(), Nick.Data(),opMsg);
+                    SendPrivateMessage( GetBotNick(), Nick.Data(),opMsg);
                }
           }
      }
