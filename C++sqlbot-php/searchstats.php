@@ -116,7 +116,8 @@ while ($data=mysql_fetch_array($searchType))
 {
 	$lsType=mysql_result($searchType,$i,"lsType");
 	$COUNT=mysql_result($searchType,$i,"COUNT(lsType)");
-	$percentage = round(((100 / $total_search) * $COUNT), 2);
+	if ($COUNT > "0") {	$percentage = round(((100 / $total_search) * $COUNT), 2); }
+	else {$percentage = 0; }
 	
 // DEFINE SEARCH TYPES
 if ($lsType == "0") {$Type = "";}
@@ -131,14 +132,14 @@ else if ($lsType == "8") {$Type = "Folder";}
 
 $percentage_width = ($percentage * 2);
 
-if ($percentage > "1") { $percentage_pic = "<img src=\"conf/image.php?c=b&w=${percentage_width}\">"; }
+if ($percentage > "1") { $percentage_pic = "<img src=\"conf/image.php?w=${percentage_width}\" alt=\"\">"; }
 else { $percentage_pic = ""; }
 
 echo "<tr>
 			<td>$Type</td>
 			<td>$COUNT</td>
 			<td class=\"stats\">$percentage_pic $percentage%</td>
-		<tr>";
+		</tr>";
 $i++;
 }
 ?>
