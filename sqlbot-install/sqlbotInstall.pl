@@ -237,8 +237,10 @@ eval { $dbh->do("CREATE TABLE records (	rowID INT(7) NOT NULL AUTO_INCREMENT PRI
 					date DATE,
 					time TIME)");
 					print "Created table \"records\"\n";
+
 $dbh->do("INSERT INTO records VALUES ('','share','0','','')"); print "	data \"share\" inserted\n";
 $dbh->do("INSERT INTO records VALUES ('','users','0','','')"); print "	data \"users\" inserted\n";
+	}; print "CREATE \"log_config\" failed: $@\n" if $@;
 
 eval { $dbh->do("CREATE TABLE log_config (rowID INT(3) NOT NULL AUTO_INCREMENT PRIMARY KEY,
 					rule VARCHAR(20),
@@ -286,6 +288,7 @@ $dbh->do("INSERT INTO log_config VALUES (	'',
 						'Log OP(-Admin)s and RegUsers disconnects')");
 						print "	data \"log_logoffs\" inserted\n";		
 				}; print "CREATE \"log_config\" failed: $@\n" if $@;
+
 eval { $dbh->do("CREATE TABLE hub_variables (rowID INT(3) NOT NULL AUTO_INCREMENT PRIMARY KEY,
 					rule VARCHAR(20),
 					value VARCHAR(40),
@@ -399,6 +402,7 @@ $dbh->do("INSERT INTO connection_slots VALUES (	'',
 						'LAN(T3)')");
 						print "	data \"connection LAN(T3)\" inserted\n";
 		}; print "CREATE \"connection_slots\" failed: $@\n" if $@;
+
 eval { $dbh->do("CREATE TABLE hub_rules (rowID INT(3) NOT NULL AUTO_INCREMENT PRIMARY KEY,
 					rule VARCHAR(100))");
 					print "Created table \"hub_rules\"\n";
