@@ -38,27 +38,22 @@ sub main (){
 sub deleteTables(){
 	$dbh = DBI->connect("DBI:mysql:$sqldbname:$sql_server","$sql_username","$sql_password",{ RaiseError => 1, AutoCommit => 0 });
 	$dbh->do("SET OPTION SQL_BIG_TABLES = 1");
-	print "This function is not yet implemented. Please manually delete the tables if the update requires it\nThen run this script to rebuild tables with default values.";
-# Delete these
-#hub_variables
-#log_config
-#user_stats
-#records
-#verbosity
-#hub_config
-##fakers
-#client_rules
-#log
-#online
-#hub_rules
-#connection_slots
 
+eval { $dbh->do("DROP TABLE fakers");
+			}; print "DROP \"fakers\" failed: $@\n" if $@;
+eval { $dbh->do("DROP TABLE log");
+			}; print "DROP \"log\" failed: $@\n" if $@;
+eval { $dbh->do("DROP TABLE online");
+			}; print "DROP \"online\" failed: $@\n" if $@;
+eval { $dbh->do("DROP TABLE user_stats");
+			}; print "DROP \"user_stats\" failed: $@\n" if $@;
+eval { $dbh->do("DROP TABLE userDB");
+			}; print "DROP \"userDB\" failed: $@\n" if $@;
+eval { $dbh->do("DROP TABLE hubLog");
+			}; print "DROP \"userDB\" failed: $@\n" if $@;
 	# Disconnect from the database.
          $dbh->disconnect();
 }
-
-
-
 
 sub installTables {
 	print "Trying to log into the MySQL database \"$sqldbname\" on server \"$sql_server\" using the
@@ -66,42 +61,65 @@ login name and password you gave in this script.\n\n";
 	$dbh = DBI->connect("DBI:mysql:$sqldbname:$sql_server","$sql_username","$sql_password",{ RaiseError => 1, AutoCommit => 0 });
 	$dbh->do("SET OPTION SQL_BIG_TABLES = 1");
 
-eval { $dbh->do("CREATE TABLE online (	rowID INT(7) NOT NULL AUTO_INCREMENT PRIMARY KEY, 
-					date DATE NOT NULL, 
-					time TIME NOT NULL, 
-					name VARCHAR(40) NOT NULL, 
-					user_type VARCHAR(10), 
-					ip VARCHAR(15) NOT NULL, 
-					country VARCHAR(2), 
-					client VARCHAR(10), 
-					client_version VARCHAR(20),
-					fulldescription VARCHAR(75), 
-					connection VARCHAR(20), 
-					connection_mode VARCHAR(7), 
-					connected_hubs tinyint(4) UNSIGNED, 
-					upload_slots tinyint(4) UNSIGNED, 
-					shared_bytes bigint(20) UNSIGNED NOT NULL, 
-					shared_gigs VARCHAR(5) , 
-					email VARCHAR(40))");
-					print "Created table \"online\"\n"
-				}; print "CREATE \"online\" failed: $@\n" if $@;
-eval { $dbh->do("CREATE TABLE log (	rowID INT(7) NOT NULL AUTO_INCREMENT PRIMARY KEY, 
-					date DATE NOT NULL, 
-					time TIME NOT NULL, 
-					action VARCHAR(10) NOT NULL, 
-					reason VARCHAR(10), 
-					name VARCHAR(40) NOT NULL, 
-					ip VARCHAR(15) NOT NULL, 
-					country VARCHAR(10), 
-					client VARCHAR(10), 
-					client_version VARCHAR(20),
-					fulldescription VARCHAR(75),  
-					connection VARCHAR(20), 
-					connected_hubs tinyint(4) UNSIGNED, 
-					upload_slots tinyint(4) UNSIGNED, 
-					shared_gigs VARCHAR(5))");
-					print "Created table \"log\"\n"
-				}; print "CREATE \"log\" failed: $@\n" if $@;
+eval { $dbh->do("CREATE TABLE hubLog (	rowID 		INT(7) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+					nick		VARCHAR(30),
+					logTime		DATETIME,
+					action		VARCHAR(20),
+					reason		VARCHAR(20)
+					)");
+					print "Created table \"hubLog\"\n";
+			}; print "CREATE \"hubLog\" failed: $@\n" if $@;
+
+
+eval { $dbh->do("CREATE TABLE userDB (	rowID 		INT(7) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+					nick		VARCHAR(30),
+					passwd		VARCHAR(15),
+					status		VARCHAR(10),
+					utype		VARCHAR(10),
+					type		INT(5),
+					allowStatus	VARCHAR(8),
+					awayStatus	VARCHAR(8),
+					awayMsg		VARCHAR(40),
+					fullDescription	VARCHAR(100),
+					dcClient	VARCHAR(10),
+					dcVersion	VARCHAR(25),
+					slots		INT(5) UNSIGNED,
+					hubs		INT(5) UNSIGNED,
+					limiter		INT(5) UNSIGNED,
+					connection	VARCHAR(8),
+					connectionMode	VARCHAR(8),
+					country		VARCHAR(3),
+					IP		VARCHAR(15),
+					hostname	VARCHAR(50),
+					firstTime	DATETIME,
+					outTime		DATETIME,
+					inTime		DATETIME,
+					onlineTime	DATETIME,
+					loginCount	INT(10) UNSIGNED,
+					kickCount	INT(10) UNSIGNED,
+					kickCountTot    INT(10) UNSIGNED,
+					tBanCount	INT(10) UNSIGNED,
+					tBanCountTot	INT(10) UNSIGNED,
+					pBanCount	INT(10) UNSIGNED,
+					pBanCountTot	INT(10) UNSIGNED,
+					lineCount	INT(20) UNSIGNED,
+					avShareBytes	BIGINT(20) UNSIGNED,
+					shareByte	BIGINT(20) UNSIGNED,
+					lastAction	VARCHAR(8),
+					lastReason	VARCHAR(12)
+					)");
+					print "Created table \"userDB\"\n";
+			}; print "CREATE \"userDB\" failed: $@\n" if $@;
+
+eval { $dbh->do("CREATE TABLE botWorker (	rowID 		TINYINT(7) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+					function	int(3),
+					nick		VARCHAR(30),
+					IP		VARCHAR(15),
+					information	VARCHAR(50)
+					)");
+					print "Created table \"botWorker\"\n"
+			}; print "CREATE \"botWorker\" failed: $@\n" if $@;
+
 eval { $dbh->do("CREATE TABLE client_rules (rowID INT(7) NOT NULL AUTO_INCREMENT PRIMARY KEY, 
 					client VARCHAR(10), 
 					min_version VARCHAR(10), 
@@ -114,22 +132,8 @@ eval { $dbh->do("CREATE TABLE client_rules (rowID INT(7) NOT NULL AUTO_INCREMENT
 					min_connection tinyint(1) UNSIGNED NOT NULL,
 					client_name VARCHAR(10) NOT NULL)");
 					print "Created table \"client_rules\"\n"
-				}; print "CREATE \"client_rules\" failed: $@\n" if $@;
-eval { $dbh->do("CREATE TABLE fakers (rowID INT(7) NOT NULL AUTO_INCREMENT PRIMARY KEY, 
-					date DATE NOT NULL, 
-					time TIME NOT NULL, 
-					name VARCHAR(40) NOT NULL, 
-					ip VARCHAR(15) NOT NULL, 
-					country VARCHAR(10), 
-					client VARCHAR(10), 
-					client_version VARCHAR(20),
-					fulldescription VARCHAR(75), 
-					connected_hubs tinyint(4) UNSIGNED,
-					upload_slots tinyint(4) UNSIGNED,
-					shared_bytes bigint(20)  UNSIGNED NOT NULL,
-					shared_gigs VARCHAR(5))");
-					print "Created table \"fakers\"\n"
-				}; print "CREATE \"fakers\" failed: $@\n" if $@;
+			}; print "CREATE \"client_rules\" failed: $@\n" if $@;
+
 eval { $dbh->do("CREATE TABLE hub_config (rowID INT(3) NOT NULL AUTO_INCREMENT PRIMARY KEY,
 					rule VARCHAR(20),
 					value VARCHAR(4),
@@ -227,12 +231,6 @@ $dbh->do("INSERT INTO verbosity VALUES (	'',
 						'Announce the bot on !reloadscripts')");
 						print "	data \"verbose_botjoin\" inserted\n";
 				}; print "CREATE \"verbosity\" failed: $@\n" if $@;
-eval { $dbh->do("CREATE TABLE kick (	rowID INT(7) NOT NULL AUTO_INCREMENT PRIMARY KEY,
-					user VARCHAR(20),
-					ip VARCHAR(15),
-					reason VARCHAR(40))");
-					print "Created table \"kick\"\n"
-				}; print "CREATE \"kick\" failed: $@\n" if $@;
 eval { $dbh->do("CREATE TABLE records (	rowID INT(7) NOT NULL AUTO_INCREMENT PRIMARY KEY,
 					recordName VARCHAR(20),
 					recordValue VARCHAR(10),
@@ -241,18 +239,7 @@ eval { $dbh->do("CREATE TABLE records (	rowID INT(7) NOT NULL AUTO_INCREMENT PRI
 					print "Created table \"records\"\n";
 $dbh->do("INSERT INTO records VALUES ('','share','0','','')"); print "	data \"share\" inserted\n";
 $dbh->do("INSERT INTO records VALUES ('','users','0','','')"); print "	data \"users\" inserted\n";
-				}; print "CREATE \"records\" failed: $@\n" if $@;
-eval { $dbh->do("CREATE TABLE user_stats (rowID INT(7) NOT NULL AUTO_INCREMENT PRIMARY KEY, 
-					first_date DATE NOT NULL, 
-					first_time TIME NOT NULL, 
-					name VARCHAR(40) NOT NULL, 
-					last_ip VARCHAR(15) NOT NULL, 
-					total_logins INT(10) NOT NULL, 
-					average_shared_gigs VARCHAR(5),
-					last_date DATE, 
-					last_time TIME)");
-					print "Created table \"user_stats\"\n";
-				}; print "CREATE \"user_stats\" failed: $@\n" if $@;
+
 eval { $dbh->do("CREATE TABLE log_config (rowID INT(3) NOT NULL AUTO_INCREMENT PRIMARY KEY,
 					rule VARCHAR(20),
 					value VARCHAR(20),
@@ -416,6 +403,7 @@ eval { $dbh->do("CREATE TABLE hub_rules (rowID INT(3) NOT NULL AUTO_INCREMENT PR
 					rule VARCHAR(100))");
 					print "Created table \"hub_rules\"\n";
 		}; print "CREATE \"hub_rules\" failed: $@\n" if $@;
+
 
 # Disconnect from the database.
          $dbh->disconnect();
