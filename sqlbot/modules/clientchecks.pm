@@ -23,7 +23,7 @@ sub splitDescription() {
 	$dcVersion=""; $NbHubs=0; $NSlots=0; $slt_ratio=""; $country="";
 	$UploadLimit=0; $conn=""; $connection=""; $email="";$tmpModeAP="";
 	$connectionMode="unknown";$tmp0="";$shareBytes=0;
-	@tmp0 = ("","");@tmp1 = ("","");@tmp2 = ("","");@tmp3 = ("","");
+	@tmp0 = ("","");@tmp1 = ("","");@tmp2 = ("","");@tmp3 = ("","");@tmp4 = ("","");
 	@tmp4 = ("","","");my($tmpdata)="";my($verdata)="";my($tmpModeAP)="";
 	my(@verdata2)=("","","","","","");my(@tmpdata2)=("","","","","","");
 	
