@@ -21,7 +21,7 @@ sub userIsOnline(){
 
 	my($sqluser) = &sqlConvertNick($user);
 	my($value) = $dbh->selectrow_array("SELECT COUNT(nick) FROM userDB 
-				WHERE (nick='$sqluser' OR IP='$ip') AND status='Online' AND allowStatus!='Banned'");
+				WHERE nick='$sqluser' AND status='Online' AND allowStatus!='Banned'");
 	if($value eq 1)
 	{return 1;}
 	return 0;
@@ -31,10 +31,10 @@ sub userInDB(){
 	my($user,$ip) = @_;
 	my($sqluser) = &sqlConvertNick($user);
 	my($value) = $dbh->selectrow_array("SELECT COUNT(nick) FROM userDB 
-					WHERE ((nick='$sqluser' OR IP='$ip') AND allowStatus!='Banned')");	
+					WHERE nick='$sqluser' AND allowStatus!='Banned'");	
 	if($value eq 1) 
 		{my($value1) = $dbh->selectrow_array("SELECT COUNT(nick) FROM userDB 
-				WHERE ((nick='$sqluser' OR IP='$ip') AND allowStatus='allow')");
+				WHERE nick='$sqluser' AND allowStatus='allow'");
 		if($value1 eq 1) 
 			{return 2;}
 		else 
@@ -61,7 +61,7 @@ sub updateUserRecordRecheck(){
 	$dbh->do("UPDATE userDB SET nick='$sqluser',slots='$NSlots',hubs='$NbHubs',
 			limiter='$UploadLimit',fullDescription='$fullDescription',
 			shareByte='$shareBytes',status='Online'
-			WHERE (nick='$sqluser' AND allowStatus!='Banned')");
+			WHERE nick='$sqluser' AND allowStatus!='Banned')");
 }
 
 # User record exists so update the details
@@ -71,7 +71,7 @@ sub updateUserRecord(){
 	my($inTime)="$date $time";
 	my($sqluser) = &sqlConvertNick($user);
 	my($uurth) = $dbh->prepare("SELECT loginCount FROM userDB 
-			WHERE ((nick='$sqluser' OR IP='$ip') AND allowStatus!='Banned')");
+			WHERE nick='$sqluser' AND allowStatus!='Banned'");
 	$uurth->execute();
 	my($ref) = $uurth->fetchrow_hashref();
 	my($loginCount) = "$ref->{'loginCount'}";
@@ -87,7 +87,7 @@ sub updateUserRecord(){
 					avShareBytes='$shareBytes',loginCount='$loginCount',
 					fullDescription='$fullDescription',shareByte='$shareBytes',
 					IP='$ip'
-					WHERE ((nick='$sqluser' OR IP='$ip') AND allowStatus!='Banned')");
+					WHERE nick='$sqluser' AND allowStatus!='Banned'");
 }
 
 # Check the allow status of this user
@@ -114,7 +114,7 @@ sub userOffline(){
 	$dbh->do("UPDATE userDB SET 	status='Offline',
 					onlineTime='$totOnlineTime',
 					outTime='$outTime'
-					WHERE (nick='$sqluser' OR IP='$ip') ");
+					WHERE nick='$sqluser'");
 }
 
 sub userOnline(){
@@ -124,7 +124,7 @@ sub userOnline(){
 	my($sqluser) = &sqlConvertNick($user);
 	$dbh->do("UPDATE userDB SET status='$online',
 					inTime='$date $time'
-					WHERE (nick='$sqluser' OR IP='$ip') AND allowStatus!='Banned'");
+					WHERE nick='$sqluser' AND allowStatus!='Banned'");
 }
 
 

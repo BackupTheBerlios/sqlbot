@@ -29,23 +29,27 @@ sub kicked_user()
 # Fires when a normal User has connected
 sub new_user_connected(){
 	my($user) = @_;
+	&splitDescription($user);
 	
-	&parseClient($user);
 	my($userInDB) = &userInDB($user,$ip);
+	
 	if($userInDB eq 1)
-		{&updateUserRecord($user);
+		{&parseClient($user);
+		&updateUserRecord($user);
 		&userConnect($user);	
 		&checkClones($user);
 		&processEvent($user);			
 	}
 	elsif($userInDB eq 0)
-		{&createNewUserRecord($user);
+		{&parseClient($user);
+		&createNewUserRecord($user);
 		&userConnect($user);	
 		&checkClones($user);
 		&processEvent($user);
 	}
 	elsif($userInDB eq 2)
-		{&updateUserRecord($user);}
+		{&updateUserRecord($user);
+		&debug("$user($ip) in DB = $userInDB");}
 	
 	&userOnline($user);
 }
@@ -54,17 +58,20 @@ sub new_user_connected(){
 sub reg_user_connected(){
 	my($user) = @_;
 	
-	&parseClient($user);
+	&splitDescription($user);
+
 	my($userInDB) = &userInDB($user,$ip);
 	if($userInDB eq 1)
-		{&updateUserRecord($user);
+		{&parseClient($user);
+		&updateUserRecord($user);
 		&userConnect($user);	
 		if (&getConfigOption("check_reg")) 
 		{	&checkClones($user);
 			&processEvent($user);}
 	}
 	elsif($userInDB eq 0)
-		{&createNewUserRecord($user);
+		{&parseClient($user);
+		&createNewUserRecord($user);
 		&userConnect($user);	
 		if (&getConfigOption("check_reg")) 
 		{	&checkClones($user);
@@ -83,17 +90,20 @@ sub reg_user_connected(){
 sub op_connected(){
 	my($user) = @_;
 	
-	&parseClient($user);
+	&splitDescription($user);
+
 	my($userInDB) = &userInDB($user,$ip);
 	if($userInDB eq 1)
-		{&updateUserRecord($user);
+		{&parseClient($user);
+		&updateUserRecord($user);
 		&userConnect($user);	
 		if (&getConfigOption("check_op")) 
 		{	&checkClones($user);
 			&processEvent($user);}
 	}
 	elsif($userInDB eq 0)
-		{&createNewUserRecord($user);
+		{&parseClient($user);
+		&createNewUserRecord($user);
 		&userConnect($user);	
 		if (&getConfigOption("check_op")) 
 		{	&checkClones($user);
@@ -117,14 +127,16 @@ sub op_admin_connected()
 	&parseClient($user);
 	my($userInDB) = &userInDB($user,$ip);
 	if($userInDB eq 1)
-		{&updateUserRecord($user);
+		{&parseClient($user);
+		&updateUserRecord($user);
 		&userConnect($user);	
 		if (&getConfigOption("check_opadmin"))
 		{	&checkClones($user);
 			&processEvent($user);}	
 	}
 	elsif($userInDB eq 0)
-		{&createNewUserRecord($user);
+		{&parseClient($user);
+		&createNewUserRecord($user);
 		&userConnect($user);	
 		if (&getConfigOption("check_opadmin"))
 		{	&checkClones($user);

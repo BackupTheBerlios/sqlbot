@@ -107,6 +107,7 @@ sub clientRecheck()
 	{
 		$user=$userlist[$checkUserCount];
 		$checkUserCount ++;
+		&splitDescription($user);
 		&parseClient($user);
 		&debug("Verifying $user");
 		if (($ip eq '') || ($user eq $botname)) {}
@@ -161,8 +162,6 @@ sub clientRecheck()
 sub parseClient(){
 	my($user) = @_;
 	
-	&splitDescription($user);
-
 	$REASON = "";
 	$ACTION = "";
 	
@@ -298,22 +297,23 @@ sub checkClones(){
 	my($newuser) = @_;
 	if (&getConfigOption("clone_check")){
 # userIsOnline
-		$newip = odch::get_ip($newuser);
-		my ($usersonline) = odch::get_user_list(); #Get space separated list of who is online
-		my ($numonlineusers) = odch::count_users(); #And how many
-		@userlist=split(/\ /,$usersonline);
-		my ($checkUserCount) = 0;
-		while ($checkUserCount != $numonlineusers)
-			{$onlineuser=$userlist[$checkUserCount];
-			my($onlinetype) = odch::get_type($onlineuser);
-			$onlineip = odch::get_ip($onlineuser);
-			#If the ip of user joining is the same ip as an op then ignore
-			if (($onlinetype ne 0) && ($onlinetype < 8))
-				{if(($newip eq $onlineip) && ($newuser ne $onlineuser))
-					{&msgAll("$newuser($newip) is a clone of $onlineuser($onlineip)");
-					$REASON = "Clone";
-					$ACTION = "Kicked"}}
-			$checkUserCount ++;}}	
+#		$newip = odch::get_ip($newuser);
+#		my ($usersonline) = odch::get_user_list(); #Get space separated list of who is online
+#		my ($numonlineusers) = odch::count_users(); #And how many
+#		@userlist=split(/\ /,$usersonline);
+#		my ($checkUserCount) = 0;
+#		while ($checkUserCount != $numonlineusers)
+#			{$onlineuser=$userlist[$checkUserCount];
+#			my($onlinetype) = odch::get_type($onlineuser);
+#			$onlineip = odch::get_ip($onlineuser);
+#			#If the ip of user joining is the same ip as an op then ignore
+#			if (($onlinetype ne 0) && ($onlinetype < 8))
+#				{if(($newip eq $onlineip) && ($newuser ne $onlineuser))
+#					{&msgAll("$newuser($newip) is a clone of $onlineuser($onlineip)");
+#					$REASON = "Clone";
+#					$ACTION = "Kicked"}}
+#			$checkUserCount ++;}
+	}	
 }
 
 sub nickFilter(){

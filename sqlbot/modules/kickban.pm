@@ -96,7 +96,7 @@ sub banWorker()
 			
 			$dbh->do("UPDATE userDB SET tBanCount='0',kickCount='0'	WHERE nick='$sqluser' AND allowStatus!='Banned'");
 		}
-		$dbh->do("DELETE FROM botWorker WHERE (nick='$sqluser' OR IP='$ip')");
+		$dbh->do("DELETE FROM botWorker WHERE nick='$sqluser'");
 	}
 	$bwth->finish();
 }
@@ -113,7 +113,7 @@ sub banUser (){
 	my($pBanCountTot) = "$ref->{'pBanCountTot'}";
 	my($lastReason) = "$ref->{'lastReason'}";
 	my($lastAction) ="";
-	
+	my($allowStatus)= "";
 	&debug("banUserBANNED- user=$user, reason=$reason, ip=$ip, mode=$mode");
 
 	$buth->finish();
@@ -122,7 +122,7 @@ sub banUser (){
 		$lastAction = "T-Banned";
 		$tBanCount++;
 		$tBanCountTot++;
-		my($allowStatus) = "Normal";
+		$allowStatus = "Normal";
 		my($temp_ban_time)=&getHubVar("temp_ban_time");
 		if (&getVerboseOption("verbose_banned")){
 			&msgAll("T-BANNED($temp_ban_time Mins) $user($ip) $reason");}
@@ -137,7 +137,7 @@ sub banUser (){
 		$lastAction = "P-Banned";
 		$pBanCountTot++;
 		odch::add_ban_entry($ip);
-		my($allowStatus) = "Banned";
+		$allowStatus = "Banned";
 		my($userInDB) = &userInDB($user,$ip);
 		if($userInDB ne 2)
 			{odch::add_nickban_entry($user);}
@@ -176,7 +176,7 @@ sub banUser (){
 				allowStatus='$allowStatus',
 				lastReason='$reason',
 			    	lastAction='$lastAction'
-			    	WHERE nick='$sqluser' AND IP='$ip' AND allowStatus!='Banned'");
+			    	WHERE nick='$sqluser' AND allowStatus!='Banned'");
 	
 	if(&getLogOption("log_bans"))
     		{&addToLog($user,$lastAction,$reason);}
