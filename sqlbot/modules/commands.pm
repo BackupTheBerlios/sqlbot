@@ -208,23 +208,22 @@ Any command NOT recognised is sent to ALL OPs as OP CHAT \r";
 
 sub info()
 {
-	my($user,$data)=@_;
-	&debug("$user - info $2");
-	my($del,$subpm) = ($1,$2);
+	my($user,$infoon)=@_;
+	&debug("$user - info $infoon");
 
-	if (&usrOnline($user) < 1)	#Online now ?
+	if (&usrOnline($user) ne 1)	#Online now ?
 	{
-		&msgUser("$user","$2 is not online");}
+		&msgUser("$user","$infoon is not online");}
 	else{
-		my($totalkicks) = $dbh->selectrow_array("SELECT COUNT(*) FROM log where name='$2' && action='Kicked'");
+		my($totalkicks) = $dbh->selectrow_array("SELECT COUNT(*) FROM log where name='$infoon' && action='Kicked'");
 		$type = odch::get_type($subpm);
 		if($type eq 32 or $type eq 16 or $type eq 8){$QUERY_LOGON = "LogOn";}
 		else {$QUERY_LOGON = "Connect";}
-			my($totalconnect) = $dbh->selectrow_array("SELECT total_logins FROM user_stats where name = '$2'");
-		my($average_gigs) = $dbh->selectrow_array("SELECT average_shared_gigs FROM user_stats where name = '$2'");
-		my($first_login_date) = $dbh->selectrow_array("SELECT first_date FROM user_stats where name = '$2'");
-		my($first_login_time) = $dbh->selectrow_array("SELECT first_time FROM user_stats where name = '$2'");
-  			my $sth = $dbh->prepare("SELECT * FROM online where name = '$2'");
+			my($totalconnect) = $dbh->selectrow_array("SELECT total_logins FROM user_stats where name = '$infoon'");
+		my($average_gigs) = $dbh->selectrow_array("SELECT average_shared_gigs FROM user_stats where name = '$infoon'");
+		my($first_login_date) = $dbh->selectrow_array("SELECT first_date FROM user_stats where name = '$infoon'");
+		my($first_login_time) = $dbh->selectrow_array("SELECT first_time FROM user_stats where name = '$infoon'");
+  			my $sth = $dbh->prepare("SELECT * FROM online where name = '$infoon'");
 		$sth->execute();
 		my $ref = $sth->fetchrow_hashref();
 		&msgUser("$user","$ref->{'name'}'s Info (MySQL)\r
@@ -308,11 +307,10 @@ sub fakersLog()
 
 sub history()
 {
-	my($user)=@_;
-	my($del,$subpm) = ($1,$2);
+	my($user,$history)=@_;
 	my($defaultLogEntries) = &getHubVar("nr_log_entries");
-	my($if_exist) = $dbh->selectrow_array("SELECT COUNT(*) FROM log WHERE name = '$2'");
-	my $sth = $dbh->prepare("SELECT * FROM log WHERE name= '$2' ORDER by rowID DESC  LIMIT 0,$defaultLogEntries");
+	my($if_exist) = $dbh->selectrow_array("SELECT COUNT(*) FROM log WHERE name = '$history'");
+	my $sth = $dbh->prepare("SELECT * FROM log WHERE name= '$history' ORDER by rowID DESC  LIMIT 0,$defaultLogEntries");
 	$sth->execute();
 	$log = "";
 	while (my $ref = $sth->fetchrow_hashref()) {
