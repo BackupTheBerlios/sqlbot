@@ -129,7 +129,7 @@ sub banUser (){
 		odch::add_ban_entry("$ip $temp_ban_time");
 		my($userInDB) = &userInDB($nick,$ip);
 		if($userInDB ne 2)
-			{odch::add_nickban_entry("$user $temp_ban_time");}}
+			{odch::add_nickban_entry("$nick $temp_ban_time");}}
 			
 	elsif ($mode =~ /pban/i){	# Permanent Ban
 		$lastAction = "P-Banned";
@@ -151,7 +151,7 @@ sub banUser (){
 
 		my($userInDB) = &userInDB($nick,$ip);
 		if($userInDB ne 2)
-			{odch::remove_nickban_entry($user);}
+			{odch::remove_nickban_entry($nick);}
 		$dbh->do("UPDATE userDB SET tBanCount='0',
 					kickCount='0',
 					allowStatus='Normal',
