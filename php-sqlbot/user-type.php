@@ -7,7 +7,7 @@ mysql_connect($databasehost,$username,$password);
 @mysql_select_db($database) or die( "Unable to select database");
 $where = "";
 if (!empty($nick))  
-	{$where="WHERE nick='$nick'";}
+	{$where="WHERE nick='$nick' AND IP='$IP'";}
 else {$where = ""; }
 
 

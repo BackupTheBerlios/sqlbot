@@ -152,7 +152,7 @@ while ($data=mysql_fetch_array($result))
 	?>
 	
 	
-<td nowrap><a href="<? echo "user-type.php?nick=$nick" ?>" <? echo "$font$nick$fontend"?></a></td>
+<td nowrap><a href="<? echo "user-type.php?nick=$nick&IP=$IP" ?>" <? echo "$font$nick$fontend"?></a></td>
 <!-- <td nowrap><? echo "$font$passwd$fontend"; ?></td> -->
 <td nowrap><a href="<? echo "user-manage.php?field=status&search=$status" ?>" title="Search for users <?echo "$status"?>"> <? echo "$font$status$fontend"; ?></a></td>
 <td nowrap><a href="<? echo "user-manage.php?field=uType&search=$uType" ?>"><? echo "$font$uType$fontend"; ?></a></td>
