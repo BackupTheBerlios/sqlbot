@@ -65,7 +65,7 @@ sub splitDescription() {
 	$email = odch::get_email($user);
 
 	## Check for internal networks ##
-	if ($ip =~ /192.168.0/) { $ip = &getHubVar("external_ip"); }
+	if ($ip =~ /192.168/) { $ip = &getHubVar("external_ip"); }
 
 	## Get Country code for user #
 	my($reg) = IP::Country::Fast->new();
@@ -167,6 +167,11 @@ sub parseClient(){
 	if($shared =~ /(\d)\1{5,}/) {
 		$REASON = "FAKER";
 		$ACTION = "Nuked";
+		if ((&getClientExists($dcClient)) && ($dcVersion ne "")){}
+		else{	$dcClient = "";
+			$dcClientname = "";
+			$dcVersion = "";}
+		
 	}
 	## CHECK MLDONKEY CLIENTS
 	elsif($fulldescription =~ /mldonkey client/)
