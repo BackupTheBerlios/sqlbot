@@ -16,6 +16,8 @@ if (!empty($order))
 	{$orderby ="'$order'";}
 else {$orderby="uType,nick";}
 
+if ($f == parselog)
+	{$sql = "DELETE FROM userDB WHERE loginCount='1' && pBanCountTot='0' && status='Offline'"; $result = mysql_query($sql) or die(mysql_error());}
 if ($f == delete)
 	{$sql = "DELETE FROM userDB $where";$result = mysql_query($sql) or die(mysql_error());}
 if ($f == uType){
@@ -41,17 +43,21 @@ mysql_close();
 	<th><form action="<? echo "user-manage.php?field=status&search=Online" ?>" method="post">
 	<input type="Submit" value="Online"></form></th>
 	<th><form action="<? echo "user-manage.php?field=lastAction&search=Kicked" ?>" method="post">
-	<input type="Submit" value="Kicked"></form></th>
+	<input type="Submit" value="Show Kicked"></form></th>
 	<th><form action="<? echo "user-manage.php?field=lastReason&search=Fake" ?>" method="post">
-	<input type="Submit" value="Faker"></form></th>
+	<input type="Submit" value="Show Fakers"></form></th>
 	<th><form action="<? echo "user-manage.php?field=allowStatus&search=Banned" ?>" method="post">
-	<input type="Submit" value="Banned"></form></th>
+	<input type="Submit" value="Show Banned"></form></th>
 	</tr><tr>
 	<th><? echo " Filters Applied $font$field $search$fontend";?></th>
 	<th><form action="<? echo "user-manage.php" ?>" method="post">
 	<input type="Submit" value="Reset Filters"></form></th>
 	<th><form action="<? echo "user-manage.php?f=delete&field=$field&search=$search" ?>" method="post">
 	<input type="Submit" value="Delete ALL" onClick="return confirmDelete()"></form></th>
+	
+	<th><form action="<? echo "user-manage.php?f=parselog" ?>" method="post">
+	<input type="Submit" value="Delete Single Entries" onClick="return confirmLogParse()"></form>
+	</th>
 	</tr><tr>
 	<th><form action="<? echo "user-manage.php?field=nick&search=$search" ?>" method="post">
 	<input type="text" name="search" value=""><? echo $font;?></th><th>
