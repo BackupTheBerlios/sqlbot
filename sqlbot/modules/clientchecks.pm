@@ -283,11 +283,9 @@ sub checkKicks(){
 		my($tban_before_pban) = &getHubVar("tban_before_pban");
 		if ($tBanCount > $tban_before_pban)
 			{&msgUser("$user","You have now been T-Banned $tban_before_pban times. You have been permantly banned!");
-			$REASON = "$tban_before_pban T-Bans";
 			$ACTION = "T-Banned";}
 		elsif ($kickCount > $kick_before_tban) 
 			{&msgUser("$user","You have now been kicked $kick_before_tban times . You have been T-Banned !");
-			$REASON = "$kick_before_tban Kicks";
 			$ACTION = "P-Banned";}}
 		
 }
