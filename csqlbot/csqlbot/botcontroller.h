@@ -28,7 +28,8 @@
 #include <dclib/cfilemanager.h>
 #include <dclib/cquerymanager.h>
 //#include <dclib/cpluginmanager.h>
-#include <dclib/cservermanager.h>
+#include <dclib/cconnectionmanager.h>
+#include <dclib/chublistmanager.h>
 #include <dclib/cdownloadmanager.h>
 #include <dcclient.h>
 #include <unistd.h>	//for sleep

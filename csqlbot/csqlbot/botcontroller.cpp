@@ -23,6 +23,7 @@ using std::endl;
 
 BotController::BotController(){
      botController = this;
+
      CManager::SetInstance(new CManager());
      CAsyncDns::SetInstance(new CAsyncDns());
 
@@ -32,7 +33,8 @@ BotController::BotController(){
 
      CDownloadManager::SetInstance(new CDownloadManager());
      CQueryManager::SetInstance(new CQueryManager());
-     CServerManager::SetInstance(new CServerManager());
+     CConnectionManager::SetInstance(new CConnectionManager());
+     CHubListManager::SetInstance(new CHubListManager());
      CDownloadManager::Instance()->DLM_LoadQueue();
 
      //Open the sql connection
@@ -50,8 +52,9 @@ BotController::~BotController(){
 
      delete CDownloadManager::Instance();
 
-     delete CServerManager::Instance();
-
+     delete CConnectionManager::Instance();
+     delete CHubListManager::Instance();
+     
      if ( CFileManager::Instance() )
      {
           delete CFileManager::Instance();
@@ -133,7 +136,7 @@ void BotController::JoinHub(CString hubid,CString host)
 
      dcclient = new DCClient(botController,mySqlCon,CString(hubid).asINT(),mySqlBot->GetBotMaster(),mySqlBot->GetBotName());
      hubList.Add(hubid, (CObject*&)dcclient);
-     CServerManager::Instance()->Connect(host,host,dcclient);
+     CConnectionManager::Instance()->Connect(host,host,dcclient);
      
 }
 
