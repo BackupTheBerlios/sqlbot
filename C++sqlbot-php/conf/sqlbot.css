@@ -176,7 +176,7 @@ td.stats {
 	width: 200px;
 	color: #010101;
 	background-color: #d8faff;
-	background-image: url("/img/percent.gif");
+	background-image: url("../img/percent.gif");
 	background-repeat: repeat-y;
 	padding: 0px;
 }
