@@ -21,24 +21,22 @@ dnl    Boston, MA 02111-1307, USA.
 # Original Author was Kalle@kde.org
 # I lifted it in some mater. (Stephan Kulow)
 # I used much code from Janos Farkas
-
-dnl Process this file with autoconf to produce a configure script.
-
-AC_INIT(acinclude.m4) dnl a source file from your sub dir
-
-dnl This is so we can use kde-common
+AC_INIT(acinclude.m4)
 AC_CONFIG_AUX_DIR(admin)
+AC_CANONICAL_SYSTEM
+
+VERSION="0.1.1a.cvs"
+if echo "$VERSION" | grep cvs >/dev/null 2>&1; then
+ VERSION=$VERSION"`date +%Y%m%d`"
+fi
+AC_SUBST(VERSION)
+
+AM_INIT_AUTOMAKE([csqlbot],[$VERSION])
+
 
 dnl This ksh/zsh feature conflicts with `cd blah ; pwd`
 unset CDPATH
 
-dnl Checking host/target/build systems, for make, install etc.
-AC_CANONICAL_SYSTEM
-dnl Perform program name transformation
-AC_ARG_PROGRAM
-
-dnl Automake doc recommends to do this only here. (Janos)
-AM_INIT_AUTOMAKE(csqlbot,0.1.1a)
 
 dnl almost the same like KDE_SET_PEFIX but the path is /usr/local
 dnl
