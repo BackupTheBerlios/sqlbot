@@ -184,6 +184,22 @@ sub userWorker(){
 			&delRegUser($user);}
 		$dbh->do("DELETE FROM botWorker WHERE function LIKE '3%' ");}
 	$bwth->finish();
+}
+sub aUserWorker(){
+	my($auwth) = $dbh->prepare("SELECT function,nick,information,IP FROM botWorker WHERE function LIKE '5%'");
+	$auwth->execute();
+	while ($ref = $auwth->fetchrow_hashref()){
+		my($function) = "$ref->{'function'}";
+		my($user) = "$ref->{'nick'}";
+		my($ip) = "$ref->{'IP'}";
+		my($information) = "$ref->{'information'}";
+		
+		if ($function=='50'){
+			$dbh->do("UPDATE userDB SET allowStatus='Allow'	WHERE nick='$user' OR IP='$ip'");}	
+		$dbh->do("DELETE FROM botWorker WHERE nick='$user'");
+	
+	$auwth->finish();
+}
 
 }
 sub chPassUser(){
