@@ -112,7 +112,7 @@ sub banUser (){
 	my($lastReason) = "$ref->{'lastReason'}";
 	my($lastAction) ="";
 	my($allowStatus)= "";
-	&debug("banUserBANNED- user=$user, reason=$reason, ip=$ip, mode=$mode");
+	&debug("banUserBANNED- user=$nick, reason=$reason, ip=$ip, mode=$mode");
 
 	$buth->finish();
 	
