@@ -46,7 +46,7 @@ sub main(){
         if (&getVerboseOption("verbose_botjoin")){
 		&version();
         }
-	odch::data_to_all("\$MyINFO \$ALL $botname $description\$ \$DSL>\$\$0\$|"); 
+	odch::data_to_all("\$MyINFO \$ALL $botname $description\$ \$DSL\$\$0\$|"); 
 	&addToLog($botname,"Restart","Reloadscripts");
 }
 
