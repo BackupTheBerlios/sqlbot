@@ -145,11 +145,14 @@ if ($hcName == "" || $hcHost == "" ){
 
 // ADD ONLINE/OFFLINE COLOUR
 if ($hcStatus == "Online"){
-$hcStatus = "<font color=\"#000000\"><strong>Online</strong></font>";
+$total_users_online=mysql_query("SELECT * FROM userInfo where hubid='$hubID' AND uiStatus='1'");
+$users_online=mysql_num_rows($total_users_online);
+$hcStatus = "<font color=\"#000000\"><strong>Online</strong></font> &nbsp;  ($users_online online)";
 }
 if ($hcStatus == "Offline"){
 $hcStatus = "<font color=\"#FF1D28\"><strong>Offline</strong></font>";
 }
+
 
 // ADD AUTOCONNECT ALIAS
 if ($hcAutoConnect == "1") {
