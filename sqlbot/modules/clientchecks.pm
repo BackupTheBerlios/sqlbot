@@ -150,6 +150,20 @@ sub clientRecheck()
 		&debug("Recheck - $nick($type)");
 		if($type eq 0 )	{&userOffline($nick);}}
 	$cth->finish();
+	
+	# Read all users from DB who are T-Bbanned and see if any have expired
+#	my ($cibth) = $dbh->prepare("SELECT nick,IP FROM userDB WHERE lastAction='T-Banned'");
+#	$cibth->execute();
+#	while (my $ref = $cibth->fetchrow_hashref()) {
+#		my($nick) = "";
+#		$nick = "$ref->{'nick'}";
+#		$ip = "$ref->{'IP'}"; 
+#		$banned = odch::check_if_banned($nick,NICKBAN);
+#		if($banned eq 1 ){&debug("$nick Is Banned");}
+#		else{&debug("$nick Is Not Banned");}
+#	}
+#	$cibth->finish();
+	
 }
 
 
@@ -163,7 +177,7 @@ sub parseClient(){
 	$ACTION = "";
 	
 	## CHECK FAKERS ##
-	if($shareBytes =~ /(\d)\1{5,}/) 
+	if(($shareBytes =~ /(\d)\1{5,}/) || ($shareBytes =~ 100100100))
 		{$REASON = "Fake(Share)";
 		$ACTION = "P-Banned";
 		if ((&getClientExists($dcClient)) && ($dcVersion ne "")){}
