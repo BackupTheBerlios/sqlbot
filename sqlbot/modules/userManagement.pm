@@ -18,7 +18,8 @@
 # Is this userOnline now ?
 sub userIsOnline(){
 	my($user) = @_;
-	my($value) = $dbh->selectrow_array("SELECT COUNT(*) FROM userDB WHERE (nick='$user' AND status='Online')");
+	my($value) = $dbh->selectrow_array("SELECT COUNT(*) FROM userDB 
+					WHERE (nick='$user' AND status='Online') AND allowStatus!='Banned'");
 	if($value eq 1)
 	{return 1;}
 	return 0;
@@ -27,10 +28,12 @@ sub userIsOnline(){
 sub userInDB(){
 	my($user,$ip) = @_;
 
-	my($value) = $dbh->selectrow_array("SELECT COUNT(DISTINCT(nick)) FROM userDB WHERE (nick='$user' OR IP='$ip')  ");	
+	my($value) = $dbh->selectrow_array("SELECT COUNT(DISTINCT(nick)) FROM userDB 
+					WHERE (nick='$user' OR IP='$ip') AND allowStatus!='Banned'");	
 	if($value eq 1) 
 	{	
-		my($value1) = $dbh->selectrow_array("SELECT COUNT(DISTINCT(nick)) FROM userDB WHERE (nick='$user' OR IP='$ip') AND allowStatus='allow'");
+		my($value1) = $dbh->selectrow_array("SELECT COUNT(DISTINCT(nick)) FROM userDB 
+				WHERE (nick='$user' OR IP='$ip') AND allowStatus='allow'");
 		if($value1 eq 1) 
 			{return 2;}
 		else 
@@ -55,8 +58,9 @@ sub updateUserRecordRecheck(){
 	my($user) = @_;
 	$connection = &getConnection($conn);
 	
-	$dbh->do("UPDATE userDB SET slots='$NSlots',hubs='$NbHubs',limiter='$UploadLimit',
-			fullDescription='$fullDescription',shareByte='$shareBytes' WHERE nick='$user'");
+	$dbh->do("UPDATE userDB SET slots='$NSlots',hubs='$NbHubs',
+			limiter='$UploadLimit',fullDescription='$fullDescription',
+			shareByte='$shareBytes' WHERE nick='$user' AND allowStatus!='Banned'");
 }
 
 # User record exists so update the details
@@ -65,7 +69,7 @@ sub updateUserRecord(){
 	&setTime();
 	my($inTime)="$date $time";
 	
-	my($uurth) = $dbh->prepare("SELECT loginCount FROM userDB WHERE (nick='$user' OR IP='$ip')");
+	my($uurth) = $dbh->prepare("SELECT loginCount FROM userDB WHERE (nick='$user' OR IP='$ip') AND allowStatus!='Banned'");
 	$uurth->execute();
 	my($ref) = $uurth->fetchrow_hashref();
 	my($loginCount) = "$ref->{'loginCount'}";
@@ -81,7 +85,7 @@ sub updateUserRecord(){
 					hostname='$hostname',IP='$ip',inTime='$inTime',
 					avShareBytes='$shareBytes',loginCount='$loginCount',
 					fullDescription='$fullDescription',shareByte='$shareBytes'
-					WHERE (nick='$user' OR IP='$ip') ");}
+					WHERE (nick='$user' OR IP='$ip') AND allowStatus!='Banned'");}
 }
 
 # Check the allow status of this user
@@ -94,7 +98,7 @@ sub userStatus(){
 sub userOffline(){
 	my($user) = @_;
 	&setTime();
-	my($uoth) = $dbh->prepare("SELECT inTime,onlineTime FROM userDB WHERE (nick='$user' OR IP='$ip')");
+	my($uoth) = $dbh->prepare("SELECT inTime,onlineTime FROM userDB WHERE nick='$user'");
 	$uoth->execute();
 	my($ref) = $uoth->fetchrow_hashref();
 
@@ -119,26 +123,23 @@ sub userOnline(){
 	&setTime();
 	$dbh->do("UPDATE userDB SET status='$online',
 					inTime='$date $time'
-					WHERE nick='$user'");
+					WHERE nick='$user' AND allowStatus!='Banned'");
 }
 
 sub addToFakers(){
 	my($user) = @_;
-	my($atfth) = $dbh->prepare("SELECT pBanCount FROM userDB WHERE nick='$user'");
+	my($atfth) = $dbh->prepare("SELECT pBanCount FROM userDB WHERE nick='$user' AND allowStatus!='Banned'");
 	$atfth->execute();
 	my($ref) = $atfth->fetchrow_hashref();
 
 	my($pBanCount) = "$ref->{'pBanCount'}";
 	$atfth->finish();
 	$pBanCount++;
-	my($allowStatus)="Banned";
-	my($lastAction)="Nuked";
-	my($lastReason)="Faker";
-	$dbh->do("UPDATE userDB SET allowStatus='$allowStatus', 
+	$dbh->do("UPDATE userDB SET allowStatus='Banned', 
 					pBanCount='$pBanCount', 
-					lastAction='$lastAction', 
-					lastReason='$lastReason' 
-					WHERE (nick='$user' OR IP='$ip')");
+					lastAction='Nuked', 
+					lastReason='Faker' 
+					WHERE (nick='$user' OR IP='$ip') AND allowStatus!='Banned'");
 }
 
 # User has spoken increment line count
@@ -146,14 +147,14 @@ sub addToFakers(){
 sub incLineCount(){
 	my($user)=@_;
 
-	my($ilcth) = $dbh->prepare("SELECT lineCount FROM userDB WHERE nick='$user' ");
+	my($ilcth) = $dbh->prepare("SELECT lineCount FROM userDB WHERE nick='$user' AND allowStatus!='Banned' ");
 	$ilcth->execute();
 	my($ref) = $ilcth->fetchrow_hashref();
 
 	my($lineCount) = "$ref->{'lineCount'}";
 	$ilcth->finish();
 	$lineCount=$lineCount+1;
-	$dbh->do("UPDATE userDB SET lineCount='$lineCount' WHERE nick='$user'");
+	$dbh->do("UPDATE userDB SET lineCount='$lineCount' WHERE nick='$user' AND allowStatus!='Banned'");
 	
 }
 # Change the level of this user
@@ -177,7 +178,7 @@ sub setRegUser(){
 	&msgUser($setUser,">>>> $user has changed your level to $level your password is $passwd");
 	# Change this user type in the userDB
 	my($utype)  = odch::get_type($setUser);
-	$dbh->do("UPDATE userDB SET type='$utype',passwd='$passwd' WHERE (nick='$user'");
+	$dbh->do("UPDATE userDB SET type='$utype',passwd='$passwd' WHERE (nick='$user' AND allowStatus!='Banned'");
 	&addToLog($setUser,"Add/Edit User",$user);	
 	
 }
