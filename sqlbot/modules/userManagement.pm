@@ -59,7 +59,7 @@ sub updateUserRecord(){
 					dcVersion='$dcVersion',slots='$NSlots',
 					hubs='$NbHubs',limiter='$UploadLimit',
 					connection='$connection',connectionMode='$connectionMode',
-					country='$country',
+					country='$country',hostname='$hostname',
 					IP='$ip',inTime='$inTime',avShareBytes='$shareBytes',
 					loginCount='$loginCount',fullDescription='$fullDescription',
 					shareByte='$shareBytes'	WHERE nick='$user'");

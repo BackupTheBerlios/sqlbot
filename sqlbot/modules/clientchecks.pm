@@ -73,7 +73,7 @@ sub splitDescription() {
 	## Get Country code for user #
 	my($reg) = IP::Country::Fast->new();
 	$country = $reg->inet_atocc($ip);
-
+	$hostname = odch::get_hostname($user);
 	## Get user Type ##
 	if($type =~ /8/){$utype = "Registered";}
 	elsif($type =~ /16/){$utype = "Operator";}

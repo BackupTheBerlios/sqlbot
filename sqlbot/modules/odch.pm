@@ -220,11 +220,12 @@ sub data_arrival(){
 					{&msgUser("$user","usage: !history username");}
 				else 
 					{&history("$user","$param2");}}
-#			elsif ($param1 =~ /!addfaker/i)
-#				{if($param1 =~ /!addfaker\|/)
-#					{&msgUser("$user","usage: !history username");}
-#				else 
-#					{&addFaker($param2);}}
+			elsif ($param1 =~ /!addfaker/i)
+				{if($param1 =~ /!addfaker\|/)
+					{&msgUser("$user","usage: !addfaker username");}
+				else 
+					{my($ip) = odch::get_ip($param2);
+					&banUser($param2,"Faker",$ip,"pban");}}
 			# Add new op commands here
 			elsif($param1 =~ /!auser/i)
 			{

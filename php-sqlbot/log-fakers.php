@@ -36,6 +36,7 @@ while ($data=mysql_fetch_array($result))
 {	$id=mysql_result($result,$i,"rowID");
 	$inTime=mysql_result($result,$i,"inTime");
 	$nick=mysql_result($result,$i,"nick");
+	$allowStatus=mysql_result($result,$i,"allowStatus");
 	$uType=mysql_result($result,$i,"uType");
 	$IP=mysql_result($result,$i,"IP");
 	$country=mysql_result($result,$i,"country");
@@ -48,24 +49,26 @@ while ($data=mysql_fetch_array($result))
 	$slots=mysql_result($result,$i,"slots");
 	$shareBytes=mysql_result($result,$i,"shareByte");
 
-	if($i % 2) { //this means if there is a remainder
-        echo "<TR bgcolor="; echo "$rowColour"; echo ">\n";
-    	} else { //if there isn't a remainder we will do the else
-        echo "<TR bgcolor="; echo "$rowColourAlt"; echo ">\n"; } 
+	// Colour Rows
+	if(($uType == "Operator") || ($uType == "Op-Admin")) {echo "<TR bgcolor="; echo "$OpRowColour"; echo ">\n";}
+	else if($allowStatus == "allow") {echo "<TR bgcolor="; echo "$AllowRowColour"; echo ">\n";}
+	else if(($allowStatus == "T-Banned") || ($allowStatus == "P-Banned")) { echo "<TR bgcolor=";echo "$BanRowColour"; echo ">\n";}
+	else if($i % 2)	{echo "<TR bgcolor="; echo "$rowColour"; echo ">\n";}
+	else{echo "<TR bgcolor="; echo "$rowColourAlt"; echo ">\n";}
 	?>
-	<td nowrap><? echo "$font$bold$inTime$boldend$fontend"; ?></td>
-	<td nowrap><? echo "$font$bold$nick$boldend$fontend"; ?></td>
-	<td nowrap><? echo "$font$bold$uType$boldend$fontend"; ?></td>
-	<td nowrap><? echo "$font$bold$IP$boldend$fontend"; ?></td>
-	<td nowrap><? echo "$font$bold$country$boldend$fontend"; ?></td>
-	<td nowrap><? echo "$font$bold$dcClient$boldend$fontend"; ?></td>
-	<td nowrap><? echo "$font$bold$dcVersion$boldend$fontend"; ?></td>
-	<td nowrap><? echo "$font$bold$fullDescription$boldend$fontend"; ?></td>
-	<td nowrap><div align="center"><? echo "$font$bold$connection$boldend$fontend"; ?></div></td>
-	<td nowrap><div align="center"><? echo "$font$bold$connectionMode$boldend$fontend"; ?></div></td>
-	<td nowrap><div align="center"><? echo "$font$bold$hubs$boldend$fontend"; ?></div></td>
-	<td nowrap><div align="center"><? echo "$font$bold$slots$boldend$fontend"; ?></div></td>
-	<td nowrap><div align="center"><a title="<? echo "$shareBytes bytes" ?>"><? echo "$font$bold$shareBigs$boldend$fontend"; ?></a></div></td>
+	<td nowrap><? echo "$font$inTime$fontend"; ?></td>
+<td nowrap><a href="<? echo "user-type.php?nicksearch=$nick" ?>"<? echo "$font$nick$fontend"; ?></a></td>
+	<td nowrap><? echo "$font$uType$fontend"; ?></td>
+	<td nowrap><? echo "$font$IP$fontend"; ?></td>
+	<td nowrap><? echo "$font$country$fontend"; ?></td>
+	<td nowrap><? echo "$font$dcClient$fontend"; ?></td>
+	<td nowrap><? echo "$font$dcVersion$fontend"; ?></td>
+	<td nowrap><? echo "$font$fullDescription$fontend"; ?></td>
+	<td nowrap><div align="center"><? echo "$font$connection$fontend"; ?></div></td>
+	<td nowrap><div align="center"><? echo "$font$connectionMode$fontend"; ?></div></td>
+	<td nowrap><div align="center"><? echo "$font$hubs$fontend"; ?></div></td>
+	<td nowrap><div align="center"><? echo "$font$slots$fontend"; ?></div></td>
+	<td nowrap><div align="center"><a title="<? echo "$shareBytes bytes" ?>"><? echo "$font$shareBigs$fontend"; ?></a></div></td>
 	</tr>
 	<?
 	$i++; 

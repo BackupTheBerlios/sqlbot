@@ -79,6 +79,8 @@ sub banWorker()
 			&banUser($user,$information,$ip,"tban");}
 		elsif($function=='23'){
 			&banUser($user,$information,$ip,"uban");}
+		elsif($function=='24'){
+			&banUser($user,"Faker",$ip,"pban");}
 		$dbh->do("DELETE FROM botWorker WHERE function LIKE '2%' ");}
 	
 	$bwth->finish();
@@ -110,15 +112,22 @@ sub banUser (){
 		odch::add_ban_entry($ip);
 		if (&getVerboseOption("verbose_banned")){
 			&msgAll("P-BANNED $user($ip) for:$reason");}}
-
+	elsif ($mode =~ /faker/i){	# Faker
+		$mode = "P-Banned";
+		$pBanCountTot++;
+		&msgUser("$user","Dont FAKE your Client OR share ... Your IP has been [Banned]");
+		&addToFakers($user);
+		odch::add_ban_entry($ip);
+		&msgAll("P-BANNED $user($ip) for:$reason");
+		return(1);}
 	elsif ($mode =~ /uban/i){	# Remove ban
 		my($allowStatus) = "allow";
 		my($lastReason) = "Removed"; 
 		$mode = "Un-Ban";
-		$tBanCount=0;
-		&msgAll("Removed Ban $user($ip)");
+		&msgAll("UnBan/Reset Kick Count $user($ip)");
 		odch::remove_ban_entry($ip);
-		$dbh->do("UPDATE userDB SET tBanCount='$tBanCount',
+		$dbh->do("UPDATE userDB SET tBanCount='0',
+					kickCount='0',
 					allowStatus='Normal',
 					lastReason='$reason',
 				    	lastAction='$mode'
