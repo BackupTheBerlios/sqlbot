@@ -109,10 +109,11 @@ sub clientRecheck()
 		$checkUserCount ++;
 		&splitDescription($user);
 		&parseClient($user);
-		&debug("Verifying $user");
+		
 		if (($ip eq '') || ($user eq $botname)) {}
 		else {
 		$userInDB = &userInDB($user,$ip);
+		
 		if ($userInDB eq 2) {
 			if (&userIsOnline($user,$ip) ne 1)
 				{&userOnline($user);}	
@@ -191,6 +192,7 @@ sub parseClient(){
 				if ($ref->{'min_version'} > $dcVersion)
 					{$REASON = "Version($dcVersion)";
 					$ACTION = "Kicked";}}
+
 			## MIN SLOTS ##
 			if ($ref->{'min_slots'} > 0 )
 				{if ($NSlots < $ref->{'min_slots'})
@@ -201,6 +203,7 @@ sub parseClient(){
 				if ($NSlots < $minslots)
 					{$REASON = "Slots(min)($NSlots)";
 					$ACTION = "Kicked";}}
+
 			## MAX SLOTS ##
 			if ($ref->{'max_slots'} > 0 )
 				{if ($NSlots > $ref->{'max_slots'})
@@ -211,11 +214,13 @@ sub parseClient(){
 				if ($NSlots > $maxslots)
 					{$REASON = "Slots(max)($NSlots)";
 					$ACTION = "Kicked";}}
+
 			## SLOT RATIO ##
 			if ($ref->{'slot_ratio'} ne 0 )
 				{if ($ref->{'slot_ratio'} > $slt_ratio)
 					{$REASON = "SlotRatio($slt_ratio)";
 					$ACTION = "Kicked";}}
+
 			## SPEED LIMIT ## 
 			if ( $UploadLimit > 0 ) 
 				{if ($ref->{'min_limit'} ne 0 )
@@ -223,21 +228,29 @@ sub parseClient(){
 						{$REASON = "Speed Limit($UploadLimit)";
 						$ACTION = "Kicked";
 					}}}
+
 			## MAX HUBS ##
 			if ($ref->{'max_hubs'} ne 0 )
 				{if ($ref->{'max_hubs'} < $NbHubs)
 					{$REASON = "Hubs($NbHubs)";
 					$ACTION = "Kicked";}}
+
 			## MIN CONNECTION ##
 			if ($ref->{'min_connection'} > $conn)
 				{my $connection = &getConnection($conn);
 				$REASON = "Connection($connection)";
 				$ACTION = "Kicked";}
+
 			## MIN SHARE ##
 			if ($ref->{'min_share'} > $GigsShared)
 				{$REASON = "Share($GigsShared Gb)";
 				$ACTION = "Kicked";}
 
+			## ILLEGAL CLIENT ##
+			if ($ref->{'allowed'} eq "NO")
+				{&debug("$user is using $dcClient");
+				$REASON = "Illegal Client";
+				$ACTION = "Kicked";}
 			## Add new client checks here ##
 			#Use the real clientname not its TAG
 			$dcClientname = $ref->{'client_name'};
