@@ -84,6 +84,24 @@ include("header.ini");
 		</select></td>
 		<td>Slot Ratio, Number slots / Number of hubs</td>
 	</tr><tr>
+		<td>Upload limit</td>
+		<td><select name='min_limit'>
+			<option value="0">0(off)</option>
+			<option value="1">1</option>         
+			<option value="2">2</option>
+			<option value="3">3</option>
+			<option value="4">4</option>
+			<option value="5">5</option>
+			<option value="6">6</option>
+			<option value="7">7</option>
+			<option value="8">8</option>
+			<option value="9">9</option>
+			<option value="10">10</option>
+			<option value="15">15</option>
+			<option value="20">20</option>
+		</select></td>
+		<td>Minimum Speed Limit Shown as B: or L: normally</td>
+	</tr><tr>
 		<td>Max Hubs</td>
 		<td><select name='max_hubs'>
 			<option value="0">0(off)</option>

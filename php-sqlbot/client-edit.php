@@ -113,6 +113,33 @@ function show_hubs_box($name,$select=0) {
                 }
 	}
 }
+function show_limiter_box($name,$select=0) {
+        echo '<select name="'.$name.'" size="1">';
+        $boxlist = array('1'=>'0',
+			 '2'=>'1',
+                         '3'=>'2',
+                         '4'=>'3',
+                         '5'=>'4',
+                         '6'=>'5',
+                         '7'=>'6',
+                         '8'=>'7',
+                         '9'=>'8',
+                         '10'=>'9',
+			'11'=>'10',
+			'12'=>'15',
+			'13'=>'20');
+
+ 
+        for ($i=1; $i<=count($boxlist); $i++) 
+	{
+        	if ($boxlist[$i] == $select) 
+		{	
+			echo '<option selected value="'.$boxlist[$i].'">'.$boxlist[$i]; 
+		} else {
+			echo '<option value="'.$boxlist[$i].'">'.$boxlist[$i];
+                }
+	}
+}
 function show_share_box($name,$select=0) {
         echo '<select name="'.$name.'" size="1">';
         $boxlist = array('1'=>'0',
@@ -179,6 +206,7 @@ $client=mysql_result($result,$i,"client");
 $min_version=mysql_result($result,$i,"min_version");
 $allowed=mysql_result($result,$i,"allowed");
 $min_slots=mysql_result($result,$i,"min_slots");
+$min_limit=mysql_result($result,$i,"min_limit");
 $max_slots=mysql_result($result,$i,"max_slots");
 $slot_ratio=mysql_result($result,$i,"slot_ratio");
 $max_hubs=mysql_result($result,$i,"max_hubs");
@@ -221,6 +249,10 @@ $client_name=mysql_result($result,$i,"client_name");
 		<td>Slot Ratio</td>
 		<td><?show_ratio_box(ud_slot_ratio,$select=$slot_ratio);?></td>
 		<td>Slot Ration,Minimum number of slots per hub</td>
+	</tr><tr>
+		<td>Speed Limiter</td>
+		<td><?show_limiter_box(ud_min_limit,$select=$min_limit);?></td>
+		<td>Minimum speed Limit a user can have (KB/s)</td>
 	</tr><tr>
 		<td>Max Hubs</td>
 		<td><?show_hubs_box(ud_max_hubs,$select=$max_hubs);?></td>
