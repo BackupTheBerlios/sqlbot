@@ -212,7 +212,6 @@ sub chPassUser(){
 			{# Remove this user from reg list
 			my($type)  = odch::get_type($user);
 			odch::remove_reg_user($user);
-			&msgUser("nutter","$user,$oldPass,$newPass,$type,$level");
 			odch::add_reg_user($user, $newPass, ($level-1));
 			# Change this user type in the userDB
 			$dbh->do("UPDATE userDB SET type='$type',passwd='$newPass' 
