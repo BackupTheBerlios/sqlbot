@@ -17,7 +17,7 @@ $num=mysql_num_rows($result);
 
 mysql_close();
 
-echo "<center><table border=\"$tableborders\" cellspacing=\"2\" cellpadding=\"2\">";
+echo "<center><table border=\"$tableBorders\" cellspacing=\"2\" cellpadding=\"2\">";
 
 $i=0;
 while ($i < $num) {

@@ -34,7 +34,7 @@ $numrows=mysql_num_rows($numresult);
 $result=mysql_query("SELECT * FROM userDB $where ORDER by $orderby LIMIT $offset,$defaultLogEntries");
 mysql_close();
 ?>
-<table border="<? echo "$tableborders";?> cellspacing="2" cellpadding="2">
+<table border="<? echo $tableBorders;?>" cellspacing="2" cellpadding="2">
 <tr>
 	<th> Preset Filters</th>
 	<th><form action="<? echo "user-manage.php?field=status&search=Online" ?>" method="post">
@@ -53,49 +53,49 @@ mysql_close();
 	<input type="Submit" value="Delete ALL" onClick="return confirmDelete()"></form></th>
 	</tr><tr>
 	<th><form action="<? echo "user-manage.php?field=nick&search=$search" ?>" method="post">
-	<input type="text" name="search" value=""><? echo "$font";?></th><th>
+	<input type="text" name="search" value=""><? echo $font;?></th><th>
 	<input type="Submit" value="Nick Search"></form></th>
 </tr>
 </table><?
 echo "Totals :Users $numrows<br>";
 ?>
-<table border="$tableborders" cellspacing="2" cellpadding="2">
+<table border="<? echo "$tableBorders";?>" cellspacing="2" cellpadding="2">
 <tr>
-<th><a href="<? echo "user-manage.php?order=nick" ?>" <? echo "$font";?>Nick<? echo "$fontend";?></a></th>
-<!-- <th><? echo "$font";?>passwd<? echo "$fontend";?></th> -->
-<th><? echo "$font";?>Status<? echo "$fontend";?></th>
- <th><a href="<? echo "user-manage.php?order=uType" ?>" <? echo "$font";?>User Type<? echo "$fontend";?></a></th>
-<!--<th><? echo "$font";?>type<? echo "$fontend";?></th> -->
-<th><? echo "$font";?>Allow Status<? echo "$fontend";?></th>
-<!-- <th><? echo "$font";?>awayStatus<? echo "$fontend";?></th>  -->
-<!-- <th><? echo "$font";?>awayMSg<? echo "$fontend";?></th> -->
-<!-- <th><? echo "$font";?>fullDescription<? echo "$fontend";?></th> -->
-<!-- <th><? echo "$font";?>dcClient<? echo "$fontend";?></th>
-<th><? echo "$font";?>dcVersion<? echo "$fontend";?></th>
-<th><? echo "$font";?>slots<? echo "$fontend";?></th>
-<th><? echo "$font";?>hubs<? echo "$fontend";?></th>
-<!--<th><? echo "$font";?>limiter<? echo "$fontend";?></th>-->
- <th><a href="<? echo "user-manage.php?order=connection" ?>" <? echo "$font";?>Connection<? echo "$fontend";?></a></th>
-<!--<th><? echo "$font";?>connectionMode<? echo "$fontend";?></th>-->
- <th><a href="<? echo "user-manage.php?order=country" ?>" <? echo "$font";?>Country<? echo "$fontend";?></a></th>
-<th><a href="<? echo "user-manage.php?order=IP" ?>" <? echo "$font";?>IP<? echo "$fontend";?></a></th>
-<!-- <th><? echo "$font";?>hostname<? echo "$fontend";?></th> 
-<th><? echo "$font";?>First Login<? echo "$fontend";?></th> 
-<th><? echo "$font";?>outTime<? echo "$fontend";?></th> -->
- <th><a href="<? echo "user-manage.php?order=inTime" ?>" <? echo "$font";?>Checkin Time<? echo "$fontend";?></a></th>
-<!-- <th><? echo "$font";?>onlineTime<? echo "$fontend";?></th>
-<th><? echo "$font";?>loginCount<? echo "$fontend";?></th>
-<th><? echo "$font";?>kickCount<? echo "$fontend";?></th>
-<th><? echo "$font";?>kickCountTot<? echo "$fontend";?></th>
-<th><? echo "$font";?>tBanCount<? echo "$fontend";?></th>
-<th><? echo "$font";?>tBanCountTot<? echo "$fontend";?></th>
-<th><? echo "$font";?>pBanCount<? echo "$fontend";?></th>
-<th><? echo "$font";?>pBanCountTot<? echo "$fontend";?></th>
-<th><? echo "$font";?>lineCount<? echo "$fontend";?></th> 
-<th><? echo "$font";?>avShareBytes<? echo "$fontend";?></th> -->
- <th><a href="<? echo "user-manage.php?order=shareByte" ?>" <? echo "$font";?>Shared_Bytes<? echo "$fontend";?></a></th>
- <th><a href="<? echo "user-manage.php?order=lastAction" ?>" <? echo "$font";?>Last Action<? echo "$fontend";?></a></th>
- <th><a href="<? echo "user-manage.php?order=lastReason" ?>" <? echo "$font";?>Last Reason<? echo "$fontend";?></a></th>
+<th><a href="<? echo "user-manage.php?order=nick" ?>"> <? echo $font;?>Nick<? echo $fontend;?></a></th>
+<!-- <th><? echo $font;?>passwd<? echo "$fontend";?></th> -->
+<th><? echo $font;?>Status<? echo "$fontend";?></th>
+ <th><a href="<? echo "user-manage.php?order=uType" ?>"> <? echo $font;?>User Type<? echo "$fontend";?></a></th>
+<!--<th><? echo $font;?>type<? echo "$fontend";?></th> -->
+<th><? echo $font;?>Allow Status<? echo "$fontend";?></th>
+<!-- <th><? echo $font;?>awayStatus<? echo "$fontend";?></th>  -->
+<!-- <th><? echo $font;?>awayMSg<? echo "$fontend";?></th> -->
+<!-- <th><? echo $font;?>fullDescription<? echo "$fontend";?></th> -->
+<!-- <th><? echo $font;?>dcClient<? echo "$fontend";?></th>
+<th><? echo $font;?>dcVersion<? echo "$fontend";?></th>
+<th><? echo $font;?>slots<? echo "$fontend";?></th>
+<th><? echo $font;?>hubs<? echo "$fontend";?></th>
+<!--<th><? echo $font;?>limiter<? echo "$fontend";?></th>-->
+ <th><a href="<? echo "user-manage.php?order=connection" ?>"> <? echo $font;?>Connection<? echo "$fontend";?></a></th>
+<!--<th><? echo $font;?>connectionMode<? echo "$fontend";?></th>-->
+ <th><a href="<? echo "user-manage.php?order=country" ?>"> <? echo $font;?>Country<? echo "$fontend";?></a></th>
+<th><a href="<? echo "user-manage.php?order=IP" ?>"> <? echo $font;?>IP<? echo "$fontend";?></a></th>
+<!-- <th><? echo $font;?>hostname<? echo "$fontend";?></th> 
+<th><? echo $font;?>First Login<? echo "$fontend";?></th> 
+<th><? echo $font;?>outTime<? echo "$fontend";?></th> -->
+ <th><a href="<? echo "user-manage.php?order=inTime" ?>"> <? echo $font;?>Checkin Time<? echo "$fontend";?></a></th>
+<!-- <th><? echo $font;?>onlineTime<? echo "$fontend";?></th>
+<th><? echo $font;?>loginCount<? echo "$fontend";?></th>
+<th><? echo $font;?>kickCount<? echo "$fontend";?></th>
+<th><? echo $font;?>kickCountTot<? echo "$fontend";?></th>
+<th><? echo $font;?>tBanCount<? echo "$fontend";?></th>
+<th><? echo $font;?>tBanCountTot<? echo "$fontend";?></th>
+<th><? echo $font;?>pBanCount<? echo "$fontend";?></th>
+<th><? echo $font;?>pBanCountTot<? echo "$fontend";?></th>
+<th><? echo $font;?>lineCount<? echo "$fontend";?></th> 
+<th><? echo $font;?>avShareBytes<? echo "$fontend";?></th> -->
+ <th><a href="<? echo "user-manage.php?order=shareByte" ?>"> <? echo $font;?>Shared_Bytes<? echo "$fontend";?></a></th>
+ <th><a href="<? echo "user-manage.php?order=lastAction" ?>"> <? echo $font;?>Last Action<? echo "$fontend";?></a></th>
+ <th><a href="<? echo "user-manage.php?order=lastReason" ?>"> <? echo $font;?>Last Reason<? echo "$fontend";?></a></th>
 
 </tr>
 <?
@@ -154,9 +154,9 @@ while ($data=mysql_fetch_array($result))
 	?>
 	
 	
-<td nowrap><a href="<? echo "user-type.php?nick=$nick&IP=$IP" ?>" <? echo "$font$nick$fontend"?></a></td>
+<td nowrap><a href="<? echo "user-type.php?nick=$nick&IP=$IP" ?>"> <? echo "$font$nick$fontend"?></a></td>
 <!-- <td nowrap><? echo "$font$passwd$fontend"; ?></td> -->
-<td nowrap><a href="<? echo "user-manage.php?field=status&search=$status" ?>" title="Search for users <?echo "$status"?>"> <? echo "$font$status$fontend"; ?></a></td>
+<td nowrap><a href="<? echo "user-manage.php?field=status&search=$status" ?>>" title="Search for users <?echo "$status"?>"> <? echo "$font$status$fontend"; ?></a></td>
 <td nowrap><a href="<? echo "user-manage.php?field=uType&search=$uType" ?>"><? echo "$font$uType$fontend"; ?></a></td>
 <!--<td nowrap><? echo "$font$type$fontend"; ?></td> -->
 <td nowrap><a href="<? echo "user-manage.php?field=allowStatus&search=$allowStatus" ?>"><? echo "$font$allowStatus$fontend"; ?></a></td>
@@ -171,7 +171,7 @@ while ($data=mysql_fetch_array($result))
 <td nowrap><a href="<? echo "user-manage.php?field=connection&search=$connection" ?>"><? echo "$font$connection$fontend"; ?></a></td>
 <!-- <td nowrap><? echo "$font$connectionMode$fontend"; ?></td> -->
 <td nowrap><a href="user-manage.php?field=country&search=<? echo "$country"?>" title="Search for all users from: <? echo "$country"?>"><? echo "$font$country$fontend"; ?></a></td>
-<td nowrap><a href="user-manage.php?field=IP&search=<? echo "$IP"?>" title="Search for all users with: <? echo "$IP"?>"><? echo "$font$IP$fontend"; ?></td>
+<td nowrap><a href="user-manage.php?field=IP&search=<? echo "$IP"?>" title="Search for all users with: <? echo "$IP"?>"><? echo "$font$IP$fontend"; ?></a></td>
 <!-- <td nowrap><? echo "$font$hostname$fontend"; ?></td>
 <td nowrap><? echo "$font$firstTime$fontend"; ?></td>
 <td nowrap><? echo "$font$outTime$fontend"; ?></td> -->
@@ -220,3 +220,4 @@ if (!(($offset/$limit)==$pages-1) && $pages!=1) {
 <? echo "$fontend";?>
 </body>
 </html>
+
