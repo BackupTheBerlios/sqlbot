@@ -187,7 +187,7 @@ $min_connection=mysql_result($result,$i,"min_connection");
 $client_name=mysql_result($result,$i,"client_name");
 ?>
 <center>
-<form action="<?echo "client-main.php?function=updateclient";?>" method="post">
+<form action="<?echo "rules-main.php?function=updateclient";?>" method="post">
 <table>
 	<tr>
 		<td></td>	

@@ -8,27 +8,19 @@ include("header.ini");
 <?
 $limit=$defaultLogEntries; 
 echo "$font";
-mysql_connect($databasehost,$username,$password);
-@mysql_select_db($database) or die( "Unable to select database");
-
-
-$numresults=mysql_query("SELECT * FROM online ");
-$numrows=mysql_num_rows($numresults);
 if (empty($offset)) {$offset=0;}
 
-// Delete a Row if requested
-if ($delete == onlinerow)
-{	$sql = "DELETE FROM online WHERE rowID=$id"; 
-	$result = mysql_query($sql) or die(mysql_error());}
+mysql_connect($databasehost,$username,$password);
+@mysql_select_db($database) or die( "Unable to select database");
+$result=mysql_query("SELECT * FROM userDB WHERE status='Online' ORDER by nick LIMIT $offset,$defaultLogEntries ");
+$numrows=mysql_num_rows($result);
 
-$result=mysql_query("SELECT * FROM online ORDER by name LIMIT $offset,$defaultLogEntries");
 echo "Total Number of users online $numrows<br>";
 ?>
 <table border="$tableborders" cellspacing="2" cellpadding="2">
 <tr> 
-<th><? echo "$font";?>Date<? echo "$fontend";?></th>
-<th><? echo "$font";?>Time<? echo "$fontend";?></th>
-<th><? echo "$font";?>Nick (email)<? echo "$fontend";?></th>
+<th><? echo "$font";?>Date Time<? echo "$fontend";?></th>
+<th><? echo "$font";?>Nick<? echo "$fontend";?></th>
 <th><? echo "$font";?>User Type<? echo "$fontend";?></th>
 <th><? echo "$font";?>IP<? echo "$fontend";?></th>
 <th><? echo "$font";?>Country<? echo "$fontend";?></th>
@@ -45,51 +37,40 @@ echo "Total Number of users online $numrows<br>";
 while ($data=mysql_fetch_array($result)) 
 { 	// include code to display results as you see fit
 	$id=mysql_result($result,$entry,"rowID");
-	$date=mysql_result($result,$entry,"date");
-	$time=mysql_result($result,$entry,"time");
-	$name=mysql_result($result,$entry,"name");
-	$user_type=mysql_result($result,$entry,"user_type");
-	$ip=mysql_result($result,$entry,"ip");
+	$inTime=mysql_result($result,$entry,"inTime");
+	$nick=mysql_result($result,$entry,"nick");
+	$uType=mysql_result($result,$entry,"uType");
+	$IP=mysql_result($result,$entry,"IP");
 	$country=mysql_result($result,$entry,"country");
-	$client=mysql_result($result,$entry,"client");
-	$client_version=mysql_result($result,$entry,"client_version");
-	$fulldescription=htmlentities(mysql_result($result,$entry,"fulldescription"));
+	$dcClient=mysql_result($result,$entry,"dcClient");
+	$dcVersion=mysql_result($result,$entry,"dcVersion");
+	$fullDescription=htmlentities(mysql_result($result,$entry,"fullDescription"));
 	$connection=mysql_result($result,$entry,"connection");
-	$connection_mode=mysql_result($result,$entry,"connection_mode");
-	$connected_hubs=mysql_result($result,$entry,"connected_hubs");
-	$upload_slots=mysql_result($result,$entry,"upload_slots");
-	$shared_bytes=mysql_result($result,$entry,"shared_bytes");
-	$shared_gigs=mysql_result($result,$entry,"shared_gigs");
-	$email=mysql_result($result,$entry,"email");
+	$connectionMode=mysql_result($result,$entry,"connectionMode");
+	$hubs=mysql_result($result,$entry,"hubs");
+	$slots=mysql_result($result,$entry,"slots");
+	$shareBytes=mysql_result($result,$entry,"shareByte");
 	
-	
-	if(($user_type == Operator) || ($user_type == "Op-Admin"))
-	{ 	if($entry % 2) { 
-	        echo "<TR bgcolor="; echo "$OprowColour"; echo ">\n";
-	    	} else { 
-	        echo "<TR bgcolor="; echo "$OprowColourAlt"; echo ">\n"; }
-		$bold = $highlight; $boldend = $highlightstop;}
-	else{
-		if($entry % 2) { 
-	        echo "<TR bgcolor="; echo "$rowColour"; echo ">\n";
-	    	} else { 
-	        echo "<TR bgcolor="; echo "$rowColourAlt"; echo ">\n"; }
-		$bold = ""; $boldend = "";}
+	// Colour Rows
+	if(($uType == Operator) || ($uType == "Op-Admin")) {echo "<TR bgcolor="; echo "$OpRowColour"; echo ">\n";}
+	else if($kickCount != 0) {echo "<TR bgcolor="; echo "$KickRowColour"; echo ">\n";}
+	else if($i % 2)	{echo "<TR bgcolor="; echo "$rowColour"; echo ">\n";}
+	else{echo "<TR bgcolor="; echo "$rowColourAlt"; echo ">\n";}
+
 	?>
-	<td nowrap><? echo "$font$bold$date$boldend$fontend"; ?></td>
-	<td nowrap><? echo "$font$bold$time$boldend$fontend"; ?></td>
-	<td nowrap><a title="<? echo "Email: $email" ?>"><? echo "$font$bold$name$boldend$fontend"; ?></a></td>
-	<td nowrap><? echo "$font$bold$user_type$boldend$fontend"; ?></td>
-	<td nowrap><div align="center"><? echo "$font$bold$ip$boldend$fontend"; ?></div></td>
+	<td nowrap><? echo "$font$bold$inTime$boldend$fontend"; ?></td>
+	<td nowrap><a href="<? echo "user-type.php?nicksearch=$nick" ?>"<? echo "$font$nick$fontend"; ?></a></td>
+	<td nowrap><a href="<? echo "user-type.php?nicksearch=$nick" ?>"<? echo "$font$uType$fontend"; ?></a></td>
+	<td nowrap><div align="center"><? echo "$font$bold$IP$boldend$fontend"; ?></div></td>
 	<td nowrap><div align="center"><? echo "$font$bold$country$boldend$fontend"; ?></div></td>
-	<td nowrap><? echo "$font$bold$client$boldend$fontend"; ?></td>
-	<td nowrap><? echo "$font$bold$client_version$boldend$fontend"; ?></td>
-	<td nowrap><? echo "$font$bold$fulldescription$boldend$fontend"; ?></td>
+	<td nowrap><? echo "$font$bold$dcClient$boldend$fontend"; ?></td>
+	<td nowrap><? echo "$font$bold$dcVersion$boldend$fontend"; ?></td>
+	<td nowrap><? echo "$font$bold$fullDescription$boldend$fontend"; ?></td>
 	<td nowrap><div align="center"><? echo "$font$bold$connection$boldend$fontend"; ?></div></td>
-	<td nowrap><div align="center"><? echo "$font$bold$connection_mode$boldend$fontend"; ?></div></td>
-	<td nowrap><div align="center"><? echo "$font$bold$connected_hubs$boldend$fontend"; ?></div></td>
-	<td nowrap><div align="center"><? echo "$font$bold$upload_slots$boldend$fontend"; ?></div></td>
-	<td nowrap><div align="center"><a title="<? echo "$shared_bytes bytes" ?>"><? echo "$font$bold$shared_gigs$boldend$fontend"; ?></a></div></td>
+	<td nowrap><div align="center"><? echo "$font$bold$connectionMode$boldend$fontend"; ?></div></td>
+	<td nowrap><div align="center"><? echo "$font$bold$hubs$boldend$fontend"; ?></div></td>
+	<td nowrap><div align="center"><? echo "$font$bold$slots$boldend$fontend"; ?></div></td>
+	<td nowrap><div align="center"><a title="<? echo "$shareBytes bytes" ?>"><? echo "$font$bold$shareBytes$boldend$fontend"; ?></a></div></td>
 	</tr>
 	<?
 	$entry++;

@@ -6,69 +6,66 @@ include("header.ini");
 <div align="center"><? 
 echo "$font";
 $limit=$defaultLogEntries; 
-
+if (empty($offset)) {$offset=0;}
 mysql_connect($databasehost,$username,$password); 
 @mysql_select_db($database) or die( "Unable to select database");
-
-
-$numresults=mysql_query("SELECT * FROM fakers ");
-$numrows=mysql_num_rows($numresults);
-if (empty($offset)) {
-	$offset=0;}
-
-$result=mysql_query("SELECT * FROM fakers ORDER by rowID DESC  LIMIT $offset,$defaultLogEntries"); 
-
+$result=mysql_query("SELECT * FROM userDB WHERE lastReason='Faker' ORDER by rowID DESC  LIMIT $offset,$defaultLogEntries"); 
+$numrows=mysql_num_rows($result);
 //Say which entries from the log we are displaying
  
 echo "Total Number of Fakers $numrows<br>";
 ?>
 <table border="$tableborders" cellspacing="2" cellpadding="2"> 
 <tr>
-<th><? echo "$font";?>Date<? echo "$fontend";?></th>
-<th><? echo "$font";?>Time<? echo "$fontend";?></th> 
+<th><? echo "$font";?>Date Time<? echo "$fontend";?></th>
 <th><? echo "$font";?>Nick<? echo "$fontend";?></th>
-<th><? echo "$font";?>IP<? echo "$fontend";?></th> 
+<th><? echo "$font";?>User Type<? echo "$fontend";?></th>
+<th><? echo "$font";?>IP<? echo "$fontend";?></th>
 <th><? echo "$font";?>Country<? echo "$fontend";?></th>
-<th><? echo "$font";?>Client<? echo "$fontend";?></th> 
+<th><? echo "$font";?>Client<? echo "$fontend";?></th>
 <th><? echo "$font";?>Version<? echo "$fontend";?></th>
 <th><? echo "$font";?>Description<? echo "$fontend";?></th>
-<th><? echo "$font";?># Hubs<? echo "$fontend";?></th> 
+<th><? echo "$font";?>Connection<? echo "$fontend";?></th>
+<th><? echo "$font";?>Connection Mode<? echo "$fontend";?></th>
+<th><? echo "$font";?># Hubs<? echo "$fontend";?></th>
 <th><? echo "$font";?># Slots<? echo "$fontend";?></th>
-<th><? echo "$font";?>Shared Bytes<? echo "$fontend";?></th>
-<th><? echo "$font";?>Shared [Gb]<? echo "$fontend";?></th>
+<th><? echo "$font";?>Shared [Gb] (bytes)<? echo "$fontend";?></th>
 </tr> 
 <? 
 while ($data=mysql_fetch_array($result)) 
-{	$date=mysql_result($result,$i,"date");
-	$time=mysql_result($result,$i,"time");
-	$name=mysql_result($result,$i,"name");
-	$ip=mysql_result($result,$i,"ip");
+{	$id=mysql_result($result,$i,"rowID");
+	$inTime=mysql_result($result,$i,"inTime");
+	$nick=mysql_result($result,$i,"nick");
+	$uType=mysql_result($result,$i,"uType");
+	$IP=mysql_result($result,$i,"IP");
 	$country=mysql_result($result,$i,"country");
-	$client=mysql_result($result,$i,"client");
-	$client_version=mysql_result($result,$i,"client_version");
-	$fulldescription=htmlentities(mysql_result($result,$i,"fulldescription"));
-	$connected_hubs=mysql_result($result,$i,"connected_hubs");
-	$upload_slots=mysql_result($result,$i,"upload_slots");
-	$shared_bytes=mysql_result($result,$i,"shared_bytes");
-	$shared_gigs=mysql_result($result,$i,"shared_gigs");
+	$dcClient=mysql_result($result,$i,"dcClient");
+	$dcVersion=mysql_result($result,$i,"dcVersion");
+	$fullDescription=htmlentities(mysql_result($result,$i,"fullDescription"));
+	$connection=mysql_result($result,$i,"connection");
+	$connectionMode=mysql_result($result,$i,"connectionMode");
+	$hubs=mysql_result($result,$i,"hubs");
+	$slots=mysql_result($result,$i,"slots");
+	$shareBytes=mysql_result($result,$i,"shareByte");
 
 	if($i % 2) { //this means if there is a remainder
         echo "<TR bgcolor="; echo "$rowColour"; echo ">\n";
     	} else { //if there isn't a remainder we will do the else
         echo "<TR bgcolor="; echo "$rowColourAlt"; echo ">\n"; } 
 	?>
-	<td nowrap><? echo "$font$date$fontend"; ?></td> 
-	<td nowrap><? echo "$font$time$fontend"; ?></td> 
-	<td nowrap><? echo "$font$name$fontend"; ?></td>
-	<td nowrap><? echo "$font$ip$fontend"; ?></td>
-	<td nowrap><? echo "$font$country$fontend"; ?></td> 
-	<td nowrap><? echo "$font$client$fontend"; ?></td> 
-	<td nowrap><? echo "$font$client_version$fontend"; ?></td> 
-	<td nowrap><? echo "$font$fulldescription$fontend"; ?></td> 
-	<td nowrap><? echo "$font$connected_hubs$fontend"; ?></td>
-	<td nowrap><? echo "$font$upload_slots$fontend"; ?></td>
-	<td nowrap><? echo "$font$shared_bytes$fontend"; ?></td>
-	<td nowrap><? echo "$font$shared_gigs$fontend"; ?></td> 
+	<td nowrap><? echo "$font$bold$inTime$boldend$fontend"; ?></td>
+	<td nowrap><? echo "$font$bold$nick$boldend$fontend"; ?></td>
+	<td nowrap><? echo "$font$bold$uType$boldend$fontend"; ?></td>
+	<td nowrap><? echo "$font$bold$IP$boldend$fontend"; ?></td>
+	<td nowrap><? echo "$font$bold$country$boldend$fontend"; ?></td>
+	<td nowrap><? echo "$font$bold$dcClient$boldend$fontend"; ?></td>
+	<td nowrap><? echo "$font$bold$dcVersion$boldend$fontend"; ?></td>
+	<td nowrap><? echo "$font$bold$fullDescription$boldend$fontend"; ?></td>
+	<td nowrap><div align="center"><? echo "$font$bold$connection$boldend$fontend"; ?></div></td>
+	<td nowrap><div align="center"><? echo "$font$bold$connectionMode$boldend$fontend"; ?></div></td>
+	<td nowrap><div align="center"><? echo "$font$bold$hubs$boldend$fontend"; ?></div></td>
+	<td nowrap><div align="center"><? echo "$font$bold$slots$boldend$fontend"; ?></div></td>
+	<td nowrap><div align="center"><a title="<? echo "$shareBytes bytes" ?>"><? echo "$font$bold$shareBigs$boldend$fontend"; ?></a></div></td>
 	</tr>
 	<?
 	$i++; 

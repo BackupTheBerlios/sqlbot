@@ -19,6 +19,7 @@ $ip_end=mysql_result($result,$i,"ip_end");
 $action=mysql_result($result,$i,"function");
 $stats_log=mysql_result($result,$i,"stats_log");
 $hub_log=mysql_result($result,$i,"hub_log");
+$reason=mysql_result($result,$i,"reason");
 ?>
 <center><form action="nick-main.php?function=update" method="post">
 	<table>
@@ -54,6 +55,10 @@ $hub_log=mysql_result($result,$i,"hub_log");
 		<td>Add to Hub Log</td>
 		<td><input type="checkbox" name="ud_hub_log" value="<? echo"$hub_log";?>" <? if ($hub_log == "on") echo" checked";?> ></td>
 		<td></td>
+	</tr><tr>
+		<td>Reason</td>
+		<td><input type="Text" name="ud_reason" value="<? echo"$reason";?>" ></td>
+		<td></td>		
 	</tr></table>
 	<hr>
 <input type="Submit" value="Submit changes">

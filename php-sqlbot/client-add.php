@@ -2,7 +2,7 @@
 $page_title="Add a DC Client";
 include("header.ini");
 ?>
-<center><form action="client-main.php?function=addclient" method="post">
+<center><form action="rules-main.php?function=addclient" method="post">
 	<table>
 	<tr>
 		<td>Client</td>
