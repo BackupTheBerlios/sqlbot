@@ -46,9 +46,9 @@ sub createNewUserRecord(){
 		
 	my($dtime)="$date $time";
 	$connection = &getConnection($conn);
-	$dbh->do("INSERT INTO userDB VALUES ('','$user','not set','','$utype','$type','Normal','off','',	
+	$dbh->do("INSERT INTO userDB VALUES ('','$user','not set','0','$utype','$type','Normal','off',' ',	
 		'$fullDescription','$dcClient','$dcVersion','$NSlots','$NbHubs','$UploadLimit','$connection','$connectionMode','$country',
-		'$ip','$hostname','$dtime','','$dtime','','1','0','0','0','0','0','0','0','$shareBytes','$shareBytes','','')");
+		'$ip','$hostname','$dtime','0','$dtime','0','1','0','0','0','0','0','0','0','$shareBytes','$shareBytes',' ',' ')");
 }
 
 sub updateUserRecordRecheck(){
