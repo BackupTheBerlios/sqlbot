@@ -39,7 +39,6 @@ BotController::BotController(){
 
      //Open the sql connection
      mySqlCon = new MySqlCon();
-
 }
 BotController::~BotController(){
 
@@ -135,9 +134,9 @@ void BotController::JoinHub(CString hubid,CString host)
      }
 
      dcclient = new DCClient(botController,mySqlCon,CString(hubid).asINT(),mySqlBot->GetBotMaster(),mySqlBot->GetBotName());
+     dcclient->SetSendMyinfo(FALSE);
      hubList.Add(hubid, (CObject*&)dcclient);
      CConnectionManager::Instance()->Connect(host,host,dcclient);
-     
 }
 
 
