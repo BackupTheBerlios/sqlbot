@@ -273,17 +273,15 @@ input.button {
 	font-weight: normal;
 	font-size: 10pt;
     border-width: 1px;
-    border-height: 1px;
     border-style: solid;
     border-color:#b0b0b0;
 }
 
 input.menubutton {
-	align: right;
+	text-align: right;
 	width: 80px;
 	border-color: #b0b0b0;
 	border-style: solid;
-	border-height: 1px;
 	border-width: 1px;
 	font-size: 10pt;
 	font-weight: normal;
@@ -296,7 +294,6 @@ input.userdbcol {
 	font-size: 10pt;
 	width: 100%;
 	border-width: 0px;
-	border-height: 0px;
 	border-style: solid;
 	border-color: #b0b0b0;
 	background-color: #598FE3;
@@ -307,7 +304,6 @@ input.userdbnicknormal {
 	color: #FFFFFF;
 	font-size: 10pt;
 	border-width: 0px;
-	border-height: 0px;
 	border-style: solid;
 	border-color: #b0b0b0;
 	background-color: #598FE3;
@@ -318,7 +314,6 @@ input.userdbBot {
 	color: #010101;
 	font-size: 10pt;
 	border-width: 0px;
-	border-height: 0px;
 	border-style: solid;
 	border-color: #b0b0b0;
 	background-color: #598FE3;
@@ -329,7 +324,6 @@ input.userdbBotMaster {
 	color: #33FF00;
 	font-size: 10pt;
 	border-width: 0px;
-	border-height: 0px;
 	border-style: solid;
 	border-color: #b0b0b0;
 	background-color: #598FE3;
@@ -341,7 +335,6 @@ input.userdbOPADM {
 	color: yellow;
 	font-size: 10pt;
 	border-width: 0px;
-	border-height: 0px;
 	border-style: solid;
 	border-color: #b0b0b0;
 	background-color: #598FE3;
@@ -352,7 +345,6 @@ input.userdbOP {
 	color: #FFFFFF;
 	font-size: 10pt;
 	border-width: 0px;
-	border-height: 0px;
 	border-style: solid;
 	border-color: #b0b0b0;
 	background-color: #598FE3;
@@ -363,7 +355,6 @@ input.userdbVIP {
 	color: #FFFFFF;
 	font-size: 10pt;
 	border-width: 0px;
-	border-height: 0px;
 	border-style: solid;
 	border-color: #b0b0b0;
 	background-color: #598FE3;
@@ -375,23 +366,20 @@ input.userdbERROR {
 	color: #FFFFFF;
 	font-size: 10pt;
 	border-width: 0px;
-	border-height: 0px;
 	border-style: solid;
 	border-color: #b0b0b0;
 	background-color: #598FE3;
 }
 
-input.userInfoDelete {
+input.deldata {
 	font-weight: bold;
 	color: #FFFFFF;
-	font-size: 12pt;
+	font-size: 10pt;
 	border-width: 0px;
-	border-height: 0px;
 	border-style: solid;
-	border-color: #b0b0b0;
+	border-color: #598FE3;
 	background-color: #598FE3;
 }
-
 
 #dek {POSITION:absolute;VISIBILITY:hidden;Z-INDEX:200;}
 

@@ -88,12 +88,12 @@ $logresult=mysql_query("SELECT *,DATE_FORMAT(lcTime, '%H:%i:%S') AS time,
 												FROM logChat WHERE hubID='$hubID' ORDER BY lcTime DESC LIMIT $offset,$defaultLogEntries");
 
 
-// RESET BUTTON
+// DELETE BUTTON
 						echo "<form action=\"$PHP_SELF\" method=\"post\">";
 							hidden_value(hubID, $hubID);
 							hidden_value(offset, 0);
 							hidden_value(deleteAll, 1);
-						echo "<input type=\"submit\" value=\"Delete All Chat Logs\" class=\"userdbnicknormal\" title=\"Delete All Chat Logs\" onClick=\"return confirmDelete()\"></form>";
+						echo "<input type=\"submit\" value=\"[ Delete All Chat Logs ]\" class=\"deldata\" title=\"Delete All Chat Logs\" onClick=\"return confirmDelete()\"></form>";
 ?>
 
 

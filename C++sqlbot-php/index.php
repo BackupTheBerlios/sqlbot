@@ -33,6 +33,12 @@ if ($action == "delete_hub")
 {
 	$delete_from_hubConfig = "DELETE FROM hubConfig WHERE hubID='$hubID'";
 	$result = mysql_query($delete_from_hubConfig) or die(mysql_error());
+	$delete_from_logSearch = "DELETE FROM logSearch WHERE hubID='$hubID'";
+	$result1 = mysql_query($delete_from_logSearch) or die(mysql_error());
+	$delete_from_logChat = "DELETE FROM logChat WHERE hubID='$hubID'";
+	$result2 = mysql_query($delete_from_logChat) or die(mysql_error());
+	$delete_from_userInfo = "DELETE FROM userInfo WHERE hubID='$hubID'";
+	$result3 = mysql_query($delete_from_userInfo) or die(mysql_error());
 }
 if ($action == "add_hub")
 {

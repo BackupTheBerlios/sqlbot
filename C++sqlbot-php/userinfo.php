@@ -339,7 +339,7 @@ $country_query  = "SELECT country_code2,country_name FROM iptoc ".
 							hidden_value(searchvalue, $searchvalue);
 							hidden_value(searchfield, $searchfield);
 							;}
-						echo "<input type=\"submit\" value=\"[ Delete $uiNick ]\" class=\"userInfoDelete\" title=\"Delete $uiNick\" onClick=\"return confirmDelete()\"></form></td></tr>"; ?>
+						echo "<input type=\"submit\" value=\"[ Delete $uiNick ]\" class=\"deldata\" title=\"Delete $uiNick\" onClick=\"return confirmDelete()\"></form></td></tr>"; ?>
 				<?php if ($allow_direct_link == "1") { ?>
 				<tr>
 					<td></td>

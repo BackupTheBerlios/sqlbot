@@ -55,7 +55,7 @@ skn.display="none"
 
 function confirmDeleteAll()
 {
-var agree=confirm("WARNING:\nThis will delete all users only (no Reg/Op/Op-Admins) in your selection!\nVIP/OP/Op-Admins (etc.) need to be deleted individually via their\n detailed info page.\n\n Are you sure you want to do this?");
+var agree=confirm("WARNING:\nThis will delete all users only (no VIP/Op/Op-Admins) in your selection!\nVIP/OP/Op-Admins (etc.) need to be deleted individually via their\n detailed info page.\n\n Are you sure you want to do this?");
 if (agree)
 	return true ;
 else
@@ -179,10 +179,8 @@ $totshared_bytes=mysql_result($total_bytes_q,$i);
 	<!-- SEARCH DIALOG -->
 	<table width="100%">
 		<tr nowrap>
-			<td><?php if ($useSearch == "1") {Echo "<font color=\"#FFFFFF\">Searching for <em>$searchvalue</em> in <em>$parse....</em> </font>";} ?>
-			</td>
-			<td align="right" width="100">
-							<!-- Delete ALL button -->
+			<td width="120">
+					<!-- Delete ALL button -->
 							<form action="<?php echo "$PHP_SELF"; ?>" method="post">
 							<?php hidden_value(hubID, $hubID);
 							hidden_value(parseoption, $parseoption);
@@ -192,7 +190,10 @@ $totshared_bytes=mysql_result($total_bytes_q,$i);
 							hidden_value(parse, $parse);
 							hidden_value(parseorder, $parseorder);
 							hidden_value(action, deleteAll); ?>
-						<input type="submit" value="Delete Selection" class="userdbnicknormal" onClick="return confirmDeleteAll()"></form>
+						<input type="submit" value="[ Delete Selection ]" class="deldata" onClick="return confirmDeleteAll()"></form>
+			</td>
+			<td>
+					<?php if ($useSearch == "1") {Echo "<font color=\"#FFFFFF\">Searching for \"<em>$searchvalue</em>\" in <em>$parse....</em> </font>";} ?>
 			</td>
 			<td align="right" width="300" nowrap>			
 			<form action="<?php echo "$PHP_SELF"; ?>" method="post">

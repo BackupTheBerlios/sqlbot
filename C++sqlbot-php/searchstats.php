@@ -71,9 +71,13 @@ $result=mysql_query("SELECT * FROM hubConfig WHERE hubID='$hubID'");
 				<?php include("conf/mainmenu.php"); ?><p>
 		</td>
 		<td class="main"><!-- MAIN BODY -->
-			<table cellpadding="0" cellspacing="0" class="statsarea">
-				<tr>
-					<td>
+		<!-- LAYOUT STATS TABLES -->
+		<table>
+			<tr>
+			<td valign="top">
+					<table cellpadding="0" cellspacing="0" class="statsarea">
+						<tr>
+							<td>
 	<!-- START USER DATABACE SPACE -->
 	<?php
 		
@@ -91,24 +95,24 @@ $result=mysql_query("SELECT * FROM hubConfig WHERE hubID='$hubID'");
 							hidden_value(hubID, $hubID);
 							hidden_value(offset, 0);
 							hidden_value(deleteAll, 1);
-						echo "<input type=\"submit\" value=\"Delete All Search Logs\" class=\"userdbnicknormal\" title=\"Delete All Search Logs\" onClick=\"return confirmDelete()\"></form>";
+						echo "<input type=\"submit\" value=\"[ Delete All Search Logs] \" class=\"deldata\" title=\"Delete All Search Logs\" onClick=\"return confirmDelete()\"></form>";
 ?>
-					</td>
-				</tr>
-				<tr>
-					<td> &nbsp; </td>
-				</tr>
-				<tr>
-					<td>
+							</td>
+						</tr>
+						<tr>
+							<td> &nbsp; </td>
+						</tr>
+						<tr>
+							<td>
 						<!-- STATS SEARCH TYPE -->
-						<FIELDSET>
-							<LEGEND><font color="#FFFFFF"> &nbsp; Summary Search Types since <?php echo "$firstSearchDate"; ?> &nbsp;</font></LEGEND>	
-								<table width="100%" cellspacing="0" border="0" class="stats">
-									<tr>
-										<th>Type</th>
-										<th>Count</th>
-										<th>% of <?php echo "$total_search"; ?> searches</th>
-									</tr>
+							<FIELDSET>
+								<LEGEND><font color="#FFFFFF"> &nbsp; Summary Search Types since <?php echo "$firstSearchDate"; ?> &nbsp;</font></LEGEND>	
+									<table width="100%" cellspacing="0" border="0" class="stats">
+										<tr>
+											<th>Type</th>
+											<th>Count</th>
+											<th>% of <?php echo "$total_search"; ?> searches</th>
+										</tr>
 <?php
 // STATS SEARCH TYPE
 $searchType=mysql_query("SELECT lsType,COUNT(lsType) from logSearch where hubID='$hubID' GROUP BY lsType");
@@ -144,24 +148,25 @@ echo "<tr>
 $i++;
 }
 ?>
-								</table>
-						</FIELDSET>
-					</td>
-				</tr>
-			</table>
-		</td>
-		<td class="main">
-			<!-- TABLE TOP SEARCHES -->
-			<table cellpadding="0" cellspacing="0" class="statsarea">
-				<tr>
-					<td>
-						<FIELDSET>
-							<LEGEND><font color="#FFFFFF"> &nbsp; Summary Top 10 Searches since <?php echo "$firstSearchDate"; ?> &nbsp;</font></LEGEND>
-								<table width="100%" cellspacing="0" border="0" class="stats">
-									<tr>
-										<th>#</th>
-										<th>File</th>
-									</tr>
+									</table>
+							</FIELDSET>
+						</td>
+					</tr>
+				</table>
+			<!-- STATS LAYOUT -->
+			</td>
+			<td valign="top">
+				<!-- TABLE TOP SEARCHES -->
+				<table cellpadding="0" cellspacing="0" class="statsarea">
+					<tr>
+						<td>
+							<FIELDSET>
+								<LEGEND><font color="#FFFFFF"> &nbsp; Summary Top 10 Searches since <?php echo "$firstSearchDate"; ?> &nbsp;</font></LEGEND>
+									<table width="100%" cellspacing="0" border="0" class="stats">
+										<tr>
+											<th>#</th>
+											<th>File</th>
+										</tr>
 <?php
 //GET TOP SEARCHES
 $topSearchResults=mysql_query("SELECT lsSearch,COUNT(lsSearch) as count from logSearch WHERE hubID='$hubID' GROUP BY lsSearch ORDER BY count DESC LIMIT 10");
@@ -174,12 +179,15 @@ while ($data=mysql_fetch_array($topSearchResults))
 }
 ?>
 									
-								</table>
-						</FIELDSET>
-					</td>
-				</tr>
+									</table>
+								</FIELDSET>
+							</td>
+						</tr>
+					</table>
+				<!-- END TABLE TOP SEARCHES -->
+				</td>
+			</tr>
 			</table>
-			<!-- END TABLE TOP SEARCHES -->
 		</td>
 	</tr>
 </table>
