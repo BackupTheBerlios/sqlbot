@@ -6,6 +6,7 @@ include("header.ini");
 	<div align="center"><form action="log-hub.php" method="post">
 	<input class="button" type="Submit" value="Refresh"></form><br>
 <div align="center"><?
+$entry=0;
 mysql_connect($databasehost,$username,$password);
 @mysql_select_db($database) or die( "Unable to select database");
 if (!empty($nicksearch))  
@@ -33,10 +34,15 @@ if ($delete == logrow)
 if ($delete == log)
 {	$sql = "DELETE FROM hubLog $where";
 	$result = mysql_query($sql) or die(mysql_error());}
-$query="SELECT * FROM hubLog $where ORDER by rowID DESC LIMIT 50";
-$result=mysql_query($query);
-$num=mysql_num_rows($result); 
-mysql_close();?>
+
+$entry=0;$limit=$defaultLogEntries; 
+if (empty($offset)) {$offset=0;}
+
+$numresults=mysql_query("SELECT * FROM hubLog $where ");
+$numrows=mysql_num_rows($numresults);
+
+
+$result=mysql_query("SELECT * FROM hubLog $where ORDER by rowID DESC  LIMIT $offset,$defaultLogEntries");?>
 <b>Apply Filers</b>
 <table> 
 	<td nowrap><form method="get" class='inline' action="log-hub.php">
@@ -84,7 +90,7 @@ mysql_close();?>
 </td>
 </table>
 <p>Filters Applied <? 
-	if ((empty($rfilter)) && (empty($afilter)) && (empty($nicksearch))&& (empty($ipsearch))&& (empty($clisearch)) )
+	if ((empty($rfilter)) && (empty($afilter)) && (empty($nicksearch)))
 		{echo "None";}
 	else
 		{echo "<b> $afilter $rfilter $nicksearch </b>";}
@@ -127,13 +133,11 @@ while ($data=mysql_fetch_array($result))
 	</form>
 	</tr>
 	<? $i++; } 
-echo "</table>";
-?></div>
+echo "</table></div>";
 
-
-<? if ($offset!=0) { 
+if ($offset!=0) { 
     $prevoffset=$offset-$defaultLogEntries;
-    print "<a href=\"user-manage.php?offset=$prevoffset&ipsearch=$ipsearch&nicksearch=$nicksearch\">PREV</a> &nbsp; \n";
+    print "<a href=\"log-hub.php?offset=$prevoffset&nicksearch=$nicksearch&afilter=$afilter&rfilter=$rfilter\">PREV</a> &nbsp; \n";
 }
 $pages=intval($numrows/$limit);
 
@@ -142,14 +146,12 @@ if ($numrows%$limit) {
 
 for ($i=1;$i<=$pages;$i++) { // loop thru
     $newoffset=$limit*($i-1);
-    print "<a href=\"user-manage.php?offset=$newoffset&ipsearch=$ipsearch&nicksearch=$nicksearch\">$i</a> &nbsp; \n"; }
+    print "<a href=\"log-hub.php?offset=$newoffset&nicksearch=$nicksearch&afilter=$afilter&rfilter=$rfilter\">$i</a> &nbsp; \n"; }
 
-if (!(($offset/$limit)==$pages-1) && $pages!=1) {
-    // not last page so give NEXT link
+if (!(($offset/$limit)==$pages) && $pages!=1) {
     $newoffset=$offset+$limit;
-    print "<a href=\"user-manage.php?offset=$newoffset&ipsearch=$ipsearch&nicksearch=$nicksearch\">NEXT</a><p>\n";
+    print "<a href=\"log-hub.php?offset=$newoffset&nicksearch=$nicksearch&afilter=$afilter&rfilter=$rfilter\">NEXT</a><p>\n";
 }
-
 ?></div>
 
 
