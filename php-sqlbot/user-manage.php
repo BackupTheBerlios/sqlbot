@@ -64,8 +64,9 @@ echo "Totals :Users $numrows<br>";
 <tr>
 <th><a href="<? echo "user-manage.php?order=nick" ?>"> <? echo $font;?>Nick<? echo $fontend;?></a></th>
 <th><? echo $font;?>Status<? echo "$fontend";?></th>
-<th><a href="<? echo "user-manage.php?order=uType" ?>"> <? echo $font;?>User Type<? echo "$fontend";?></a></th>
-<th><? echo $font;?>Allow Status<? echo "$fontend";?></th>
+<th><a href="<? echo "user-manage.php?order=uType" ?>"> <? echo $font;?>Type<? echo "$fontend";?></a></th>
+<th><? echo $font;?>Client<? echo "$fontend";?></th>
+<th><? echo $font;?>Allowed?<? echo "$fontend";?></th>
  <th><a href="<? echo "user-manage.php?order=connection" ?>"> <? echo $font;?>Connection<? echo "$fontend";?></a></th>
  <th><a href="<? echo "user-manage.php?order=country" ?>"> <? echo $font;?>Country<? echo "$fontend";?></a></th>
 <th><a href="<? echo "user-manage.php?order=IP" ?>"> <? echo $font;?>IP<? echo "$fontend";?></a></th>
@@ -88,8 +89,12 @@ while ($data=mysql_fetch_array($result))
 //	$awayStatus=mysql_result($result,$i,"awayStatus");
 //	$awayMSg=mysql_result($result,$i,"awayMSg");
 //	$fullDescription=mysql_result($result,$i,"fullDescription");
-//	$dcClient=mysql_result($result,$i,"dcClient");
-//	$dcVersion=mysql_result($result,$i,"dcVersion");
+	$dcVersion=mysql_result($result,$i,"dcVersion");
+	$dcClient=mysql_result($result,$i,"dcClient");
+	if ( $dcClient == "++" ) { $icoClient = DCpp ;}
+	if ( $dcClient == "DCGUI" ) { $icoClient = DCGUI ;}
+	if ( $dcClient == "No Tag" ) { $icoClient = NoTag ; $dcVersion= "";}
+
 //	$slots=mysql_result($result,$i,"slots");
 //	$hubs=mysql_result($result,$i,"hubs");
 //	$limiter=mysql_result($result,$i,"limiter");
@@ -122,6 +127,7 @@ while ($data=mysql_fetch_array($result))
 
 	// Colour Rows
 	if(($uType == "Operator") || ($uType == "Op-Admin")) {echo "<TR bgcolor="; echo "$OpRowColour"; echo ">\n";}
+	else if($uType == "Registered") {echo "<TR bgcolor="; echo "$RegRowColour"; echo ">\n";}
 	else if($allowStatus == "Allow") {echo "<TR bgcolor="; echo "$AllowRowColour"; echo ">\n";}
 	else if(($allowStatus == "Banned")) { echo "<TR bgcolor=";echo "$BanRowColour"; echo ">\n";}
 	else if($kickCount != 0) {echo "<TR bgcolor="; echo "$KickRowColour"; echo ">\n";}
@@ -132,8 +138,15 @@ while ($data=mysql_fetch_array($result))
 	
 	
 <td nowrap><a href="<? echo "user-type.php?nick=$nick&IP=$IP" ?>"> <? echo "$font$nick$fontend"?></a></td>
-<td nowrap><a href="<? echo "user-manage.php?field=status&search=$status" ?>" title="Search for users <?echo "$status"?>"> <? echo "$font$status$fontend"; ?></a></td>
-<td nowrap><a href="<? echo "user-manage.php?field=uType&search=$uType" ?>"><? echo "$font$uType$fontend"; ?></a></td>
+<td nowrap><div align="center"><a href="<? echo "user-manage.php?field=status&search=$status" ?>" title="Search for users <?echo "$status"?>"><img src="img/user/<? echo "$status" ?>.gif" border="0"></div></a> 
+</td>
+<td nowrap><div align="center"><a href="<? echo "user-manage.php?field=uType&search=$uType" ?>" title="Search for all <? echo "$uType" ?>s"><img src="img/user/<? echo "$uType" ?>.gif" border="0"></a></div></td>
+
+<td nowrap>
+	<div align="center"><a title="<? echo "$dcClient $dcVersion" ?>" style="cursor:help"><img src="img/clients/<? echo "$icoClient" ?>.gif" border="0"></a>
+	</div>
+</td>
+
 <td nowrap><a href="<? echo "user-manage.php?field=allowStatus&search=$allowStatus" ?>"><? echo "$font$allowStatus$fontend"; ?></a></td>
 <td nowrap><a href="<? echo "user-manage.php?field=connection&search=$connection" ?>"><? echo "$font$connection$fontend"; ?></a></td>
 <td nowrap><center><a href="user-manage.php?field=country&search=<? echo "$country"?>"  title="Search for all users from: <? echo "$country"?>">
