@@ -107,15 +107,21 @@ sub banUser (){
 	my($lastAction) ="";
 
 	$buth->finish();
-
+	
 	if ($mode =~ /tBan/i){		# Temporary Ban
 		$lastAction = "T-Banned";
 		$tBanCount++;
 		$tBanCountTot++;
-		odch::add_ban_entry($ip);
-		odch::add_nickban_entry($user);
+		
+		my($temp_ban_time)=&getHubVar("temp_ban_time");
 		if (&getVerboseOption("verbose_banned")){
-			&msgAll("T-BANNED $user($ip) for:$reason");}}
+			&msgAll("T-BANNED($temp_ban_time Mins) $user($ip) for:$reason");}
+			
+		$temp_ban_time = $temp_ban_time * 60;
+		odch::add_ban_entry("$ip $temp_ban_time");
+		odch::add_nickban_entry("$user $temp_ban_time");
+	
+		}
 	elsif ($mode =~ /pban/i){	# Permanent Ban
 		$lastAction = "P-Banned";
 		$pBanCountTot++;
