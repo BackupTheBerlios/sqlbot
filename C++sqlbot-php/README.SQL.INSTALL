@@ -155,6 +155,17 @@ lcMessage TINYTEXT,
 primary key(lcTime, hubID, lcNick));
 
 
+#and one for the <!-- HUB  EXTRAS-->:
+CREATE TABLE hubExtras (
+hubID INT(3) NOT NULL,
+hxRecUsers int(6),
+hxRecShare int(20),
+hxBanNicks TEXT,
+hxBanSearch TEXT,
+hxBanChat TEXT,
+hxBanSharedFiles TEXT,
+primary key(hubID));
+
 
 
 #Finally the last table for the IP-Country database.
