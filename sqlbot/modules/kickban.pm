@@ -42,7 +42,7 @@ sub kickWorker()
 		&msgUser("$user","You have been kicked ($information)");
 		odch::kick_user($user); # GoodBye..
 
-		my($kw1th) = $dbh->prepare("SELECT kickCountTot,kickCount FROM userDB WHERE nick='$user' AND allowStatus!='Banned'");
+		my($kw1th) = $dbh->prepare("SELECT kickCountTot,kickCount FROM userDB WHERE nick='$nick' AND allowStatus!='Banned'");
 		$kw1th->execute();
 		$ref1 = $kw1th->fetchrow_hashref();
 		my($kickCountTot) = "$ref1->{'kickCountTot'}";
@@ -50,7 +50,7 @@ sub kickWorker()
 		$kickCount++;
 		$kickCountTot++;
 		$kw1th->finish();
-		$dbh->do("UPDATE userDB SET kickCountTot='$kickCountTot',kickCount='$kickCount',lastReason='$information',lastAction='Kicked' WHERE nick='$user' AND allowStatus!='Banned'");
+		$dbh->do("UPDATE userDB SET kickCountTot='$kickCountTot',kickCount='$kickCount',lastReason='$information',lastAction='Kicked' WHERE nick='$nick' AND allowStatus!='Banned'");
 
 		$dbh->do("DELETE FROM botWorker WHERE function LIKE '1%' AND nick='$nick'");
 	}
