@@ -35,11 +35,12 @@ sub splitDescription() {
 	$email = odch::get_email($user);
 
 	## Check for internal networks ##
-	if ($ip =~ /192.168/)  {$ip = &getHubVar("external_ip"); }
-
-	## Get Country code for user #
-	my($reg) = IP::Country::Fast->new();
-	$country = $reg->inet_atocc($ip);
+	if ($ip =~ /192.168/)  
+		{$country = &getHubVar("hub_country");}
+	else
+		{## Get Country code for user #
+		my($reg) = IP::Country::Fast->new();
+		$country = $reg->inet_atocc($ip);}
 	$hostname = odch::get_hostname($user);
 	## Get user Type ##
 	if($type =~ /8/){$utype = "Registered";}
