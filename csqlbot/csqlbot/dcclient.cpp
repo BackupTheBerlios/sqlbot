@@ -100,7 +100,9 @@ int DCClient::DC_CallBack( CObject * Object )
                     chatFloodCounter = 0;
                     MySql->Update(dcHubId,"hubConfig","hcStatus='Offline'","");
                     SendConsole("Disconnected",hubConfig->GetHubHost());
+		    delete object;
                     delete(this);
+		    return 0;
                }
                break;
           }
