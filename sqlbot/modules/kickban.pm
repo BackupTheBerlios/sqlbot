@@ -94,9 +94,9 @@ sub banWorker()
 #			&banUser($user,$information,$ip,"nban");}
 		elsif($function=='27'){
 			
-			$dbh->do("UPDATE userDB SET tBanCount='0',kickCount='0'	WHERE nick='$sqluser' AND allowStatus!='Banned'");
+			$dbh->do("UPDATE userDB SET tBanCount='0',kickCount='0'	WHERE nick='$sqluser'");
 		}
-		$dbh->do("DELETE FROM botWorker WHERE nick='$sqluser'");
+		$dbh->do("DELETE FROM botWorker WHERE IP='$ip'");
 	}
 	$bwth->finish();
 }
@@ -159,7 +159,7 @@ sub banUser (){
 					allowStatus='Normal',
 					lastReason='Removed',
 				    	lastAction='$lastAction'
-				    	WHERE nick='$sqluser' AND allowStatus='Banned'");
+				    	WHERE nick='$sqluser'");
 
 		if(&getLogOption("log_bans"))
 			{&addToLog($user,$lastAction,"Removed");}			
@@ -176,7 +176,7 @@ sub banUser (){
 				allowStatus='$allowStatus',
 				lastReason='$reason',
 			    	lastAction='$lastAction'
-			    	WHERE nick='$sqluser' AND allowStatus!='Banned'");
+			    	WHERE nick='$sqluser'");
 	
 	if(&getLogOption("log_bans"))
     		{&addToLog($user,$lastAction,$reason);}

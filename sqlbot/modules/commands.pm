@@ -20,15 +20,15 @@ sub myInfo()
 	my($user)=@_;
 	my($sqluser) = &sqlConvertNick($user);
 	my($loginCount) = $dbh->selectrow_array("SELECT loginCount FROM userDB 
-				WHERE nick='$sqluser' AND lastAction!='P-Banned' AND status='Online' ");
+				WHERE nick='$sqluser' AND status='Online' ");
 	my($avShareBytes) = $dbh->selectrow_array("SELECT avShareBytes FROM userDB 
-				WHERE nick='$sqluser' AND lastAction!='P-Banned' AND status='Online'");
+				WHERE nick='$sqluser' AND status='Online'");
 	my($shareByte) = $dbh->selectrow_array("SELECT shareByte FROM userDB 
-				WHERE nick='$sqluser' AND lastAction!='P-Banned' AND status='Online'");
+				WHERE nick='$sqluser' AND status='Online'");
 	my($firstTime) = $dbh->selectrow_array("SELECT firstTime FROM userDB 
-				WHERE nick='$sqluser' AND lastAction!='P-Banned' AND status='Online'");
+				WHERE nick='$sqluser' AND status='Online'");
 
-	my($mith) = $dbh->prepare("SELECT * FROM userDB WHERE nick='$sqluser' AND lastAction!='P-Banned' AND status='Online'");
+	my($mith) = $dbh->prepare("SELECT * FROM userDB WHERE nick='$sqluser' AND status='Online'");
 	$mith->execute();
 	my($ref) = $mith->fetchrow_hashref();
 	&msgUser("$user","Your Info:\r

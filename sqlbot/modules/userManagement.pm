@@ -21,7 +21,7 @@ sub userIsOnline(){
 
 	my($sqluser) = &sqlConvertNick($user);
 	my($value) = $dbh->selectrow_array("SELECT COUNT(nick) FROM userDB 
-				WHERE nick='$sqluser' AND status='Online' AND allowStatus!='Banned'");
+				WHERE nick='$sqluser' AND status='Online' ");
 	if($value eq 1)
 	{return 1;}
 	return 0;
@@ -31,7 +31,7 @@ sub userInDB(){
 	my($user,$ip) = @_;
 	my($sqluser) = &sqlConvertNick($user);
 	my($value) = $dbh->selectrow_array("SELECT COUNT(nick) FROM userDB 
-					WHERE nick='$sqluser' AND allowStatus!='Banned'");	
+					WHERE nick='$sqluser' ");	
 	if($value eq 1) 
 		{my($value1) = $dbh->selectrow_array("SELECT COUNT(nick) FROM userDB 
 				WHERE nick='$sqluser' AND allowStatus='allow'");
@@ -61,7 +61,7 @@ sub updateUserRecordRecheck(){
 	$dbh->do("UPDATE userDB SET nick='$sqluser',slots='$NSlots',hubs='$NbHubs',
 			limiter='$UploadLimit',fullDescription='$fullDescription',
 			shareByte='$shareBytes',status='Online'
-			WHERE nick='$sqluser' AND allowStatus!='Banned')");
+			WHERE nick='$sqluser' )");
 }
 
 # User record exists so update the details
@@ -71,7 +71,7 @@ sub updateUserRecord(){
 	my($inTime)="$date $time";
 	my($sqluser) = &sqlConvertNick($user);
 	my($uurth) = $dbh->prepare("SELECT loginCount FROM userDB 
-			WHERE nick='$sqluser' AND allowStatus!='Banned'");
+			WHERE nick='$sqluser' ");
 	$uurth->execute();
 	my($ref) = $uurth->fetchrow_hashref();
 	my($loginCount) = "$ref->{'loginCount'}";
@@ -87,7 +87,7 @@ sub updateUserRecord(){
 					avShareBytes='$shareBytes',loginCount='$loginCount',
 					fullDescription='$fullDescription',shareByte='$shareBytes',
 					IP='$ip'
-					WHERE nick='$sqluser' AND allowStatus!='Banned'");
+					WHERE nick='$sqluser' ");
 }
 
 # Check the allow status of this user
@@ -124,7 +124,7 @@ sub userOnline(){
 	my($sqluser) = &sqlConvertNick($user);
 	$dbh->do("UPDATE userDB SET status='$online',
 					inTime='$date $time'
-					WHERE nick='$sqluser' AND allowStatus!='Banned'");
+					WHERE nick='$sqluser' ");
 }
 
 
@@ -133,7 +133,7 @@ sub userOnline(){
 sub incLineCount(){
 	my($user)=@_;
 	my($sqluser) = &sqlConvertNick($user);
-	my($ilcth) = $dbh->prepare("SELECT lineCount FROM userDB WHERE nick='$sqluser' AND allowStatus!='Banned'");
+	my($ilcth) = $dbh->prepare("SELECT lineCount FROM userDB WHERE nick='$sqluser'");
 	$ilcth->execute();
 	my($ref) = $ilcth->fetchrow_hashref();
 
@@ -141,7 +141,7 @@ sub incLineCount(){
 	$ilcth->finish();
 	$lineCount=$lineCount+1;
 
-	$dbh->do("UPDATE userDB SET lineCount='$lineCount' WHERE nick='$sqluser' AND allowStatus!='Banned'");
+	$dbh->do("UPDATE userDB SET lineCount='$lineCount' WHERE nick='$sqluser' ");
 	
 }
 # Change the level of this user
@@ -165,7 +165,7 @@ sub setRegUser(){
 	&msgUser($setUser,">>>> $user has changed your level to $level your password is $passwd");
 	# Change this user type in the userDB
 	my($utype)  = odch::get_type($setUser);
-	$dbh->do("UPDATE userDB SET type='$utype',passwd='$passwd' WHERE (nick='$sqluser' AND allowStatus!='Banned')");
+	$dbh->do("UPDATE userDB SET type='$utype',passwd='$passwd' WHERE nick='$sqluser'");
 	&addToLog($setUser,"Add/Edit User",$user);	
 	
 }
@@ -247,8 +247,7 @@ sub delRegUser(){
 		{# Remove this user from reg list
 		odch::remove_reg_user($user);}
 	&addToLog($user,"Del User",$user);
-	$dbh->do("UPDATE userDB SET type='User',passwd='not set' 
-				WHERE nick='$sqluser' ");
+	$dbh->do("UPDATE userDB SET type='User',passwd='not set' WHERE nick='$sqluser' ");
 }
 
 
@@ -259,15 +258,15 @@ sub userAway(){
 	my($awayMsg) = substr($data, $tmp_ptr+5);
 	chop($awayMsg);
 	$dbh->do("UPDATE userDB SET awayMsg='$awayMsg',awayStatus='on' 
-			WHERE nick='$sqluser' AND allowStatus!='Banned'");
+			WHERE nick='$sqluser'");
 }
 sub userBack(){
 	my($user) = @_;
 	my($sqluser) = &sqlConvertNick($user);
 	my($value) = $dbh->do("SELECT awayStatus FROM userDB 
-			WHERE awayStatus='on' AND nick='$sqluser' AND allowStatus!='Banned'");
+			WHERE awayStatus='on' AND nick='$sqluser'");
 	if($value eq 1)
-		{$dbh->do("UPDATE userDB SET awayStatus='off' WHERE nick='$sqluser' AND lastAction!='P-Banned'");
+		{$dbh->do("UPDATE userDB SET awayStatus='off' WHERE nick='$sqluser'");
 		&msgAll("$user returns after being away");}
 
 }
