@@ -284,6 +284,7 @@ CString DCClient::GetOpList()
         }
         return (sOpList);
 }
+
 CString DCClient::GetVipList()
 {
         CString sVipList = "";
