@@ -14,8 +14,8 @@
 #
 ##############################################################################################
 
-$botVersion = "0.2.0";
-
+$botVersion = "0.2.1";
+$description = "I am $botname, PRAY you meet the rules. sqlBot http://sqlbot.berlios.de"; 
 
 use DBI;
 use IP::Country::Fast;
@@ -46,6 +46,7 @@ sub main(){
         if (&getVerboseOption("verbose_botjoin")){
 		&version();
         }
+	odch::data_to_all("\$MyINFO \$ALL $botname $description\$ \$DSL>\$\$0\$|"); 
 	&addToLog($botname,"Restart","Reloadscripts");
 }
 
