@@ -136,7 +136,9 @@ while ($data=mysql_fetch_array($result))
 <td nowrap><a href="<? echo "user-manage.php?field=uType&search=$uType" ?>"><? echo "$font$uType$fontend"; ?></a></td>
 <td nowrap><a href="<? echo "user-manage.php?field=allowStatus&search=$allowStatus" ?>"><? echo "$font$allowStatus$fontend"; ?></a></td>
 <td nowrap><a href="<? echo "user-manage.php?field=connection&search=$connection" ?>"><? echo "$font$connection$fontend"; ?></a></td>
-<td nowrap><a href="user-manage.php?field=country&search=<? echo "$country"?>" title="Search for all users from: <? echo "$country"?>"><? echo "$font$country$fontend"; ?></a></td>
+<td nowrap><center><a href="user-manage.php?field=country&search=<? echo "$country"?>"  title="Search for all users from: <? echo "$country"?>">
+<img src="flags/<? echo "$country" ?>.GIF" alt="<? echo "$country" ?>" border="0" title="<? echo "$country" ?>"></a></center></td>
+
 <td nowrap><a href="user-manage.php?field=IP&search=<? echo "$IP"?>" title="Search for all users with: <? echo "$IP"?>"><? echo "$font$IP$fontend"; ?></a></td>
 <td nowrap><? echo "$font$inTime$fontend"; ?></td>
 <td nowrap><a href="user-manage.php?field=shareByte&search=<? echo "$byteShare"?>" title="<? echo "$Share" ?>" style="cursor:help"><? echo "$font$byteShare$fontend"; ?></a></td>
