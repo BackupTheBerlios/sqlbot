@@ -1,12 +1,12 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
-<html>
-<head>
-<title>Hub Log</title>
-</head>
-<body>
+<?
+$page_title="View Online clients";
+include("header.ini");
+?>
+<br>
+	<div align="center"><form action="log-online.php" method="post">
+	<input class="button" type="Submit" value="Refresh"></form><br>
 <?
 include("dbinfo.inc.php");
-echo "<b><center>ODCH Admin - Users Online $hubname</center></b><br><br>";
 $limit=$defaultLogEntries; 
 echo "$font";
 mysql_connect($databasehost,$username,$password);
@@ -22,8 +22,7 @@ if ($delete == onlinerow)
 {	$sql = "DELETE FROM online WHERE rowID=$id"; 
 	$result = mysql_query($sql) or die(mysql_error());}
 
-$result=mysql_query("SELECT * FROM online ORDER by rowID DESC LIMIT $offset,$defaultLogEntries");
-
+$result=mysql_query("SELECT * FROM online ORDER by name LIMIT $offset,$defaultLogEntries");
 echo "Total Number of users online $numrows<br>";
 ?>
 <table border="$tableborders" cellspacing="2" cellpadding="2">
@@ -100,7 +99,7 @@ while ($data=mysql_fetch_array($result))
 	<td nowrap><? echo "$font$bold$shared_bytes$boldend$fontend"; ?></td>
 	<td nowrap><? echo "$font$bold$shared_gigs$boldend$fontend"; ?></td>
 	<td nowrap><? echo "$font$bold$email$boldend$fontend"; ?></td>
-	<td nowrap><input type="Submit" value="Delete" </td>
+	<td nowrap><input type="Submit" value="Delete" onClick="return confirmDelete()"></td>
 	
 	</form>
 	</tr>
@@ -128,7 +127,7 @@ if (!(($offset/$limit)==$pages) && $pages!=1) {
     print "<a href=\"?m=$menuname&p=$path/hubonline&offset=$newoffset\">NEXT</a><p>\n";
 }
 mysql_close();
-?>
+?></div>
 <? echo "$fontend";?>
 </body>
 </html>
