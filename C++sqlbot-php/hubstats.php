@@ -136,7 +136,7 @@ while ($data=mysql_fetch_array($searchType))
 // DEFINE SEARCH TYPES
 if ($lsType == "0") {$Type = "";}
 else if ($lsType == "1") {$Type = "Any";}
-else if ($lsType == "2") {$Type = "MP3";}
+else if ($lsType == "2") {$Type = "Audio";}
 else if ($lsType == "3") {$Type = "Compressed";}
 else if ($lsType == "4") {$Type = "Document";}
 else if ($lsType == "5") {$Type = "Executable";}
@@ -173,7 +173,7 @@ $i++;
 <?php //DEFINE SEARCH TYPES
 if ($searchfield == "") {$SearchType = "All"; $parse_option = "";}
 else if ($searchfield == "1") {$SearchType = "Any"; $parse_option = "&& lsType='$searchfield'";}
-else if ($searchfield == "2") {$SearchType = "MP3"; $parse_option = "&& lsType='$searchfield'";}
+else if ($searchfield == "2") {$SearchType = "Audio"; $parse_option = "&& lsType='$searchfield'";}
 else if ($searchfield == "3") {$SearchType = "Compressed"; $parse_option = "&& lsType='$searchfield'";}
 else if ($searchfield == "4") {$SearchType = "Document"; $parse_option = "&& lsType='$searchfield'";}
 else if ($searchfield == "5") {$SearchType = "Executable"; $parse_option = "&& lsType='$searchfield'";}
@@ -197,10 +197,10 @@ else { echo "<option value=\"$number\">$meaning";}
 // DEFINE SEARCH TYPES
 	echo "<form action=\"$PHP_SELF\" method=\"post\">";
 				hidden_value(hubID, $hubID);
-	echo 	"<select name=\"searchfield\" class=\"form_select_long\">";
-					isselected($searchfield, "", All);
+	echo 	"<select name=\"searchfield\" class=\"form_select_long\" onchange=\"submit();\">";
+					isselected($searchfield, "", "- All Combined");
 					isselected($searchfield, 1, Any);
-					isselected($searchfield, 2, MP3);
+					isselected($searchfield, 2, Audio);
 					isselected($searchfield, 3, Compressed);
 					isselected($searchfield, 4, Document);
 					isselected($searchfield, 5, Executable);

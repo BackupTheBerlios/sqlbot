@@ -66,7 +66,7 @@ function list_connection($con_variable, $value) {
 
 function connection_choice($value_description, $value,$value_orig) {
 echo "<td>$value_description &nbsp;</td>\n<td align=\"right\">";
-echo "<select name=\"$value\" class=\"form_select\">";
+echo "<select name=\"$value\" class=\"form_select_long\">";
 
 		list_connection("28.8Kbps", $value_orig);
 		list_connection("33.6Kbps", $value_orig);

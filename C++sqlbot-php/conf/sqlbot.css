@@ -176,6 +176,8 @@ td.stats {
 	width: 200px;
 	color: #010101;
 	background-color: #d8faff;
+	background-image: url("/img/percent.gif");
+	background-repeat: repeat-y;
 	padding: 0px;
 }
 
@@ -392,6 +394,7 @@ input.deldata {
 	border-color: #598FE3;
 	background-color: #598FE3;
 }
+
 
 #dek {POSITION:absolute;VISIBILITY:hidden;Z-INDEX:200;}
 
