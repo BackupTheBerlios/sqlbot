@@ -33,11 +33,11 @@ CString TimeHand::getDate()
      time ( &rawtime );
      timeinfo = localtime ( &rawtime );
 
-     datestream << setw(2) << setfill('0') <<  timeinfo->tm_mday 
-     		<< setw(2) << setfill('0') << timeinfo->tm_mon+1
-		<< setw(2) << setfill('0') << timeinfo->tm_year+1900;
+     datestream << setw(4) << setfill('0') << timeinfo->tm_year+1900
+           << setw(2) << setfill('0') <<  timeinfo->tm_mday
+          << setw(2) << setfill('0') << timeinfo->tm_mon+1;
      datestream.flush();
-//     cout << "datanow = " << datestream.str() << endl;
+//     cout << "datenow = " << datestream.str() << endl;
     return CString((const char *&)datestream.str());
 }
 CString TimeHand::getTime()
@@ -66,11 +66,11 @@ CString TimeHand::getLogDate()
      timeinfo = localtime ( &rawtime );
 
      datestream << setw(2) << setfill('0') << timeinfo->tm_mday
-     		<< "-" << setw(2) << setfill('0') << timeinfo->tm_mon+1
-		<< "-" << setw(2) << setfill('0') << timeinfo->tm_year+1900 ;
+     << "-" << setw(2) << setfill('0') << timeinfo->tm_mon+1
+	<< "-" << setw(2) << setfill('0') << timeinfo->tm_year+1900 ;
      datestream.flush();
 //     datestream.freeze(0);
-//     cout << "datanow = " << datestream.str() << endl;
+//     cout << "datenow = " << datestream.str() << endl;
     return CString((const char *&)datestream.str());     
 }
 CString TimeHand::getLogTime()
