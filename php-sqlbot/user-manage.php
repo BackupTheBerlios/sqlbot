@@ -9,7 +9,8 @@ $where = "";
 if (!empty($field))  
 	{$where="WHERE $field LIKE '%$search%'";}
 if (!empty($order))  
-	{$orderby="ORDER by '$order'";}	
+	{$orderby="ORDER by '$order'";}
+else {$orderby="ORDER by uType,nick";}
 
 if ($f == delete)
 	{$sql = "DELETE FROM userDB $where";$result = mysql_query($sql) or die(mysql_error());}
