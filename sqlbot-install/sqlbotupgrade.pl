@@ -48,9 +48,25 @@ eval { $dbh->do("ALTER TABLE userDB MODIFY nick VARCHAR(50)");
 eval { $dbh->do("ALTER TABLE userDB MODIFY onlineTime BIGINT(20)");
 					print "ALTER TABLE userDB MODIFY onlineTime BIGINT(20)\n";
 		}; print "ALTER TABLE userDB MODIFY onlineTime BIGINT(20)  : failed $@\n" if $@;
+
+eval { $dbh->do("INSERT INTO hub_variables VALUES (	'',
+							'hub_country',
+							'',
+							'Country location of the Hub')");
+			print "INSERT INTO hub_variables hub_country \n";
+		}; print "INSERT INTO hub_variables VALUES hub_country : failed $@\n" if $@;
+
+eval { $dbh->do("INSERT INTO hub_variables VALUES (	'',
+						'logfile_name',
+						'',
+						'Name for the Chat logFile, Leave blank for no logging')");
+			print "INSERT INTO hub_variables logfile_name \n";
+		}; print "INSERT INTO hub_variables logfile_name\n" if $@;
+
+						
 	
 eval { $dbh->do("ALTER TABLE hubLog MODIFY nick VARCHAR(50)");
-					print "ALTER TABLE hubLog MODFIY (nick varchar(50)\n";
+				print "ALTER TABLE userDB MODFIY (nick varchar(50)\n";
 		}; print "ALTER TABLE hubLog MODFIY nick varchar(50) : failed $@\n" if $@;
 
 eval { $dbh->do("CREATE TABLE ipFiltering (rowID 	INT(7) NOT NULL AUTO_INCREMENT PRIMARY KEY,
