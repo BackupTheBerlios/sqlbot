@@ -113,13 +113,15 @@ void BotController::Start(){
 
      while (hubList.Count() != 0)
      {
-        sleep(5);
+        sleep(10);
      }
 }
 void BotController::AddHub(CString hubid,CString host)
 {
      hubList.Add(hubid, (CObject*&)host);
 }
+
+
 void BotController::JoinHub(CString hubid,CString host)
 {
      DCClient *dcclient = 0;
@@ -132,9 +134,11 @@ void BotController::JoinHub(CString hubid,CString host)
      dcclient = new DCClient(botController,mySqlCon,CString(hubid).asINT(),mySqlBot->GetBotMaster(),mySqlBot->GetBotName());
      hubList.Add(hubid, (CObject*&)dcclient);
      CServerManager::Instance()->Connect(host,host,dcclient);
-
+     
 }
-void BotController::LeaveHub(int hubid)
+
+
+void BotController::LeaveHub(DCClient *dcclient,int hubid)
 {
      CString *host = 0;
 

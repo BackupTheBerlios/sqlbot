@@ -46,7 +46,7 @@ public:
      void Start(void);
      void AddHub(CString hubid,CString host);
      void JoinHub(CString hubid,CString host);
-     void LeaveHub(int hubid);
+     void LeaveHub(DCClient *dcclient,int hubid);
 
      CStringList hubList;
 private:

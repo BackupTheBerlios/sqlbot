@@ -463,14 +463,18 @@ bool BotCommands::MasterBotCommands(CString nick, CString cmd)
      else if (cmd == "+die")
      {
           dcclient->SaveUserList();
-          dcclient->GetBController()->LeaveHub(dcclient->GetHubId());
+          dcclient->GetBController()->LeaveHub(dcclient,dcclient->GetHubId());
+
           exit(0);
           return(TRUE);
      }
      else if (cmd == "+part")
      {
-          dcclient->Disconnect();
-          return(TRUE);
+          dcclient->SaveUserList();
+          dcclient->GetBController()->LeaveHub(dcclient,dcclient->GetHubId());
+          delete(this);
+//          dcclient->Disconnect();
+//          return(TRUE);
      }
 //        /** add transfer to the waitlist */
 //          pTransferView->DLM_QueueAdd( nick, m_pClient->GetHubName(), m_pClient->GetIP()+":"+QString().setNum(m_pClient->GetPort()).ascii(),
@@ -529,23 +533,25 @@ CString BotCommands::Help()
      help += "+botinfo - Information about the bot, #of hubs connections version, master etc\r\n";
 	help += "+time - Shows the Hub Date & Time\r\n";
 	help += "+myinfo - Shows your user info\r\n";
-	help += "+timeonline - Shows your Total time connected\r\n";
+	help += "+showops - Show ops online now\r\n";
+     help += "+showvips - Shows vips online now\r\n";
+     help += "+version - Displays my version\r\n";
 //     help += "NI +topchat - Shows the top ten biggest Chatters\r\n";     
 	help += "See Also: +help op, +help master\r\n";
      return(help);
 }
 CString BotCommands::HelpOp()
 {
-	CString help;
-	help = "Operator Help:\r\n";
-	help += "+help op - This Text\r\n";
-	help += "+info <nick> - Shows the Information held on <nick>\r\n";
+     CString help;
+     help = "Operator Help:\r\n";
+     help += "+help op - This Text\r\n";
+     help += "+info <nick> - Shows the Information held on <nick>\r\n";
 	help += "+kick <nick> <reason> - Kick this user\r\n";
 	help += "+sban <nick> <reason> - Short Ban this user\r\n";     
 	help += "+lban <nick> <reason> - Long Ban this user\r\n";
 	help += "+pban <nick> <reason> - Perm Long Ban this user\r\n";
 	help += "+uban <nick> - Removes a ban, clears ban flag, and sets expire time to now\n";     
-    	help += "+move <nick> <host> <reason> - Move the user to another hub\r\n";
+     help += "+move <nick> <host> <reason> - Move the user to another hub\r\n";
 	help += "+move <nick> - Move the user to predefined hub\r\n";     
      help += "+save - Store all changes made to configs to SQL\r\n";
      help += "+reload - Reload the SQL config for this hub\r\n";
@@ -604,26 +610,7 @@ CString BotCommands::Rules()
 }        
 /*
      user commands
-+help
-#help
-#uptime
-#online (user count with ops too)
-#stats
-#fakers
-#myinfo
-     op commands
-info nick
-kick nick reason
-sban nick reason or sban ip reason
-lban nick reason or lban ip reason
-nban nick reason or  nban ip reason
-unban nick or unban ip
-move nick host or move ip host
-get config
-set share GB
-set hubs #
-set slots min #
-set slots max #
+
 add reg nick password
 del reg nick
      master commands
@@ -631,7 +618,5 @@ add op nick password
 del op nick
 join hub
 part hub
-reload
-save
 
 */
