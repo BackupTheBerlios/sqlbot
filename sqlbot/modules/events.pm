@@ -47,8 +47,7 @@ sub processEvent(){
 	$notags = "NoTags";
 		
 	if (lc($REASON) eq lc("FAKER"))
-		{&banUser($user,"Faker",$ip,"pban");}
-
+		{&msgUser("$user","Do Not Fake your Client or your Share... Your IP has been [Banned]");}
 	elsif (lc($REASON) eq lc("MLDonkey"))
 		{&msgUser("$user","No MLDonkey... Your IP has been [Banned]");}
 	
