@@ -57,21 +57,26 @@ sub processEvent(){
 
 sub botWorker(){
 	# Check for Kick Events
+
 	my($WKicks) = $dbh->selectrow_array("SELECT COUNT(*) FROM botWorker WHERE function LIKE '1%'");
 	if($WKicks ne 0)
-		{&kickWorker();}
+		{
+		&kickWorker();}
 	#Check for pban Events
 	my($WBans) = $dbh->selectrow_array("SELECT COUNT(*) FROM botWorker WHERE function LIKE '2%'"); # Or 22 or 23
 	if($WBans ne 0)
-		{&banWorker();}
+		{
+		&banWorker();}
 	#Check for User List events
 	my($WUsers) = $dbh->selectrow_array("SELECT COUNT(*) FROM botWorker WHERE function LIKE '3%'"); # Or 31 or 32 or 33
 	if($WUsers ne 0)
-		{&userWorker();}
+		{
+		&userWorker();}
 	#Check for User List events # 40 - add  41 - Delete  42 - Allow Status
 	my($WIpFilter) = $dbh->selectrow_array("SELECT COUNT(*) FROM botWorker WHERE function LIKE '4%'"); # Or 40 or 41
 	if($WIpFilter ne 0)
-		{&ipFilterWorker();}
+		{
+		&ipFilterWorker();}
 	#User is marked as allowed	
 	my($WAUser) = $dbh->selectrow_array("SELECT COUNT(*) FROM botWorker WHERE function LIKE '5%'"); # Or 50
 	if($WAUser ne 0)

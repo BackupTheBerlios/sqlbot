@@ -126,7 +126,7 @@ sub addToLog(){
 	&setTime();
 	my($dtime)="$date $time";
 	my($sqluser) = &sqlConvertNick($user);
-	$dbh->do("INSERT INTO hubLog VALUES ('mysql_insertid',$sqluser,'$dtime','$ACTION','$REASON')");
+	$dbh->do("INSERT INTO hubLog VALUES ('mysql_insertid','$sqluser','$dtime','$ACTION','$REASON')");
 }
 
 sub calcOnlineTime(){

@@ -25,6 +25,7 @@ sub kickWorker()
 	{
 		my($user) = "$ref->{'nick'}";
 		my($information) = "$ref->{'information'}";
+		
 		if (&getVerboseOption("verbose_kicks")){
 			if (lc($information) eq lc($notags)){
 				if (&getVerboseOption("verbose_notagkicks"))
@@ -179,18 +180,6 @@ sub banUser (){
 	odch::kick_user($user);
 }
 
-sub checkNick(){
-	
-	my($checknick) = @_;
-	my($orignick) = $checknick;
-	
-	$checknick =~ s/'//g;
-	
-	if (lc($checknick) ne lc($orignick)){
-		return(1);}
-		
-	
 
-}
 ## Required in every module ##
 1;
