@@ -1,0 +1,169 @@
+body {
+	margin: 0px;
+	padding: 0px;
+	font-family: arial, helvetica, sans-serif;
+	background-color: #FFFFFF;
+}
+
+a:active {
+	color: #15E8FF;
+}
+a:hover {
+	text-decoration: underline;
+	color: #15E8FF;
+}
+a:link {
+	color: #15E8FF;
+}
+a:visited {
+	color: #15E8FF;
+}
+
+table.top {
+	vertical-align: top;
+	border-bottom: solid;
+	border-color: #010101;
+	padding: 0px;
+	padding-top: 0px;
+	width: 100%;
+	height: 80px;
+	background-color: #598FE3;
+	color: #FFFFFF;
+	background-image: url("../img/sqlbot.png");
+	background-repeat: no-repeat;
+}
+
+table.main {
+	vertical-align: top;
+	width: 100%;
+	padding: 0px;
+	margin: 0px;
+}
+
+table.config {
+	vertical-align: top;
+	border: solid;
+	border-color: #010101;
+	margin: 0px;
+	padding: 0px;
+	background-color: #598FE3;
+	color: #FFFFFF;
+	background-image: url("../img/back.gif");
+	padding-left: 5px;
+	padding-right: 5px;
+	padding-bottom: 5px;
+	width: 350px;
+}
+
+
+
+td.menu {
+	border-bottom: solid;
+	border-right: solid;
+	border-color: #010101;
+	vertical-align: top;
+	margin: 0px;
+	padding: 5px;
+	width: 100px;
+	background-color: #598FE3;
+}
+
+td.main {
+	vertical-align: top;
+	margin: 0px;
+	padding: 5px;
+	background-color: #FFFFFF;
+}
+
+
+.form_input {
+	font-family: arial, helvetica, sans-serif;
+	padding-left: 3px;
+	background: #9CE0FF;
+	text-decoration: none;
+	font-weight: normal;
+	color: #000000;
+	font-size: 10px;
+	width: 200px;
+}
+
+.password {
+	font-family: arial, helvetica, sans-serif;
+	padding-left: 3px;
+	background: #9CE0FF;
+	text-decoration: none;
+	font-weight: normal;
+	color: #000000;
+	font-size: 10px;
+	width: 100px;
+}
+.form_select {
+	font-family: arial, helvetica, sans-serif;
+	padding-left: 3px;
+	background: #9CE0FF;
+	text-decoration: none;
+	font-weight: normal;
+	color: #000000;
+	font-size: 10px;
+	width: 80px;
+}
+
+.form_time {
+	font-family: arial, helvetica, sans-serif;
+	padding-left: 3px;
+	background: #9CE0FF;
+	text-decoration: none;
+	font-weight: normal;
+	color: #000000;
+	font-size: 10px;
+	width: 100px;
+}
+
+
+
+
+
+.form_checkbox {
+	background: #9CE0FF;
+	color: #000000;
+}
+
+.form_textarea {
+	font-family: arial, helvetica, sans-serif;
+	padding-left: 3px;
+	background: #9CE0FF;
+	text-decoration: none;
+	font-weight: normal;
+	color: #000000;
+	font-size: 10px;
+	width: 200px;
+	height: 90px;
+}
+
+.form_noedit {
+	width: 194px;
+	font-size: 10px;
+	color: #6C6C6C;
+	text-decoration: none;
+	background: #9CE0FF;
+	padding-left: 3px;
+	padding-top: 1px;
+	padding-bottom: 1px;
+	font-family: arial, helvetica, sans-serif;
+	font-weight: normal;
+	border: solid;
+	border-width: 2px;
+	border-color: #E9E9E9;
+	border-left-color: #A2A2A2;
+	border-top-color: #A2A2A2;
+}
+
+
+input.button {
+	font-weight: normal;
+	font-size: 8pt;
+        border-width: 1;
+        border-height: 1;
+        border-style: solid;
+        border-color:#b0b0b0;
+}
