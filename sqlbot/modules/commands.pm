@@ -167,7 +167,8 @@ sub buildHelp(){
 Public Commands (Main Chat):-\r
 . +help = Shows these commands in a PM\r
 . +rules = rules for your client,\r
-. +myinfo = Show your information \r
+. +myip = Show your current IP address \r
+. +myinfo = Show your detailed information \r
 . +time = Shows the current Data & Time of the server\r
 . +showops = List of Ops Online\r
 . +fakers = List share fakers detected\r

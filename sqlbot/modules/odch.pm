@@ -345,6 +345,9 @@ sub data_arrival(){
 			&msgAll("Server Time = $date $time");}
 		elsif($data =~ /^<.*> [\+-]version\|/i)
 			{&version($user);}
+		elsif($data =~ /^<.*> [\+-]myip\|/i)
+			{my($myip) = odch::get_ip($user);
+			&msgUser("$user","Your IP address is currently: $myip");}
 		elsif($data =~ /^<.*> [\+-]myinfo\|/i)
 			{&myInfo($user);}
 		elsif($data =~ /^<.*> [\+-]uptime\|/i)
