@@ -20,15 +20,15 @@ sub myInfo()
 	my($user)=@_;
 
 	my($loginCount) = $dbh->selectrow_array("SELECT loginCount FROM userDB 
-				WHERE nick='$user' AND allowStatus!='Banned'");
+				WHERE nick='$user' AND allowStatus!='Banned' AND status='Online' ");
 	my($avShareBytes) = $dbh->selectrow_array("SELECT avShareBytes FROM userDB 
-				WHERE nick='$user' AND allowStatus!='Banned'");
+				WHERE nick='$user' AND allowStatus!='Banned' AND status='Online'");
 	my($shareByte) = $dbh->selectrow_array("SELECT shareByte FROM userDB 
-				WHERE nick='$user' AND allowStatus!='Banned'");
+				WHERE nick='$user' AND allowStatus!='Banned' AND status='Online'");
 	my($firstTime) = $dbh->selectrow_array("SELECT firstTime FROM userDB 
-				WHERE nick='$user' AND allowStatus!='Banned'");
+				WHERE nick='$user' AND allowStatus!='Banned' AND status='Online'");
 
-	my($mith) = $dbh->prepare("SELECT * FROM userDB WHERE nick='$user' AND allowStatus!='Banned'");
+	my($mith) = $dbh->prepare("SELECT * FROM userDB WHERE nick='$user' AND allowStatus!='Banned' AND status='Online'");
 	$mith->execute();
 	my($ref) = $mith->fetchrow_hashref();
 	&msgUser("$user","Your Info:\r
@@ -65,9 +65,8 @@ sub seen()
 		while($ref = $sth->fetchrow_hashref()){
 			my($outTime) = $ref->{'outTime'};
 			my($nick) = $ref->{'nick'};
-			my($status)="Online";
 			my($userOnline) = $dbh->selectrow_array("SELECT COUNT(*) FROM userDB 
-						WHERE nick='$userseen' AND status='$status' ");
+						WHERE nick='$userseen' AND status='Online' ");
 			if (($userOnline) ne 1)
 				{$seenresult .= "$nick was last online on $outTime\n\r";}
 			else
@@ -81,11 +80,11 @@ sub seen()
 	}
 	else
 		{my($userOnline) = $dbh->selectrow_array("SELECT COUNT(*) FROM userDB 
-					WHERE nick='$userseen' AND status='$status'");
+					WHERE nick='$userseen' AND status='Online'");
 		if (($userOnline) eq 0)
 				{$seenresult .= "No Matches found for \'$seensearch\'\r";}
 			else
-				{$seenresult .= "\'$seensearch\' is on online now\r";}
+				{$seenresult .= "\'$seensearch\' is Online now\r";}
 	}
 	&debug("$user - seen built");
 }

@@ -115,7 +115,7 @@ sub clientRecheck()
 			&userConnect($user);	
 			&userOnline($user);}
 		else{
-			if (&userIsOnline($user) ne 1)
+			if (&userIsOnline($user,$ip) ne 1)
 				{&userOnline($user);}	
 			else{
 				&updateUserRecordRecheck($user);

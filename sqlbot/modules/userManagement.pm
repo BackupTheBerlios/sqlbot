@@ -17,9 +17,9 @@
 
 # Is this userOnline now ?
 sub userIsOnline(){
-	my($user) = @_;
+	my($user,$ip) = @_;
 	my($value) = $dbh->selectrow_array("SELECT COUNT(*) FROM userDB 
-					WHERE (nick='$user' AND status='Online') AND allowStatus!='Banned'");
+					WHERE (nick='$user' OR IP='$ip') AND status='Online' AND allowStatus!='Banned'");
 	if($value eq 1)
 	{return 1;}
 	return 0;
@@ -55,12 +55,13 @@ sub createNewUserRecord(){
 }
 
 sub updateUserRecordRecheck(){
-	my($user) = @_;
+	my($user,$ip) = @_;
 	$connection = &getConnection($conn);
-	
-	$dbh->do("UPDATE userDB SET slots='$NSlots',hubs='$NbHubs',
+
+	$dbh->do("UPDATE userDB SET nick='$user',slots='$NSlots',hubs='$NbHubs',
 			limiter='$UploadLimit',fullDescription='$fullDescription',
-			shareByte='$shareBytes' WHERE nick='$user' AND allowStatus!='Banned'");
+			shareByte='$shareBytes' 
+			WHERE (nick='$user' OR IP='$ip') AND status='Online' AND allowStatus!='Banned'");
 }
 
 # User record exists so update the details
@@ -78,15 +79,14 @@ sub updateUserRecord(){
 	$uurth->finish();
 	my($connection) = &getConnection($conn);
 
-	if(&userIsOnline($user) eq 0)
-		{$dbh->do("UPDATE userDB SET nick='$user',utype='$utype',dcClient='$dcClient',
+	$dbh->do("UPDATE userDB SET nick='$user',utype='$utype',dcClient='$dcClient',
 					dcVersion='$dcVersion',slots='$NSlots',hubs='$NbHubs',
 					limiter='$UploadLimit',connection='$connection',
 					connectionMode='$connectionMode',country='$country',
 					hostname='$hostname',IP='$ip',inTime='$inTime',
 					avShareBytes='$shareBytes',loginCount='$loginCount',
 					fullDescription='$fullDescription',shareByte='$shareBytes'
-					WHERE (nick='$user' OR IP='$ip') AND allowStatus!='Banned'");}
+					WHERE (nick='$user' OR IP='$ip') AND status!='Online' AND allowStatus!='Banned'");
 }
 
 # Check the allow status of this user
@@ -122,9 +122,9 @@ sub userOnline(){
 	my($user) = @_;
 	my($online) ="Online";
 	&setTime();
-	$dbh->do("UPDATE userDB SET status='$online',
+	$dbh->do("UPDATE userDB SET nick='$user',status='$online',
 					inTime='$date $time'
-					WHERE nick='$user' AND allowStatus!='Banned'");
+					WHERE (nick='$user' OR IP='$ip') AND allowStatus!='Banned'");
 }
 
 sub addToFakers(){
