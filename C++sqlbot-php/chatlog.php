@@ -123,7 +123,11 @@ while ($i > -1) {
 
 echo "<tr>
 			<td nowrap valign=\"top\">[ <a title=\"$date\" style=\"cursor:help\">$time</a> ]</td>
-			<td nowrap valign=\"top\"><strong> $lcNick </strong></td>
+			<td nowrap valign=\"top\">
+				<form action=\"userinfo.php\" method=\"post\">";
+							hidden_value(hubID, $hubID);
+							hidden_value(uiNick, $lcNick);
+	echo "<input type=\"submit\" value=\"$lcNick\" class=\"userdbOP\" nowrap title=\"View User's Data\"></form></td>
 			<td nowrap valign=\"top\"> &gt;&gt;</td>
 			<td valign=\"top\" class=\"chatlog\">$Message</td>
 		</tr>";
