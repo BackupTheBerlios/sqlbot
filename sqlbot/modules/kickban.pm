@@ -86,8 +86,12 @@ sub banWorker()
 			&banUser($user,"Fake(Tag)",$ip,"pban");}
 		elsif($function=='25'){
 			&banUser($user,"Fake(Share)",$ip,"pban");}
-		elsif($function=='26'){
-			&banUser($user,$information,$ip,"nban");}
+#		elsif($function=='26'){
+#			&banUser($user,$information,$ip,"nban");}
+		elsif($function=='27'){
+			$dbh->do("UPDATE userDB SET tBanCount='0',kickCount='0'
+				WHERE nick='$user' AND allowStatus !='Banned'");
+		}
 			
 		$dbh->do("DELETE FROM botWorker WHERE nick='$user'");
 	}
@@ -115,26 +119,38 @@ sub banUser (){
 		
 		my($temp_ban_time)=&getHubVar("temp_ban_time");
 		if (&getVerboseOption("verbose_banned")){
-			&msgAll("T-BANNED($temp_ban_time Mins) $user($ip) for:$reason");}
+			&msgAll("T-BANNED($temp_ban_time Mins) $user($ip) $reason");}
 			
 		$temp_ban_time = $temp_ban_time * 60;
 		odch::add_ban_entry("$ip $temp_ban_time");
-		odch::add_nickban_entry("$user $temp_ban_time");
+		my($userInDB) = &userInDB($user,$ip);
+		if($userInDB ne 2)
+			{odch::add_nickban_entry("$user $temp_ban_time");}
+		
 	
 		}
 	elsif ($mode =~ /pban/i){	# Permanent Ban
 		$lastAction = "P-Banned";
 		$pBanCountTot++;
 		odch::add_ban_entry($ip);
-		odch::add_nickban_entry($user);
+
+		my($userInDB) = &userInDB($user,$ip);
+		if($userInDB ne 2)
+			{odch::add_nickban_entry($user);}
+
 		if (&getVerboseOption("verbose_banned")){
-			&msgAll("P-BANNED $user($ip) for:$reason");}}
+			&msgAll("P-BANNED $user($ip) $reason");}}
 	elsif ($mode =~ /uban/i){	# Remove ban
 		$lastAction = "Un-Ban";
 		if (&getVerboseOption("verbose_banned")){
-			&msgAll("UN-BANNED $user($ip) for:$reason");}
+			&msgAll("UN-BANNED $user($ip) $reason");}
 		odch::remove_ban_entry($ip);
-		odch::remove_nickban_entry($user);
+
+		my($userInDB) = &userInDB($user,$ip);
+		if($userInDB ne 2)
+			{odch::remove_nickban_entry($user);}
+
+
 		$dbh->do("UPDATE userDB SET tBanCount='0',
 					kickCount='0',
 					allowStatus='Normal',
@@ -156,7 +172,7 @@ sub banUser (){
 	if(&getLogOption("log_bans"))
     		{&addToLog($user,$lastAction,$reason);}
 	odch::kick_user($user);
-	&msgUser($user,"You have been BANNED for:$reason");
+	&msgUser($user,"You have been BANNED :$reason");
 
 }
 ## Required in every module ##
