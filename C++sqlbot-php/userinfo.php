@@ -240,7 +240,9 @@ $country_query  = "SELECT country_code2,country_name FROM iptoc ".
 									list_level($uiUserLevel, 0, User);
 									list_level($uiUserLevel, 1, VIP);
 									list_level($uiUserLevel, 2, Op);
-									list_level($uiUserLevel, 3, OpAdmin);
+									list_level($uiUserLevel, 3, "Op-Admin");
+									list_level($uiUserLevel, 4, "Bot-Master");
+									list_level($uiUserLevel, 5, Bot);
 									?>
 								</select>
 								<input type="submit" value="Update" class="userdbnicknormal"></form>

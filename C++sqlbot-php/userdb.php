@@ -136,7 +136,8 @@ if (empty($offset)) { $offset = 0; }
 $total_result=mysql_query("SELECT * FROM userInfo WHERE hubID='$hubID'");
 $total_users=mysql_num_rows($total_result);
 
-$userresult=mysql_query("SELECT *,DATE_FORMAT(uiLastSeenTime, '%d/%m/%Y %H:%i') AS date FROM userInfo WHERE hubID='$hubID' $parseoption $parseoptionextra ORDER BY uiUserLevel  DESC,$parseorder LIMIT $offset,$defaultLogEntries");
+$userresult=mysql_query("SELECT *,DATE_FORMAT(uiLastSeenTime, '%d/%m/%Y %H:%i') AS date,
+DATE_FORMAT(uiBanTime, '%d/%m/%Y %H:%i') AS BanTime FROM userInfo WHERE hubID='$hubID' $parseoption $parseoptionextra ORDER BY uiUserLevel  DESC,$parseorder LIMIT $offset,$defaultLogEntries");
 
 $total_userresult=mysql_query("SELECT *,DATE_FORMAT(uiLastSeenTime, '%d/%m/%Y %H:%i') AS date FROM userInfo WHERE hubID='$hubID' $parseoption $parseoptionextra ORDER BY uiUserLevel  DESC,$parseorder");
 
@@ -273,11 +274,12 @@ while ($data=mysql_fetch_array($userresult))
 // CONVERSIONS FOR GRAPHICS& DATE
 
 	$conv_time=mysql_result($userresult,$i,"date");
+	$BanTime=mysql_result($userresult,$i,"BanTime");
 	if ($uiClient == "Unknown") { $CLIENT = "<img src=\"img/clients/NoTag.gif\" alt=\"\">"; }
 	if ($uiClient == "DCGUI") { $CLIENT = "<img src=\"img/clients/DCGUI.gif\" alt=\"$uiClient\">"; }
 	if ($uiClient == "++") { $CLIENT = "<img src=\"img/clients/DCpp.gif\" alt=\"$uiClient\">"; }
 	if ($uiClient == "DC") { $CLIENT = "<img src=\"img/clients/DC.gif\" alt=\"$uiClient\">"; }
-	if ($uiNick == "$bcName") { $CLIENT = "BOT"; }
+	if ($uiUserLevel == "5") { $CLIENT = "<img src=\"img/clients/Bot.gif\" alt=\"Bot\">"; }
 	
 	if  (($uiStatus == "1") && ($uiIsAway == "0")) { $uiStatus ="<img src=\"img/Online.gif\" alt=\"Online\" title=\"Online\">";}
 	if  (($uiStatus == "1") && ($uiIsAway == "1")) { $uiStatus ="<img src=\"img/Away.gif\" alt=\"Away\" title=\"Away\">";}
@@ -299,21 +301,26 @@ if ($uiMode == "Active") { $uiMode = "A"; }
 
 //DECLARE POPUPS FOR USER-NICK
 if ($uiClient == "Unknown") { $clientHover = "ONMOUSEOVER=\"popup('Unknown</td>','yellow')\"; ONMOUSEOUT=\"kill()\""; }
+if ($uiUserLevel == "5") { $clientHover = "ONMOUSEOVER=\"popup('Bot</td>','yellow')\"; ONMOUSEOUT=\"kill()\""; }
 else  { $clientHover = "ONMOUSEOVER=\"popup('Client</td><td>$uiClient</td></tr><tr><td>Version</td><td>$uiVersion</td></tr><tr><td>Details</td><td>M:$uiMode,H:$uiHubs,S:$uiSlots,L:$uiLimiter</td>','yellow')\"; ONMOUSEOUT=\"kill()\""; }
 
 
 // DECLARE USER-STATES
+if ($uiUserLevel == "5") { $class = "userdbBot"; $Level = "Bot"; }
+if ($uiUserLevel == "4") { $class = "userdbBotMaster"; $Level = "Bot Master"; }
 if ($uiUserLevel == "3") { $class = "userdbOPADM"; $Level = "Op Admin"; }
 if ($uiUserLevel == "2") { $class = "userdbOP"; $Level = "Operator";  }
 if ($uiUserLevel == "1") { $class = "userdbVIP"; $Level = "VIP";  }
-if ($uiNick == "$bcMaster") { $class = "userdbMASTER"; $Level = "Master"; }
 if (($uiUserLevel > "1") && ($uiIsAdmin == "0")) { $class = "userdbERROR"; $Level = "Misconfigured"; }
 if (($uiUserLevel < "2") && ($uiIsAdmin == "1")) { $class = "userdbERROR"; $Level = "Misconfigured"; }
 if ((($uiUserLevel == "0") || ($uiUserLevel == "")) && ($uiIsAdmin == "0")) { $class = "userdbnicknormal"; $Level = "User";}
 
 
+//USER INFO / BANS
 
+if ($uiBanTotal == "0") { $user_info = "Logins</td><td>$uiLoginCount</td></tr><tr><td>Kicks</td><td>$uiKickTotal</td></tr><tr><td>Bans</td><td>$uiBanTotal</td>"; }
 
+if ($uiBanTotal > "0") { $user_info = "Logins</td><td>$uiLoginCount</td></tr><tr><td>Kicks</td><td>$uiKickTotal</td></tr><tr><td>Bans</td><td>$uiBanTotal ($BanTime)</td>"; }
 
 
 // PAGE DATA
@@ -324,7 +331,7 @@ echo "<tr>
 			<input type=\"hidden\" name=\"hubID\" value=\"$hubID\">
 			<input type=\"hidden\" name=\"uiNick\" value=\"$uiNick\">
 			<input type=\"submit\" value=\"$uiNick\" class=\"$class\" nowrap
-			ONMOUSEOVER=\"popup('Logins</td><td>$uiLoginCount</td></tr><tr><td>Kicks</td><td>$uiKickTotal</td></tr><tr><td>Bans</td><td>$uiBanTotal</td>','yellow')\"; ONMOUSEOUT=\"kill()\"></form>
+			ONMOUSEOVER=\"popup('$user_info','yellow')\"; ONMOUSEOUT=\"kill()\"></form>
 		</td>
 		<td nowrap align=\"center\">$Level</td>
 		<td nowrap align=\"center\" $clientHover>$CLIENT</td>
