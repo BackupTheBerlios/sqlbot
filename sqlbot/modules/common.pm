@@ -119,6 +119,15 @@ sub getLogOption() {
 	{return 1;}
 	return 0;
 }
+sub getUserIp() {
+	my($user) = @_;
+	my($sth) = $dbh->prepare("SELECT IP FROM userDB WHERE nick='$user'");
+	$sth->execute();
+	my($ref) = $sth->fetchrow_hashref();
+	my($ip) = "$ref->{'IP'}";
+	$sth->finish();
+	return $ip;
+}
 sub getHubVar() {
 	my($data) = @_;
 	my($sth) = $dbh->prepare("SELECT value FROM hub_variables WHERE rule='$data'");
