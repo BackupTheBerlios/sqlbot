@@ -62,7 +62,7 @@ login name and password you gave in this script.\n\n";
 	$dbh->do("SET OPTION SQL_BIG_TABLES = 1");
 
 eval { $dbh->do("CREATE TABLE hubLog (	rowID 		INT(7) NOT NULL AUTO_INCREMENT PRIMARY KEY,
-					nick		VARCHAR(30),
+					nick		VARCHAR(50),
 					logTime		DATETIME,
 					action		VARCHAR(20),
 					reason		VARCHAR(20)
@@ -70,6 +70,15 @@ eval { $dbh->do("CREATE TABLE hubLog (	rowID 		INT(7) NOT NULL AUTO_INCREMENT PR
 					print "Created table \"hubLog\"\n";
 			}; print "CREATE \"hubLog\" failed: $@\n" if $@;
 
+eval { $dbh->do("CREATE TABLE ipFiltering (rowID 	INT(7) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+					ipStart		VARCHAR(15),
+					ipEnd		VARCHAR(15),
+					ipMask		VARCHAR(15),
+					function	VARCHAR(10),
+					information	VARCHAR(50),
+					log		char(3))");
+					print "CREATE TABLE ipFiltering\n";
+		}; print "CREATE TABLE ipFiltering failed: $@\n" if $@;
 
 eval { $dbh->do("CREATE TABLE userDB (	rowID 		INT(7) NOT NULL AUTO_INCREMENT PRIMARY KEY,
 					nick		VARCHAR(50),
@@ -94,7 +103,7 @@ eval { $dbh->do("CREATE TABLE userDB (	rowID 		INT(7) NOT NULL AUTO_INCREMENT PR
 					firstTime	DATETIME,
 					outTime		DATETIME,
 					inTime		DATETIME,
-					onlineTime	DATETIME,
+					onlineTime	BIGINT(20),
 					loginCount	INT(10) UNSIGNED,
 					kickCount	INT(10) UNSIGNED,
 					kickCountTot    INT(10) UNSIGNED,
@@ -159,11 +168,6 @@ $dbh->do("INSERT INTO hub_config VALUES (	'',
 						'on',
 						'Enable Ban after 10 kicks per 24Hrs')");
 						print "	data \"check_kicks\" inserted\n";		
-$dbh->do("INSERT INTO hub_config VALUES (	'',
-						'check_mldonkey',
-						'on',
-						'Kick mlDonkey users')");
-						print "	data \"check_mldonkey\" inserted\n";
 $dbh->do("INSERT INTO hub_config VALUES (	'',
 						'kick_notags',
 						'on',
@@ -295,14 +299,14 @@ eval { $dbh->do("CREATE TABLE hub_variables (rowID INT(3) NOT NULL AUTO_INCREMEN
 					description VARCHAR(50))");
 					print "Created table \"hub_variables\"\n";
 $dbh->do("INSERT INTO hub_variables VALUES (	'',
-						'hub_website_address',
+						'	hub_country',
 						'',
 						'URL of Hub')");
 						print "	data \"hub_web_address\" inserted\n";
 $dbh->do("INSERT INTO hub_variables VALUES (	'',
 						'external_ip',
 						'',
-						'External IP of user(if on a LAN')");
+						'Country of Hub/User on Local Lan");
 						print "	data \"external_ip\" inserted\n";
 $dbh->do("INSERT INTO hub_variables VALUES (	'',
 						'debug_user',
@@ -320,11 +324,6 @@ $dbh->do("INSERT INTO hub_variables VALUES (	'',
 						'Nr. of lines to be returned for !log events')");
 						print "	data \"nr_log_entries\" inserted\n";		
 $dbh->do("INSERT INTO hub_variables VALUES (	'',
-						'delayed_kick_time',
-						'10',
-						'Delay kicks by X seconds')");
-						print "	data \"delayed_kick_time\" inserted\n";
-$dbh->do("INSERT INTO hub_variables VALUES (	'',
 						'kick_before_tban',
 						'10',
 						'Number of kicks before a kick becomes a Temp Ban')");
@@ -332,8 +331,14 @@ $dbh->do("INSERT INTO hub_variables VALUES (	'',
 $dbh->do("INSERT INTO hub_variables VALUES (	'',
 						'temp_ban_time',
 						'1',
-						'Minutes to temp-ban people')");
+						'Minutes for a Temp Ban')");
 						print "	data \"temp_ban_time\" inserted\n";
+$dbh->do("INSERT INTO hub_variables VALUES (	'',
+						'logfile_name',
+						'',
+						'Name for the Chat logFile (Leave blank for no logging)')");
+						print "	data \"logfile_name\" inserted\n";
+
 $dbh->do("INSERT INTO hub_variables VALUES (	'',
 						'tban_before_pban',
 						'10',
