@@ -6,7 +6,9 @@ echo "$font";
 mysql_connect($databasehost,$username,$password);
 @mysql_select_db($database) or die( "Unable to select database");
 $where = "";
-if (!empty($field))  
+if ($field == shareByte)
+	{$where="WHERE $field = '$search'";}
+else if (!empty($field))  
 	{$where="WHERE $field LIKE '%$search%'";}
 if (!empty($order))  
 	{$orderby ="'$order'";}
@@ -182,7 +184,8 @@ while ($data=mysql_fetch_array($result))
 <td nowrap><? echo "$font$pBanCountTot$fontend"; ?></td>
 <td nowrap><? echo "$font$lineCount$fontend"; ?></td>
 <td nowrap><? echo "$font$avShareBytes$fontend"; ?></td> -->
-<td nowrap><a title="<? echo "$Share" ?>" style="cursor:help"><? echo "$font$byteShare$fontend"; ?></a></td>
+<td nowrap><a href="user-manage.php?field=shareByte&search=<? echo "$byteShare"?>" title="<? echo "$Share" ?>" style="cursor:help"><? echo "$font$byteShare$fontend"; ?></a></td>
+
 <td nowrap><a href="<? echo "user-manage.php?field=lastAction&search=$lastAction" ?>"><? echo "$font$lastAction$fontend"; ?></a></td>
 <td nowrap><a href="<? echo "user-manage.php?field=lastReason&search=$lastReason" ?>"><? echo "$font$lastReason$fontend"; ?></a></td>
 	
