@@ -3,14 +3,14 @@
 $databasehost="localhost";
 
 // MySQL DB login
-$username="odch";
-$password="linux";
+$username="sqlbotuser";
+$password="sqlbotpass";
 
 //Name of DB
 $database="odch";
 
 // Name of the Hub (Used only for headers)
-$hubname="axljab.homelinux.org:9000";
+$hubname="";
 
 //The Default number of entries to display, commands like !log
 $defaultLogEntries = 20;
