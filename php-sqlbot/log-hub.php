@@ -181,7 +181,7 @@ echo "</table>";
 
 if ($offset!=0) { 
     $prevoffset=$offset-$defaultLogEntries;
-    print "<a href=\"$hublog?offset=$prevoffset&ipsearch=$ipsearch&clisearch=$clisearch&nicksearch=$nicksearch&afilter=$afilter&rfilter=$rfilter\">PREV</a> &nbsp; \n";
+    print "<a href=\"log-hub.php?offset=$prevoffset&ipsearch=$ipsearch&clisearch=$clisearch&nicksearch=$nicksearch&afilter=$afilter&rfilter=$rfilter\">PREV</a> &nbsp; \n";
 }
 $pages=intval($numrows/$limit);
 
@@ -194,7 +194,7 @@ for ($i=1;$i<=$pages;$i++) { // loop thru
 
 if (!(($offset/$limit)==$pages) && $pages!=1) {
     $newoffset=$offset+$limit;
-    print "<a href=\"log-hub?offset=$newoffset&ipsearch=$ipsearch&clisearch=$clisearch&nicksearch=$nicksearch&afilter=$afilter&rfilter=$rfilter\">NEXT</a><p>\n";
+    print "<a href=\"log-hub.php?offset=$newoffset&ipsearch=$ipsearch&clisearch=$clisearch&nicksearch=$nicksearch&afilter=$afilter&rfilter=$rfilter\">NEXT</a><p>\n";
 }
 
 ?></div>
