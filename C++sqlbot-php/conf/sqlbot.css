@@ -262,3 +262,5 @@ input.userdbnickop {
 	border-color: #b0b0b0;
 	background-color: #598FE3;
 }
+
+#dek {POSITION:absolute;VISIBILITY:hidden;Z-INDEX:200;}

@@ -5,6 +5,61 @@
 <link href="conf/sqlbot.css" rel="stylesheet" type="text/css">
 </head>
 <body>
+<DIV ID="dek"></div>
+<SCRIPT TYPE="text/javascript">
+<!--
+
+//Pop up information box II (Mike McGrath (mike_mcgrath@lineone.net,  http://website.lineone.net/~mike_mcgrath))
+//Permission granted to Dynamicdrive.com to include script in archive
+//For this and 100's more DHTML scripts, visit http://dynamicdrive.com
+
+Xoffset= 50;    // modify these values to ...
+Yoffset= 0;    // change the popup position.
+
+var old,skn,iex=(document.all),yyy=-1000;
+
+var ns4=document.layers
+var ns6=document.getElementById&&!document.all
+var ie4=document.all
+
+if (ns4)
+skn=document.dek
+else if (ns6)
+skn=document.getElementById("dek").style
+else if (ie4)
+skn=document.all.dek.style
+if(ns4)document.captureEvents(Event.MOUSEMOVE);
+else{
+skn.visibility="visible"
+skn.display="none"
+}
+document.onmousemove=get_mouse;
+
+function popup(msg,bak){
+var content="<TABLE  BORDER=1 BORDERCOLOR=black CELLPADDING=2 CELLSPACING=0 "+
+"BGCOLOR="+bak+"><TD ALIGN><FONT COLOR=black SIZE=2>"+msg+"</FONT></TD></TABLE>";
+yyy=Yoffset;
+ if(ns4){skn.document.write(content);skn.document.close();skn.visibility="visible"}
+ if(ns6){document.getElementById("dek").innerHTML=content;skn.display=''}
+ if(ie4){document.all("dek").innerHTML=content;skn.display=''}
+}
+
+function get_mouse(e){
+var x=(ns4||ns6)?e.pageX:event.x+document.body.scrollLeft;
+skn.left=x+Xoffset;
+var y=(ns4||ns6)?e.pageY:event.y+document.body.scrollTop;
+skn.top=y+yyy;
+}
+
+function kill(){
+yyy=-1000;
+if(ns4){skn.visibility="hidden";}
+else if (ns6||ie4)
+skn.display="none"
+}
+//-->
+</script>
+
 <?php
 	include("conf/dbinfo.inc.php");
 	include("conf/forms.php");
@@ -55,7 +110,7 @@ $hcStatus = "<font color=\"#FF1D28\"><strong>Offline</strong></font>";
 	<tr>
 		<td class="menu"><!-- MAIN MENU -->
 				<form action="<?php echo "index.php"; ?>" method="post">
-				<input type="submit" value="Back to hubs..." class="button">
+				<input type="submit" value="Back to bot..." class="button">
 				</form>
 				<p>
 				<?php include("conf/mainmenu.php"); ?><p>
@@ -207,11 +262,11 @@ while ($data=mysql_fetch_array($userresult))
 // CONVERSIONS FOR GRAPHICS& DATE
 
 	$conv_time=mysql_result($userresult,$i,"date");
-	if ($uiClient == "Unknown") { $uiClient = "<img src=\"img/clients/NoTag.gif\" alt=\"\" title=\"$uiTag\">"; }
-	if ($uiClient == "DCGUI") { $uiClient = "<img src=\"img/clients/DCGUI.gif\" alt=\"$uiClient\" title=\"$uiTag\">"; }
-	if ($uiClient == "++") { $uiClient = "<img src=\"img/clients/DCpp.gif\" alt=\"$uiClient\" title=\"$uiTag\">"; }
-	if ($uiClient == "DC") { $uiClient = "<img src=\"img/clients/DC.gif\" alt=\"$uiClient\" title=\"$uiTag\">"; }
-	if ($uiNick == "$bcName") { $uiClient = "BOT"; }
+	if ($uiClient == "Unknown") { $CLIENT = "<img src=\"img/clients/NoTag.gif\" alt=\"\" title=\"$uiTag\">"; }
+	if ($uiClient == "DCGUI") { $CLIENT = "<img src=\"img/clients/DCGUI.gif\" alt=\"$uiClient\" title=\"$uiTag\">"; }
+	if ($uiClient == "++") { $CLIENT = "<img src=\"img/clients/DCpp.gif\" alt=\"$uiClient\" title=\"$uiTag\">"; }
+	if ($uiClient == "DC") { $CLIENT = "<img src=\"img/clients/DC.gif\" alt=\"$uiClient\" title=\"$uiTag\">"; }
+	if ($uiNick == "$bcName") { $CLIENT = "BOT"; }
 	
 	if  (($uiStatus == "1") && ($uiIsAway == "0")) { $uiStatus ="<img src=\"img/Online.gif\" alt=\"Online\" title=\"Online\">";}
 	if  (($uiStatus == "1") && ($uiIsAway == "1")) { $uiStatus ="<img src=\"img/Away.gif\" alt=\"Away\" title=\"Away\">";}
@@ -227,18 +282,21 @@ else {$class = "userdbnicknormal"; }
 	else if (($uiShare / 1024) > 1) { $Shared=round(($uiShare / 1024), 2); $Share="$Shared KB";}
 	else if ($uiShare == "0") { $Share = "0 KB";}
 
+if ($uiMode == "Passive") { $uiMode = "P"; }
+if ($uiMode == "Active") { $uiMode = "A"; }
 
-	echo "<tr>
+
+echo "<tr>
 		<td width=\"5\">$uiStatus</td>
-		<td nowrap>
+		<td>
 			<form action=\"userinfo.php\" method=\"post\">
 			<input type=\"hidden\" name=\"hubID\" value=\"$hubID\">
 			<input type=\"hidden\" name=\"uiIp\" value=\"$uiIp\">
 			<input type=\"hidden\" name=\"uiNick\" value=\"$uiNick\">
-			<input type=\"submit\" value=\"$uiNick\" class=\"$class\" title=\"View info on $uiNick\"></form>
+			<input type=\"submit\" value=\"$uiNick\" class=\"$class\" nowrap ONMOUSEOVER=\"popup('$uiClient V:$uiVersion<br>M:$uiMode,H:$uiHubs,S:$uiSlots,L:$uiLimiter','yellow')\"; ONMOUSEOUT=\"kill()\"></form>
 		</td>
 		<td nowrap align=\"center\">$uiIsAdmin</td>
-		<td nowrap align=\"center\">$uiClient</td>
+		<td nowrap align=\"center\">$CLIENT</td>
 		<td nowrap align=\"center\">$uiSpeed</td>
 		<td nowrap align=\"center\">$uiIp</td>
 		<td nowrap align=\"center\">$conv_time</td>
@@ -308,6 +366,8 @@ else {$class = "userdbnicknormal"; }
 		</td>
 	</tr>
 </table>
+
+<a href="http://webmonkey.com" ONMOUSEOVER="popup('Tutorials and tips for the advanced webmaster','lightgreen')"; ONMOUSEOUT="kill()">WebMonkey</a>
 <!-- END MAIN TABLE -->
 <?php mysql_close(); }?>
 </body>

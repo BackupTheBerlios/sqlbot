@@ -152,7 +152,7 @@ $hcStatus = "<font color=\"#FF1D28\"><strong>Offline</strong></font>";
 	<tr>
 		<td class="menu"><!-- MAIN MENU -->
 				<form action="<?php echo "index.php"; ?>" method="post">
-				<input type="submit" value="Back to hubs..." class="button">
+				<input type="submit" value="Back to bot..." class="button">
 				</form>
 				<p>
 				<?php include("conf/mainmenu.php"); ?>

@@ -156,21 +156,25 @@ echo "<tr>
 			<tr>
 				<td valign=\"top\"><strong>$hcName</strong></td>
 				<td valign=\"top\">
-				<form action=\"hubconfig.php\" method=\"post\">
 				<table border=\"0\" cellspacing=\"0\" cellpadding=\"0\">
 					<tr>
-						<td><input type=\"hidden\" name=\"hubID\" value=\"$hubID\"></td>
-						<td><input type=\"hidden\" name=\"hcName\" value=\"$hcName\"></td>
-						<td>
-							<select name=\"action\" class=\"form_select\">
+						<td><form action=\"hubconfig.php\" method=\"post\">
+						<input type=\"hidden\" name=\"hubID\" value=\"$hubID\">
+						<input type=\"hidden\" name=\"hcName\" value=\"$hcName\">
+						<select name=\"action\" class=\"form_select\">
 							<option selected value=\"edit\">Edit/View</option>
 							<option value=\"delete\">Delete</option>
-							</select>
+							</select><input type=\"submit\" value=\"Go\" class=\"button\"></form>
 						</td>
-						<td><input type=\"submit\" value=\"Go\" class=\"button\">
+						<td>
+							<form action=\"userdb.php\" method=\"post\">
+							<input type=\"hidden\" name=\"hubID\" value=\"$hubID\">
+							<input type=\"hidden\" name=\"parse\" value=\"Online\">
+							<input type=\"hidden\" name=\"parseorder\" value=\"uiNick\">
+							<input type=\"submit\" value=\"Online Users\" class=\"button\" title=\"View Online Users\"></form>
 						</td>
 					</tr>
-				</table></form>
+				</table>
 				</td>
 			</tr>"; ?>
 			<tr><?php noedit_form("Hub status", $hcStatus); ?></tr>
