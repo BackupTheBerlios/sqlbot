@@ -188,29 +188,32 @@ LOAD DATA INFILE '/tmp/ip-to-country.csv' INTO TABLE iptoc FIELDS TERMINATED BY 
 
 
 # This is needed for the latest cvs (if you are using it)
-CREATE TABLE `clientRules` (
-`ID` int(11) NOT NULL auto_increment,
- `NAME` varchar(100) NOT NULL default '',
- `VERSION` int(10) unsigned NOT NULL default '0',
- `MINSPEED` int(10) unsigned NOT NULL default '0',
- `MAXSPEED` int(10) unsigned NOT NULL default '0',
- `MINSHARE` bigint(20) NOT NULL default '0',
- `MAXSHARE` bigint(20) NOT NULL default '0',
- `MINLIMIT` double NOT NULL default '0',
- `MAXLIMIT` double NOT NULL default '0',
- `MINSLOTS` int(11) NOT NULL default '0',
- `MAXSLOTS` int(11) NOT NULL default '0',
- `MINHUBS` int(11) NOT NULL default '0',
- `MAXHUBS` int(11) NOT NULL default '0',
- `MINVERSIONMAJOR` int(11) NOT NULL default '0',
- `MINVERSIONMINOR` int(11) NOT NULL default '0',
- `MINVERSIONPATCH` int(11) NOT NULL default '0',
- `MAXVERSIONMAJOR` int(11) NOT NULL default '0',
- `MAXVERSIONMINOR` int(11) NOT NULL default '0',
- `MAXVERSIONPATCH` int(11) NOT NULL default '0',
- `ENABLEMOTD` tinyint(1) NOT NULL default '0',
- `MOTD` blob NOT NULL,
- PRIMARY KEY Â (`ID`)
+CREATE TABLE `clientRules` ( 
+  `ID` int(11) NOT NULL auto_increment, 
+  `hubID` int(11) NOT NULL default '0', 
+  `NAME` varchar(100) NOT NULL default '', 
+  `VERSION` int(10) unsigned NOT NULL default '0', 
+  `ALLOW` tinyint(1) NOT NULL default '0', 
+  `MINSPEED` int(10) unsigned NOT NULL default '0', 
+  `MAXSPEED` int(10) unsigned NOT NULL default '0', 
+  `MINSHARE` bigint(20) NOT NULL default '0', 
+  `MAXSHARE` bigint(20) NOT NULL default '0', 
+  `MINLIMIT` double NOT NULL default '0', 
+  `MAXLIMIT` double NOT NULL default '0', 
+  `MINSLOTS` int(11) NOT NULL default '0', 
+  `MAXSLOTS` int(11) NOT NULL default '0', 
+  `MINHUBS` int(11) NOT NULL default '0', 
+  `MAXHUBS` int(11) NOT NULL default '0', 
+  `MINVERSIONMAJOR` int(11) NOT NULL default '0', 
+  `MINVERSIONMINOR` int(11) NOT NULL default '0', 
+  `MINVERSIONPATCH` int(11) NOT NULL default '0', 
+  `MAXVERSIONMAJOR` int(11) NOT NULL default '0', 
+  `MAXVERSIONMINOR` int(11) NOT NULL default '0', 
+  `MAXVERSIONPATCH` int(11) NOT NULL default '0', 
+  `SLOTHUBRATIO` double NOT NULL default '0', 
+  `ENABLEMOTD` tinyint(1) NOT NULL default '0', 
+  `MOTD` longtext NOT NULL, 
+  PRIMARY KEY Â (`ID`) 
 ) TYPE=MyISAM; 
 
 
