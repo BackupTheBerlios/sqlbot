@@ -21,7 +21,7 @@ sub userIsOnline(){
 
 	my($sqluser) = &sqlConvertNick($user);
 	my($value) = $dbh->selectrow_array("SELECT COUNT(nick) FROM userDB 
-				WHERE ((nick='$sqluser' OR IP='$ip') AND status='Online' ");
+				WHERE (nick='$sqluser' OR IP='$ip') AND status='Online' ");
 	if($value eq 1)
 	{return 1;}
 	return 0;
