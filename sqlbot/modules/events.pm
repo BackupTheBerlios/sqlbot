@@ -45,10 +45,10 @@ sub processEvent(){
 	if (lc($REASON) eq lc("Fake(Share)"))
 		{&banUser($user,"Fake(Share)",$ip,"pban");}
 	elsif (lc($ACTION) eq lc("P-Banned"))
-		{&banUser($user,$REASON,$ip,"pban");}
+		{&banUser($user,"$REASON",$ip,"pban");}
 	elsif (lc($ACTION) eq lc("Kicked")){
 		if (&getConfigOption("client_check")){
-			&kickUser($user,$REASON);}}
+			&kickUser($user,"$REASON");}}
 	elsif (lc($ACTION) eq lc("T-Banned")){
 		&banUser($user,$REASON,$ip,"tban");}
 }
