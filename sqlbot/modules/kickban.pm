@@ -37,7 +37,6 @@ sub kickWorker()
 			else{&addToLog($user,'Kicked',$information);}}
 			
 		&msgUser("$user","You have been kicked ($information)");
-		&debug("(10)$user($ip)$information");
 		odch::kick_user($user); # GoodBye..
 
 		my($kw1th) = $dbh->prepare("SELECT kickCountTot,kickCount FROM userDB WHERE nick='$user' AND lastAction!='P-Banned'");
@@ -109,7 +108,7 @@ sub banUser (){
 	my($pBanCountTot) = "$ref->{'pBanCountTot'}";
 	my($lastAction) ="";
 	
-	&debug("BANNED- user=$user, reason=$reason, ip=$ip, mode=$mode");
+	&debug("banUserBANNED- user=$user, reason=$reason, ip=$ip, mode=$mode");
 
 	$buth->finish();
 	
@@ -166,7 +165,7 @@ sub banUser (){
 				allowStatus='Banned',
 				lastReason='$reason',
 			    	lastAction='$lastAction'
-			    	WHERE nick='$user' AND allowStatus!='Banned'");
+			    	WHERE nick='$user' AND IP='$ip'");
 	
 	if(&getLogOption("log_bans"))
     		{&addToLog($user,$lastAction,$reason);}
