@@ -148,7 +148,6 @@ function mod($a, $b) {
 <tr><td><input type="radio" name="aStatus" value=21 <? if ($allowStatus == "Banned" && $lastAction == "P-Banned" && $lastReason != "Fake(Share)" && $lastReason !="Fake(Tag)")  echo"checked=\"true\"";?>><? echo "$font";?>Permanent Ban - Place a permanent Ban</font></td></tr>
 <tr><td><input type="radio" name="aStatus" value=22 <? if ($allowStatus == "Banned" && $lastAction == "T-Banned" && $lastReason != "Fake(Share)" && $lastReason !="Fake(Tag)")  echo"checked=\"true\"";?>><? echo "$font";?>Temporary Ban - Place under temporary Ban</font></td></tr>
 <tr><td><input type="radio" name="aStatus" value=27 <? if ($allowStatus == "Normal") echo"checked=\"true\"";?>><? echo "$font";?>Reset Kick & Ban Counters</font></td></tr>
-
 <tr><td><input type="radio" name="aStatus" value=23 <? if ($allowStatus == "Normal") echo"checked=\"true\"";?>><? echo "$font";?>Normal (UnBan) & Reset Kick Counter</font></td></tr>
 <tr><td><input type="radio" name="aStatus" value=10 ><? echo "$font";?>Kick User</font></td></tr>
 <tr><td><input type="Text" size="50" name="information" value=""></tr></td>

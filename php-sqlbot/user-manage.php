@@ -22,7 +22,7 @@ if ($f == uType){
 	$sql = "INSERT INTO botWorker VALUES ('mysql_insertid',$uType,'$nick','$ip','$passwd')";
 	$result = mysql_query($sql) or die(mysql_error());}
 else if ($f == aStatus){
-	$sql = "INSERT INTO botWorker VALUES ('mysql_insertid','$value','$nick','$ip','$information')";
+	$sql = "INSERT INTO botWorker VALUES ('mysql_insertid','$aStatus','$nick','$ip','$information')";
 	$result = mysql_query($sql) or die(mysql_error());}
 	
 if (empty($offset)) {$offset=0;}
@@ -130,7 +130,7 @@ while ($data=mysql_fetch_array($result))
 	
 	
 <td nowrap><a href="<? echo "user-type.php?nick=$nick&IP=$IP" ?>"> <? echo "$font$nick$fontend"?></a></td>
-<td nowrap><a href="<? echo "user-manage.php?field=status&search=$status" ?>>" title="Search for users <?echo "$status"?>"> <? echo "$font$status$fontend"; ?></a></td>
+<td nowrap><a href="<? echo "user-manage.php?field=status&search=$status" ?>" title="Search for users <?echo "$status"?>"> <? echo "$font$status$fontend"; ?></a></td>
 <td nowrap><a href="<? echo "user-manage.php?field=uType&search=$uType" ?>"><? echo "$font$uType$fontend"; ?></a></td>
 <td nowrap><a href="<? echo "user-manage.php?field=allowStatus&search=$allowStatus" ?>"><? echo "$font$allowStatus$fontend"; ?></a></td>
 <td nowrap><a href="<? echo "user-manage.php?field=connection&search=$connection" ?>"><? echo "$font$connection$fontend"; ?></a></td>
@@ -143,7 +143,7 @@ while ($data=mysql_fetch_array($result))
 <?if ($allowStatus == Banned)
 {?>
 <td>
-<form action="<? echo "user-manage.php?f=aStatus&field=$field&search=$search&nick=$nick&ip=$IP&value=23&information=Un-ban";?>" method="post">
+<form action="<? echo "user-manage.php?f=aStatus&field=$field&search=$search&nick=$nick&ip=$IP&aStatus=23&information=Un-ban";?>" method="post">
 <input type="Submit" value="UnBan"></form>
 </td>
 <?}?>	
