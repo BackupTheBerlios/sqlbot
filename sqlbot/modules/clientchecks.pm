@@ -218,7 +218,8 @@ sub parseClient(){
 			## SLOT RATIO ##
 			if ($ref->{'slot_ratio'} ne 0 )
 				{if ($ref->{'slot_ratio'} > $slt_ratio)
-					{$REASON = "SlotRatio($slt_ratio)";
+					{$slt_ratio = sprintf("%.2f", $slt_ratio); 
+					$REASON = "SlotRatio($slt_ratio)";
 					$ACTION = "Kicked";}}
 
 			## SPEED LIMIT ## 
