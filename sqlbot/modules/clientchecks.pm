@@ -110,6 +110,7 @@ sub clientRecheck()
 		if ($ip eq '') {}
 		else {
 		$userInDB = &userInDB($user,$ip);
+		&debug("Recheck - $nick($userInDB)");
 		if ($userInDB eq 2) {}#If they are set to allow then do nothing
 		elsif ($userInDB eq 0) #If they dont exist create a record
 			{&createNewUserRecord($user);
@@ -141,13 +142,14 @@ sub clientRecheck()
 					&checkKicks($user);  # Check kick counter
 					&processEvent($user); }}}}}  # take action if any
 	# Make sure the online sql table does not contain ghosts
-	my ($cth) = $dbh->prepare("SELECT * FROM userDB WHERE status='Online'");
+	my ($cth) = $dbh->prepare("SELECT nick FROM userDB WHERE status='Online'");
 	$cth->execute();
 	while (my $ref = $cth->fetchrow_hashref()) {
-		$user = "";
-		$user = "$ref->{'nick'}"; 
-		$type = odch::get_type($user);
-		if($type eq 0 )	{&userOffline($user);}}
+		my($nick) = "";
+		$nick = "$ref->{'nick'}"; 
+		$type = odch::get_type($nick);
+		&debug("Recheck - $nick($type)");
+		if($type eq 0 )	{&userOffline($nick);}}
 	$cth->finish();
 }
 
