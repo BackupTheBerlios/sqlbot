@@ -41,6 +41,9 @@ include("header.ini");
 			<option value="20">20</option>
 			<option value="25">25</option>
 			<option value="50">50</option>
+			<option value="75">75</option>
+			<option value="100">100</option>
+			<option value="150">150</option>
 		</select></td>
 		<td>Minimum number of Slots this client should have (int)</td>
 	</tr><tr>
@@ -61,6 +64,9 @@ include("header.ini");
 			<option value="20">20</option>
 			<option value="25">25</option>
 			<option value="50">50</option>
+			<option value="75">75</option>
+			<option value="100">100</option>
+			<option value="150">150</option>
 		</select></td>
 		<td>Maximum number of Slots this client should have (int)</td>
 	</tr><tr>
