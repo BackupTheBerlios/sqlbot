@@ -52,7 +52,7 @@ sub splitDescription() {
 	if($tmpdata eq "") {return 1;}
 	
 	$tmpdata =~ s/'//g;
-	$fullDescription = " ";
+	$fullDescription = "$tmpdata";
 	my($pos1) = rindex($tmpdata, "<") +1;
 	my($pos2) = rindex($tmpdata, ">");
 	if($pos2 < 10){return 1;}
