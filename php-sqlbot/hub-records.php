@@ -25,7 +25,7 @@ include("header.ini");
 	<input class="button" type="Submit" value="User Information" title="User Information"></form>
 	</td>
 	<td nowrap>
-	<form action="stats-records.php" method="post">
+	<form action="hub-records.php" method="post">
 	<input class="button" type="Submit" value="Hub Records" title="Hub Records"></form>
 	</td>
 </tr>
@@ -68,7 +68,7 @@ while ($i < $num) {
 
 	<td nowrap><? echo "$font$name$fontend"; ?></td>
 	<td nowrap><? echo "$font$value$fontend"; ?></td>
-	<form action="stats-records.php?function=reset&id=<? echo "$id";?>" method="post">
+	<form action="hub-records.php?function=reset&id=<? echo "$id";?>" method="post">
 	<td nowrap><input type="Submit" value="Reset" title="Reset value to 0" onClick="return confirmDelete()"></td></form></tr>
 	<?++$i;} ?></table>
 </center>

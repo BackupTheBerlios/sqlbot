@@ -26,7 +26,7 @@ $stats_page="stats-hub1.php";
 	<input class="button" type="Submit" value="User Information" title="User Information"></form>
 	</td>
 	<td nowrap>
-	<form action="hub-records.php" method="post">
+	<form action="stats-records.php" method="post">
 	<input class="button" type="Submit" value="Hub Records" title="Hub Records"></form>
 	</td>
 </tr>
