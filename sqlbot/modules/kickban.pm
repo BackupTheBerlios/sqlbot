@@ -108,6 +108,8 @@ sub banUser (){
 	my($tBanCountTot) = "$ref->{'tBanCountTot'}";
 	my($pBanCountTot) = "$ref->{'pBanCountTot'}";
 	my($lastAction) ="";
+	
+	&debug("BANNED- user=$user, reason=$reason, ip=$ip, mode=$mode");
 
 	$buth->finish();
 	
