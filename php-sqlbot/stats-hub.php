@@ -25,6 +25,10 @@ $stats_page="stats-hub1.php";
 	<form action="stats-hub.php?select=userstats" method="post">
 	<input class="button" type="Submit" value="User Information" title="User Information"></form>
 	</td>
+	<td nowrap>
+	<form action="hub-records.php" method="post">
+	<input class="button" type="Submit" value="Hub Records" title="Hub Records"></form>
+	</td>
 </tr>
 </table>
 <hr size="1" width="100%"><p>
