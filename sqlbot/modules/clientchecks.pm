@@ -297,12 +297,14 @@ sub checkClones(){
 			{$onlineuser=$userlist[$checkUserCount];
 			my($onlinetype) = odch::get_type($onlineuser);
 			$onlineip = odch::get_ip($onlineuser);
-			# && ($onlinetype ne 0))
-			if(($newip eq $onlineip) && ($newuser ne $onlineuser))
-				{&msgUser("nutter","$newuser($newip) could be a clone of $onlineuser($onlineip)");
-				$REASON = "Clone";
-				$ACTION = "Kicked"}
-			$checkUserCount ++;}
+			#If the ip of user joining is the same ip as an op then ignore
+			if (($onlinetype ne 0) && ($onlinetype < 8))
+				{if(($newip eq $onlineip) && ($newuser ne $onlineuser))
+					{&msgAll("$newuser($newip) is a clone of $onlineuser($onlineip)");
+					$REASON = "Clone";
+					$ACTION = "Kicked"}}
+			$checkUserCount ++;
+		}
 	}	
 }
 ## Required in every module ##
