@@ -68,15 +68,15 @@ sub seen()
 			my($userOnline) = $dbh->selectrow_array("SELECT COUNT(*) FROM userDB 
 						WHERE nick='$userseen' AND status='Online' ");
 			if (($userOnline) ne 1)
-				{$seenresult .= "$nick was last online on $outTime\n\r";}
+				{$seenresult .= "$nick was last online on $outTime \r\n";}
 			else
-				{$seenresult .= "$nick is on online now\n\r";}
+				{$seenresult .= "$nick is on online now \r\n";}
 			$match++;
 		}
 		$sth->finish();
 		my($userCount) = $dbh->selectrow_array("SELECT COUNT(*) FROM userDB 
 					WHERE nick like '$userseen'");
-		$seenresult .= "Returned $match of $userCount for \'$seensearch\' \n\r";
+		$seenresult .= "Returned $match of $userCount for \'$seensearch\'  \r\n";
 	}
 	else
 		{my($userOnline) = $dbh->selectrow_array("SELECT COUNT(*) FROM userDB 
@@ -188,7 +188,7 @@ Public commands(PM):-\r
 	if(($type eq 32) or ($type eq 16))
 	{
 		my($defaultLogEntries) = &getHubVar("nr_log_entries");
-		$helpmsg .="\n\r\n\rOp commands(PM):-\r
+		$helpmsg .=" \r\n \r\nOp commands(PM):-\r
 . +recheck = force bot to re check all clients,and update online table\r
 . +info \'username\' = get the info of another user\r
 . +log = show the last $defaultLogEntries Entries from the hublog\r
