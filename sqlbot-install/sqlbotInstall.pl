@@ -72,7 +72,7 @@ eval { $dbh->do("CREATE TABLE hubLog (	rowID 		INT(7) NOT NULL AUTO_INCREMENT PR
 
 
 eval { $dbh->do("CREATE TABLE userDB (	rowID 		INT(7) NOT NULL AUTO_INCREMENT PRIMARY KEY,
-					nick		VARCHAR(30),
+					nick		VARCHAR(50),
 					passwd		VARCHAR(15),
 					status		VARCHAR(10),
 					utype		VARCHAR(10),
