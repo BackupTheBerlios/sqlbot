@@ -124,7 +124,7 @@ sub op_admin_connected()
 {
 	my($user) = @_;
 	
-	&parseClient($user);
+	&splitDescription($user);
 	my($userInDB) = &userInDB($user,$ip);
 	if($userInDB eq 1)
 		{&parseClient($user);
@@ -174,7 +174,6 @@ sub hub_timer() {
 #Data has received
 sub data_arrival(){
 	my($user,$data)=@_;
-
 	if($data =~ /GetNickList/)
 	{
 		odch::data_to_user($user,"\$MyINFO \$ALL $botname $botDescription\$ \$botConnection\$\$$botShare\$|");
