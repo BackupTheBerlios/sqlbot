@@ -256,7 +256,7 @@ $nick=mysql_result($result,$i,"nick");
 }
 
 if ($select == top_users){
-
+echo "<!--";
 ///////////////////////////////////////////////////////
 ////Longest Online
 ///////////////////////////////////////////////////////
@@ -280,7 +280,7 @@ $nick=mysql_result($result,$i,"nick");
 		<td><? echo "$font$nick$fontend" ?></td>
 		<td><? echo "$font$onlineTime$fontend" ?></td>
 		</tr><? ++$i; }  ?>
-</table>
+</table> -->
 <?
 ///////////////////////////////////////////////////////
 ////Most Frequent / Average

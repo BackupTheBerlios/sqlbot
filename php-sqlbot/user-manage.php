@@ -90,16 +90,21 @@ while ($data=mysql_fetch_array($result))
 //	$awayMSg=mysql_result($result,$i,"awayMSg");
 //	$fullDescription=mysql_result($result,$i,"fullDescription");
 	$dcVersion=mysql_result($result,$i,"dcVersion");
+	$slots=mysql_result($result,$i,"slots");
+	$hubs=mysql_result($result,$i,"hubs");
+	$connectionMode=mysql_result($result,$i,"connectionMode");
+	$limiter=mysql_result($result,$i,"limiter");
+		if ($limiter == "0") {$limiter = "none";}
 	$dcClient=mysql_result($result,$i,"dcClient");
-	if ( $dcClient == "++" ) { $icoClient = DCpp ;}
-	if ( $dcClient == "DCGUI" ) { $icoClient = DCGUI ;}
-	if ( $dcClient == "No Tag" ) { $icoClient = NoTag ; $dcVersion= "";}
+	if ( $dcClient == "No Tag" ) { $icoClient = NoTag ; $popup = "No Tag";}
+	if ( $dcClient == "++" ) { 	$icoClient = DCpp ;
+						$popup= "$dcClient $dcVersion  Slots=$slots  Hubs=$hubs  Mode=$connectionMode  Limiter=$limiter";}
+	if ( $dcClient == "DCGUI" ) { $icoClient = DCGUI ;
+						$popup= "$dcClient $dcVersion  Slots=$slots  Hubs=$hubs  Mode=$connectionMode  Limiter=$limiter";}
 
-//	$slots=mysql_result($result,$i,"slots");
-//	$hubs=mysql_result($result,$i,"hubs");
-//	$limiter=mysql_result($result,$i,"limiter");
+
+
 	$connection=mysql_result($result,$i,"connection");
-//	$connectionMode=mysql_result($result,$i,"connectionMode");
 	$country=mysql_result($result,$i,"country");
 	$IP=mysql_result($result,$i,"IP");
 //	$hostname=mysql_result($result,$i,"hostname");
@@ -143,7 +148,7 @@ while ($data=mysql_fetch_array($result))
 <td nowrap><div align="center"><a href="<? echo "user-manage.php?field=uType&search=$uType" ?>" title="Search for all <? echo "$uType" ?>s"><img src="img/user/<? echo "$uType" ?>.gif" border="0"></a></div></td>
 
 <td nowrap>
-	<div align="center"><a title="<? echo "$dcClient $dcVersion" ?>" style="cursor:help"><img src="img/clients/<? echo "$icoClient" ?>.gif" border="0"></a>
+	<div align="center"><a title="<? echo "$popup" ?>" style="cursor:help"><img src="img/clients/<? echo "$icoClient" ?>.gif" border="0"></a>
 	</div>
 </td>
 
