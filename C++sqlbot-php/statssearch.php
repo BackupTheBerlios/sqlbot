@@ -205,7 +205,7 @@ else { echo "\n<option value=\"$number\">$meaning";}
 }
 
 ?>
-								<LEGEND><font color="#FFFFFF"> &nbsp; Top 10 Searches
+								<LEGEND><font color="#FFFFFF"> &nbsp; Top 20 Searches
 												since <?php echo "$firstSearchDate"; ?> &nbsp;</font></LEGEND>
 									<table width="100%" cellspacing="0" border="0" class="stats">
 										<tr>
@@ -226,19 +226,19 @@ else { echo "\n<option value=\"$number\">$meaning";}
 					isselected($searchfield, 7, Video);
 					isselected($searchfield, 8, Folder);
 		echo "</select>
-				<input type=\"submit\" value=\"Go\" class=\"userdbnicknormal\" title=\"View Selection\"></form>";
+				<input type=\"submit\" value=\"Go\" class=\"userdbnicknormal\" title=\"View Selection\"></form>\n";
 
 ?>
 											</td>
 										</tr>
 <?php
 //GET TOP SEARCHES
-$topSearchResults=mysql_query("SELECT lsSearch,COUNT(lsSearch) as count from logSearch WHERE hubID='$hubID' $parse_option GROUP BY lsSearch ORDER BY count DESC LIMIT 10");
+$topSearchResults=mysql_query("SELECT lsSearch,COUNT(lsSearch) as count from logSearch WHERE hubID='$hubID' $parse_option GROUP BY lsSearch ORDER BY count DESC LIMIT 20");
 while ($data=mysql_fetch_array($topSearchResults)) 
 {
 	$COUNT=mysql_result($topSearchResults,$ts,"count");
 	$lsSearch=htmlentities(mysql_result($topSearchResults,$ts,"lsSearch"));
-	echo "<tr><td>$COUNT &nbsp; </td><td>$lsSearch</td></tr>";
+	echo "\n<tr>\n\t<td>$COUNT &nbsp; </td>\n\t<td>$lsSearch</td>\n</tr>";
 	$ts++;
 }
 ?>

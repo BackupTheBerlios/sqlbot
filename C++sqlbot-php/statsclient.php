@@ -155,7 +155,7 @@ $j++;
 					<tr>
 						<td>
 							<FIELDSET>
-								<LEGEND><font color="#FFFFFF"> &nbsp; Summary top 10 Countries of <?php echo "$total_clients users logged"; ?> &nbsp;</font></LEGEND>	
+								<LEGEND><font color="#FFFFFF"> &nbsp; Summary top 20 Countries of <?php echo "$total_clients users logged"; ?> &nbsp;</font></LEGEND>	
 									<table width="100%" cellspacing="0" border="0" class="stats">
 										<tr>
 											<td><strong>Country</strong></td>
@@ -164,7 +164,7 @@ $j++;
 											<td><strong>Percent of total users</strong></td>
 										</tr>
 <?php
-$countrystats=mysql_query("SELECT uiCountry,COUNT(uiCountry) AS count FROM userInfo WHERE hubID='$hubID' GROUP BY uiCountry ORDER BY count DESC LIMIT 10");
+$countrystats=mysql_query("SELECT uiCountry,COUNT(uiCountry) AS count FROM userInfo WHERE hubID='$hubID' GROUP BY uiCountry ORDER BY count DESC LIMIT 20");
 while ($data=mysql_fetch_array($countrystats)) 
 {
 	$uiCountry=mysql_result($countrystats,$k,"uiCountry");

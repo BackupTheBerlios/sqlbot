@@ -318,6 +318,7 @@ while ($data=mysql_fetch_array($userresult))
 	$BanTime=mysql_result($userresult,$i,"BanTime");
 	$BanExpire=mysql_result($userresult,$i,"BanExpire");
 	if ($uiClient == "Unknown") { $CLIENT = "<img src=\"img/clients/NoTag.gif\" alt=\"\">"; }
+	if (($uiClient == "Unknown") && ( $uiDescription == "http://dc.ketelhot.de" )) {$CLIENT = "<img src=\"img/clients/DCGUI_notag.gif\" alt=\"\">"; }
 	if ($uiClient == "DCGUI") { $CLIENT = "<img src=\"img/clients/DCGUI.gif\" alt=\"$uiClient\">"; }
 	if ($uiClient == "++") { $CLIENT = "<img src=\"img/clients/DCpp.gif\" alt=\"$uiClient\">"; }
 	if ($uiClient == "DC") { $CLIENT = "<img src=\"img/clients/DC.gif\" alt=\"$uiClient\">"; }
@@ -347,6 +348,7 @@ if ($uiMode == "Active") { $uiMode = "A"; }
 
 //DECLARE POPUPS FOR USER-NICK
 if ($uiClient == "Unknown") { $clientHover = "ONMOUSEOVER=\"popup('Unknown</td>','yellow')\"; ONMOUSEOUT=\"kill()\""; }
+if (($uiClient == "Unknown") && ( $uiDescription == "http://dc.ketelhot.de" )){ $clientHover = "ONMOUSEOVER=\"popup('Possibly DCGUI according to tag</td>','yellow')\"; ONMOUSEOUT=\"kill()\""; }
 if ($uiUserLevel == "5") { $clientHover = "ONMOUSEOVER=\"popup('Bot</td>','yellow')\"; ONMOUSEOUT=\"kill()\""; }
 elseif ($uiClient != "Unknown")  { $clientHover = "ONMOUSEOVER=\"popup('Client</td><td>$uiClient</td></tr><tr><td>Version</td><td>$uiVersion</td></tr><tr><td>Details</td><td>M:$uiMode,H:$uiHubs,S:$uiSlots,L:$uiLimiter</td>','yellow')\"; ONMOUSEOUT=\"kill()\""; }
 
