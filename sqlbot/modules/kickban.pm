@@ -83,7 +83,7 @@ sub banWorker()
 			&banUser($user,$information,$ip,"uban");}
 		elsif($function=='24'){
 			&banUser($user,"Faker",$ip,"pban");}
-		$dbh->do("DELETE FROM botWorker WHERE function LIKE '2%' ");
+		$dbh->do("DELETE FROM botWorker WHERE function LIKE '2%' AND nick='$user'");
 	}
 	$bwth->finish();
 }
