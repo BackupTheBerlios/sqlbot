@@ -74,7 +74,7 @@ sub banWorker()
 		my($user) = "$ref->{'nick'}";
 		my($ip) = "$ref->{'IP'}";
 		my($information) = "$ref->{'information'}";
-		&debug("($function)$user($ip)$information");
+		
 		if ($function=='21'){
 			&banUser($user,$information,$ip,"pban");}
 		elsif($function=='22'){

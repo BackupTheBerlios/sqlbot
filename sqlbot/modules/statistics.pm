@@ -20,47 +20,47 @@ sub buildStats(){
 	my($totUsersOnline) = $dbh->selectrow_array("SELECT COUNT(*) from userDB WHERE status='Online'");
 	my($totDiffUsers) = $dbh->selectrow_array("SELECT COUNT(*) from userDB");
 	&totalUptime();
-	$totShare = roundToGn($totShare);
-
-#	my($stth) = $dbh->prepare("SELECT country,COUNT(country) from userDB WHERE status='Online'");
-#	$stth->execute();
-#	my($tmpCountries) = "";
-
-#	while ($ref = $stth->fetchrow_hashref()){
-#		$tmpCountries .= "\[$ref->{'country'} $ref->{'COUNT(*)'}] "; }
-#	$stth->finish();
-#	my($countries) =  "$tmpCountries";
-#	my($stth1) = $dbh->prepare("SELECT client, COUNT(*) from userDB GROUP by dcClient WHERE status='Online'");
-#	$stth1->execute();
-#	my($tmpClient) = "";
-
-#	while ($ref1 = $stth1->fetchrow_hashref()) {
-#		$tmpClient .= "$ref1->{'client'} [$ref1->{'COUNT(*)'}]\n\r"; }
-#	$stth1->finish();
-#	my($clients) = "$tmpClient";
-
+	
+	my($avShareGigs) = &roundToGB($totShare/$totUsersOnline);
+	$totShare = &roundToGB($totShare);
+	
+	my($stth) = $dbh->prepare("select country, COUNT(*) from userDB WHERE status='Online' GROUP by country");
+	$stth->execute();
+	my($tmpCountries) = "";
+	while ($ref = $stth->fetchrow_hashref()){
+		$tmpCountries .= "\[$ref->{'country'} $ref->{'COUNT(*)'}] "; }
+	$stth->finish();
+	my($countries) =  "$tmpCountries";
+	my($stth1) = $dbh->prepare("SELECT dcClient, COUNT(*) from userDB WHERE status='Online' GROUP by dcClient");
+	$stth1->execute();
+	my($tmpClient) = "";
+	while ($ref1 = $stth1->fetchrow_hashref()) {
+		$tmpClient .= "$ref1->{'dcClient'} [$ref1->{'COUNT(*)'}]\n\r"; }
+	$stth1->finish();
+	my($clients) = "$tmpClient";
 	my($stth2) = $dbh->prepare("SELECT * FROM records");
 	$stth2->execute();
 	my($tmpRecords) = "";
-
 	while ($ref2 = $stth2->fetchrow_hashref()) {
-		$tmpRecords .=  "Record $ref2->{'recordName'} is $ref2->{'recordValue'} Set on $ref2->{'date'} at $ref2->{'time'}\r";}
+		$tmpRecords .=  "Record $ref2->{'recordName'} is $ref2->{'recordValue'} Set on $ref2->{'date'} at $ref2->{'time'}\n\r";}
 	$stth2->finish();
 	my($records) = "$tmpRecords";
-	
 	my($webAddress) = &getHubVar("hub_website_address");
+	
+
 	$statsmsg = "Online stats:\r
 Uptime: $days d $hours h $mins m\r
 Users online : $totUsersOnline \r
+Users Online from Countries: $countries\n\rAverage share of $avShareGigs per user.\r
+Online Clients:\r
+$clients \r
+
 Total Share  : $totShare, 
 Total Unique visitors: $totDiffUsers\r
 Current Records :\r
 $records\r
 More detailed stats can be found at $webAddress| ";
 
-# Users Online from Countries: $countries\r\rAverage share of $avShareGigs per user.\r
-# Online Clients:\r
-# $clients \r
 
 }
 

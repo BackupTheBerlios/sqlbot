@@ -161,7 +161,7 @@ Public Commands (Main Chat):-\r
 - +showops = List of Ops Online\r
 - +fakers = List share fakers detected\r
 - +version = Shows which version the bot is running\r
-- +stats = (Removed Temporarily)Channel statistics\r
+- +stats = Channel statistics\r
 - +myinfo = Show your information \r
 - +away \'Reason\' = Mark yourself away for the reason\r
 - +back = Mark yourself back. (Auto back on hub chat)\r
