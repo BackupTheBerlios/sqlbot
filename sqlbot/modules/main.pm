@@ -25,13 +25,7 @@ $dbh = DBI->connect("DBI:mysql:odch:$sql_server","$sql_username","$sql_password"
 $dbh->do("SET OPTION SQL_BIG_TABLES = 1");
 
 
-	$type=""; $ip=""; $shared="";$GigsShared="";
-	$tmpdata=""; $fullDescription=""; $dcClient="";
-	$dcVersion=""; $NbHubs=""; $NSlots=""; $slt_ratio=""; $country="";
-	$UploadLimit=""; $conn=""; $connection=""; $email="";$tmpModeAP="";
-	$connectionMode="";$tmp0="";$shareBytes="";
-	@tmp0 = ("","");@tmp1 = ("","");@tmp2 = ("","");@tmp3 = ("","");@tmp4 = ("","","");my($pos1)="";my($pos2)="";my($tmpdata)="";my($verdata)="";my($tmpModeAP)="";
-	my(@verdata2)=("","","","","","");my(@tmpdata2)=("","","","","","");	$REASON = "";
+		$REASON = "";
 	$ACTION = "";
 
 # Import the other modules,

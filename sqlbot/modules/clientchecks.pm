@@ -13,11 +13,18 @@
 #
 ##############################################################################################
 #Break down the components of a client description
+
 sub splitDescription() {
 	my($user) = @_;
 
 	#Initialise globals
-
+	$type=""; $ip=""; ;$GigsShared="";
+	$tmpdata=""; $fullDescription=""; $dcClient="";
+	$dcVersion=""; $NbHubs=""; $NSlots=""; $slt_ratio=""; $country="";
+	$UploadLimit=""; $conn=""; $connection=""; $email="";$tmpModeAP="";
+	$connectionMode="";$tmp0="";$shareBytes=0;
+	@tmp0 = ("","");@tmp1 = ("","");@tmp2 = ("","");@tmp3 = ("","");@tmp4 = ("","","");my($tmpdata)="";my($verdata)="";my($tmpModeAP)="";
+	my(@verdata2)=("","","","","","");my(@tmpdata2)=("","","","","","");
 	
 	$type = odch::get_type($user);
 	$ip = odch::get_ip($user);
@@ -43,11 +50,10 @@ sub splitDescription() {
 	if($tmpdata eq "") {return 1;}
 	$tmpdata =~ s/'//g;
 	$fullDescription = "$tmpdata";
-	$pos1 = rindex($tmpdata, "<") +1;
-	$pos2 = rindex($tmpdata, ">");
-
-	if($pos2 < 10) {return 1;}
-
+	my($pos1) = rindex($tmpdata, "<") +1;
+	my($pos2) = rindex($tmpdata, ">");
+	if($pos2 < 10){return 1;}
+	
 	$verdata = substr($tmpdata, $pos1, $pos2 - $pos1);
 	@verdata2 = split(/\ /, $verdata);
 
@@ -56,13 +62,16 @@ sub splitDescription() {
 	@tmpdata2 = split(/,/, $tmpdata);
 
         $dcClient = $verdata2[0];
+	
+	
 	@tmp0 = split(/:/, $tmpdata2[0]);
 	@tmp1 = split(/:/, $tmpdata2[1]);
 	@tmp2 = split(/:/, $tmpdata2[2]);
 	@tmp3 = split(/:/, $tmpdata2[3]);
 	@tmp4 = split(/:/, $tmpdata2[4]);
 	$dcVersion = $tmp0[1];
-
+	
+	
 	$tmpModeAP = $tmp1[1];
 	if($tmpModeAP =~ /A/){$connectionMode = "Active";}
 	elsif($tmpModeAP =~ /P/){$connectionMode = "Passive";}
@@ -91,7 +100,7 @@ sub clientRecheck()
 #	@userlist=split(/\ /,$usersonline);
 #	my ($checkUserCount) = 0;
 #	while ($checkUserCount != $numonlineusers)
-#	{
+#	{string to int
 #		$user=$userlist[$checkUserCount];
 #		$checkUserCount ++;
 #		&parseClient($user);
@@ -178,9 +187,10 @@ sub parseClient(){
 			my ($ref) = $pcth->fetchrow_hashref();
 			
 			## MIN VERSION ##
-			if ($ref->{'min_version'} > $dcVersion)
-				{$REASON = "Version";
-				$ACTION = "Kicked";}
+			if ($dcVersion =~/(\d)\1{2,}/){
+				if ($ref->{'min_version'} > $dcVersion)
+					{$REASON = "Version";
+					$ACTION = "Kicked";}}
 			## MIN SLOTS ##
 			if ($ref->{'min_slots'} > 0 )
 				{if ($NSlots < $ref->{'min_slots'})
