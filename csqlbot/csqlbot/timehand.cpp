@@ -34,8 +34,8 @@ CString TimeHand::getDate()
      timeinfo = localtime ( &rawtime );
 
      datestream << setw(4) << setfill('0') << timeinfo->tm_year+1900
-           << setw(2) << setfill('0') <<  timeinfo->tm_mday
-          << setw(2) << setfill('0') << timeinfo->tm_mon+1;
+          << setw(2) << setfill('0') << timeinfo->tm_mon+1
+           << setw(2) << setfill('0') <<  timeinfo->tm_mday;
      datestream.flush();
 //     cout << "datenow = " << datestream.str() << endl;
     return CString((const char *&)datestream.str());
