@@ -43,11 +43,15 @@ login name and password you gave in this script.\n\n";
 
 eval { $dbh->do("ALTER TABLE userDB MODIFY nick VARCHAR(50)");
 					print "ALTER TABLE userDB MODFIY (nick varchar(50)\n";
-		}; print "ALTER TABLE userDB MODFIY (nick varchar(50))  : failed $@\n" if $@;
+		}; print "ALTER TABLE userDB MODFIY nick varchar(50)  : failed $@\n" if $@;
+		
+eval { $dbh->do("ALTER TABLE userDB MODIFY loginCount BIGINT(20)");
+					print "ALTER TABLE userDB MODIFY loginCount BIGINT(20)\n";
+		}; print "ALTER TABLE userDB MODIFY loginCount BIGINT(20)  : failed $@\n" if $@;
 	
 eval { $dbh->do("ALTER TABLE hubLog MODIFY nick VARCHAR(50)");
 					print "ALTER TABLE userDB MODFIY (nick varchar(50)\n";
-		}; print "ALTER TABLE hubLog MODFIY (nick varchar(50)) : failed $@\n" if $@;
+		}; print "ALTER TABLE hubLog MODFIY nick varchar(50) : failed $@\n" if $@;
 
 eval { $dbh->do("CREATE TABLE ipFiltering (rowID 	INT(7) NOT NULL AUTO_INCREMENT PRIMARY KEY,
 					ipStart		VARCHAR(15),
