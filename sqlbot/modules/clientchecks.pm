@@ -308,26 +308,28 @@ sub checkKicks(){
 }
 
 sub checkClones(){
-	my($newuser) = @_;
-	if (&getConfigOption("clone_check")){
-# userIsOnline
-#		$newip = odch::get_ip($newuser);
-#		my ($usersonline) = odch::get_user_list(); #Get space separated list of who is online
-#		my ($numonlineusers) = odch::count_users(); #And how many
-#		@userlist=split(/\ /,$usersonline);
-#		my ($checkUserCount) = 0;
-#		while ($checkUserCount != $numonlineusers)
-#			{$onlineuser=$userlist[$checkUserCount];
-#			my($onlinetype) = odch::get_type($onlineuser);
-#			$onlineip = odch::get_ip($onlineuser);
-#			#If the ip of user joining is the same ip as an op then ignore
-#			if (($onlinetype ne 0) && ($onlinetype < 8))
-#				{if(($newip eq $onlineip) && ($newuser ne $onlineuser))
-#					{&msgAll("$newuser($newip) is a clone of $onlineuser($onlineip)");
-#					$REASON = "Clone";
-#					$ACTION = "Kicked"}}
-#			$checkUserCount ++;}
-	}	
+	my($newUser) = @_;
+	if (&getConfigOption("clone_check"))
+	{
+		my($newUserIp) = odch::get_ip($newUser);
+		my($value) = $dbh->do("SELECT nick FROM userDB WHERE IP='$newUserIp' AND status='Online'");
+		if($value eq 1)
+		{
+			my($sth) = $dbh->prepare("SELECT nick FROM userDB WHERE IP='$newUserIp' AND status='Online' ");
+			$sth->execute();
+			my($ref) = $sth->fetchrow_hashref();
+			my($nick) = "$ref->{'nick'}";
+			$sth->finish();
+			my($newUserShareBytes) = odch::get_share($nick);
+			my($userShareBytes) = odch::get_share($newUser);
+			if($newUserShareBytes eq newUserShareBytes)
+			{
+				&msgAll("$newuser($newUserIp) is a Clone of $nick($newUserIp)");
+				$REASON = "Clone";
+				$ACTION = "Kicked"
+			}
+		}
+	}
 }
 
 sub nickFilter(){
