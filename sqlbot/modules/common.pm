@@ -35,7 +35,7 @@ sub debug() {
 	}
 }
 
-sub msgUser($$) {
+sub msgUser() {
 	my($user,$msg) = @_;
 	odch::data_to_user($user, "\$To: $user From: $botname \$$msg |");
 }
@@ -44,7 +44,7 @@ sub msgOPs() {
 	my($sender,$msg) = @_;
 	my $sth = $dbh->prepare("SELECT nick FROM userDB WHERE (uType='Operator' OR uType='Op-Admin')");
 	$sth->execute();
-	while (my $ref = $sth->fetchrow_hashref()){
+	while ($ref = $sth->fetchrow_hashref()){
 		$op= "$ref->{'nick'}";
 		if (lc($op) ne lc($sender)){ # Dont echo
 			odch::data_to_user($op, "\$To: $op From: $botname \$$msg |");}
@@ -62,7 +62,6 @@ sub version()
 {
 	&msgAll("Im running version $botVersion of sqlBot");
 	&msgAll("     Available from http://sqlbot.berlios.de");
-	&debug("$user - Version sent");
 }
 sub getConnection(){
 	my($conn) =@_;
@@ -103,9 +102,9 @@ sub getLogOption() {
 }
 sub getHubVar() {
 	my($data) = @_;
-	my $sth = $dbh->prepare("SELECT value FROM hub_variables WHERE rule='$data'");
+	my($sth) = $dbh->prepare("SELECT value FROM hub_variables WHERE rule='$data'");
 	$sth->execute();
-	my $ref = $sth->fetchrow_hashref();
+	my($ref) = $sth->fetchrow_hashref();
 	$value = "$ref->{'value'}";
 	$sth->finish();
 	return $value;

@@ -28,12 +28,12 @@ $dbh->do("SET OPTION SQL_BIG_TABLES = 1");
 
 require "$modules_path/common.pm";
 require "$modules_path/kickban.pm";
+require "$modules_path/clientchecks.pm";
+require "$modules_path/userManagement.pm";
 require "$modules_path/events.pm";
 require "$modules_path/mysql.pm";
-require "$modules_path/clientchecks.pm";
 require "$modules_path/statistics.pm";
 require "$modules_path/commands.pm";
-require "$modules_path/userManagement.pm";
 require "$modules_path/odch.pm";
 # Register the script and announce a presence
 sub main(){

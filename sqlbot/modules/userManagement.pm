@@ -28,15 +28,12 @@ sub userInDB(){
 sub createNewUserRecord(){
 	my($user) = @_;
 	&setTime();
-	
-	my($allow) = "Normal";
-	my($awayStatus) ="off";
-	my($awayMsg) = "";
+		
 	my($dtime)="$date $time";
 	$connection = &getConnection($conn);
 
 	$dbh->do("INSERT INTO userDB VALUES ('mysql_insertid','$user','not set',
-		'','$utype','$type','$allow','$awayStatus','$awayMsg',	
+		'','$utype','$type','Normal','off','',	
 		'$fullDescription','$dcClient','$dcVersion','$NSlots','$NbHubs','$UploadLimit','$connection','$connectionMode','$country',
 		'$ip','$hostname','$dtime','','$dtime','','1','0','0','0','0','0','0','0','$shareBytes','$shareBytes','','')");
 
@@ -48,13 +45,13 @@ sub updateUserRecord(){
 	&setTime();
 	my($inTime)="$date $time";
 	
-	my $uurth = $dbh->prepare("SELECT loginCount FROM userDB WHERE nick='$user'");
+	my($uurth) = $dbh->prepare("SELECT loginCount FROM userDB WHERE nick='$user'");
 	$uurth->execute();
-	my $ref = $uurth->fetchrow_hashref();
+	my($ref) = $uurth->fetchrow_hashref();
 	my($loginCount) = "$ref->{'loginCount'}";
 	$loginCount++;
 	$uurth->finish();
-	$connection = &getConnection($conn);
+	my($connection) = &getConnection($conn);
 	$dbh->do("UPDATE userDB SET utype='$utype', dcClient='$dcClient',
 					dcVersion='$dcVersion',slots='$NSlots',
 					hubs='$NbHubs',limiter='$UploadLimit',
@@ -74,12 +71,10 @@ sub userStatus(){
 # This user has logged off, so mark Offline
 sub userOffline(){
 	my($user) = @_;
-	
 	&setTime();
-	
-	my $uoth = $dbh->prepare("SELECT inTime FROM userDB WHERE nick = '$user'");
+	my($uoth) = $dbh->prepare("SELECT inTime FROM userDB WHERE nick = '$user'");
 	$uoth->execute();
-	my $ref = $uoth->fetchrow_hashref();
+	my($ref) = $uoth->fetchrow_hashref();
 
 	my($inTime) = "$ref->{'inTime'}";		
 	# $onlinetime += $outtime - $intime;
@@ -105,9 +100,9 @@ sub userOnline(){
 
 sub addToFakers(){
 	my($user) = @_;
-	my $atfth = $dbh->prepare("SELECT pBanCount FROM userDB WHERE nick = '$user'");
+	my($atfth) = $dbh->prepare("SELECT pBanCount FROM userDB WHERE nick = '$user'");
 	$atfth->execute();
-	my $ref = $atfth->fetchrow_hashref();
+	my($ref) = $atfth->fetchrow_hashref();
 
 	my($pBanCount) = "$ref->{'pBanCount'}";
 	$atfth->finish();
@@ -120,7 +115,6 @@ sub addToFakers(){
 					lastAction='$lastAction', 
 					lastReason='$lastReason' 
 					WHERE nick='$user'");
-	&debug("$user - User.FAKER.done");
 }
 
 # User has spoken increment line count
@@ -128,9 +122,9 @@ sub addToFakers(){
 sub incLineCount(){
 	my($user)=@_;
 
-	my $ilcth = $dbh->prepare("SELECT lineCount FROM userDB WHERE nick='$user'");
+	my($ilcth) = $dbh->prepare("SELECT lineCount FROM userDB WHERE nick='$user'");
 	$ilcth->execute();
-	my $ref = $ilcth->fetchrow_hashref();
+	my($ref) = $ilcth->fetchrow_hashref();
 
 	my($lineCount) = "$ref->{'lineCount'}";
 	$ilcth->finish();
@@ -163,9 +157,9 @@ sub setRegUser(){
 	
 }
 sub userWorker(){
-	my $bwth = $dbh->prepare("SELECT function,nick,information,IP FROM botWorker WHERE function LIKE '3%'");
+	my($bwth) = $dbh->prepare("SELECT function,nick,information,IP FROM botWorker WHERE function LIKE '3%'");
 	$bwth->execute();
-	while (my $ref = $bwth->fetchrow_hashref()){
+	while ($ref = $bwth->fetchrow_hashref()){
 		my($function) = "$ref->{'function'}";
 		my($user) = "$ref->{'nick'}";
 		my($ip) = "$ref->{'IP'}";
@@ -180,7 +174,6 @@ sub userWorker(){
 		elsif($function=='33'){
 			&delRegUser($user);}
 		$dbh->do("DELETE FROM botWorker WHERE function LIKE '3%' ");}
-	
 	$bwth->finish();
 
 }
@@ -225,7 +218,7 @@ sub userAway(){
 	my($user,$data) = @_;
 	my($tmp_ptr) = index($data,"+away");
 
-	$awayMsg = substr($data, $tmp_ptr+5);
+	my($awayMsg) = substr($data, $tmp_ptr+5);
 	chop($awayMsg);
 	$dbh->do("UPDATE userDB SET awayMsg='$awayMsg',awayStatus='on'	WHERE nick='$user'");
 }

@@ -16,24 +16,6 @@
 #	http://axljab.homelinux.org:8080/		
 #
 ##############################################################################################
-sub added_registered_user()
-{
-	my($user) = @_;
-#	&msgUser($user,"You User Login has been updated. Reconnect to hub for the changes to take effect");
-}
-sub added_temp_ban()
-{
-	my($entry,$time) = @_;
-#    	&msgAll("BANNED for $time Seconds");
-
-}
-
-# Fires when a ban is added
-sub added_perm_ban()
-{
-    	my($entry) = @_;
-#    	&msgAll("BANNED: $entry ");
-}
 
 # Fires when a user is kicked
 sub kicked_user()
@@ -73,8 +55,8 @@ sub reg_user_connected(){
 	&userConnect($user);
 	
 	if (&getConfigOption("check_reg")) 
-	{	#&checkKicks($user);
-		#&checkClones($user);
+	{	&checkKicks($user);
+		&checkClones($user);
 		&processEvent($user);}
 
 	if (&getVerboseOption("verbose_op_connect"))
@@ -94,8 +76,8 @@ sub op_connected(){
 	&userConnect($user);
 	
 	if (&getConfigOption("check_op")) 
-	{	#&checkKicks($user);
-		#&checkClones($user);
+	{	&checkKicks($user);
+		&checkClones($user);
 		&processEvent($user);}
 
 	if (&getVerboseOption("verbose_op_connect"))
@@ -116,8 +98,8 @@ sub op_admin_connected()
 	&userConnect($user);
 	
 	if (&getConfigOption("check_opadmin")) 
-	{	#&checkClones($user);
-		#&checkKicks($user);
+	{	&checkClones($user);
+		&checkKicks($user);
 		&processEvent($user);
 	}	
 
@@ -152,7 +134,7 @@ sub data_arrival(){
 
 	if($data =~ /\$To: $botname From: (.*)\|/)
 	{
-		my $pm = $1;
+		my($pm )= $1;
 		@params = split(/\ /, $pm);
 		$param1 = $params[2];$param2 = $params[3];$param3 = $params[4];$param4 = $params[5];
 
@@ -165,9 +147,9 @@ sub data_arrival(){
 			else 
 				{&seen($param2);
 				&msgUser("$user","$seenresult");}}
-#		elsif($param1 =~ /!stats/i)
-#			{&buildStats();
-#			&msgUser("$user","$statsmsg");}
+		elsif($param1 =~ /!stats/i)
+			{&buildStats();
+			&msgUser("$user","$statsmsg");}
 		elsif($param1 =~ /!rules/i)
 			{&buildRules($user);
 			&msgUser("$user","$rules");}
@@ -265,9 +247,9 @@ sub data_arrival(){
 		elsif($data =~ /^<.*> \+help\|/i)
 			{&buildHelp($user);
 			&msgUser("$user","$helpmsg");}
-#		elsif($data =~ /^<.*> \+stats\|/i)
-#			{&buildStats();
-#			&msgUser("$user","$statsmsg");}
+		elsif($data =~ /^<.*> \+stats\|/i)
+			{&buildStats();
+			&msgUser("$user","$statsmsg");}
 		elsif($data =~ /^<.*> \+rules\|/i)
 			{&buildRules($user);
 			&msgUser("$user","$rules|");}

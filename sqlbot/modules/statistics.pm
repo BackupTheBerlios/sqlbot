@@ -20,43 +20,47 @@ sub buildStats(){
 	my($totUsersOnline) = $dbh->selectrow_array("SELECT COUNT(*) from userDB WHERE status='Online'");
 	my($totDiffUsers) = $dbh->selectrow_array("SELECT COUNT(*) from userDB");
 	&totalUptime();
+	$totShare = roundToGn($totShare);
 
-#	my($sth) = $dbh->prepare("SELECT * from userDB GROUP by country WHERE status='Online'");
-#	$sth->execute();
+#	my($stth) = $dbh->prepare("SELECT country,COUNT(country) from userDB WHERE status='Online'");
+#	$stth->execute();
 #	my($tmpCountries) = "";
-#	while (my $ref = $sth->fetchrow_hashref()){
+
+#	while ($ref = $stth->fetchrow_hashref()){
 #		$tmpCountries .= "\[$ref->{'country'} $ref->{'COUNT(*)'}] "; }
-#	$sth->finish();
+#	$stth->finish();
 #	my($countries) =  "$tmpCountries";
+#	my($stth1) = $dbh->prepare("SELECT client, COUNT(*) from userDB GROUP by dcClient WHERE status='Online'");
+#	$stth1->execute();
+#	my($tmpClient) = "";
 
-	my ($bsth) = $dbh->prepare("SELECT client, COUNT(*) from userDB GROUP by dcClient WHERE status='Online'");
-	$bsth->execute();
-	my($tmpClient) = "";
-	while (my $ref = $bsth->fetchrow_hashref()) {
-		$tmpClient .= "$ref->{'client'} [$ref->{'COUNT(*)'}]\n\r"; }
-	$bsth->finish();
-	my($clients) = "$tmpClient";
+#	while ($ref1 = $stth1->fetchrow_hashref()) {
+#		$tmpClient .= "$ref1->{'client'} [$ref1->{'COUNT(*)'}]\n\r"; }
+#	$stth1->finish();
+#	my($clients) = "$tmpClient";
 
-	$bsth1 = $dbh->prepare("SELECT * FROM records");
-	$bsth->execute();
+	my($stth2) = $dbh->prepare("SELECT * FROM records");
+	$stth2->execute();
 	my($tmpRecords) = "";
-	while (my $ref = $bsth->fetchrow_hashref()) {
-		$tmpRecords .=  "Record $ref->{'recordName'} is $ref->{'recordValue'} Set on $ref->{'date'} at $ref->{'time'}\r";}
-	$bsth->finish();
 
+	while ($ref2 = $stth2->fetchrow_hashref()) {
+		$tmpRecords .=  "Record $ref2->{'recordName'} is $ref2->{'recordValue'} Set on $ref2->{'date'} at $ref2->{'time'}\r";}
+	$stth2->finish();
 	my($records) = "$tmpRecords";
+	
 	my($webAddress) = &getHubVar("hub_website_address");
 	$statsmsg = "Online stats:\r
 Uptime: $days d $hours h $mins m\r
 Users online : $totUsersOnline \r
-Total Share  : $totShare, Average share of $avShareGigs per user.\r
-Online Clients:\r
-$clients \r
-Users Online from Countries: $countries\r\r
+Total Share  : $totShare, 
 Total Unique visitors: $totDiffUsers\r
 Current Records :\r
 $records\r
-More detailed stats can be found at $webAddress|";
+More detailed stats can be found at $webAddress| ";
+
+# Users Online from Countries: $countries\r\rAverage share of $avShareGigs per user.\r
+# Online Clients:\r
+# $clients \r
 
 }
 
@@ -67,9 +71,9 @@ sub checkRecords(){
 	my($currtotalusers) = $dbh->selectrow_array("SELECT COUNT(*) FROM userDB WHERE status='Online'");
 	my($shareGB) = &roundToGB($currtotalshare);
 
-	my $crth = $dbh->prepare("SELECT * FROM records WHERE recordName='share'");
+	my($crth) = $dbh->prepare("SELECT * FROM records WHERE recordName='share'");
 	$crth->execute();
-	my $ref = $crth->fetchrow_hashref();
+	my($ref) = $crth->fetchrow_hashref();
 	$record = $ref->{'recordValue'};
 	$recordDate = $ref->{'date'};
 	$recordTime = $ref->{'time'};
@@ -83,14 +87,14 @@ sub checkRecords(){
 		$newRecord = 0;
 	}
 	
-	$crth1 = $dbh->prepare("SELECT * FROM records WHERE recordName='users'");
-	$crth->execute();
-	$ref = $crth->fetchrow_hashref();
-	$record = $ref->{'recordValue'};
-	$recordDate = $ref->{'date'};
-	$recordTime = $ref->{'time'};
+	my($crth1) = $dbh->prepare("SELECT * FROM records WHERE recordName='users'");
+	$crth1->execute();
+	my($ref1) = $crth1->fetchrow_hashref();
+	$record = $ref1->{'recordValue'};
+	$recordDate = $ref1->{'date'};
+	$recordTime = $ref1->{'time'};
 
-	$crth->finish();
+	$crth1->finish();
 
 	if ($record < $currtotalusers){
 		if (&getVerboseOption("verbose_records"))
@@ -104,8 +108,8 @@ sub topChat() {
 	my $tcth = $dbh->prepare("SELECT nick,lineCount FROM userDB ORDER BY lineCount DESC LIMIT 0,10");
 	$tcth->execute();
 	$msg = "The Top 10 Chatters are :\r";
-	$i=1;
-	while (my $ref = $tcth->fetchrow_hashref()) {
+	my($i)=1;
+	while ($ref = $tcth->fetchrow_hashref()) {
 		$msg .=  "$i-$ref->{'nick'}: $ref->{'lineCount'}  \r";
 		$i++;}
 	$tcth->finish();

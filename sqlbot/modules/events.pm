@@ -70,21 +70,21 @@ sub processEvent(){
 ## Register KickTable Timer function
 $SIG{ALRM} = \&botWorker;
 sub botWorker(){
-	# Check for Kick Events	
-	my($value) = $dbh->selectrow_array("SELECT COUNT(*) FROM botWorker WHERE function LIKE '1%'");
-	if($value ne 0)
+	# Check for Kick Events
+	my($WKicks) = $dbh->selectrow_array("SELECT COUNT(*) FROM botWorker WHERE function LIKE '1%'");
+	if($kicks ne 0)
 		{&kickWorker();}
 
 	#Check for pban Events
-	my($value) = $dbh->selectrow_array("SELECT COUNT(*) FROM botWorker WHERE function LIKE '2%'"); # Or 22 or 23
-	if($value ne 0)
+	my($WBans) = $dbh->selectrow_array("SELECT COUNT(*) FROM botWorker WHERE function LIKE '2%'"); # Or 22 or 23
+	if($bans ne 0)
 		{&banWorker();}
 
 	#Check for User List events
-	my($value) = $dbh->selectrow_array("SELECT COUNT(*) FROM botWorker WHERE function LIKE '3%'"); # Or 31 or 32 or 33
-	if($value ne 0)
+	my($WUsers) = $dbh->selectrow_array("SELECT COUNT(*) FROM botWorker WHERE function LIKE '3%'"); # Or 31 or 32 or 33
+	if($users ne 0)
 		{&userWorker();}
-	alarm(10);
+	alarm(60);
 }
 
 ## Required in every module ##

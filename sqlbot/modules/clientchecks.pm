@@ -89,25 +89,19 @@ sub splitDescription() {
 # Rescan all online clients
 sub clientRecheck()
 {
-	my ($usersonline) = odch::get_user_list(); #Get space separated list of who is online
-	my ($numonlineusers) = odch::count_users(); #And how many
-
-	@userlist=split(/\ /,$usersonline);
-	my ($checkUserCount) = 0;
+#	my ($usersonline) = odch::get_user_list(); #Get space separated list of who is online
+#	my ($numonlineusers) = odch::count_users(); #And how many
+#
+#	@userlist=split(/\ /,$usersonline);
+#	my ($checkUserCount) = 0;
 #	while ($checkUserCount != $numonlineusers)
 #	{
 #		$user=$userlist[$checkUserCount];
 #		$checkUserCount ++;
 #		&parseClient($user);
-		# A check in case things go wrong on getting user information.
-		# Ive seen this a few times dont know why yet.
-#		if (lc($connection) eq lc("Error"))
-#		{	&msgUser("nutter","FATAL ERROR - Unable to obtain user information from odch for $user");
-#			return 1; #Abort any more checks
-#		}
 #
-#		if (&usrOnline($user) ne 1)
-#			{if(lc($botname) ne lc($user)) #if not a bot, should be in the online table
+#
+#		{if(lc($botname) ne lc($user)) #if not a bot, should be in the online table
 #				{&addToOnline($user);}}	
 #		else
 #			{&debug("ReChecking - updating $user,type = $type");
@@ -142,8 +136,8 @@ sub clientRecheck()
 #			}
 #		}
 #	}
-	# Make sure the online sql table does not contain ghosts
-#	my ($cth) = $dbh->prepare("SELECT * FROM online");
+#	# Make sure the online sql table does not contain ghosts
+#	my ($cth) = $dbh->prepare("SELECT * FROM userDB WHERE status='Online'");
 #	$cth->execute();
 #	while (my $ref = $cth->fetchrow_hashref()) {
 #		$user = "";
@@ -183,9 +177,9 @@ sub parseClient(){
 	else {
 	## CHECK CLIENT ##
 		if ((&getClientExists($dcClient)) && ($dcVersion ne "")){
-			my $pcth = $dbh->prepare("SELECT * FROM client_rules WHERE client='$dcClient'");
+			my($pcth) = $dbh->prepare("SELECT * FROM client_rules WHERE client='$dcClient'");
 			$pcth->execute();
-			my $ref = $pcth->fetchrow_hashref();
+			my ($ref) = $pcth->fetchrow_hashref();
 			
 			## MIN VERSION ##
 			if ($ref->{'min_version'} > $dcVersion)
@@ -240,21 +234,21 @@ sub parseClient(){
 				{$REASON = "NoTags";
 				$ACTION = "Kicked";}
 			# Make sure the user meets at least the following if untagged
-			my $pcth = $dbh->prepare("SELECT * FROM client_rules WHERE client='++'");
+			my($pcth) = $dbh->prepare("SELECT * FROM client_rules WHERE client='++'");
 			$pcth->execute();
-			my $ref = $pcth->fetchrow_hashref();
+			my($ref1) = $pcth->fetchrow_hashref();
 
 			## MIN SHARE ##
-			if ($ref->{'min_share'} > $GigsShared)
+			if ($ref1->{'min_share'} > $GigsShared)
 				{$REASON = "Share";
 				$ACTION = "Kicked";}
 			## MIN CONNECTION ##
-			elsif ($ref->{'min_connection'} > $conn){
+			elsif ($ref1->{'min_connection'} > $conn){
 				$REASON = "Connection";
 				$ACTION = "Kicked";}
-			$dcClient = "";
-			$dcClientname = "";
-			$dcVersion = "";
+			$dcClient = "No Tag";
+			$dcClientname = "Not Known";
+			$dcVersion = "No Tag";
 			$pcth->finish();}
 	## END ##
 	}
@@ -266,9 +260,9 @@ sub checkKicks(){
 	my($user) = @_;
 	&setTime();
 	if (&getConfigOption("check_kicks"))
-		{my $ckth = $dbh->prepare("SELECT kickCount,tBanCount FROM userDB WHERE nick = '$user'");
+		{my($ckth) = $dbh->prepare("SELECT kickCount,tBanCount FROM userDB WHERE nick = '$user'");
 		$ckth->execute();
-		my $ref = $ckth->fetchrow_hashref();
+		my($ref) = $ckth->fetchrow_hashref();
 		my($kickCount) = "$ref->{'kickCount'}";
 		my($tBanCount) = "$ref->{'tBanCount'}";
 		$ckth->finish();

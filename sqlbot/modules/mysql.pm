@@ -15,7 +15,7 @@
 ##############################################################################################
 sub getClientExists(){
 	my($Client)=@_;
-	$value = $dbh->selectrow_array("SELECT COUNT(*) FROM client_rules WHERE client='$Client'");
+	my($value) = $dbh->selectrow_array("SELECT COUNT(*) FROM client_rules WHERE client='$Client'");
 	if($value eq 1)
 	{return 1;}
 	return 0;
@@ -23,9 +23,10 @@ sub getClientExists(){
 
 sub getConnectionSlots(){
 	my($data,$mslot) = @_;
-	my $gcsth = $dbh->prepare("SELECT * FROM connection_slots WHERE connection='$data'");
+	my($value) = "";
+	my($gcsth) = $dbh->prepare("SELECT * FROM connection_slots WHERE connection='$data'");
 	$gcsth->execute();
-	my $ref = $gcsth->fetchrow_hashref();
+	my($ref) = $gcsth->fetchrow_hashref();
 	if ($mslot eq 1){
 		$value = "$ref->{'min_slots'}";}
 	else{

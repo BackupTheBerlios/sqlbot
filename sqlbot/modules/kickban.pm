@@ -19,9 +19,9 @@
 # (script & php) Read the botWorker table and kick marked users
 sub kickWorker()
 {
-	my $kwth = $dbh->prepare("SELECT nick,information FROM botWorker WHERE function LIKE'1%'");
+	my($kwth) = $dbh->prepare("SELECT nick,information FROM botWorker WHERE function LIKE'1%'");
 	$kwth->execute();
-	while (my $ref = $kwth->fetchrow_hashref())
+	while ($ref = $kwth->fetchrow_hashref())
 	{
 		my($user) = "$ref->{'nick'}";
 		my($information) = "$ref->{'information'}";
@@ -35,23 +35,25 @@ sub kickWorker()
 				if(&getLogOption("log_no_tags_kicks")){
 					&addToLog($user,'Kicked',$information);}}
 			else{&addToLog($user,'Kicked',$information);}}
+			
 		&msgUser("$user","You have been kicked ($information)");
 		&debug("(10)$user($ip)$information");
 		odch::kick_user($user); # GoodBye..
 
-		my $kw1th = $dbh->prepare("SELECT kickCountTot,kickCount FROM userDB WHERE nick='$user'");
+		my($kw1th) = $dbh->prepare("SELECT kickCountTot,kickCount FROM userDB WHERE nick='$user'");
 		$kw1th->execute();
-		my $ref = $kw1th->fetchrow_hashref();
+		$ref1 = $kw1th->fetchrow_hashref();
 
-		my($kickCountTot) = "$ref->{'kickCountTot'}";
-		my($kickCount) = "$ref->{'kickCount'}";
+		my($kickCountTot) = "$ref1->{'kickCountTot'}";
+		my($kickCount) = "$ref1->{'kickCount'}";
 		$kickCount++;
 		$kickCountTot++;
 		$kw1th->finish();
 		$dbh->do("UPDATE userDB SET kickCountTot='$kickCountTot',kickCount='$kickCount',lastReason='$information',lastAction='Kicked' WHERE nick='$user'");
+		$dbh->do("DELETE FROM botWorker WHERE function LIKE '1%' AND nick='$user'");
 	}
 	$kwth->finish();
-	$dbh->do("DELETE FROM botWorker WHERE function LIKE '1%' ");
+	
 }
 ##############################################################################################
 # (script) Add User to worker, called from bot
@@ -65,9 +67,9 @@ sub kickUser(){
 # Read the botWorker table and Ban users
 sub banWorker()
 {
-	my $bwth = $dbh->prepare("SELECT function,nick,information,IP FROM botWorker WHERE function LIKE '2%'");
+	my($bwth) = $dbh->prepare("SELECT function,nick,information,IP FROM botWorker WHERE function LIKE '2%'");
 	$bwth->execute();
-	while (my $ref = $bwth->fetchrow_hashref()){
+	while ($ref = $bwth->fetchrow_hashref()){
 		my($function) = "$ref->{'function'}";
 		my($user) = "$ref->{'nick'}";
 		my($ip) = "$ref->{'IP'}";
@@ -81,8 +83,8 @@ sub banWorker()
 			&banUser($user,$information,$ip,"uban");}
 		elsif($function=='24'){
 			&banUser($user,"Faker",$ip,"pban");}
-		$dbh->do("DELETE FROM botWorker WHERE function LIKE '2%' ");}
-	
+		$dbh->do("DELETE FROM botWorker WHERE function LIKE '2%' ");
+	}
 	$bwth->finish();
 }
 ##############################################################################################
@@ -90,7 +92,7 @@ sub banWorker()
 sub banUser (){
 	my($user,$reason,$ip,$mode)=@_;
 
-	my $buth = $dbh->prepare("SELECT tBanCount,tBanCountTot,pBanCountTot FROM userDB WHERE nick='$user'");
+	my($buth) = $dbh->prepare("SELECT tBanCount,tBanCountTot,pBanCountTot FROM userDB WHERE nick='$user'");
 	$buth->execute();
 	my $ref = $buth->fetchrow_hashref();
 	my($tBanCount) = "$ref->{'tBanCount'}";

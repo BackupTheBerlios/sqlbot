@@ -24,9 +24,9 @@ sub myInfo()
 	my($shareByte) = $dbh->selectrow_array("SELECT shareByte FROM userDB WHERE nick='$user'");
 	my($firstTime) = $dbh->selectrow_array("SELECT firstTime FROM userDB WHERE nick='$user'");
 
-	my $mith = $dbh->prepare("SELECT * FROM userDB WHERE nick='$user'");
+	my($mith) = $dbh->prepare("SELECT * FROM userDB WHERE nick='$user'");
 	$mith->execute();
-	my $ref = $mith->fetchrow_hashref();
+	my($ref) = $mith->fetchrow_hashref();
 	&msgUser("$user","Your Info:\r
 Name : $ref->{'nick'}\r
 User Type : $ref->{'utype'}\r
@@ -57,7 +57,7 @@ sub seen()
 	if ($userCount ne 0)	
 		{my($sth) = $dbh->prepare("SELECT * FROM userDB WHERE nick like '$userseen' LIMIT $defaultLogEntries");
 		$sth->execute();
-		while(my $ref = $sth->fetchrow_hashref()){
+		while($ref = $sth->fetchrow_hashref()){
 			my($lastTime) = $ref->{'lastTime'};
 			my($nick) = $ref->{'nick'};
 			my($status)="Online";
@@ -88,9 +88,9 @@ sub buildRules {
 	&parseClient($user);
 	$rules = "";
 	if (&getClientExists($dcClient)) 
-		{my ($brth) = $dbh->prepare("SELECT min_share,min_version,min_slots,slot_ratio,max_hubs,client_name,min_connection FROM client_rules WHERE client='$dcClient'");
+		{my($brth) = $dbh->prepare("SELECT min_share,min_version,min_slots,slot_ratio,max_hubs,client_name,min_connection FROM client_rules WHERE client='$dcClient'");
 		$brth->execute();
-		my $ref = $brth->fetchrow_hashref();
+		my($ref) = $brth->fetchrow_hashref();
 		my($minShare) = $ref->{'min_share'};
 		my($minVersion) = $ref->{'min_version'};
 		my($minSlots) = $ref->{'min_slots'};
@@ -100,8 +100,8 @@ sub buildRules {
 		my($dcClientname) = $ref->{'client_name'};
 		my($minconnection) = &getConnection($ref->{'min_connection'});
 		$brth->finish();
-		$uconn = odch::get_connection($user);
-		$uconnection = &getConnection($uconn);
+		my($conn) = odch::get_connection($user);
+		$uconnection = &getConnection($conn);
 
 
 		$rules = "$user .. The Rules for your client ($dcClientname) are.....\r
@@ -125,10 +125,10 @@ $rules .= "- You may connect to a maximum of $maxHubs hubs. \r
 				{$rules = "$user.. Your client is NOT displaying a Tag, and Clients NOT displaying TAGS will be Auto-kicked. Sort it out !";
 				&debug("$user - Rules noTag Warning");}
 			else
-				{my ($sth) = $dbh->prepare("SELECT * FROM client_rules WHERE client='++'");
+				{my($sth) = $dbh->prepare("SELECT * FROM client_rules WHERE client='++'");
 				$sth->execute();
-				my $ref = $sth->fetchrow_hashref();
-				my($minshare) = $ref->{'min_share'};
+				my($ref1) = $sth->fetchrow_hashref();
+				my($minshare) = $ref1->{'min_share'};
 				$sth->finish();
 				$rules = "$user.. Your client is not displaying a Tag, and Tag checking is currently disabled.\r The only rules u must meet are the minimum share of $minshare GB\n\r";
 				&debug("$user - Rules noTag ok");
@@ -136,11 +136,12 @@ $rules .= "- You may connect to a maximum of $maxHubs hubs. \r
 		}
 	}
 # Add static hub rules
-	$rth = $dbh->prepare("SELECT rule FROM hub_rules");
+	my($rth) = $dbh->prepare("SELECT rule FROM hub_rules");
 	$rth->execute();
 	my($tmp_rules) = "";
-	while (my $ref = $rth->fetchrow_hashref()) {
-		$tmp_rules .=  "- $ref->{'rule'} \n\r";}
+
+	while($ref2 = $rth->fetchrow_hashref()) {
+		$tmp_rules .=  "- $ref2->{'rule'} \n\r";}
 	$rth->finish();
 	$rules .= "$tmp_rules";
 }
@@ -204,10 +205,10 @@ sub info()
 	my($userCount) = $dbh->selectrow_array("SELECT COUNT(*) FROM userDB WHERE nick='$infoUser'");
 	if ($userCount ne 0)
 	{
-		my $ith = $dbh->prepare("SELECT nick,status,allowStatus,awayStatus,uType,loginCount,firstTime,kickCountTot,
+		my($ith) = $dbh->prepare("SELECT nick,status,allowStatus,awayStatus,uType,loginCount,firstTime,kickCountTot,
 			dcClient,dcVersion,connectionMode,IP,country,inTime,shareByte,avShareBytes FROM userDB where nick='$infoUser'");
 		$ith->execute();
-		my $ref = $ith->fetchrow_hashref();
+		my($ref) = $ith->fetchrow_hashref();
 		&msgUser("$user","$ref->{'nick'}'s Info (MySQL)\r
 Name : $ref->{'nick'}\r
 Status : $ref->{'status'}\r
@@ -237,7 +238,7 @@ sub log()
 	my($lth) = $dbh->prepare("SELECT logTime,action,reason,nick FROM hubLog ORDER by rowID DESC LIMIT 0,$defaultLogEntries");
 	$lth->execute();
 	$result = "";
-	while (my $ref = $lth->fetchrow_hashref()) {
+	while ($ref = $lth->fetchrow_hashref()) {
 			$result .= "\r\n$ref->{'logTime'} [$ref->{'action'} - $ref->{'reason'}] $ref->{'nick'}"; }
 	$lth->finish();
 	&msgUser("$user","$result");
@@ -250,7 +251,7 @@ sub kickLog()
 	my($klth) = $dbh->prepare("SELECT logTime,action,reason,nick FROM hubLog WHERE action like 'Kicked' ORDER by rowID DESC LIMIT 0,$defaultLogEntries");
 	$klth->execute();
 	$result = "";
-	while (my $ref = $klth->fetchrow_hashref()) {
+	while ($ref = $klth->fetchrow_hashref()) {
 		$result .= "\r\n$ref->{'logTime'} [$ref->{'action'} - $ref->{'reason'}] $ref->{'nick'}"; }
 	$klth->finish();
 	&msgUser("$user","$result");
@@ -263,7 +264,7 @@ sub banLog()
 	my($blth) = $dbh->prepare("SELECT logTime,action,reason,nick FROM hubLog WHERE action like 'Ban' ORDER by rowID DESC LIMIT 0,$defaultLogEntries");
 	$blth->execute();
 	$result = "";
-	while (my $ref = $blth->fetchrow_hashref()) {
+	while (my($ref) = $blth->fetchrow_hashref()) {
 		$result .= "\r\n$ref->{'logTime'} [$ref->{'action'} - $ref->{'reason'}] $ref->{'nick'}"; }
 	$blth->finish();
 	&msgUser("$user","$result");
@@ -276,7 +277,7 @@ sub fakersLog()
 	my($flth) = $dbh->prepare("SELECT outTime,nick,IP FROM userDB WHERE lastReason='Faker' ORDER by rowID DESC LIMIT 0,$defaultLogEntries");
 	$flth->execute();
 	$result = "Fakers are :\r";
-	while (my $ref = $flth->fetchrow_hashref()) {
+	while ($ref = $flth->fetchrow_hashref()) {
 		$result .= "\r$ref->{'nick'}($ref->{'IP'}) $ref->{'outTime'} "; }
 	$flth->finish();
 	&msgUser("$user","$result");
@@ -291,7 +292,7 @@ sub history()
 	my($hth) = $dbh->prepare("SELECT logTime,action,reason FROM hubLog WHERE nick='$hUser' ORDER by rowID DESC LIMIT 0,$defaultLogEntries");
 	$hth->execute();
 	$result = "";
-	while (my $ref = $hth->fetchrow_hashref()) {
+	while ($ref = $hth->fetchrow_hashref()) {
 		$result .= "\r\n$ref->{'logTime'} [$ref->{'action'} - $ref->{'reason'}] $ref->{'nick'}"; }
 	$hth->finish();
 	&msgUser("$user","$result");
@@ -302,7 +303,7 @@ sub showOps(){
 	$result = "";
 	my($soth) = $dbh->prepare("SELECT nick FROM userDB WHERE status='Online' AND (uType='Operator' OR uType='Op-Admin')");
 	$soth->execute();
-	while (my $ref = $soth->fetchrow_hashref()){
+	while ($ref = $soth->fetchrow_hashref()){
 		$result .= " $ref->{'nick'} ";}
 	$soth->finish();
 }
