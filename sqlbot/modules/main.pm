@@ -45,6 +45,13 @@ sub main(){
 		&version();
         }
 	
+	# When the Hub fires up again since creation or when killed or restarted set everyone Offline.
+	# If we do not do this it will lead to false positives in clone checking.
+
+        my($sth) = $dbh->prepare("UPDATE userDB set status='Offline' ");
+        $sth->execute();
+        $sth->finish();
+
 	# odch::data_to_all("\$MyINFO \$ALL $botname $botDescription\$ \$$botConnection\$\$$botShare\$|");
 	odch::data_to_all("\$MyINFO \$ALL $botname $botDescription\$ \$$botConnection\x01\$\$$botShare\$|")
 	&addToLog($botname,"Restart","Reloadscripts");

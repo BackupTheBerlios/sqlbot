@@ -405,9 +405,9 @@ sub checkClones(){
 			$sth->finish();
 			my($newUserShareBytes) = odch::get_share($nick);
 			my($userShareBytes) = odch::get_share($newUser);
-			if($newUserShareBytes eq newUserShareBytes)
+			if($newUserShareBytes eq $userShareBytes)
 			{
-				&msgAll("$newuser($newUserIp) is a Clone of $nick($newUserIp)");
+				&msgAll("$newUser($newUserIp) is a Clone of $nick($newUserIp)");
 				$REASON = "Clone";
 				$ACTION = "Kicked"
 			}
