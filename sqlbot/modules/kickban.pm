@@ -166,7 +166,6 @@ sub banUser (){
 		$reason = $lastReason;}
 	
 	$dbh->do("UPDATE userDB SET tBanCountTot='$tBanCountTot',
-				kickCount=0,
 				tBanCount='$tBanCount',
 				pBanCountTot='$pBanCountTot',
 				allowStatus='Banned',

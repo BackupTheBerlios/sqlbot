@@ -41,14 +41,12 @@ sub new_user_connected(){
 		if($userInDB eq 1)
 			{&updateUserRecord($user);
 			&userConnect($user);	
-			&checkKicks($user);
 			&checkClones($user);
 			&processEvent($user);			
 		}
 		elsif($userInDB eq 0)
 			{&createNewUserRecord($user);
 			&userConnect($user);	
-			&checkKicks($user);
 			&checkClones($user);
 			&processEvent($user);
 		}
@@ -75,16 +73,14 @@ sub reg_user_connected(){
 			{&updateUserRecord($user);
 			&userConnect($user);	
 			if (&getConfigOption("check_reg")) 
-			{	&checkKicks($user);
-				&checkClones($user);
+			{	&checkClones($user);
 				&processEvent($user);}
 		}
 		elsif($userInDB eq 0)
 			{&createNewUserRecord($user);
 			&userConnect($user);	
 			if (&getConfigOption("check_reg")) 
-			{	&checkKicks($user);
-				&checkClones($user);
+			{	&checkClones($user);
 				&processEvent($user);}
 		}
 		elsif($userInDB eq 2)
@@ -113,16 +109,14 @@ sub op_connected(){
 			{&updateUserRecord($user);
 			&userConnect($user);	
 			if (&getConfigOption("check_op")) 
-			{	&checkKicks($user);
-				&checkClones($user);
+			{	&checkClones($user);
 				&processEvent($user);}
 		}
 		elsif($userInDB eq 0)
 			{&createNewUserRecord($user);
 			&userConnect($user);	
 			if (&getConfigOption("check_op")) 
-			{	&checkKicks($user);
-				&checkClones($user);
+			{	&checkClones($user);
 				&processEvent($user);}
 		}
 		elsif($userInDB eq 2)
@@ -154,7 +148,6 @@ sub op_admin_connected()
 			&userConnect($user);	
 			if (&getConfigOption("check_opadmin"))
 			{	&checkClones($user);
-				&checkKicks($user);
 				&processEvent($user);}	
 		}
 		elsif($userInDB eq 0)
@@ -162,7 +155,6 @@ sub op_admin_connected()
 			&userConnect($user);	
 			if (&getConfigOption("check_opadmin"))
 			{	&checkClones($user);
-				&checkKicks($user);
 				&processEvent($user);}	
 		}
 		elsif($userInDB eq 2)
@@ -200,7 +192,7 @@ sub data_arrival(){
 	my($user,$data)=@_;
 	if($data =~ /GetNickList/)
 	{
-		odch::data_to_user($user,"\$MyINFO \$ALL $botname $description\$ \$DSL>\$\$0\$|");
+		odch::data_to_user($user,"\$MyINFO \$ALL $botname $description\$ \$DSL\$\$0\$|");
 	} 
 	
 	if($data =~ /\$To: $botname From: (.*)\|/)

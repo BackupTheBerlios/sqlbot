@@ -40,6 +40,9 @@ sub userConnect(){
 sub processEvent(){
 	my($user)=@_;
 
+	if (lc($ACTION) ne lc("")){
+		&checkKicks($user);}
+
 	# Select the appropriate action
 	if (lc($REASON) eq lc("Fake(Share)"))
 		{&banUser($user,"Fake(Share)",$ip,"pban");}

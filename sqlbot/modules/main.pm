@@ -25,7 +25,7 @@ $dbh = DBI->connect("DBI:mysql:odch:$sql_server","$sql_username","$sql_password"
 $dbh->do("SET OPTION SQL_BIG_TABLES = 1");
 
 
-		$REASON = "";
+	$REASON = "";
 	$ACTION = "";
 
 # Import the other modules,
