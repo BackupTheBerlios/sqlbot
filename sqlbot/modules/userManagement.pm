@@ -106,7 +106,7 @@ sub userOffline(){
 # TODO
 	my($totOnlineTime) = &calcOnlineTime($outTime,$inTime,$onlineTime);
 	$uoth->finish();
-&debug("($user)Online for $differenceEpochSeconds Seconds");
+
 	$dbh->do("UPDATE userDB SET 	status='Offline',
 					onlineTime='$totOnlineTime',
 					outTime='$outTime'

@@ -147,7 +147,6 @@ sub clientRecheck()
 		my($nick) = "";
 		$nick = "$ref->{'nick'}"; 
 		$type = odch::get_type($nick);
-		&debug("Recheck - $nick($type)");
 		if($type eq 0 )	{&userOffline($nick);}}
 	$cth->finish();
 	
