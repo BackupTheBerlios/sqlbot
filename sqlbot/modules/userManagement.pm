@@ -99,7 +99,7 @@ sub updateUserRecord(){
 					hostname='$hostname',IP='$ip',inTime='$inTime',
 					avShareBytes='$shareBytes',loginCount='$loginCount',
 					fullDescription='$fullDescription',shareByte='$shareBytes',
-					IP='$ip'WHERE (nick='$sqluser' OR IP='$ip')");
+					IP='$ip' WHERE nick='$sqluser' OR IP='$ip'");
 	}
 	else
 	{
