@@ -89,7 +89,7 @@ sub delFromKick(){
 }
 
 sub updateInStats(){
-	my($user) = @_;
+	my($user,$mode) = @_;
 	&debug("$user - update stats");
 	&setTime();
 	my($exists) = $dbh->selectrow_array("SELECT COUNT(*) FROM user_stats WHERE name='$user'");
@@ -101,8 +101,8 @@ sub updateInStats(){
 		my($rowID) = "$ref->{'rowID'}";
 		my($first_date) = "$ref->{'first_date'}";
 		my($first_time) = "$ref->{'first_time'}";
-		my($old_total_logins) = "$ref->{'total_logins'}";
-		my($total_logins) = int($old_total_logins + 1);
+		my($total_logins) = "$ref->{'total_logins'}";
+		if($mode){$total_logins = int($total_logins + 1);} #Only increment on login
 		my($old_average_shared_gigs) = "$ref->{'average_shared_gigs'}";
 		my($average_shared_gigs) = int(((($old_average_shared_gigs * $old_total_logins)
 					+ $GigsShared) / $total_logins) * 100) / 100;

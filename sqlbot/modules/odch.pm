@@ -110,7 +110,7 @@ sub user_disconnected(){
 	my($user) = @_;
 	&parseClient($user);
 	&logDisconnect($user);
-	&updateInStats($user);
+	&updateInStats($user,0);
 }
 
 # Fires every 900 seconds. Used for regular things

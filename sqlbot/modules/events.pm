@@ -42,7 +42,7 @@ sub logLogon{
 	      	if(&getLogOption("log_connects"))
 	        	{&addToLog($user,$ACTION,$REASON);}}
 
-	&updateInStats($user);
+	&updateInStats($user,1);
 	if (&usrOnline($user)){&delFromOnline($user);}
 	&addToOnline($user);
 	&debug("$user - logON.done");	
