@@ -55,7 +55,7 @@ skn.display="none"
 
 function confirmDeleteAll()
 {
-var agree=confirm("WARNING:\nThis will delete all users only (no VIP/Op/Op-Admins) in your selection!\nVIP/OP/Op-Admins (etc.) need to be deleted individually via their\n detailed info page.\n\n Are you sure you want to do this?");
+var agree=confirm("WARNING:\nThis will delete all NON-banned, Offline users only (no VIP/Op/Op-Admins) in your selection!\nVIP/OP/Op-Admins (etc.) need to be deleted individually via their\n detailed info page.\n\n Are you sure you want to do this?");
 if (agree)
 	return true ;
 else
@@ -92,7 +92,7 @@ if ($action == "deleteUser")
 }
 
 if ($action == "deleteAll") {
-$deleteAll_from_userInfo="DELETE FROM userInfo WHERE hubID='$hubID' && uiUserLevel='0' $parseoption $parseoptionextra";
+$deleteAll_from_userInfo="DELETE FROM userInfo WHERE hubID='$hubID' && uiUserLevel='0' && uiBanFlag<'3' && uiStatus='0' $parseoption $parseoptionextra";
 $result = mysql_query($deleteAll_from_userInfo) or die(mysql_error());
 }
 
