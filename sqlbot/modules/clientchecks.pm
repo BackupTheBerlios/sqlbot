@@ -108,7 +108,7 @@ sub clientRecheck()
 		$user=$userlist[$checkUserCount];
 		$checkUserCount ++;
 		&parseClient($user);
-
+		&debug("Verifying $user");
 		if (($ip eq '') || ($user eq $botname)) {}
 		else {
 		$userInDB = &userInDB($user,$ip);
