@@ -366,10 +366,12 @@ if ((($uiUserLevel == "0") || ($uiUserLevel == "")) && ($uiIsAdmin == "0")) { $c
 
 
 //USER INFO / BANS
-
 if ($uiBanFlag == "0") { $user_info = "Login/Srchs</td><td>$uiLoginCount / $uiTotalSearches</td></tr><tr><td>Kicks</td><td>$uiKickTotal</td></tr><tr><td>Bans</td><td>$uiBanTotal</td>"; }
-
 if ($uiBanFlag > "0") { $user_info = "Login</td><td>$uiLoginCount</td></tr><tr><td>Kicks</td><td>$uiKickTotal</td></tr><tr><td valign=top>Bans</td><td>Total: $uiBanTotal<br>Banned: $BanTime<br>Expires: $BanExpire</td>"; }
+
+// SSL icon for 127.0.0.1 connections
+if ($uiIp == "127.0.0.1") { $ssl = "<img src=\"img/ssl.png\" border=\"0\" alt=\"SSL Login\" title=\"SSL Login\">";}
+else {$ssl="";}
 
 
 // PAGE DATA
@@ -395,7 +397,7 @@ echo "<tr>
 		<td nowrap align=\"center\" $clientHover>$CLIENT</td>
 		<td nowrap align=\"center\">$uiSpeed</td>
 		<td nowrap align=\"center\">$flag</td>
-		<td nowrap align=\"center\">$uiIp</td>
+		<td nowrap align=\"center\">$uiIp$ssl</td>
 		<td nowrap align=\"center\">$conv_time</td>
 		<td nowrap align=\"center\"
 		ONMOUSEOVER=\"popup('$Share</td>','yellow')\"; ONMOUSEOUT=\"kill()\">$uiShare</td>
