@@ -14,29 +14,32 @@
 #
 #
 ##############################################################################################
-#Open this users record
 
-# Does this user record exist ?
+# Is this userOnline now ?
 sub userIsOnline(){
 	my($user) = @_;
-	my($value) = $dbh->do("SELECT COUNT(*) FROM userDB WHERE (nick='$user' AND status='Online')");
+	my($value) = $dbh->selectrow_array("SELECT COUNT(*) FROM userDB WHERE (nick='$user' AND status='Online')");
 	if($value eq 1)
 	{return 1;}
 	return 0;
 }
-
+# Is there a match for this user ?
 sub userInDB(){
 	my($user,$ip) = @_;
-	my($value) = $dbh->do("SELECT COUNT(*) FROM userDB WHERE (nick='$user' OR IP='$ip')");	
+
+	my($value) = $dbh->selectrow_array("SELECT COUNT(DISTINCT(nick)) FROM userDB WHERE (nick='$user' OR IP='$ip')  ");	
+	&debug("$user($ip) userInDB(Count)=$value");
 	if($value eq 1) 
-		{$value = $dbh->do("SELECT allowStatus FROM userDB WHERE (nick='$user' OR IP='$ip') && allowStatus='allow'");
-		if($value eq 1) 
+	{	
+		my($value1) = $dbh->selectrow_array("SELECT COUNT(DISTINCT(nick)) FROM userDB WHERE (nick='$user' OR IP='$ip') AND allowStatus='allow'");
+		if($value1 eq 1) 
 			{return 2;}
 		else 
-			{return 1;}}
+			{return 1;}
+	}
 	return 0;
 }
-# Create a new record with some default
+# Create a new record with some defaults
 sub createNewUserRecord(){
 	my($user) = @_;
 	&setTime();
@@ -45,8 +48,8 @@ sub createNewUserRecord(){
 	$connection = &getConnection($conn);
 	$dbh->do("INSERT INTO userDB VALUES ('','$user','not set','','$utype','$type','Normal','off','',	
 		'$fullDescription','$dcClient','$dcVersion','$NSlots','$NbHubs','$UploadLimit','$connection','$connectionMode','$country',
-		'$ip','$hostname','$dtime','','$dtime','','1','0','0','0',
-		'0','0','0','0','$shareBytes','$shareBytes','','')");
+		'$ip','$hostname','$dtime','','$dtime','','1','0','0','0','0','0','0','0','$shareBytes','$shareBytes','','')");
+	&debug("$user - Created new user");
 }
 
 sub updateUserRecordRecheck(){
