@@ -149,6 +149,10 @@ sub splitDescription() {
 # Rescan all online clients
 sub clientRecheck()
 {
+        my($sth) = $dbh->prepare("UPDATE userDB set status='Offline' ");
+        $sth->execute();
+        $sth->finish();
+
 	my ($usersonline) = odch::get_user_list(); #Get space separated list of who is online
 	my ($numonlineusers) = odch::count_users(); #And how many
 
