@@ -139,12 +139,7 @@ $hcStatus = "<font color=\"#FF1D28\"><strong>Offline</strong></font>";
 				<input type="submit" value="Back to hubs..." class="button">
 				</form>
 				<p>
-				<?php echo "$hcName"; ?> <br>
-				<div align="right"><font color="#15E8FF">
-<strike>				Hub Log<br>
-				Hub Config<br>
-				Client Config<br>
-				User Database</strike></font></div>
+				<?php include("conf/mainmenu.php"); ?>
 		</td>
 		<td class="main"><!-- MAIN BODY -->
 				<form action="<?php echo "$PHP_SELF"; ?>" method="post">
@@ -163,7 +158,7 @@ $hcStatus = "<font color=\"#FF1D28\"><strong>Offline</strong></font>";
 							<tr><?php dual_select_form(Yes,No, "Auto-Connect", hcAutoConnect, $hcAutoConnect); ?></tr>
 							<tr><?php noedit_form("Hub ID", $hubID); ?></tr>
 							<tr><?php noedit_form("Hub Status", $hcStatus); ?></tr>
-							<tr><?php line_form("Hub Name", 20, hcName, $hcName); ?></tr>
+							<tr><?php line_form("Hub Name (short)", 15, hcName, $hcName); ?></tr>
 							<tr><?php line_form("Hub Address", 40, hcHost, $hcHost); ?></tr>
 							<tr><?php line_form("Bot Password", 40, hcPwd, $hcPwd); ?></tr>
 							<tr><?php line_form("Hub Owner", 40, hcOwner, $hcOwner); ?></tr>

@@ -47,6 +47,10 @@ echo "<td>$value_description &nbsp;</td>
 function hidden_form($value, $value_orig) {
 echo "<td><input type=\"hidden\" name=\"$value\" value=\"$value_orig\"></td><td></td>";}
 
+// HIDDEN VALUE
+function hidden_value($value, $value_orig) {
+echo "<input type=\"hidden\" name=\"$value\" value=\"$value_orig\">";}
+
 // CHECKBOX
 function checkbox($value_description, $value, $value_orig) {
 if ($value_orig == "1"){ $if_checked = " checked"; }

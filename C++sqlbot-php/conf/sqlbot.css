@@ -55,7 +55,34 @@ table.config {
 	width: 350px;
 }
 
+table.userdbarea {
+	vertical-align: top;
+	border: solid;
+	border-color: #010101;
+	margin: 0px;
+	padding: 0px;
+	background-color: #598FE3;
+	color: #FFFFFF;
+	padding-left: 5px;
+	padding-right: 5px;
+	padding-bottom: 5px;
+	width: 100%;
+}
 
+table.userdb {
+	font-family: arial, helvetica, sans-serif;
+	font-size: 10px;
+	vertical-align: top;
+	border: solid;
+	border-color: #010101;
+	margin: 0px;
+	padding: 0px;
+	color: #FFFFFF;
+	padding-left: 5px;
+	padding-right: 5px;
+	padding-bottom: 5px;
+	width: 100%;
+}
 
 td.menu {
 	border-bottom: solid;
@@ -161,9 +188,23 @@ td.main {
 
 input.button {
 	font-weight: normal;
-	font-size: 8pt;
+	font-size: 10pt;
         border-width: 1;
         border-height: 1;
         border-style: solid;
         border-color:#b0b0b0;
 }
+
+input.menubutton {
+	align: right;
+	width: 80px;
+	border-color: #b0b0b0;
+	border-style: solid;
+	border-height: 1;
+	border-width: 1;
+	font-size: 10pt;
+	font-weight: normal;
+	padding: 0px;
+}
+
+
