@@ -134,55 +134,54 @@ sub data_arrival(){
 		my $pm = $1;
 		# Only specific types may msg the bot
 		my($type) = odch::get_type($user);
-
+		
 		#Public PM commands
-		if($pm =~ /!seen/)
+		if($data =~ /\$To: $botname From: $user \$\<$user\> !seen/)
 			{if($data =~ /\$To: $botname From: $user \$\<$user\> !seen\|/)
 				{&msgUser("$user","usage: !seen username");}
 			elsif($data =~ /\$To: $botname From: $user \$\<$user\> \s?(\S*) (.*)\|/) 
 				{&seen(@_);
 				&msgUser("$user","$seenresult");}			
 		}
-		elsif($pm =~ /!stats/)
+		elsif($data =~ /\$To: $botname From: $user \$\<$user\> !stats/)
 			{&buildStats();
 			&msgUser("$user","$statsmsg");}
-		elsif($pm =~ /!rules/)
+		elsif($data =~ /\$To: $botname From: $user \$\<$user\> !rules/)
 			{&buildRules($user);
 			&msgUser("$user","$rules");}
-		elsif($pm =~ /!help/)
+		elsif($data =~ /\$To: $botname From: $user \$\<$user\> !help/)
 			{&buildHelp(@_);
 			&msgUser("$user","$helpmsg");}
-		elsif($pm =~ /!myinfo/)
+		elsif($data =~ /\$To: $botname From: $user \$\<$user\> !myinfo/)
 			{&myinfo(@_);}
 		#Op commands
 		elsif($type eq 32 or $type eq 16)
 		{
-			&debug("$pm");
-			if ($pm =~ /!info/){
+			if ($data =~ /\$To: $botname From: $user \$\<$user\> !info/){
 				if($data =~ /\$To: $botname From: $user \$\<$user\> !info\|/)
 					{&msgUser("$user","!info username");}
 				elsif($data =~ /\$To: $botname From: $user \$\<$user\> \s?(\S*) (.*)\|/) 
 					{&info($user);}
 			}
-			elsif ($pm =~ /!recheck/){
+			elsif ($data =~ /\$To: $botname From: $user \$\<$user\> !recheck/){
 				&msgAll("$user has forced all clients to be rechecked");	
 				&clientRecheck();}
-			elsif ($pm =~ /!log/){
+			elsif ($data =~ /\$To: $botname From: $user \$\<$user\> !log/){
 				&log($user);}
-			elsif ($pm =~ /!kicklog/){
+			elsif ($data =~ /\$To: $botname From: $user \$\<$user\> !kicklog/){
 				&kickLog($user);}
-			elsif ($pm =~ /!banlog/){
+			elsif ($data =~ /\$To: $botname From: $user \$\<$user\> !banlog/){
 				&banLog($user);}
-			elsif ($pm =~ /!fakerslog/){
+			elsif ($data =~ /\$To: $botname From: $user \$\<$user\> !fakerslog/){
 				&fakerslog($user);}
-			elsif ($pm =~ /!history/)
+			elsif ($data =~ /\$To: $botname From: $user \$\<$user\> !history/)
 			{
 				if($data =~ /\$To: $botname From: $user \$\<$user\> !history\|/)
 					{&msgUser("$user","usage: !history username");}
 				elsif($data =~ /\$To: $botname From: $user \$\<$user\> \s?(\S*) (.*)\|/) 
 					{&history(@_);}
 			}
-			elsif ($pm =~ /!addfaker/){
+			elsif ($data =~ /\$To: $botname From: $user \$\<$user\> !addfaker/){
 				if($data =~ /\$To: $botname From: $user \$\<$user\> !addfaker\|/)
 					{&msgUser("$user","usage: !history username");}
 				elsif($data =~ /\$To: $botname From: $user \$\<$user\> \s?(\S*) (.*)\|/) 
