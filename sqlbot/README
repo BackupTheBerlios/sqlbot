@@ -59,7 +59,7 @@ apache			Used to configure your bot. Without it you cannot easily
 php-mysql		Required for php/apache to connect to the MySQL server. It should
 			be included with your distro, so no extra compiling should be
 			neccissary.
-
+<
 MySQL server		This speaks for itself. I will also not go into all the ins & outs
 			of MySQL, because this would require about 5000 pages. Yes, it is
 			comlex,	but once you have a basic setup, the rest should be easy.
@@ -120,7 +120,7 @@ Install mysql tables:
 www & php Installation
 -=-=-=-=-=-=-=-=-=-=-=
 You will to have a webserver server up and running. You must have php and php-mysql
-installed and running. Test it with a simple <?phpinfo();?> in a blank php file
+installed and running. Test it with a simple &lt;?phpinfo();?&gt; in a blank php file
 (like test.php). Make sure its running ok. Untar the php modules into an area on your
 webserver,
 
