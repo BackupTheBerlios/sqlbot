@@ -213,7 +213,7 @@ sub data_arrival(){
 				{&msgAll("usage: +seen username");}
 			elsif($data =~ /^<.*> \s?(\S*) (.*)\|/)
 				{&seen(@_);
-				&msgAll("$seenresult");}
+				&msgUser("$user","$seenresult");}
 		}
 		elsif($data =~ /^<.*> \+dcgui/i)
 			{&msgAll("DCGUI - Homepage = http://dc.ketelhot.de/|");}
@@ -226,8 +226,7 @@ sub data_arrival(){
 		my($type) = odch::get_type($user);
 		if($type eq 32)
 		{
-			if($data =~ /^<.*> \+vartest/i)
-				{&msgAll();}
+			
 		}
 	}
 } # end sub data arrival
