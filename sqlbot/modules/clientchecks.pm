@@ -167,7 +167,7 @@ sub parseClient(){
 	$ACTION = "";
 	
 	## CHECK FAKERS ##
-	if(($shareBytes =~ /(\d)\1{5,}/))
+	if(($shareBytes =~ /(\d)\1{5,}/) || ($shareBytes =~ 100100100))
 		{$REASON = "Fake(Share)";
 		$ACTION = "P-Banned";
 		if ((&getClientExists($dcClient)) && ($dcVersion ne "")){}
