@@ -54,9 +54,6 @@ echo "<br>Total Number of Matching Entries <b>$numrows</b><br>"; ?>
 	<th><? echo "$font";?>Date Time<? echo "$fontend";?></th>
 	<th><? echo "$font";?>Action<? echo "$fontend";?></th> 
 	<th><? echo "$font";?>Reason<? echo "$fontend";?></th> 
-	<th>
-	<form action="<? echo "log-hub.php?f=delete&offset=$offset&field=$field&search=$search" ?>" method="post">
-	<input type="Submit" value="Delete ALL" onClick="return confirmDelete()"></form></th>
 </tr> 
 <? 
 while ($data=mysql_fetch_array($result)) 
@@ -77,11 +74,10 @@ while ($data=mysql_fetch_array($result))
 
 	?>
 	<form action="<? echo "log-hub.php?f=row&id=$id&offset=$offset&search=$search" ?>" method="post"> 
-	<td nowrap><a href="<? echo "user-type.php?nick=$nick" ?>"><? echo "$font$nick$fontend"; ?></a></td>
+	<td nowrap><a href="<? echo "log-hub.php?field=nick&search=$nick" ?>"><? echo "$font$nick$fontend"; ?></a></td>
 	<td nowrap><? echo "$font$logTime$fontend"; ?></td> 
 	<td nowrap><a href="<? echo "log-hub.php?field=action&search=$action"; ?>"><? echo "$font$action$fontend"; ?></a></td>
 	<td nowrap><a href="<? echo "log-hub.php?field=reason&search=$reason"; ?>"><? echo "$font$reason$fontend"; ?></a></td>
-	<td nowrap><center><input type="Submit" value="Delete"></center></td>
 	</form>
 	</tr>
 	<? $i++; } 
