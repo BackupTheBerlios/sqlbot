@@ -330,7 +330,7 @@ while ($data=mysql_fetch_array($userresult))
 	if  (($uiBanFlag > "0") && ($uiStatus == "0")) { $Status ="<img src=\"img/Ban.gif\" alt=\"Offline\" title=\"Banned\">";}
 
 	if (!empty($uiCountry)) {$flag = "<img src=\"img/flags/${uiCountry}.PNG\" alt=\"$uiCountry\" ONMOUSEOVER=\"popup('$uiCountry</td>','yellow')\"; ONMOUSEOUT=\"kill()\">"; }
-
+	else {$flag = "";}
 
 //CONVERSION FOR SHARE
 	if (($uiShare / 1024 / 1024 / 1024 / 1024) > 1) { $Shared=round(($uiShare / 1024 / 1024 / 1024 / 1024), 2); $Share="$Shared TB";}
