@@ -21,7 +21,7 @@ if ($f == uType){
 	echo "$uType $nicksearch($ip) status changed.<br>";
 	$result = mysql_query($sql) or die(mysql_error());}
 else if ($f == aStatus){
-	$sql = "INSERT INTO botWorker VALUES ('mysql_insertid',$aStatus,'$nick','$ip','Admin')";
+	$sql = "INSERT INTO botWorker VALUES ('mysql_insertid',$aStatus,'$nick','$ip','$information')";
 	echo "$aStatus $search($ip) status changed.<br>";
 	$result = mysql_query($sql) or die(mysql_error());}
 if (empty($offset)) {$offset=0;}
@@ -143,7 +143,7 @@ while ($data=mysql_fetch_array($result))
 
 	// Colour Rows
 	if(($uType == "Operator") || ($uType == "Op-Admin")) {echo "<TR bgcolor="; echo "$OpRowColour"; echo ">\n";}
-	else if($allowStatus == "allow") {echo "<TR bgcolor="; echo "$AllowRowColour"; echo ">\n";}
+	else if($allowStatus == "Allow") {echo "<TR bgcolor="; echo "$AllowRowColour"; echo ">\n";}
 	else if(($allowStatus == "Banned")) { echo "<TR bgcolor=";echo "$BanRowColour"; echo ">\n";}
 	else if($kickCount != 0) {echo "<TR bgcolor="; echo "$KickRowColour"; echo ">\n";}
 	else if($i % 2)	{echo "<TR bgcolor="; echo "$rowColour"; echo ">\n";}

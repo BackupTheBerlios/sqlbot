@@ -141,10 +141,12 @@ if (!empty($numrows)){
 <form action="<? echo "user-manage.php?f=aStatus&nick=$nick&ip=$IP";?>" method="post">
 <tr><td><input type="radio" name="aStatus" value=21 <? if ($allowStatus == "Banned" && $lastAction == "P-Banned" && $lastReason != "Fake(Share)" && $lastReason !="Fake(Tag)")  echo"checked=\"true\"";?>><? echo "$font";?>Permanent Ban - Place a permanent Ban</font></td></tr>
 <tr><td><input type="radio" name="aStatus" value=22 <? if ($allowStatus == "Banned" && $lastAction == "T-Banned" && $lastReason != "Fake(Share)" && $lastReason !="Fake(Tag)")  echo"checked=\"true\"";?>><? echo "$font";?>Temporary Ban - Place under temporary Ban</font></td></tr>
+<tr><td><input type="radio" name="aStatus" value=23 <? if ($allowStatus == "Normal") echo"checked=\"true\"";?>><? echo "$font";?>Normal (UnBan) & Reset Kick Counter</font></td></tr>
+<tr><td><input type="Text" size="50" name="information" value=""></tr></td>
+<tr><td></tr></td>
 <tr><td><input type="radio" name="aStatus" value=25 <? if ($allowStatus == "Banned" && $lastReason == "Fake(Share)") echo"checked=\"true\"";?>><? echo "$font";?>Fake Share</font></td></tr>
 <tr><td><input type="radio" name="aStatus" value=24 <? if ($allowStatus == "Banned" && $lastReason == "Fake(Tag)") echo"checked=\"true\"";?>><? echo "$font";?>Fake Tag</font></td></tr>
-<tr><td><input type="radio" name="aStatus" value=20 <? if ($allowStatus == "allow") echo"checked=\"true\"";?>><a title="Useful for Hub List Bots" style="cursor:help"><? echo "$font";?>Allow - No logging or client checks</font></a></td></tr>
-<tr><td><input type="radio" name="aStatus" value=23 <? if ($allowStatus == "Normal") echo"checked=\"true\"";?>><? echo "$font";?>Normal (UnBan) & Reset Kick Counter</font></td></tr>
+<tr><td><input type="radio" name="aStatus" value=50 <? if ($allowStatus == "Allow") echo"checked=\"true\"";?>><a title="Useful for Hub List Bots" style="cursor:help"><? echo "$font";?>Allow - No logging or client checks</font></a></td></tr>
 <tr><td><input type="radio" name="aStatus" value=10 ><? echo "$font";?>Kick User</font></td></tr>
 <tr><td><input type="Submit" value="Submit changes"></tr></td></form>
 </table>
