@@ -106,9 +106,14 @@ sub clientRecheck()
 		&parseClient($user);
 
 
-		if (&userOnline($user) ne 1){
+
+
+		if (&userInOnline($user) ne 1){
 			if(lc($botname) ne lc($user)) #if not a bot, should be in the online table
-				{&updateUserRecord($user);}}	
+				{if(&userInDB($user) eq 1)
+					{&updateUserRecord($user);}
+				else
+					{&createNewUserRecord($user);}}}	
 		else{
 			&updateUserRecordRecheck($user);
 			if($type eq 0 )	

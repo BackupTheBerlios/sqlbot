@@ -17,7 +17,7 @@
 #Open this users record
 
 # Does this user record exist ?
-sub userOnline(){
+sub userInOnline(){
 	my($user) = @_;
 	my($value) = $dbh->selectrow_array("SELECT COUNT(*) FROM userDB WHERE nick='$user' AND status='Online'");
 	if($value eq 1)
