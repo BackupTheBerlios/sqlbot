@@ -9,8 +9,8 @@ $where = "";
 if (!empty($field))  
 	{$where="WHERE $field LIKE '%$search%'";}
 if (!empty($order))  
-	{$orderby="ORDER by '$order'";}
-else {$orderby="ORDER by uType,nick";}
+	{$orderby ="'$order'";}
+else {$orderby="uType,nick";}
 
 if ($f == delete)
 	{$sql = "DELETE FROM userDB $where";$result = mysql_query($sql) or die(mysql_error());}
@@ -27,7 +27,7 @@ mysql_connect($databasehost,$username,$password);
 @mysql_select_db($database) or die( "Unable to select database");
 $numresult=mysql_query("SELECT * FROM userDB $where");
 $numrows=mysql_num_rows($numresult);
-$result=mysql_query("SELECT * FROM userDB $where $orderby LIMIT $offset,$defaultLogEntries");
+$result=mysql_query("SELECT * FROM userDB $where ORDER by $orderby LIMIT $offset,$defaultLogEntries");
 mysql_close();
 ?>
 <table border="<? echo "$tableborders";?> cellspacing="2" cellpadding="2">
