@@ -78,7 +78,7 @@ else {
 // DEFINE SEARCH / SORT OPTIONS (for deletion / parsing)
 if ($parse == "All") { $parseoption = "";}
 if ($parse == "Online") { $parseoption = "&& uiStatus='1'"; }
-if ($parse == "Banned") { $parseoption = "&& uiBanTotal > '0'"; }
+if ($parse == "Banned") { $parseoption = "&& uiBanFlag > '0'"; }
 if ($useSearch == "1") { 
 $alteredsearchfiled = ereg_replace ("\*", "%", $searchvalue);
 $parseoptionextra= "&& $searchfield LIKE '$alteredsearchfiled'";}
