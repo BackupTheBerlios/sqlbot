@@ -98,7 +98,7 @@ sub banUser (){
 	my($tBanCount) = "$ref->{'tBanCount'}";
 	my($tBanCountTot) = "$ref->{'tBanCountTot'}";
 	my($pBanCountTot) = "$ref->{'pBanCountTot'}";
-	&debug("BanUser($mode)-$user($ip)$reason");
+
 	$buth->finish();
 
 	if ($mode =~ /tBan/i){		# Temporary Ban
