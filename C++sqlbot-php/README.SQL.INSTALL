@@ -91,7 +91,7 @@ hcLogSystem  SET('0','1'));
 
 
 
-#and one last one for the <!-- USER INFO DETAILS -->:
+#and one for the <!-- USER INFO DETAILS -->:
 
 
 CREATE TABLE userInfo (
@@ -134,6 +134,13 @@ uiBanTime VARCHAR(14),
 uiBanExpire VARCHAR(14),
 uiLoginCount int(7));
 
+
+
+#finally the last table for the IP-Country database.
+# Download this file http://ip-to-country.directi.com/downloads/ip-to-country.csv.zip and extract it into /tmp
+#Then in your mysql do this to import the file:
+
+LOAD DATA INFILE '/tmp/ip-to-country.csv' INTO TABLE iptoc FIELDS TERMINATED BY ',' ENCLOSED BY '"' LINES TERMINATED BY '\n';
 
 
 
