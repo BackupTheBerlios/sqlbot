@@ -1,9 +1,7 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
-<html>
-<head>
-<title>Add a DC Client</title>
-</head>
-<body>
+<?
+$page_title="Add a DC Client";
+include("header.ini");
+?>
 
 <?
 include("dbinfo.inc.php");

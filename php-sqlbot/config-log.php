@@ -1,12 +1,10 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
-<html>
-<head>
-<title>Logging Config</title>
-</head>
-<body>
+<?
+$page_title="Configure the log";
+include("header.ini");
+?>
+
 <? 
 include("dbinfo.inc.php");
-echo "$font<h3><center>ODCH Admin - Log Config $hubname</h3></center><br>$fontend"; 
 mysql_connect($databasehost,$username,$password); 
 @mysql_select_db($database) or die( "Unable to select database"); 
 $query="SELECT * FROM log_config ORDER by rowID ASC"; 
@@ -32,7 +30,6 @@ while ($i < $num) {
 <? ++$i; }  ?></table>
 <input type="submit" value="Submit">
 	</form>
-<p><a href="index.php">Return to Admin Index</a></p>
 </center>
 </body>
 </html>

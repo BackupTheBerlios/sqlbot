@@ -1,13 +1,12 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
-<html>
-<head>
-<title>ODCH Admin Control Center</title>
-</head>
-<body>
+<?
+$page_title="Configure SqlBot";
+include("header.ini");
+?>
+
 <?
 
 include("dbinfo.inc.php");
-echo "<h3><center>ODCH Admin - Current Config for $hubname</center></h3><br><br>";
+
 mysql_connect($databasehost,$username,$password);
 @mysql_select_db($database) or die( "Unable to select database");
 
@@ -41,12 +40,9 @@ if ($function == configupdate)
 	$sql = "UPDATE hub_config SET value='$ud_post_client_check' WHERE rule='post_client_check'";
 	$result = mysql_query($sql) or die(mysql_error());
 
-	if (empty($ud_post_client_check)) {$ud_post_client_check = "off";}
-	$sql = "UPDATE hub_config SET value='$ud_post_client_check' WHERE rule='clone_check'";
-	$result = mysql_query($sql) or die(mysql_error());
-	
-	if (empty($ud_clone_check)) {$ud_clone_check = "off";}
-	$sql = "UPDATE hub_config SET value='$ud_clone_check' WHERE rule='clone_check'";
+
+	if (empty($ud_client_check)) {$ud_client_check = "off";}
+	$sql = "UPDATE hub_config SET value='$ud_client_check' WHERE rule='client_check'";
 	$result = mysql_query($sql) or die(mysql_error());
 
 //	if (empty($ud_log_con_and_discon)) {$ud_log_con_and_discon = "off";}

@@ -1,12 +1,10 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
-<html>
-<head>
-<title>Add a DC client</title>
-</head>
-<body>
+<?
+$page_title="Edit a DC Client";
+include("header.ini");
+?>
+
 <?
 include("dbinfo.inc.php");
-echo "<h3><center>ODCH Admin - Update Per Client Rules for $hubname</h3></center><br>";
 mysql_connect($databasehost,$username,$password);
 @mysql_select_db($database) or die( "Unable to select database");
 $query="SELECT * FROM client_rules where rowID=$id";
@@ -216,7 +214,7 @@ $client_name=mysql_result($result,$i,"client_name");
 	</tr><tr>
 		<td>Max Slots</td>
 		<td><?show_slots_box(ud_max_slots,$max_slots);?></td>
-		<tindex.phpd>Minimum number of Slots this client should have (int)</td>
+		<td>Minimum number of Slots this client should have (int)</td>
 	</tr><tr>
 		<td>Slot Ratio</td>
 		<td><?show_ratio_box(ud_slot_ratio,$select=$slot_ratio);?></td>

@@ -1,14 +1,10 @@
- 
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
-<html>
-<head>
-<title>Add a Nick Filter</title>
-</head>
-<body>
+<?
+$page_title="Add a new hub-rule";
+include("header.ini");
+?>
 
 <?
 include("dbinfo.inc.php");
-echo "<h3><center>ODCH Admin - Add New Rule for $hubname</center></h3><br><br>";
 ?>
 <center>
 	<table>

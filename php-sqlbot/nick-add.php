@@ -1,13 +1,10 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
-<html>
-<head>
-<title>Add a Nick Filter</title>
-</head>
-<body>
+<?
+$page_title="Add a filtered Nickname";
+include("header.ini");
+?>
 
 <?
 include("dbinfo.inc.php");
-echo "<h3><center>ODCH Admin - Add New Nick Filter for $hubname</center></h3><br><br>";
 ?>
 <center><form action="nick-main.php?function=add" method="post">
 	<table>

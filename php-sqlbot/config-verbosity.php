@@ -1,12 +1,10 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
-<html>
-<head>
-<title>Hub Verbosity</title>
-</head>
-<body>
+<?
+$page_title="Hub Verbosity";
+include("header.ini");
+?>
+
 <?
 include("dbinfo.inc.php");
-echo "$font<h3><center>ODCH Admin - Current Verbosity Config $hubname</h3></center><br>$fontend";
 mysql_connect($databasehost,$username,$password);
 @mysql_select_db($database) or die( "Unable to select database");
 $query="SELECT * FROM verbosity ORDER by rowID ASC";
@@ -33,7 +31,6 @@ while ($i < $num) {
 <? ++$i; }  ?></table>
 <input type="submit" value="Submit">
 	</form>
-<p><a href="index.php">Return to Admin Index</a></p>
 </center>
 
 </body>

@@ -1,11 +1,10 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
-<html>
-<head>
-<title>Overall User Stats</title>
-<body>
 <?
+$page_title="Overall User Stats";
+include("header.ini");
+?>
+
+<div align="center"><?
 include("dbinfo.inc.php");
-echo "<h2><center>ODCH Admin - User Stats for $hubname</center></h2><br><br>";
 $limit=$defaultLogEntries; 
 echo "$font";
 mysql_connect($databasehost,$username,$password);
@@ -84,7 +83,7 @@ if (!(($offset/$limit)==$pages-1) && $pages!=1) {
     print "<a href=\"?m=$menuname&p=$path/userstats&offset=$newoffset\">NEXT</a><p>\n";
 }
 mysql_close();
-?>
+?></div>
 <? echo "$fontend";?>
 </body>
 </html>

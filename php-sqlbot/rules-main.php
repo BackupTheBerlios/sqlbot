@@ -1,12 +1,10 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
-<html>
-<head>
-<title>Additional Hub Rules</title>
-</head>
-<body>
+<?
+$page_title="Hub Rules";
+include("header.ini");
+?>
+
 <?
 include("dbinfo.inc.php");
-echo "<h3><center>ODCH Admin - Current Rules for $hubname</center></h3><br><br>";
 echo"$font";
 echo "<center><p>The rules here are additonal rules to those generated dynamically based a particular users client.<br> The rules you configure here should be static rules.<br> For Example, Grant slot to op on request, No Porn, No Installed files etc.</p></center>";
 echo"$fontend";
@@ -40,7 +38,7 @@ $rule=mysql_result($result,$i,"rule");
 		<td><form action="<? echo "rules-edit.php?id=$id" ?>" method="post">
 		<input type="Submit" value="Edit"></td></form>
 		<td><form action="<? echo "rules-main.php?function=delete&ud_id=$id" ?>" method="post">
-		<input type="Submit" value="Delete"></td>
+		<input type="Submit" value="Delete" onClick="return confirmDelete()"></td>
 		</form>
 	</tr>
 <? ++$i; }  

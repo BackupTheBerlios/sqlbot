@@ -1,12 +1,10 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
-<html>
-<head>
-<title>Hub Records</title>
-</head>
-<body>
+<?
+$page_title="Hub Records";
+include("header.ini");
+?>
+
 <?
 include("dbinfo.inc.php");
-echo "<h3><center>ODCH Admin - Hub Records for $hubname</center></h3><br><br>";
 mysql_connect($databasehost,$username,$password);
 @mysql_select_db($database) or die( "Unable to select database");
 if($function == reset) {
@@ -41,7 +39,7 @@ $time=mysql_result($result,$i,"time");
 		<td><? echo "$font$recordValue$fontend" ?></td>
 		<td><? echo "$font$date$fontend" ?></td>
 		<td><? echo "$font$time$fontend" ?></td>
-		<td><input type="Submit" value="Reset"></td>
+		<td><input type="Submit" value="Reset" onClick="return confirmDelete()"></td>
 		</form>
 	</tr>
 

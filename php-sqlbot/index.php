@@ -1,5 +1,5 @@
 <?
-$page_title="Testing";
+$page_title="SqlBot PHP Config";
 include("header.ini");
 ?>
 

@@ -1,14 +1,13 @@
+<?
+$page_title="Add / Edit Clients";
+include("header.ini");
+?>
+<div align="center">
 
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
-<html>
-<head>
-<title>ODCH - Client Setup</title>
-</head>
-<body>
 <?
 
 include("dbinfo.inc.php");
-echo "<h3><center>ODCH Admin - client settings $hubname</center></h3><br><br>";
+
 mysql_connect($databasehost,$username,$password);
 @mysql_select_db($database) or die( "Unable to select database");
 
@@ -32,7 +31,6 @@ $query="SELECT * FROM client_rules";
 $result=mysql_query($query);
 $num=mysql_numrows($result);
 
-echo "$font<h3><center>ODCH Admin Control Center $hubname</h3></center>$fontend";
 echo "$font<p><b>Current Per Client Rules</b><br>$fontend";
 ?>
 
@@ -94,7 +92,7 @@ while ($i < $num) {
 	<td nowrap><input type="Submit" value="Edit"></td></form>
 	<form action="client-main.php?function=delclient&id=<? echo "$id";?>" method="post">
 	<td nowrap><input type="Submit" value="Delete" onClick="return confirmDelete()"></td></form></tr>
-	<?++$i;} ?></table>
+	<?++$i;} ?></table></div>
 <? echo "$fontend";?>
 </body>
 </html>

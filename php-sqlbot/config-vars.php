@@ -1,12 +1,10 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
-<html>
-<head>
-<title>Hub variables</title>
-</head>
-<body>
+<?
+$page_title="Configure your Hub variables";
+include("header.ini");
+?>
+
 <?
 include("dbinfo.inc.php");
-echo "<h3><center>ODCH Admin - Current Variables for $hubname</center></h3><br><br>";
 mysql_connect($databasehost,$username,$password);
 @mysql_select_db($database) or die( "Unable to select database");
 if($function == update) {

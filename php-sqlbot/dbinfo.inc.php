@@ -3,8 +3,8 @@
 $databasehost="localhost";
 
 // MySQL DB login
-$username="odch";
-$password="linux";
+$username="sqluser";
+$password="sqlpass";
 
 //Name of DB
 $database="odch";

@@ -1,13 +1,10 @@
- 
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
-<html>
-<head>
-<title>Add a Nick Filter</title>
-</head>
-<body>
+<?
+$page_title="Edit Rules";
+include("header.ini");
+?>
+
 <?
 include("dbinfo.inc.php");
-echo "<h3><center>ODCH Admin - Edit Rule for $hubname</center></h3><br><br>";
 mysql_connect($databasehost,$username,$password);
 @mysql_select_db($database) or die( "Unable to select database");
 

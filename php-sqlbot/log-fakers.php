@@ -1,13 +1,11 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
-<html>
-<head>
-<title>Fakers Log</title>
-</head>
-<body>
-<? 
+<?
+$page_title="View logged Fakers";
+include("header.ini");
+?>
+
+<div align="center"><? 
 echo "$font";
 include("dbinfo.inc.php");
-echo "<h3><center>ODCH Admin - Share fakers detected On $hubname</center></h3><br><br>";
 $limit=$defaultLogEntries; 
 
 mysql_connect($databasehost,$username,$password); 
@@ -98,6 +96,7 @@ if (!(($offset/$limit)==$pages-1) && $pages!=1) {
 }
 mysql_close();
 ?>
+</div>
 <? echo "$fontend";?>
 </body>
 </html>

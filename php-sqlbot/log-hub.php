@@ -1,13 +1,13 @@
-<html>
-<head>
-<title>Hub Log</title>
-</head>
-<body>
-
 <?
+$page_title="Hub Log";
+include("header.ini");
+?>
+
+
+
+<div align="center"><?
 $entry=0; 
 include("dbinfo.inc.php");
-echo "<center><h3>ODCH Admin - Hub Log for $hubname</h3></center>";
 echo "$font";
 $limit=$defaultLogEntries; 
 
@@ -113,9 +113,6 @@ echo "<br>Total Number of Matching Entries <b>$numrows</b><br>"; ?>
 
 <table border="<? echo "$tableborders";?> cellspacing="2" cellpadding="2"> 
 <tr>  
-	<th><form action="
-	<? echo "log-hub.php?delete=log&offset=$offset&ipsearch=$ipsearch&clisearch=$clisearch&nicksearch=$nicksearch&afilter=$afilter&rfilter=$rfilter" ?>" method="post">
-	<input type="Submit" value="Delete ALL"></form></th>
 	<th><? echo "$font";?>Entry<? echo "$fontend";?></th>
 	<th><? echo "$font";?>Date<? echo "$fontend";?></th>
 	<th><? echo "$font";?>Time<? echo "$fontend";?></th> 
@@ -133,7 +130,7 @@ echo "<br>Total Number of Matching Entries <b>$numrows</b><br>"; ?>
 	<th><? echo "$font";?>Shared [Gb]<? echo "$fontend";?></th>
 	<th>
 	<form action="<? echo "log-hub.php?delete=log&offset=$offset&ipsearch=$ipsearch&clisearch=$clisearch&nicksearch=$nicksearch&afilter=$afilter&rfilter=$rfilter" ?>" method="post">
-	<input type="Submit" value="Delete ALL"></form></th>
+	<input type="Submit" value="Delete ALL" onClick="return confirmDelete()"></form></th>
 </tr> 
 <? 
 while ($data=mysql_fetch_array($result)) 
@@ -160,8 +157,7 @@ while ($data=mysql_fetch_array($result))
     	} else { //if there isn't a remainder we will do the else
         echo "<TR bgcolor="; echo "$rowColourAlt"; echo ">\n"; } 
 	?>
-	<td nowrap><form action="<? echo "log-hub.php?delete=logrow&id=$id&offset=$offset&ipsearch=$ipsearch&clisearch=$clisearch&nicksearch=$nicksearch&afilter=$afilter&rfilter=$rfilter" ?>" method="post">
-	<center><input type="Submit" value="Delete"></center></td>
+<!-- 		<form action="<? echo "log-hub.php?delete=log&offset=$offset&ipsearch=$ipsearch&clisearch=$clisearch&nicksearch=$nicksearch&afilter=$afilter&rfilter=$rfilter" ?>" method="post"> -->
 	<td nowrap><? echo "$font$id$fontend"; ?></td>
 	<td nowrap><? echo "$font$date$fontend"; ?></td> 
 	<td nowrap><? echo "$font$time$fontend"; ?></td> 
@@ -194,14 +190,14 @@ if ($numrows%$limit) {
 
 for ($i=1;$i<=$pages;$i++) { // loop thru
     $newoffset=$limit*($i-1);
-    print "<a href=\"hublog?offset=$newoffset&ipsearch=$ipsearch&clisearch=$clisearch&nicksearch=$nicksearch&afilter=$afilter&rfilter=$rfilter\">$i</a> &nbsp; \n"; }
+    print "<a href=\"log-hub.php?offset=$newoffset&ipsearch=$ipsearch&clisearch=$clisearch&nicksearch=$nicksearch&afilter=$afilter&rfilter=$rfilter\">$i</a> &nbsp; \n"; }
 
 if (!(($offset/$limit)==$pages) && $pages!=1) {
     $newoffset=$offset+$limit;
-    print "<a href=\"$hublog?offset=$newoffset&ipsearch=$ipsearch&clisearch=$clisearch&nicksearch=$nicksearch&afilter=$afilter&rfilter=$rfilter\">NEXT</a><p>\n";
+    print "<a href=\"log-hub?offset=$newoffset&ipsearch=$ipsearch&clisearch=$clisearch&nicksearch=$nicksearch&afilter=$afilter&rfilter=$rfilter\">NEXT</a><p>\n";
 }
 mysql_close();
-?>
+?></div>
 <? echo "$fontend";?>
 </body>
 </html>
