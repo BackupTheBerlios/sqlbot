@@ -105,20 +105,14 @@ sub clientRecheck()
 
 		&debug("ReChecking - [$user]");
 		if (&usrOnline($user) ne 1)
-		{			
-			if(lc($botname) ne lc($user)) #if not a bot, should be in the online table
-			{
-				&addToOnline($user);
-				&debug("ReChecking - $user was not in online table");
-			}
-		}	
+			{if(lc($botname) ne lc($user)) #if not a bot, should be in the online table
+				{&addToOnline($user);
+				&debug("ReChecking - $user was not in online table");}}	
 		else
-		{
-			&debug("ReChecking - updating $user,type = $type");
+			{&debug("ReChecking - updating $user,type = $type");
 			&updateInOnline($user);
-			if($type eq 0 )	{
-				&delFromOnline($user);
-			}
+			if($type eq 0 )	
+				{&delFromOnline($user);}
 			if($type eq 32 )
 			{ #If Opadmin
 			# Check OP admins if set
@@ -176,12 +170,9 @@ sub parseClient(){
 	}
 	## CHECK MLDONKEY CLIENTS
 	elsif($fulldescription =~ /mldonkey client/)
-	{
-		if (&getConfigOption("check_mldonkey"))
-		{
-			$REASON = "MLDonkey";
-			$ACTION = "Nuked";
-		}
+		{if (&getConfigOption("check_mldonkey"))
+			{$REASON = "MLDonkey";
+			$ACTION = "Nuked";}
 	}
 	else {
 	## CHECK CLIENT ##
