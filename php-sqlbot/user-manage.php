@@ -10,7 +10,8 @@ if (!empty($nicksearch))
 	{$where="WHERE nick LIKE '%$nicksearch%'";$ipsearch = "";}
 else if (!empty($ipsearch)) 
 	{$where="WHERE IP LIKE '%$ipsearch%'";$nicksearch = "";}
-else {$where = ""; }
+else if(!empty($search)){$where = ""; }	
+else {$where = "WHERE $field LIKE '%$search%'""; }
 if ($function == delete)
 	{$sql = "DELETE FROM userDB $where";$result = mysql_query($sql) or die(mysql_error());}
 if ($f == uType){
