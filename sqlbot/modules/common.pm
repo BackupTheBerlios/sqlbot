@@ -36,6 +36,22 @@ sub msgUser() {
 	my($user,$msg) = @_;
 	odch::data_to_user($user, "\$To: $user From: $botname \$ $msg |");
 }
+
+sub msgOPs() {
+	my($sender,$msg) = @_;
+	my $sth = $dbh->prepare("SELECT * FROM online WHERE user_type='Operator' OR user_type='Op-Admin'");
+	$sth->execute();
+	while (my $ref = $sth->fetchrow_hashref()){
+		$op= "$ref->{'name'}";
+		if ($op ne $sender){ # Dont echo
+			odch::data_to_user($op, "\$To: $op From: $botname \$$sender> $msg |");}
+			
+		}
+	$sth->finish();
+		
+}
+
+
 sub msgAll() {
 	my($msg) = @_;
 	odch::data_to_all("<$botname> $msg |");
