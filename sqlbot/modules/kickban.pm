@@ -160,7 +160,7 @@ sub banUser (){
 				    	WHERE nick='$sqluser'");
 
 		if(&getLogOption("log_bans"))
-			{&addToLog($user,$lastAction,"Removed");}			
+			{&addToLog($nick,$lastAction,"Removed");}			
 		return(1);}
 	else{return(1);}
 	
