@@ -299,7 +299,7 @@ eval { $dbh->do("CREATE TABLE hub_variables (rowID INT(3) NOT NULL AUTO_INCREMEN
 					description VARCHAR(50))");
 					print "Created table \"hub_variables\"\n";
 $dbh->do("INSERT INTO hub_variables VALUES (	'',
-						'	hub_country',
+						'hub_country',
 						'',
 						'URL of Hub')");
 						print "	data \"hub_web_address\" inserted\n";

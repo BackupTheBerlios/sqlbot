@@ -5,12 +5,14 @@ SQLBot Changelog
 CVS
 -=-=-=-=-=-=-=-=-=-=-=-=-
 
+
+Fixed	: Coding typos and bugs in user-manager (AORCrazy)
 Added	: Bot description, hardcoded Title and Connection DSL
 Fixed	: Method for selecting a user from DB, use lastReason=P-Banned
 Added	: Option in php to Reset the Kick & Ban counters
 Changed	: Removed the LastReason of xKicks & xBans to preserve the Real Reason was kicked originally
 Added	: Line count to include Main Chat & Op Chat
-Added	: First Draft at Statistics, Some useful info about users(Needs more work)
+Added	: First Draft at Statistics, Some useful info about users
 Changed : Split Fakers in Fake(Share) and Fake(Client)
 Changed : Search and sorting facilities in user-manage.php
 Deleted	: Delayed kick timer
