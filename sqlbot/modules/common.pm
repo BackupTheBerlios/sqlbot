@@ -133,7 +133,14 @@ sub getHubVar() {
 	my($sth) = $dbh->prepare("SELECT value FROM hub_variables WHERE rule='$data'");
 	$sth->execute();
 	my($ref) = $sth->fetchrow_hashref();
-	$value = "$ref->{'value'}";
+	if ( $ref )
+	{
+		$value = "$ref->{'value'}";
+	}
+	else
+	{
+		$value = "";
+	}
 	$sth->finish();
 	return $value;
 }
