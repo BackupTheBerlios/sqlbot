@@ -41,7 +41,7 @@ sub new_user_connected(){
 	&checkClones($user);
 	&processEvent($user);
 	&logLogon($user);
-	&buildHelp($user);
+#	&buildHelp($user);
 	&msgUser("$user","$helpmsg");
 }
 
@@ -60,7 +60,7 @@ sub reg_user_connected(){
 	if (&getVerboseOption("verbose_op_connect"))
 		{&msgAll("Reg User $user just connected");}
 
-	&buildHelp($user);
+#	&buildHelp($user);
 	&msgUser("$user","$helpmsg");
 }
 
@@ -79,7 +79,7 @@ sub op_connected(){
 	if (&getVerboseOption("verbose_op_connect"))
 		{&msgAll("Op $user just connected");}
 
-	&buildHelp($user);
+#	&buildHelp($user);
 	&msgUser("$user","$helpmsg");
 }
 
@@ -100,7 +100,7 @@ sub op_admin_connected()
 	if (&getVerboseOption("verbose_op_connect"))
 		{&msgAll("OpAdmin $user just connected");}
 
-	&buildHelp($user);
+#	&buildHelp($user);
 	&msgUser("$user","$helpmsg");
 
 }
@@ -140,7 +140,7 @@ sub data_arrival(){
 			{if($data =~ /\$To: $botname From: $user \$\<$user\> !seen\|/)
 				{&msgUser("$user","usage: !seen username");}
 			elsif($data =~ /\$To: $botname From: $user \$\<$user\> \s?(\S*) (.*)\|/) 
-				{&seen(@_);
+				{&seen($2);
 				&msgUser("$user","$seenresult");}			
 		}
 		elsif($data =~ /\$To: $botname From: $user \$\<$user\> !stats/)
@@ -222,7 +222,7 @@ sub data_arrival(){
 			{if($data =~ /^<.*> \+seen\|/)
 				{&msgAll("usage: +seen username");}
 			elsif($data =~ /^<.*> \s?(\S*) (.*)\|/)
-				{&seen(@_);
+				{&seen($2);
 				&msgUser("$user","$seenresult");}
 		}
 		elsif($data =~ /^<.*> \+dcgui/i)
