@@ -7,7 +7,7 @@
 <!--
 function confirmDelete()
 {
-var agree=confirm("WARNING:\nThis will delete <?php echo "$uiNick"; ?> only, regardless of Level or Status!\n\n Are you sure you want to do this?");
+var agree=confirm("WARNING:\nThis will delete ALL Chat Logs from this hub!!\n Are you sure?");
 if (agree)
 	return true ;
 else
@@ -27,6 +27,11 @@ else
 if ($hubID == "") {
 echo "Error... information parsed!<p>Please return to the <a href=\"index.php\"><font color=\"blue\">index.php</font></a>";}
 else {
+
+if ($deleteAll == "1" ) {
+	$delete_from_logChat = "DELETE FROM logChat WHERE hubID='$hubID'";
+	$result = mysql_query($delete_from_logChat) or die(mysql_error());
+}
 
 // GET BOT NAME
 $botresult=mysql_query("SELECT * FROM botConfig");
@@ -81,8 +86,17 @@ $total_chats=mysql_num_rows($logtotal);
 $logresult=mysql_query("SELECT *,DATE_FORMAT(lcTime, '%H:%i:%S') AS time,
 												DATE_FORMAT(lcTime, '%d/%m/%Y') AS date
 												FROM logChat WHERE hubID='$hubID' ORDER BY lcTime DESC LIMIT $offset,$defaultLogEntries");
-												
+
+
+// RESET BUTTON
+						echo "<form action=\"$PHP_SELF\" method=\"post\">";
+							hidden_value(hubID, $hubID);
+							hidden_value(offset, 0);
+							hidden_value(deleteAll, 1);
+						echo "<input type=\"submit\" value=\"Delete All Chat Logs\" class=\"userdbnicknormal\" title=\"Delete All Chat Logs\" onClick=\"return confirmDelete()\"></form>";
 ?>
+
+
 <FIELDSET>
 	<LEGEND><font color="#FFFFFF"> &nbsp; Chat log for  <?php echo "[ $hcName ] &nbsp; $total_chats Messages in total"; ?>	&nbsp; </font></LEGEND>	
 <table class="chatlog">
