@@ -43,7 +43,7 @@ function show_slots_box($name,$select=0) {
 }
 ?>
 <center>
-<? echo "<center><table border=\"$tableborders\" cellspacing=\"2\" cellpadding=\"2\">";?>
+<? echo "<center><table border=\"$tableBorders\" cellspacing=\"2\" cellpadding=\"2\">";?>
 <tr>
 	<th></th>
 	<th><? echo "$font";?>Connection<? echo "$fontend";?></th>
