@@ -192,7 +192,7 @@ Public commands(PM):-\r
 	if(($type eq 32) or ($type eq 16))
 	{
 		my($defaultLogEntries) = &getHubVar("nr_log_entries");
-		$helpmsg .=" \r\n \r\nOp commands(PM):-\r
+		$helpmsg .=" \r \rOp commands(PM):-\r
 . +recheck = force bot to re check all clients,and update online table\r
 . +info \'username\' = get the info of another user\r
 . +log = show the last $defaultLogEntries Entries from the hublog\r
