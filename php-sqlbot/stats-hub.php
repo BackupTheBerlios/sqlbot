@@ -382,17 +382,46 @@ $nick=mysql_result($result,$i,"nick");
 
 <?
 ///////////////////////////////////////////////////////
-////Most Online
+////Most Frequent / Average
 ///////////////////////////////////////////////////////
 
 mysql_connect($databasehost,$username,$password);
 @mysql_select_db($database) or die( "Unable to select database");
 
-$query="SELECT nick,onlineTime FROM userDB ORDER BY onlineTime ASC LIMIT 10";
+$query="SELECT nick,onlineTime,loginCount FROM userDB ORDER BY loginCount DESC LIMIT 30";
 $result=mysql_query($query);
 $num=mysql_num_rows($result);
 mysql_close();
-echo "<center>Most Online <table border=\"$tableborders\" cellspacing=\"2\" cellpadding=\"2\">";
+echo "<center>Most Frequent Visitors / Average Time online<table border=\"$tableborders\" cellspacing=\"2\" cellpadding=\"2\">";
+$i=0;while ($i < $num) {
+$onlineTime=mysql_result($result,$i,"onlineTime");
+$loginCount=mysql_result($result,$i,"loginCount");
+$averageVisitLength=$onlineTime/$loginCount;
+$nick=mysql_result($result,$i,"nick");
+	if($i % 2) { //this means if there is a remainder
+        echo "<TR bgcolor="; echo "$rowColour"; echo ">\n";
+    	} else { //if there isn't a remainder we will do the else
+        echo "<TR bgcolor="; echo "$rowColourAlt"; echo ">\n"; }?>
+		<td><? echo "$font$i$fontend" ?></td>
+		<td><? echo "$font$nick$fontend" ?></td>
+		<td><? echo "$font$onlineTime$fontend" ?></td>
+		<td><? echo "$font$averageVisitLength$fontend" ?> Secs</td>
+		</tr><? ++$i; }  ?>
+</table>
+
+<?
+///////////////////////////////////////////////////////
+////Longest Online
+///////////////////////////////////////////////////////
+
+mysql_connect($databasehost,$username,$password);
+@mysql_select_db($database) or die( "Unable to select database");
+
+$query="SELECT nick,onlineTime FROM userDB ORDER BY onlineTime DESC LIMIT 20";
+$result=mysql_query($query);
+$num=mysql_num_rows($result);
+mysql_close();
+echo "<center>Longest Online <table border=\"$tableborders\" cellspacing=\"2\" cellpadding=\"2\">";
 $i=0;while ($i < $num) {
 $onlineTime=mysql_result($result,$i,"onlineTime");
 $nick=mysql_result($result,$i,"nick");
