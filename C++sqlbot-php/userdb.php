@@ -8,11 +8,6 @@
 <DIV ID="dek"></div>
 <SCRIPT TYPE="text/javascript">
 <!--
-
-//Pop up information box II (Mike McGrath (mike_mcgrath@lineone.net,  http://website.lineone.net/~mike_mcgrath))
-//Permission granted to Dynamicdrive.com to include script in archive
-//For this and 100's more DHTML scripts, visit http://dynamicdrive.com
-
 Xoffset= 10;    // modify these values to ...
 Yoffset= -20;    // change the popup position.
 
@@ -57,6 +52,15 @@ if(ns4){skn.visibility="hidden";}
 else if (ns6||ie4)
 skn.display="none"
 }
+
+function confirmDeleteAll()
+{
+var agree=confirm("WARNING:\nThis will delete all users only (no Reg/Op/Op-Admins) in your selection!\nVIP/OP/Op-Admins (etc.) need to be deleted individually via their\n detailed info page.\n\n Are you sure you want to do this?");
+if (agree)
+	return true ;
+else
+	return false ;
+}
 //-->
 </script>
 
@@ -70,7 +74,27 @@ skn.display="none"
 if ($hubID == "") {
 echo "Error... no hubID parsed!<p>Please return to the <a href=\"index.php\"><font color=\"blue\">index.php</font></a>";}
 else {
-	
+
+// DEFINE SEARCH / SORT OPTIONS (for deletion / parsing)
+if ($parse == "All") { $parseoption = "";}
+if ($parse == "Online") { $parseoption = "&& uiStatus='1'"; }
+if ($parse == "Banned") { $parseoption = "&& uiBanTotal > '0'"; }
+if ($useSearch == "1") { 
+$alteredsearchfiled = ereg_replace ("\*", "%", $searchvalue);
+$parseoptionextra= "&& $searchfield LIKE '$alteredsearchfiled'";}
+
+
+if ($action == "deleteUser")
+{
+	$delete_from_userInfo = "DELETE FROM userInfo WHERE hubID='$hubID' && uiNick='$uiNick' && uiIp='$uiIp'";
+	$result = mysql_query($delete_from_userInfo) or die(mysql_error());
+}
+
+if ($action == "deleteAll") {
+$deleteAll_from_userInfo="DELETE FROM userInfo WHERE hubID='$hubID' && uiUserLevel='0' $parseoption $parseoptionextra";
+$result = mysql_query($deleteAll_from_userInfo) or die(mysql_error());
+}
+
 // GET BOT NAME
 $botresult=mysql_query("SELECT * FROM botConfig");
 	$bcName=htmlentities(mysql_result($botresult,$i,"bcName"));
@@ -123,13 +147,6 @@ $hcStatus = "<font color=\"#FF1D28\"><strong>Offline</strong></font>";
 <td>
 	<!-- START USER DATABACE SPACE -->
 <?php
-if ($parse == "All") { $parseoption = "";}
-if ($parse == "Online") { $parseoption = "&& uiStatus='1'"; }
-if ($parse == "Banned") { $parseoption = "&& uiBanTotal > '0'"; }
-if ($useSearch == "1") { 
-$alteredsearchfiled = ereg_replace ("\*", "%", $searchvalue);
-$parseoptionextra= "&& $searchfield LIKE '$alteredsearchfiled'";}
-
 if (empty($offset)) { $offset = 0; }
 
 // GET TOTAL USERS IN DB 
@@ -161,10 +178,23 @@ $totshared_bytes=mysql_result($total_bytes_q,$i);
 					[ <?php echo "$total_selection / $total_users ($totalShare)"; ?> ] &nbsp;  for hub <?php echo "$hcName [ ID: $hubID ]"; ?></font></LEGEND>
 	<!-- SEARCH DIALOG -->
 	<table width="100%">
-		<tr>
+		<tr nowrap>
 			<td><?php if ($useSearch == "1") {Echo "<font color=\"#FFFFFF\">Searching for <em>$searchvalue</em> in <em>$parse....</em> </font>";} ?>
 			</td>
-			<td align="right">
+			<td align="right" width="100">
+							<!-- Delete ALL button -->
+							<form action="<?php echo "$PHP_SELF"; ?>" method="post">
+							<?php hidden_value(hubID, $hubID);
+							hidden_value(parseoption, $parseoption);
+							hidden_value(useSearch, $useSearch);
+							hidden_value(searchvalue, $searchvalue);
+							hidden_value(searchfield, $searchfield);
+							hidden_value(parse, $parse);
+							hidden_value(parseorder, $parseorder);
+							hidden_value(action, deleteAll); ?>
+						<input type="submit" value="Delete Selection" class="userdbnicknormal" onClick="return confirmDeleteAll()"></form>
+			</td>
+			<td align="right" width="300" nowrap>			
 			<form action="<?php echo "$PHP_SELF"; ?>" method="post">
 				<?php hidden_value(hubID, $hubID); ?>
 				<?php hidden_value(parse, $parse); ?>
@@ -230,6 +260,7 @@ $totshared_bytes=mysql_result($total_bytes_q,$i);
 			<?php hidden_value(parseorder, uiShare); ?>
 			<input type="submit" value="Shared Bytes" class="userdbcol"></form>
 		</td>
+		<th>Del</td>
 	</tr>
 <?php
 while ($data=mysql_fetch_array($userresult)) 
@@ -290,7 +321,7 @@ while ($data=mysql_fetch_array($userresult))
 	if  (($uiStatus == "1") && ($uiIsAway == "0")) { $Status ="<img src=\"img/Online.gif\" alt=\"Online\" title=\"Online\">";}
 	if  (($uiStatus == "1") && ($uiIsAway == "1")) { $Status ="<img src=\"img/Away.gif\" alt=\"Away\" title=\"Away\">";}
 	if  ($uiStatus == "0") { $Status ="<img src=\"img/Offline.gif\" alt=\"Offline\" title=\"Offline\">";}
-	if  (($uiBanTotal > "0") && ($uiStatus == "0")) { $Status ="<img src=\"img/Ban.gif\" alt=\"Offline\" title=\"Banned\">";}
+	if  (($uiBanFlag > "0") && ($uiStatus == "0")) { $Status ="<img src=\"img/Ban.gif\" alt=\"Offline\" title=\"Banned\">";}
 
 
 
@@ -324,19 +355,29 @@ if ((($uiUserLevel == "0") || ($uiUserLevel == "")) && ($uiIsAdmin == "0")) { $c
 
 //USER INFO / BANS
 
-if ($uiBanTotal == "0") { $user_info = "Logins</td><td>$uiLoginCount</td></tr><tr><td>Kicks</td><td>$uiKickTotal</td></tr><tr><td>Bans</td><td>$uiBanTotal</td>"; }
+if ($uiBanFlag == "0") { $user_info = "Logins</td><td>$uiLoginCount</td></tr><tr><td>Kicks</td><td>$uiKickTotal</td></tr><tr><td>Bans</td><td>$uiBanTotal</td>"; }
 
-if ($uiBanTotal > "0") { $user_info = "Logins</td><td>$uiLoginCount</td></tr><tr><td>Kicks</td><td>$uiKickTotal</td></tr><tr><td valign=top>Bans</td><td>Total: $uiBanTotal<br>Banned: $BanTime<br>Expires: $BanExpire</td>"; }
+if ($uiBanFlag > "0") { $user_info = "Logins</td><td>$uiLoginCount</td></tr><tr><td>Kicks</td><td>$uiKickTotal</td></tr><tr><td valign=top>Bans</td><td>Total: $uiBanTotal<br>Banned: $BanTime<br>Expires: $BanExpire</td>"; }
 
 
 // PAGE DATA
 echo "<tr>
 		<td width=\"5\">$Status</td>
 		<td>
-			<form action=\"userinfo.php\" method=\"post\">
-			<input type=\"hidden\" name=\"hubID\" value=\"$hubID\">
-			<input type=\"hidden\" name=\"uiNick\" value=\"$uiNick\">
-			<input type=\"submit\" value=\"$uiNick\" class=\"$class\" nowrap
+			<form action=\"userinfo.php\" method=\"post\">";
+							hidden_value(hubID, $hubID);
+							hidden_value(parse, $parse);
+							hidden_value(parseorder, $parseorder);
+							hidden_value(offset, $offset);
+							hidden_value(uiNick, $uiNick);
+							hidden_value(uiIp, $uiIp);
+						if ($useSearch == "1") {
+							hidden_value(useSearch, 1);
+							hidden_value(useSearch, 1);
+							hidden_value(searchvalue, $searchvalue);
+							hidden_value(searchfield, $searchfield);
+							;}
+	echo "<input type=\"submit\" value=\"$uiNick\" class=\"$class\" nowrap
 			ONMOUSEOVER=\"popup('$user_info','yellow')\"; ONMOUSEOUT=\"kill()\"></form>
 		</td>
 		<td nowrap align=\"center\">$Level</td>
@@ -346,6 +387,24 @@ echo "<tr>
 		<td nowrap align=\"center\">$conv_time</td>
 		<td nowrap align=\"center\"
 		ONMOUSEOVER=\"popup('$Share</td>','yellow')\"; ONMOUSEOUT=\"kill()\">$uiShare</td>
+		<td>";
+		if ($uiUserLevel == "0") {
+						echo "<form action=\"$PHP_SELF\" method=\"post\">";
+							hidden_value(hubID, $hubID);
+							hidden_value(parse, $parse);
+							hidden_value(parseorder, $parseorder);
+							hidden_value(offset, $offset);
+							hidden_value(uiNick, $uiNick);
+							hidden_value(uiIp, $uiIp);
+							hidden_value(action, deleteUser);
+						if ($useSearch == "1") {
+							hidden_value(useSearch, 1);
+							hidden_value(useSearch, 1);
+							hidden_value(searchvalue, $searchvalue);
+							hidden_value(searchfield, $searchfield);
+							;}
+						echo "<input type=\"submit\" value=\"X\" class=\"userdbnicknormal\" title=\"Delete $uiNick\"></form>";}
+		echo "</td>
 	</tr>";
 	$i++;
 }
@@ -358,7 +417,7 @@ echo "<tr>
 <!-- PREVIOUS / NEXT PAGE -->
 	<table width="100%">
 		<tr>
-			<td width="25%">
+			<td width="15">
 				<?php
 				// CODE FOR FIRST-PAGE BUTTON
 				$last_divide = floor($total_selection / $defaultLogEntries);
@@ -377,10 +436,10 @@ echo "<tr>
 							hidden_value(searchvalue, $searchvalue);
 							hidden_value(searchfield, $searchfield);
 							;} ?>
-							<input type="submit" value="<<< First Page" class="userdbnicknormal" title="Go to First Page"></form>
+							<input type="submit" value="<<<" class="userdbnicknormal" title="Go to First Page"></form>
 				<?php ;} ?>
 			</td>
-			<td align="right" width="25%">
+			<td width="*">
 				<?php
 				// CODE FOR PREVIOUS BUTTON
 				if ($offset >= $defaultLogEntries){
@@ -396,10 +455,10 @@ echo "<tr>
 							hidden_value(searchvalue, $searchvalue);
 							hidden_value(searchfield, $searchfield);
 							;} ?>
-							<input type="submit" value="<< Previous Page" class="userdbnicknormal" title="Go to Previous Page"></form>
+							<input type="submit" value=" << " class="userdbnicknormal" title="Go to Previous Page"></form>
 				<?php ;} ?>
 			</td>
-			<td width="25%">
+			<td width="*" align="right">
 				<?php
 				// CODE FOR NEXT BUTTON
 				$offset_value = $offset + $defaultLogEntries;
@@ -417,10 +476,10 @@ echo "<tr>
 							hidden_value(searchvalue, $searchvalue);
 							hidden_value(searchfield, $searchfield);
 							;} ?>
-							<input type="submit" value="Next Page >>" class="userdbnicknormal" title="Go to Next Page"></form>
+							<input type="submit" value=" >> " class="userdbnicknormal" title="Go to Next Page"></form>
 				<?php ;} ?>
 			</td>
-			<td align="right">
+			<td align="right" width="10">
 				<?php
 				// CODE FOR LAST-PAGE BUTTON
 				$last_divide = floor($total_selection / $defaultLogEntries);
@@ -439,7 +498,7 @@ echo "<tr>
 							hidden_value(searchvalue, $searchvalue);
 							hidden_value(searchfield, $searchfield);
 							;} ?>
-							<input type="submit" value="Last Page >>>" class="userdbnicknormal" title="Go to Last Page"></form>
+							<input type="submit" value=">>>" class="userdbnicknormal" title="Go to Last Page"></form>
 				<?php ;} ?>
 			</td>
 		</tr>

@@ -3,6 +3,18 @@
 <head>
 <title>C++ SqlBOT</title>
 <link href="conf/sqlbot.css" rel="stylesheet" type="text/css">
+<SCRIPT TYPE="text/javascript">
+<!--
+function confirmDelete()
+{
+var agree=confirm("WARNING:\nThis will delete <?php echo "$uiNick"; ?> only, regardless of Level or Status!\n\n Are you sure you want to do this?");
+if (agree)
+	return true ;
+else
+	return false ;
+}
+//-->
+</script>
 </head>
 <body>
 <?php
@@ -308,6 +320,27 @@ $country_query  = "SELECT country_code2,country_name FROM iptoc ".
 					<td nowrap>Total Time on hub</td>
 					<td nowrap> : &nbsp; <?php echo "$total_days $Grandtotal"; ?></td>
 				</tr>
+				<tr>
+					<td nowrap> &nbsp; </td>
+					<td nowrap> &nbsp; </td>
+				</tr>
+				<tr>
+					<td nowrap></td>
+					<td nowrap> <?php
+						echo "<form action=\"userdb.php\" method=\"post\">";
+							hidden_value(hubID, $hubID);
+							hidden_value(parse, $parse);
+							hidden_value(parseorder, $parseorder);
+							hidden_value(offset, $offset);
+							hidden_value(uiNick, $uiNick);
+							hidden_value(uiIp, $uiIp);
+							hidden_value(action, deleteUser);
+						if ($useSearch == "1") {
+							hidden_value(useSearch, 1);
+							hidden_value(searchvalue, $searchvalue);
+							hidden_value(searchfield, $searchfield);
+							;}
+						echo "<input type=\"submit\" value=\"[ Delete $uiNick ]\" class=\"userInfoDelete\" title=\"Delete $uiNick\" onClick=\"return confirmDelete()\"></form></td></tr>"; ?>
 			</table>
 		</td>
 	</tr>

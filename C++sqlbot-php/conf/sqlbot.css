@@ -252,6 +252,7 @@ input.userdbnicknormal {
 	background-color: #598FE3;
 }
 
+
 input.userdbBot {
 	color: #010101;
 	font-size: 10pt;
@@ -312,6 +313,17 @@ input.userdbERROR {
 	text-decoration: blink;
 	color: #FFFFFF;
 	font-size: 10pt;
+	border-width: 0px;
+	border-height: 0px;
+	border-style: solid;
+	border-color: #b0b0b0;
+	background-color: #598FE3;
+}
+
+input.userInfoDelete {
+	font-weight: bold;
+	color: #FFFFFF;
+	font-size: 12pt;
 	border-width: 0px;
 	border-height: 0px;
 	border-style: solid;
