@@ -100,13 +100,13 @@ sub banWorker()
 sub banUser (){
 	my($user,$reason,$ip,$mode)=@_;
 
-	my($buth) = $dbh->prepare("SELECT reason,tBanCount,tBanCountTot,pBanCountTot FROM userDB WHERE nick='$user' AND lastAction!='P-Banned'");
+	my($buth) = $dbh->prepare("SELECT lastReason,tBanCount,tBanCountTot,pBanCountTot FROM userDB WHERE nick='$user' AND lastAction!='P-Banned'");
 	$buth->execute();
 	my $ref = $buth->fetchrow_hashref();
 	my($tBanCount) = "$ref->{'tBanCount'}";
 	my($tBanCountTot) = "$ref->{'tBanCountTot'}";
 	my($pBanCountTot) = "$ref->{'pBanCountTot'}";
-	my($origReason) = "$ref->{'pBanCountTot'}";
+	my($lastReason) = "$ref->{'lastReason'}";
 	my($lastAction) ="";
 	
 	&debug("banUserBANNED- user=$user, reason=$reason, ip=$ip, mode=$mode");
@@ -163,7 +163,7 @@ sub banUser (){
 	
 	
 	if($reason eq ""){ #If no reason is passed do not update
-		$reason = $origReason;}
+		$reason = $lastReason;}
 	
 	$dbh->do("UPDATE userDB SET tBanCountTot='$tBanCountTot',
 				kickCount=0,
