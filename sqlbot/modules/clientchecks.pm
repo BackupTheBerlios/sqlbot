@@ -188,7 +188,8 @@ sub parseClient(){
 			my ($ref) = $pcth->fetchrow_hashref();
 			
 			## MIN VERSION ##
-			if ($dcVersion =~/(\d)\1{2,}/){
+			$dcVersion =~/(\d)\1{2,}/;
+			if ( $dcVersion ){
 				if ($ref->{'min_version'} > $dcVersion)
 					{$REASON = "Version($dcVersion)";
 					$ACTION = "Kicked";}}
