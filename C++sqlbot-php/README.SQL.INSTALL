@@ -132,3 +132,38 @@ uiBanTime VARCHAR(14),
 uiBanExpire VARCHAR(14),
 uiLoginCount int(7));
 
+
+
+#Now wer have sql finished... log out:
+			quit
+
+
+
+
+## C++ BOT SETUP
+
+#After building C++sqlbot and installing it, create a directory in your home directory called ".sqlbot"
+
+			mkdir ~/.sqlbot
+			
+
+#Now open a text editor and _edit_ and save the following contents into ~/.sqlbot/dcbot.cfg
+
+<?xml version="1.0"?> 
+<dcbot> 
+  <mysql> 
+    <sqluser>xxxxxxxxxx</sqluser> 
+    <sqlpassword>xxxxxxxxxx</sqlpassword> 
+    <sqlhost>xxxxxxxxx</sqlhost> 
+    <sqldatabase>xxxxxxxxxx</sqldatabase> 
+  </mysql> 
+</dcbot>
+
+
+#Now we copy the php files to your webserver, and edit the conf/dbinfo.inc.php file.
+
+#open your webbrowser and configure your BOT, and add and edit a HUB to log into.
+
+#Finally cd to your home directory, and run the sqlbot binary (probably still in C++sqlbot/sqlbot/sqlbot)
+#run it then as:
+				C++sqlbot/sqlbot/sqlbot
