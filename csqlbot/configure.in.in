@@ -90,5 +90,29 @@ all_includes="$all_includes $USER_INCLUDES"
 AC_SUBST(all_includes)
 AC_SUBST(all_libraries)
 
-AC_SUBST(AUTODIRS)
 
+dnl ###############################################################
+dnl DCLIB stuff
+dnl ###############################################################
+
+LARGEFILESUPPORT="-D_FILE_OFFSET_BITS=64 -D_LARGEFILE_SOURCE"
+
+AM_PATH_XML2( 2.0.0, , AC_MSG_ERROR(libxml2 must be installed.) )
+
+# disable lfs
+AC_ARG_ENABLE(lfs,
+[  --disable-lfs           disable largefile support ],
+[ LARGEFILESUPPORT="" ]
+)
+
+all_includes="$all_includes $LARGEFILESUPPORT"
+AC_SUBST(all_includes)
+AC_SUBST(all_libraries)
+
+KDE_CHECK_SSL
+
+dnl ###############################################################
+
+
+
+AC_SUBST(AUTODIRS)

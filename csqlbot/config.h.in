@@ -9,6 +9,12 @@
 /* Define to 1 if you have the <memory.h> header file. */
 #undef HAVE_MEMORY_H
 
+/* Define if you have OpenSSL < 0.9.6 */
+#undef HAVE_OLD_SSL_API
+
+/* If we are going to use OpenSSL */
+#undef HAVE_SSL
+
 /* Define to 1 if you have the <stdint.h> header file. */
 #undef HAVE_STDINT_H
 
