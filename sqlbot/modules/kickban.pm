@@ -54,7 +54,6 @@ sub kickWorker()
 sub kickUser(){
 	my($user,$lastReason)=@_;
 	my($ip) = odch::get_ip($user);
-
 	my($sqluser) = &sqlConvertNick($user);
 	$dbh->do("INSERT INTO botWorker VALUES ('mysql_insertid','10','$sqluser','$ip','$lastReason')");
 }

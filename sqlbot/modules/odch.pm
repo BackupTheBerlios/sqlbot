@@ -202,6 +202,7 @@ sub data_arrival(){
 	if($data =~ /\$To: $botname From: (.*)\|/)
 	{
 		my($pm )= $1;
+		
 		@params = split(/\ /, $pm);
 		$param1 = $params[2];$param2 = $params[3];$param3 = $params[4];$param4 = $params[5];
 
@@ -256,28 +257,37 @@ sub data_arrival(){
 				{if($param1 =~ /^[\!+-]kick\|/i)
 					{&msgUser("$user","usage: +kick 'username' 'reason'");}
 				else 
-					{&kickUser($param2,$param3);}}
+					{&splitDescription($user);
+					@reason = split(/\"/, $pm);
+					$reason = $reason[1];$reason =~ s/^(")//;$reason =~ s/(")$//;
+					&kickUser($param2,$reason);}}
 			elsif ($param1 =~ /^[\!+-]tban/i)
 				{if($param1 =~ /^[\!+-]tban\|/i)
 					{&msgUser("$user","usage: +tban 'username' 'reason'");}
 				else 
-					{&splitDescription($param2);
-					&banUser($param2,$param3,$ip,"tban");
-					&kickUser($param2,$param3);}}
+					{@reason = split(/\"/, $pm);
+					$reason = $reason[1];$reason =~ s/^(")//;$reason =~ s/(")$//;
+					my($userip) = &getUserIp($param2);
+					&banUser($param2,$reason,$userip,"tban");
+					&kickUser($param2,$reason);}}
 			elsif ($param1 =~ /^[\!+-]pban/i)
 				{if($param1 =~ /^[\!+-]pban\|/i)
 					{&msgUser("$user","usage: +pban 'username' 'reason'");}
 				else 
-					{&splitDescription($param2);
-					&banUser($param2,$param3,$ip,"pban");
-					&kickUser($param2,$param3);}}
+					{@reason = split(/\"/, $pm);
+					$reason = $reason[1];$reason =~ s/^(")//;$reason =~ s/(")$//;
+					my($userip) = &getUserIp($param2);
+					&banUser($param2,$reason,$userip,"pban");
+					&kickUser($param2,$reason);}}
 			elsif ($param1 =~ /^[\!+-]uban/i)
 				{if($param1 =~ /^[\!+-]uban\|/i)
 					{&msgUser("$user","usage: +uban username reason");}
 				else 
-					{&splitDescription($param2);
-					&banUser($param2,$param3,$ip,"uban");
-					&kickUser($param2,$param3);}}
+					{@reason = split(/\"/, $pm);
+					$reason = $reason[1];$reason =~ s/^(")//;$reason =~ s/(")$//;
+					my($userip) = &getUserIp($param2);
+					&banUser($param2,$reason,$userip,"uban");
+					&kickUser($param2,$reason);}}
 			elsif ($param1 =~ /^[\!+-]fakerslog/i)
 				{&fakersLog($user);}
 			elsif ($param1 =~ /^[\!+-]history/i)
