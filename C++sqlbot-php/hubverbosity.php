@@ -17,6 +17,7 @@ function doselectAll(theBox){
 </head>
 <body>
 <?php
+	import_request_variables ( "gp" );
 	include("conf/dbinfo.inc.php");
 	include("conf/forms.php");
 // CONNECT TO MYSQL SERVER

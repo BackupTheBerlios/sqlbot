@@ -18,6 +18,7 @@ else
 </head>
 <body>
 <?php
+	import_request_variables ( "gp" );
  function utime (){
  // WORK OUT LOAD TIME (FOR INTEREST)
 $time = explode( " ", microtime());
