@@ -439,7 +439,7 @@ bool BotCommands::OpBotCommands(CString nick, CString cmd)
      {
           dcclient->GetHubConfig()->LoadHubConfig();
           dcclient->GetLogger()->readLogCfg();
-          SendReply(msgSrc,nick,"Reloaded Configuration for  [" + dcclient->GetHubName() + "]");
+          SendReply(msgSrc,nick,"Reloaded Configuration for  [" + dcclient->GetHubConfig()->GetHubName() + "]");
           return(TRUE);
      }     
      return(FALSE);
@@ -472,8 +472,7 @@ bool BotCommands::MasterBotCommands(CString nick, CString cmd)
      {
           dcclient->SaveUserList();
           dcclient->GetBController()->LeaveHub(dcclient,dcclient->GetHubId());
-          delete(this);
-//          dcclient->Disconnect();
+          dcclient->Disconnect();
 //          return(TRUE);
      }
 //        /** add transfer to the waitlist */
