@@ -20,18 +20,35 @@ $sqldbname = "odch";
 
 sub main (){
 	print "1 - Upgrade from 0.2.0 to CVS\n";
-	print "2 - Exit\n";
+	print "2 - Upgrade from 0.2.1 to CVS\n";
+	print "3 - Exit\n";
 	
 	my($option) = &promptUser("option :","1");
 	if ($option eq "1")
 		{&installTables();}
 	elsif ($option eq "2")
+		{&installTables021();}
+	elsif ($option eq "3")
 		{&exit();}
 	else
 		{print "Invalid entry\n";
 		&main();}
 		
 
+}
+sub installTables021 {
+	print "Trying to log into the MySQL database \"$sqldbname\" on server \"$sql_server\" using the
+login name and password you gave in this script.\n\n";
+	$dbh = DBI->connect("DBI:mysql:$sqldbname:$sql_server","$sql_username","$sql_password",{ RaiseError => 1, AutoCommit => 0 });
+	$dbh->do("SET OPTION SQL_BIG_TABLES = 1");
+
+eval { $dbh->do("ALTER TABLE client_rules ADD min_limit TINYINT(4)");
+			print "ALTER TABLE client_rules ADD min_limit TINYINT(4)\n";
+		}; print "ALTER TABLE client_rules ADD min_limit TINYINT(4) : failed $@\n" if $@;
+
+
+# Disconnect from the database.
+         $dbh->disconnect();
 }
 
 
