@@ -92,7 +92,11 @@ while ($i < $num) {
 	<td nowrap><input type="Submit" value="Edit"></td></form>
 	<form action="client-main.php?function=delclient&id=<? echo "$id";?>" method="post">
 	<td nowrap><input type="Submit" value="Delete" onClick="return confirmDelete()"></td></form></tr>
-	<?++$i;} ?></table></div>
+	<?++$i;} ?></table><br><br>
+	NOTE: if min AND/OR max slots is set to 0 then slots based on connection is ACTIVE
+	<form action="client-cslots-edit.php" method="post">
+	<input class="button" type="Submit" value="Edit Connection Slots Rules" title="Edit connection Slot Rules"></form>
+</div>
 <? echo "$fontend";?>
 </body>
 </html>

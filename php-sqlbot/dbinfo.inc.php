@@ -10,7 +10,7 @@ $password="sqlpass";
 $database="odch";
 
 // Name of the Hub (Used only for headers)
-$hubname="AxlJab.homelinux.org:8080";
+$hubname="sqlbot.berlios.de";
 
 //The Default number of entries to display, commands like !log
 $defaultLogEntries = 20;
